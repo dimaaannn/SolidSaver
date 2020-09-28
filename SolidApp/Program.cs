@@ -16,16 +16,23 @@ namespace SolidApp
 
             ISldWorks swApp;
             swApp = SolidTools.GetSWApp();
-            SldWorks.ModelDoc2 swModel = swApp.ActiveDoc;
+            ModelDoc2 swModel = swApp.ActiveDoc;
             Console.WriteLine(swModel.GetType());
             Debug.WriteLine("Test output");
 
             //Drawing tests
             SwDrawing swDraw = new SwDrawing(swModel);
 
-            foreach (string s in swDraw.GetSheetNames()){
+            foreach (string s in swDraw.SheetNames){
                 Console.WriteLine(s);
             }
+
+            //string bmpFileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.bmp";
+            //swDraw.SavePreview(bmpFileName);
+
+            var swExp = new SwExporter(swApp, swModel);
+            swExp.ExportPdf("");
+
 
             Console.WriteLine("Press any key");
             Console.ReadKey();
