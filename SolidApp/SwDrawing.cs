@@ -1,4 +1,6 @@
 ﻿
+
+using SolidApp;
 using SolidWorks.Interop.sldworks;
 using SwConst;
 using System;
@@ -16,74 +18,105 @@ namespace SolidDrawing
     class SwDrawing
     {
         private static swDocumentTypes_e DocType = swDocumentTypes_e.swDocDRAWING;
-        private ModelDoc2 DrawModel;
+        private ISldWorks _swApp;
+        private ModelDoc2 _drawModel;
         private DrawingDoc _swDraw;
-        public string[] SheetNames
-        {
-            get { return _swDraw.GetSheetNames(); }
-        }
+        public string[] SheetNames => _swDraw.GetSheetNames();
+        public string FilePath => _drawModel.GetPathName();
 
         public SwDrawing(ModelDoc2 drawModel) //Инициализация из класса модели
         {
-            DrawModel = drawModel;
-            if (DrawModel.GetType() == (int)DocType)
+            _drawModel = drawModel;
+            if (_drawModel.GetType() == (int)DocType)
             {
-                _swDraw = (DrawingDoc)DrawModel;
+                _swApp = SolidTools.GetSWApp();
+                _swDraw = (DrawingDoc)_drawModel;
                 Debug.Print("SwDrawing initialised");
             }
             else throw new System.TypeLoadException("Модель не является чертежом");
         }
 
-        public SwDrawing(DrawingDoc drawModel) //Инициализация из класса чертежа (НЕ ТЕСТИРОВАНО)
-        {
-            if (!(drawModel is null))
-            {
-                _swDraw = drawModel;
-                Debug.Print("SwDrawing initialised");
-            }
-            else throw new System.ArgumentNullException("Документ чертежа не инициализирован");
-        }
-
         public bool SavePreview(string bmpPath, int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
         {
-            return DrawModel.SaveBMP(bmpPath, height, width);
+            return _drawModel.SaveBMP(bmpPath, height, width);
         }
 
-
+        public bool SavePdf(string filename)
+        {
+            var swExp = new SwExporter(_swApp, _drawModel);
+            swExp.Path = filename;
+            swExp.SheetNames = this.SheetNames;
+            swExp.ExportPdf();
+            return true;
+        }
 
     }
 
     class SwExporter
     {
-        private ISldWorks _swApp;
-        private ExportPdfData _swExport;
-        private ModelDoc2 _swModel;
+        private readonly ExportPdfData _swExport;
+        private readonly ModelDoc2 _swModel;
+        public string[] SheetNames { get; set; }
+        public string Path { get; set; }
+
+        public int errors = 0;
+        public int output = 0;
 
         public SwExporter(ISldWorks swApp, ModelDoc2 swModel)
         {
-            if (!(swApp is null))
-            { 
-                _swApp = swApp;
-
+            if (!(swModel is null))
+            {
                 _swExport = swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
                 _swModel = swModel;
-                Debug.Print("SwExporter: Class created");
+                Debug.Print("SwExporter: Class instanced");
             }
             else throw new TypeLoadException("SwExporter: Приложение не инициализированно");
-        }
-
-        public bool ExportPdf(string Path)
+        } //Class constructor
+        
+        public bool ExportPdf(string filename = "") 
         {
-            int errors = 0;
-            int output = 0;
-            var sheetNames = new string[] { "Лист1", "Лист2"};
-            string FileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.pdf";
-            _swExport.SetSheets((int)swExportDataSheetsToExport_e.swExportData_ExportSpecifiedSheets, sheetNames);
-            Boolean ret = false;
+            Debug.Print("ExportPdf: begin");
+            
+            if (filename == "") filename = Path;
 
-            ret = _swModel.Extension.SaveAs(FileName, 0, 0, _swExport, ref errors, ref output);
-            Console.WriteLine($"Output = {output}\nErrors = {errors}");
+            if (IsFileLocked(filename))
+            {
+                Debug.Print("ExportPdf: File is locked");
+                throw new System.IO.FileLoadException("ExportPdf: File is locked");
+            }
+            
+            _swExport.SetSheets((int)swExportDataSheetsToExport_e.swExportData_ExportSpecifiedSheets, 
+                SheetNames);
+
+            bool ret = _swModel.Extension.SaveAs(Path, 0, 0, _swExport, ref errors, ref output);
+            Debug.Print($"Output = {output}, Errors = {errors}");
+            if (errors != 0)
+            {
+                Debug.Print("ExportPdf: Error! Breaking.");
+                ret = false;
+            }
             return ret;
         }
+
+        public bool IsFileLocked(string filename = "")
+        {   
+            if (filename == "") filename = Path;
+            bool Locked = false;
+            try
+            {
+                System.IO.FileStream fs =
+                    System.IO.File.Open(filename, System.IO.FileMode.Open,
+                    System.IO.FileAccess.ReadWrite, System.IO.FileShare.None);
+                fs.Close();
+            }
+            catch (System.IO.IOException ex)
+            {
+                Locked = true;
+            }
+
+            if (! System.IO.File.Exists(filename)) Locked = false;
+
+            return Locked;
+        } //Проверяет заблокирован ли файл
     }
 }

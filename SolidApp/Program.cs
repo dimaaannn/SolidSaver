@@ -30,9 +30,17 @@ namespace SolidApp
             //string bmpFileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.bmp";
             //swDraw.SavePreview(bmpFileName);
 
-            var swExp = new SwExporter(swApp, swModel);
-            swExp.ExportPdf("");
+            string fileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.pdf";
+            var sheetNames = new string[] { "Лист1" };
 
+
+            //var swExp = new SwExporter(swApp, swModel);
+            //swExp.Path = fileName;
+            //swExp.SheetNames = sheetNames;
+            //swExp.ExportPdf();
+            //Console.WriteLine("file is locked = " + swExp.IsFileLocked(fileName));
+
+            swDraw.SavePdf(fileName);
 
             Console.WriteLine("Press any key");
             Console.ReadKey();
