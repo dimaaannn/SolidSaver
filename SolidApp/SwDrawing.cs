@@ -4,14 +4,8 @@ using SolidApp;
 using SolidWorks.Interop.sldworks;
 using SwConst;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SolidDrawing
 {
@@ -23,6 +17,35 @@ namespace SolidDrawing
         private DrawingDoc _swDraw;
         public string[] SheetNames => _swDraw.GetSheetNames();
         public string FilePath => _drawModel.GetPathName();
+        public string FolderPath
+        {
+            get
+            {
+                string result = this.FilePath;
+                int lastSlash = result.LastIndexOf("\\");
+                return result.Substring(0, lastSlash + 1);
+            }
+        }
+        public string FileName
+        {
+            get
+            {
+                string result = this.FilePath;
+                int lastSlash = result.LastIndexOf("\\");
+                return result.Substring(lastSlash);
+            }
+        }
+        public string FileNameWhithoutExt
+        {
+            get
+            {
+                string result = this.FilePath;
+                int lastSlash = result.LastIndexOf("\\");
+                int lastPoint = result.LastIndexOf(".");
+                return result.Substring(lastSlash + 1, lastPoint - lastSlash - 1);
+            }
+        }
+        public string[] SheetsToSaving { get; set; }
 
         public SwDrawing(ModelDoc2 drawModel) //Инициализация из класса модели
         {
@@ -41,15 +64,25 @@ namespace SolidDrawing
             return _drawModel.SaveBMP(bmpPath, height, width);
         }
 
-        public bool SavePdf(string filename)
+        public bool SavePdf(string filename = "", string[] sheets = null) //Сохранить листы SheetNames как PDF
         {
             var swExp = new SwExporter(_swApp, _drawModel);
+            
+            if (sheets is null)
+            {   //Проверяется существование массивов в классе и параметре. Если отсутствуют - используются все листы
+                if (SheetsToSaving is null) SheetsToSaving = this.SheetNames;
+            }
+            else SheetsToSaving = sheets;
+            
+            if(filename == "")
+            {
+                filename = string.Concat(filename, this.FolderPath, this.FileNameWhithoutExt, ".pdf");
+            } //Set filename as Title
             swExp.Path = filename;
-            swExp.SheetNames = this.SheetNames;
-            swExp.ExportPdf();
-            return true;
-        }
 
+            swExp.SheetNames = SheetsToSaving;
+            return swExp.ExportPdf();
+        }
     }
 
     class SwExporter
@@ -92,11 +125,11 @@ namespace SolidDrawing
             Debug.Print($"Output = {output}, Errors = {errors}");
             if (errors != 0)
             {
-                Debug.Print("ExportPdf: Error! Breaking.");
+                Debug.Print("ExportPdf: Error! Abort.");
                 ret = false;
             }
             return ret;
-        }
+        } // Save file as
 
         public bool IsFileLocked(string filename = "")
         {   

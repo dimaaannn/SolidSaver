@@ -6,6 +6,7 @@ using SolidDrawing;
 //using SolidWorks;
 using SolidWorks.Interop.sldworks;
 using System.Diagnostics;
+using System.IO;
 
 namespace SolidApp
 {
@@ -21,31 +22,27 @@ namespace SolidApp
             Debug.WriteLine("Test output");
 
             //Drawing tests
-            SwDrawing swDraw = new SwDrawing(swModel);
+            //SwDrawing swDraw = new SwDrawing(swModel);
 
-            foreach (string s in swDraw.SheetNames){
-                Console.WriteLine(s);
-            }
+            //foreach (string s in swDraw.SheetNames){
+            //    Console.WriteLine(s);
+            //}
+            //try
+            //{
+            //    Console.WriteLine(swDraw.SavePdf() ? "PDF is saved" : "PDF is NOT saved");
+            //}
+            //catch(FileLoadException e)
+            //{
+            //    Console.WriteLine("File is locked " + e.Message);
+            //}
 
-            //string bmpFileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.bmp";
-            //swDraw.SavePreview(bmpFileName);
+            var swModelCls = new SolidApp.SwModelManager(swModel);
 
-            string fileName = "\\\\sergeant\\Техотдел\\Технологический - Общие документы\\Общая\\Красиков\\VBA\\SolidWorks\\Тестовая сборка\\Test.pdf";
-            var sheetNames = new string[] { "Лист1" };
-
-
-            //var swExp = new SwExporter(swApp, swModel);
-            //swExp.Path = fileName;
-            //swExp.SheetNames = sheetNames;
-            //swExp.ExportPdf();
-            //Console.WriteLine("file is locked = " + swExp.IsFileLocked(fileName));
-
-            swDraw.SavePdf(fileName);
+            Console.WriteLine("DocType = " + swModelCls.DocType);
+            
 
             Console.WriteLine("Press any key");
             Console.ReadKey();
-            
-
 
         }
     }
