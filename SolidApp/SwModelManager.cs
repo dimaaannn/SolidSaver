@@ -20,7 +20,7 @@ namespace SolidApp
         public static int FileExist(string filename)
         {
             SaFileStatus fileStatus = SaFileStatus.NotExist;
-            if (System.IO.File.Exists(filename)) fileStatus = SaFileStatus.Exist;
+            if (!System.IO.File.Exists(filename)) fileStatus = SaFileStatus.NotExist;
             else
             {
                 try
@@ -118,13 +118,17 @@ namespace SolidApp
             }
             Debug.WriteLine("SaveAsCopy: try saving to Path = {0}", path);
             int warnings = 0, errors = 0;
-            bool ret;
-            var swExportData = _swApp.GetExportFileData((int)swFileSaveTypes_e.swFileSaveAsCopy);
-            ret = _swModel.Extension.SaveAs(path,
-                (int)swSaveAsVersion_e.swSaveAsCurrentVersion,
-                (int)swSaveAsOptions_e.swSaveAsOptions_Copy,
-                swExportData, ref errors, ref warnings);
-            Debug.WriteLine($"SaveAsCopy: errors = {errors}, warnings = {warnings}");
+            bool ret = false;
+
+            if (FileExist(path) == 0)
+            {
+                var swExportData = _swApp.GetExportFileData((int)swFileSaveTypes_e.swFileSave);
+                ret = _swModel.Extension.SaveAs(path,
+                    (int)swSaveAsVersion_e.swSaveAsCurrentVersion,
+                    (int)swSaveAsOptions_e.swSaveAsOptions_Copy,
+                    swExportData, ref errors, ref warnings);
+                Debug.WriteLine($"SaveAsCopy: errors = {errors}, warnings = {warnings}\nSuccess = {ret}");
+            }
             return ret;
         }
     }

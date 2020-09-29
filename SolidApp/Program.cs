@@ -39,7 +39,7 @@ namespace SolidApp
             var swModelCls = new SolidApp.SwModelManager(swModel);
 
             Console.WriteLine("DocType = " + swModelCls.DocType);
-            
+            Console.WriteLine("Is saved = " + swModelCls.SaveAsCopy());
 
             Console.WriteLine("Press any key");
             Console.ReadKey();
