@@ -37,9 +37,12 @@ namespace SolidApp
             //}
 
             var swModelCls = new SolidApp.SwModelManager(swModel);
+            var swExp = new SwExporter(swApp);
+
+            string savePath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 Основа топпера-Copy.SLDPRT";
 
             Console.WriteLine("DocType = " + swModelCls.DocType);
-            Console.WriteLine("Is saved = " + swModelCls.SaveAsCopy());
+            Console.WriteLine("Is saved = " + swExp.Copy(swModel, savePath, false));
 
             Console.WriteLine("Press any key");
             Console.ReadKey();

@@ -66,7 +66,7 @@ namespace SolidDrawing
 
         public bool SavePdf(string filename = "", string[] sheets = null) //Сохранить листы SheetNames как PDF
         {
-            var swExp = new SwExporter(_swApp, _drawModel);
+            var swExp = new SwDrawExporter(_swApp, _drawModel);
             
             if (sheets is null)
             {   //Проверяется существование массивов в классе и параметре. Если отсутствуют - используются все листы
@@ -85,7 +85,7 @@ namespace SolidDrawing
         }
     }
 
-    class SwExporter
+    class SwDrawExporter
     {
         private readonly ExportPdfData _swExport;
         private readonly ModelDoc2 _swModel;
@@ -95,7 +95,7 @@ namespace SolidDrawing
         public int errors = 0;
         public int output = 0;
 
-        public SwExporter(ISldWorks swApp, ModelDoc2 swModel)
+        public SwDrawExporter(ISldWorks swApp, ModelDoc2 swModel)
         {
             if (!(swModel is null))
             {
