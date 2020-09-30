@@ -23,11 +23,15 @@ namespace SolidApp
             var swExp = new SwExporter(swApp);
 
             Console.WriteLine("DocType = " + swModelCls.DocType);
-            Console.WriteLine("Is saved = " + swModelCls.Draw2Pdf()) ;
+            //Console.WriteLine("Is saved = " + swModelCls.Draw2Pdf()) ;
 
             string pathToFile =  @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.pdf";
-            
 
+            Console.WriteLine("GetDocType {0}", swModelCls.PrpMan.DocType);
+            swModelCls.PrpMan.SetActiveConf("test");
+            Console.WriteLine("test {0}", swModelCls.PrpMan.GetSheetThickness);
+            Console.WriteLine("GetActiveConfig {0}", swModelCls.PrpMan.GetActiveConf);
+            
             Console.WriteLine("Press any key");
             Console.ReadKey();
 

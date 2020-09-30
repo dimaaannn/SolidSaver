@@ -10,6 +10,7 @@ using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Data;
 
+
 namespace SolidApp
 {
     public class SwModelManager
@@ -17,7 +18,17 @@ namespace SolidApp
         private static ISldWorks _swApp;
         public readonly swDocumentTypes_e DocType;
         private readonly ModelDoc2 _swModel;
+        private PrpManager _PrpMan;
         public string FilePath => _swModel.GetPathName();
+        public PrpManager PrpMan
+        {
+            get
+            {
+                if (_PrpMan is null)
+                    _PrpMan = PrpManager.CreateInstance(_swModel);
+                return _PrpMan;
+            }
+        }
 
         public string FolderPath
         {
@@ -316,7 +327,7 @@ namespace SolidApp
         }
     }
 
-
+    //Todo Create class for part types
     public class SwPartManager : SwModelManager
     {
         private readonly PartDoc _swPartDoc;
@@ -334,9 +345,75 @@ namespace SolidApp
             }
         } //init PartDoc
 
-
     }
 
+
+    public class PrpManager
+    {
+        private readonly ModelDoc2 _swModel;
+        private Feature _swFeat;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="swmodel">ModelDoc2 model</param>
+        public PrpManager(ModelDoc2 swmodel)
+        {
+            if(!(swmodel is null))
+            {
+                _swModel = swmodel;
+                Debug.Print("PrpMan: Created instance");
+            }
+        }
+        /// <summary>
+        /// CreateNewInstance
+        /// </summary>
+        /// <param name="modeldoc"></param>
+        /// <returns></returns>
+        public static PrpManager CreateInstance(ModelDoc2 modeldoc)
+        {
+            return new PrpManager(modeldoc);
+        }
+        //Private Property
+        //private Body2[] GetBodyArr => _swModel. Todo
+
+        //Public Property
+        public string Title => _swModel.GetTitle();
+        public swDocumentTypes_e DocType => (swDocumentTypes_e)_swModel.GetType(); 
+        public double GetSheetThickness
+        {
+            get //Todo get sheet thickness
+            {
+                double ret = 0;
+                //var featArr = FeatArray;
+
+                //var thickness = from feature in featArr
+                //                where feature.GetTypeName() == "SheetMetal"
+                //                select feature.IParameter("Толщина").Value;
+                //if (thickness.Count() == 0)
+                //    ret = 0;
+
+
+                return ret;
+            }
+        }
+
+        //Manage Configurations
+        public string GetActiveConf => _swModel.IGetActiveConfiguration().Name;
+        public bool SetActiveConf(string confName)
+        {
+            bool ret;
+            ret =  _swModel.ShowConfiguration2(confName);
+            Debug.WriteLine("PrpMan: WARNING! config {0} is {1}", confName, ret ? "active" : "not active");
+            return ret;
+        }
+        
+
+
+
+
+
+    }
 
 
 
