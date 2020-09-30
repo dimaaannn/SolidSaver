@@ -8,6 +8,7 @@ using Sld = SldWorks;
 using SolidApp;
 using SolidWorks.Interop.sldworks;
 using SwConst;
+using System.Data;
 
 namespace SolidApp
 {
@@ -154,6 +155,7 @@ namespace SolidApp
         /// Предупреждения при последнем сохранении
         /// </summary>
         public int Errors { get => _errors; }
+
         /// <summary>
         /// Конструктор класса SwExporter
         /// </summary>
@@ -175,7 +177,7 @@ namespace SolidApp
         {
             SaFileStatus fileStatus = SaFileStatus.NotExist;
             if (System.IO.File.Exists(filename)) fileStatus = SaFileStatus.Exist;
-            else
+            if(fileStatus == SaFileStatus.Exist)
             {
                 try
                 {
@@ -203,8 +205,13 @@ namespace SolidApp
             bool ret = false;
             SaFileStatus fileStatus;
             Debug.WriteLine("SwExporter: Path = {0}", path);
+            if (string.IsNullOrEmpty(path))
+                throw new NoNullAllowedException("Путь сохранения не может быть пустым");
             fileStatus =  FileExist(path);
             
+            _warning = 0; //Сбросить предупреждения
+            _errors = 0;
+
             switch(fileStatus)
             {
                 case SaFileStatus.ExistLocked:
@@ -219,6 +226,7 @@ namespace SolidApp
             Debug.Print("SwExporter: Запись в файл {0}", ret ? "Разрешена" : "Запрещена");
             return ret;
         }
+
         /// <summary>
         /// Сохранить копию модели
         /// </summary>
@@ -241,7 +249,44 @@ namespace SolidApp
             return ret;
         }
 
+        /// <summary>
+        /// Экспорт листов чертежа в PDF
+        /// </summary>
+        /// <param name="swModel">Модель чертежа</param>
+        /// <param name="path">Путь сохранения</param>
+        /// <param name="overwrite">Перезаписать</param>
+        /// <param name="sheetNames">Имена листов для экспорта (опционально)</param>
+        /// <returns>Статус</returns>
+        public bool SavePdf(ModelDoc2 swModel, 
+            string path,
+            bool overwrite = false,
+            string[] sheetNames = null)
+        {
+            bool ret = false;
+            DrawingDoc swDrawing;
+            swExportDataSheetsToExport_e exportSheets = 
+                swExportDataSheetsToExport_e.swExportData_ExportSpecifiedSheets;
 
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocDRAWING) 
+                throw  new System.TypeLoadException("Модель не является чертежом");
+            
+            swDrawing = (DrawingDoc)swModel;
+
+            if (swDrawing is null) 
+                throw new NullReferenceException("SavePdf: Wrong reference!");
+            Debug.Print("SavePdf: begin.");
+
+            if (sheetNames is null) exportSheets = swExportDataSheetsToExport_e.swExportData_ExportAllSheets;
+
+            if(FileChecker(path, overwrite))
+            {
+                ExportPdfData ExportPdfParams = _swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
+                ExportPdfParams.SetSheets((int)exportSheets, sheetNames);
+                ret = swModel.Extension.SaveAs(path, 0, 0, ExportPdfParams, ref _errors, ref _warning);
+                Debug.Print("SavePdf status {0}", ret ? "Success" : "Failed");
+            }
+            return ret;
+        }
     }
 
 
