@@ -94,9 +94,9 @@ namespace SolidApp
         /// <param name="height">Высота в пикселях</param>
         /// <param name="width">Ширина в пикселях</param>
         /// <returns></returns>
-        public bool SavePreview(string bmpPath = "", int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
+        public bool SavePreview(string bmpPath = null, int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
         {
-            if (bmpPath == "") bmpPath = string.Concat(this.GetDefaultPath, ".bmp");
+            if (string.IsNullOrEmpty( bmpPath)) bmpPath = string.Concat(this.GetDefaultPath, ".bmp");
             var swExp = new SwExporter(_swApp);
             return swExp.SavePreview(_swModel, bmpPath);
         }
@@ -106,14 +106,36 @@ namespace SolidApp
         /// </summary>
         /// <param name="path">По умолчанию - в папке документа</param>
         /// <returns>Результат выполнения</returns>
-        public bool SaveAsCopy(string path = "")
+        public bool SaveAsCopy(string path = null)
         {
             bool ret = false;
             var expMan = new SwExporter(_swApp);
-            if (path == "") 
+            if (string.IsNullOrEmpty( path)) 
                 path = string.Concat(this.FolderPath, FileNameWhithoutExt, "-Copy", this.GetFileExtension);
 
             ret = expMan.Copy(_swModel, path, true);
+            return ret;
+        }
+
+        /// <summary>
+        /// Сохранить документ чертежа в PDF 
+        /// </summary>
+        /// <param name="path">Путь сохранения</param>
+        /// <param name="sheetnames">Имена листов для сохранения</param>
+        /// <returns>Результат</returns>
+        public bool Draw2Pdf(string path = null, string[] sheetnames = null)
+        {
+            
+            bool ret = false;
+            if (string.IsNullOrEmpty(path))
+                path = string.Concat(this.FolderPath, FileNameWhithoutExt, ".pdf");
+
+            Debug.Print("Draw2pdf: begin saving to path {0}", path);
+            if (DocType == swDocumentTypes_e.swDocDRAWING)
+            {
+                var expMan = new SwExporter(_swApp);
+                ret = expMan.SavePdf(_swModel, path, true, sheetnames);
+            }
             return ret;
         }
     }
@@ -234,6 +256,7 @@ namespace SolidApp
             return ret;
         }
 
+        //Todo Добавить адаптивный экспорт для моделей и сборок
         /// <summary>
         /// Экспорт листов чертежа в PDF
         /// </summary>

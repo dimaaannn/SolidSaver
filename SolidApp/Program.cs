@@ -18,31 +18,15 @@ namespace SolidApp
             ISldWorks swApp;
             swApp = SolidTools.GetSWApp();
             ModelDoc2 swModel = swApp.ActiveDoc;
-            Console.WriteLine(swModel.GetType());
-            Debug.WriteLine("Test output");
-
-            //Drawing tests
-            //SwDrawing swDraw = new SwDrawing(swModel);
-
-            //foreach (string s in swDraw.SheetNames){
-            //    Console.WriteLine(s);
-            //}
-            //try
-            //{
-            //    Console.WriteLine(swDraw.SavePdf() ? "PDF is saved" : "PDF is NOT saved");
-            //}
-            //catch(FileLoadException e)
-            //{
-            //    Console.WriteLine("File is locked " + e.Message);
-            //}
 
             var swModelCls = new SolidApp.SwModelManager(swModel);
             var swExp = new SwExporter(swApp);
 
-            string savePath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 Основа топпера-Copy.SLDPRT";
-            string savePDFpath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.bmp";
             Console.WriteLine("DocType = " + swModelCls.DocType);
-            Console.WriteLine("Is saved = " + swModelCls.SavePreview()) ;
+            Console.WriteLine("Is saved = " + swModelCls.Draw2Pdf()) ;
+
+            string pathToFile =  @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.pdf";
+            
 
             Console.WriteLine("Press any key");
             Console.ReadKey();
@@ -60,6 +44,18 @@ namespace SolidApp
 
             ISldWorks swApp = System.Activator.CreateInstance(progType) as SolidWorks.Interop.sldworks.ISldWorks;
             return swApp;
+        }
+    }
+
+    public static class TestFunctions
+    {
+        public static void GetFileAttr(string path)
+        {
+            FileAttributes fAttr = File.GetAttributes(path);
+            FileAttributes fAttr2 = FileAttributes.Archive;
+
+            Console.WriteLine(fAttr == fAttr2);
+
         }
     }
 }
