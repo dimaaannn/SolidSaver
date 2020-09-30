@@ -40,9 +40,9 @@ namespace SolidApp
             var swExp = new SwExporter(swApp);
 
             string savePath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 Основа топпера-Copy.SLDPRT";
-            string savePDFpath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.pdf";
+            string savePDFpath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.bmp";
             Console.WriteLine("DocType = " + swModelCls.DocType);
-            Console.WriteLine("Is saved = " + swExp.SavePdf(swModel, savePDFpath, true, new string []{ "Лист1"} ) );
+            Console.WriteLine("Is saved = " + swModelCls.SavePreview()) ;
 
             Console.WriteLine("Press any key");
             Console.ReadKey();

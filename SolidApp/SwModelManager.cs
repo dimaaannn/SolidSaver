@@ -19,27 +19,6 @@ namespace SolidApp
         private readonly ModelDoc2 _swModel;
         public string FilePath => _swModel.GetPathName();
 
-        public static int FileExist(string filename)
-        {
-            SaFileStatus fileStatus = SaFileStatus.NotExist;
-            if (!System.IO.File.Exists(filename)) fileStatus = SaFileStatus.NotExist;
-            else
-            {
-                try
-                {
-                    System.IO.FileStream fs =
-                        System.IO.File.Open(filename, System.IO.FileMode.Open,
-                        System.IO.FileAccess.ReadWrite, System.IO.FileShare.None);
-                    fs.Close();
-                }
-                catch (System.IO.IOException ex)
-                {
-                    fileStatus = SaFileStatus.ExistLocked;
-                }
-            }
-            return (int)fileStatus;
-        } //Проверяет заблокирован ли файл
-
         public string FolderPath
         {
             get
@@ -85,7 +64,10 @@ namespace SolidApp
             }
         }
 
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="swModel">Модель документа</param>
         public SwModelManager(ModelDoc2 swModel)
         {
             if (!(swModel is null))
@@ -105,33 +87,33 @@ namespace SolidApp
             }
         }
 
-
-
+        /// <summary>
+        /// Сохранить картинку bmp с превью документа
+        /// </summary>
+        /// <param name="bmpPath">Путь сохранения. Пустой - сохраняет в папку документа</param>
+        /// <param name="height">Высота в пикселях</param>
+        /// <param name="width">Ширина в пикселях</param>
+        /// <returns></returns>
         public bool SavePreview(string bmpPath = "", int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
         {
             if (bmpPath == "") bmpPath = string.Concat(this.GetDefaultPath, ".bmp");
-            return _swModel.SaveBMP(bmpPath, height, width);
+            var swExp = new SwExporter(_swApp);
+            return swExp.SavePreview(_swModel, bmpPath);
         }
 
+        /// <summary>
+        /// Сохранить копию документа
+        /// </summary>
+        /// <param name="path">По умолчанию - в папке документа</param>
+        /// <returns>Результат выполнения</returns>
         public bool SaveAsCopy(string path = "")
         {
-            if (path == "")
-            {
-                path = string.Concat(this.FolderPath, FileNameWhithoutExt, "-Copy", this.GetFileExtension);
-            }
-            Debug.WriteLine("SaveAsCopy: try saving to Path = {0}", path);
-            int warnings = 0, errors = 0;
             bool ret = false;
+            var expMan = new SwExporter(_swApp);
+            if (path == "") 
+                path = string.Concat(this.FolderPath, FileNameWhithoutExt, "-Copy", this.GetFileExtension);
 
-            if (FileExist(path) == 0)
-            {
-                var swExportData = _swApp.GetExportFileData((int)swFileSaveTypes_e.swFileSave);
-                ret = _swModel.Extension.SaveAs(path,
-                    (int)swSaveAsVersion_e.swSaveAsCurrentVersion,
-                    (int)swSaveAsOptions_e.swSaveAsOptions_Copy,
-                    swExportData, ref errors, ref warnings);
-                Debug.WriteLine($"SaveAsCopy: errors = {errors}, warnings = {warnings}\nSuccess = {ret}");
-            }
+            ret = expMan.Copy(_swModel, path, true);
             return ret;
         }
     }
@@ -143,6 +125,9 @@ namespace SolidApp
         ExistLocked
     }; //Статус доступности файла
 
+    /// <summary>
+    /// Экспорт моделей SolidWorks
+    /// </summary>
     public class SwExporter
     {
         private static ISldWorks _swApp;
@@ -284,6 +269,25 @@ namespace SolidApp
                 ExportPdfParams.SetSheets((int)exportSheets, sheetNames);
                 ret = swModel.Extension.SaveAs(path, 0, 0, ExportPdfParams, ref _errors, ref _warning);
                 Debug.Print("SavePdf status {0}", ret ? "Success" : "Failed");
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Сохранить .bmp файл с превью
+        /// </summary>
+        /// <param name="swModel">Модель документа</param>
+        /// <param name="path">Путь файла сохранения</param>
+        /// <param name="overwrite">Перезаписать если существует</param>
+        /// <param name="height">Высота в px</param>
+        /// <param name="width">Ширина в px</param>
+        /// <returns>Статус выполнения</returns>
+        public bool SavePreview(ModelDoc2 swModel, string path, bool overwrite = true, int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
+        {
+            bool ret = false;
+            if(FileChecker(path, overwrite))
+            {
+                ret =  swModel.SaveBMP(path, height, width);
             }
             return ret;
         }
