@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sld = SldWorks;
 using SolidApp;
 using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Data;
+using System.IO;
+
 
 namespace SolidApp
 {
@@ -515,11 +514,81 @@ namespace SolidApp
             bret = ret >= 0;
             return bret;
         }
-        
 
     }
 
+    public static class SwFileManager
+    {
+        private static ISldWorks _swApp;
+        /// <summary>
+        /// swApp singleton
+        /// </summary>
+        public static ISldWorks swApp
+        {
+            get
+            {
+                if (_swApp is null)
+                    _swApp = SolidTools.GetSWApp();
+                return _swApp;
+            }
+        }
+
+        /// <summary>
+        /// Check for existence of drawing with part name
+        /// </summary>
+        /// <param name="filePath">Path to part</param>
+        /// <returns></returns>
+        public static bool isDrawExcist(string filePath)
+        {
+            string drawName = Path.ChangeExtension(filePath, "SLDDRW");
+            return File.Exists(drawName);
+        }
+
+        /// <summary>
+        /// Open drawing doc if exist
+        /// </summary>
+        /// <param name="filePath">Path to part!</param>
+        /// <param name="swModel">Out DrawingDoc</param>
+        /// <returns>Success</returns>
+        public static bool OpenDraw(string filePath, out DrawingDoc swModel)
+        {
+            string drawName = Path.ChangeExtension(filePath, "SLDDRW");
+            bool ret = false;
+            swModel = null;
+            if (File.Exists(drawName))
+            {
+                swModel = swApp.OpenDoc(drawName, (int)swDocumentTypes_e.swDocDRAWING);
+            }
+
+            if(!(swModel == null))
+                ret = true;
+
+            return ret;
+        }
 
 
+        /// <summary>
+        /// Some debug tests
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void Tests(string filePath)
+        {
+            var directory = Path.GetDirectoryName(filePath);
+            var filenameWhithoutExt = Path.GetFileNameWithoutExtension(filePath);
+            var filename = Path.GetFileName(filePath);
+            var ext = Path.GetExtension(filePath);
+            var dir = Path.GetDirectoryName(filePath);
+            var rand = Path.GetRandomFileName();
+            var changeExt = Path.ChangeExtension(filePath, "test");
+
+            Console.WriteLine($"Directory = {directory}\n" +
+                $"filename whithout ext = {filenameWhithoutExt}\n" +
+                $"file name = {filename}\n" +
+                $"file extension = {ext}\n" +
+                $"directory = {dir}\n" +
+                $"random = {rand}\n" +
+                $"change ext = {changeExt}");
+        }
+    }
 }
 

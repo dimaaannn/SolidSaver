@@ -20,20 +20,23 @@ namespace SolidApp
             ModelDoc2 swModel = swApp.ActiveDoc;
 
             var swModelCls = new SolidApp.SwModelManager(swModel);
-            var swExp = new SwExporter(swApp);
 
             Console.WriteLine("DocType = " + swModelCls.DocType);
             //Console.WriteLine("Is saved = " + swModelCls.Draw2Pdf()) ;
 
-            string pathToFile =  @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.pdf";
-
-
-            //Console.WriteLine("GetSheetThickness = {0}", swModelCls.PrpMan.GetSheetThickness); //Проверка isSheet
-
             Console.WriteLine("GetParam = {0}", swModelCls.PrpMan.GetParam("Наименование")); 
-
             Console.WriteLine("GetActiveConfig {0}", swModelCls.PrpMan.GetActiveConf);
-            
+
+            string pathToPart = swModelCls.FilePath;
+
+            //SwFileManager.Tests(pathToPart);
+            Console.WriteLine("Draw is {0}", SwFileManager.isDrawExcist(pathToPart) ? "Excist" : "Not excist");
+
+            DrawingDoc openedDraw;
+            var isOpened = SwFileManager.OpenDraw(pathToPart, out openedDraw);
+            ModelDoc2 openedModel = (ModelDoc2)openedDraw;
+            Console.WriteLine("Draw is opened {0}, type = {1}", isOpened, openedModel.GetTitle());
+
             Console.WriteLine("Press any key");
             Console.ReadKey();
 
@@ -61,7 +64,7 @@ namespace SolidApp
             FileAttributes fAttr2 = FileAttributes.Archive;
 
             Console.WriteLine(fAttr == fAttr2);
-
         }
+
     }
 }
