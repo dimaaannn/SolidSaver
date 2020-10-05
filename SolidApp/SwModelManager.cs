@@ -10,7 +10,6 @@ using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Data;
 
-
 namespace SolidApp
 {
     public class SwModelManager
@@ -18,14 +17,14 @@ namespace SolidApp
         private static ISldWorks _swApp;
         public readonly swDocumentTypes_e DocType;
         private readonly ModelDoc2 _swModel;
-        private PrpManager _PrpMan;
+        private PartPrpManager _PrpMan;
         public string FilePath => _swModel.GetPathName();
-        public PrpManager PrpMan
+        public PartPrpManager PrpMan
         {
             get
             {
                 if (_PrpMan is null)
-                    _PrpMan = PrpManager.CreateInstance(_swModel);
+                    _PrpMan = PartPrpManager.CreateInstance(_swModel);
                 return _PrpMan;
             }
         }
@@ -151,12 +150,14 @@ namespace SolidApp
         }
     }
 
+
     public enum SaFileStatus
     {
         NotExist,
         Exist,
         ExistLocked
     }; //Статус доступности файла
+
 
     /// <summary>
     /// Экспорт моделей SolidWorks
@@ -327,6 +328,7 @@ namespace SolidApp
         }
     }
 
+
     //Todo Create class for part types
     public class SwPartManager : SwModelManager
     {
@@ -348,7 +350,8 @@ namespace SolidApp
     }
 
 
-    public class PrpManager
+    //Добавить проверку типа детали
+    public class PartPrpManager
     {
         private readonly ModelDoc2 _swModel;
         private Feature _swFeat;
@@ -357,7 +360,7 @@ namespace SolidApp
         /// Constructor
         /// </summary>
         /// <param name="swmodel">ModelDoc2 model</param>
-        public PrpManager(ModelDoc2 swmodel)
+        public PartPrpManager(ModelDoc2 swmodel)
         {
             if(!(swmodel is null))
             {
@@ -370,36 +373,106 @@ namespace SolidApp
         /// </summary>
         /// <param name="modeldoc"></param>
         /// <returns></returns>
-        public static PrpManager CreateInstance(ModelDoc2 modeldoc)
+        public static PartPrpManager CreateInstance(ModelDoc2 modeldoc)
         {
-            return new PrpManager(modeldoc);
+            return new PartPrpManager(modeldoc);
         }
         //Private Property
-        //private Body2[] GetBodyArr => _swModel. Todo
+        private bool _isSheetMetal = false;
+        private double _sheetThickness = -1;
+
+        //Private methods
+        /// <summary>
+        /// Get feature by name
+        /// </summary>
+        /// <param name="featName">Feature type name</param>
+        /// <returns>Feature object</returns>
+        private Feature GetFeatureByType(string featName)
+        {
+            object[] modelFeat = _swModel.FeatureManager.GetFeatures(true);
+            Feature swFeat = null;
+            foreach (Feature feat in modelFeat)
+            {
+                Debug.WriteLine($"FeatName = {feat.GetTypeName()}");
+                if (feat.GetTypeName() == featName)
+                {
+                    swFeat = feat;
+                    break;
+                }
+            }
+            //Debug.WriteLine("Get feature: Feature is {0}", swFeat is null ? "Not Found" : "Found");
+            return swFeat;
+        }
+        private Body2[] GetBodies()
+        {
+            object[] bodiesArray;
+            PartDoc swpart = (PartDoc)_swModel;
+            bodiesArray = swpart.GetBodies2((int)swBodyType_e.swAllBodies, true);
+            return Array.ConvertAll(bodiesArray, item => (Body2)item);
+        }
 
         //Public Property
         public string Title => _swModel.GetTitle();
         public swDocumentTypes_e DocType => (swDocumentTypes_e)_swModel.GetType(); 
+        /// <summary>
+        /// is part have SheetMetal body
+        /// </summary>
+        public bool isSheet
+        {
+            get
+            {
+                bool ret = false;
+                Body2[] bodiesArr = GetBodies();
+                if(!(bodiesArr is null))
+                {
+                    foreach (Body2 body in bodiesArr)
+                    {   
+                        if (body.IsSheetMetal())
+                        {
+                            ret = true;
+                            break;
+                        }
+                    }
+                }
+                return ret;
+            }
+        }
+        /// <summary>
+        /// Get active configuration
+        /// </summary>
+        public string GetActiveConf => _swModel.IGetActiveConfiguration().Name;
+
+        //TODO Переделать функцию на поиск в body из isSheet
+        /// <summary>
+        /// Get sheet thickness in mm
+        /// </summary>
         public double GetSheetThickness
         {
-            get //Todo get sheet thickness
+            get
             {
                 double ret = 0;
-                //var featArr = FeatArray;
+                if (_sheetThickness == -1 && isSheet)
+                {
+                    var feat = GetFeatureByType("SheetMetal");
 
-                //var thickness = from feature in featArr
-                //                where feature.GetTypeName() == "SheetMetal"
-                //                select feature.IParameter("Толщина").Value;
-                //if (thickness.Count() == 0)
-                //    ret = 0;
+                    if (!(feat is null))
+                        _sheetThickness = feat.IParameter("Толщина").Value; //Cache thickness
+                    else 
+                        _sheetThickness = 0;
+                }
 
-
+                ret = _sheetThickness;
+                Debug.WriteLine($"Sheet thickness is {_sheetThickness}");
                 return ret;
             }
         }
 
-        //Manage Configurations
-        public string GetActiveConf => _swModel.IGetActiveConfiguration().Name;
+        //Public methods
+        /// <summary>
+        /// Switch active configuration to
+        /// </summary>
+        /// <param name="confName">Configuration name</param>
+        /// <returns>Success</returns>
         public bool SetActiveConf(string confName)
         {
             bool ret;
@@ -407,11 +480,42 @@ namespace SolidApp
             Debug.WriteLine("PrpMan: WARNING! config {0} is {1}", confName, ret ? "active" : "not active");
             return ret;
         }
+
+        /// <summary>
+        /// Get parameter value
+        /// </summary>
+        /// <param name="paramName">Field name</param>
+        /// <returns>null or Field value</returns>
+        public string GetParam(string paramName)
+        {
+            string propVal, valout;
+            bool bret;
+            //Todo set confman singleton
+            ConfigurationManager confMan = _swModel.ConfigurationManager;
+            bret = confMan.ActiveConfiguration.CustomPropertyManager.Get3(paramName, true, out valout, out propVal);
+
+            if (bret == false)
+                propVal = null;
+
+            return propVal;
+        }
+        /// <summary>
+        /// Set property parameter
+        /// </summary>
+        /// <param name="paramName">Field name</param>
+        /// <param name="paramVal">Field value</param>
+        /// <returns>Success</returns>
+        public bool SetParam(string paramName, string paramVal)
+        {
+            //Todo set confman singleton
+            ConfigurationManager confMan = _swModel.ConfigurationManager;
+            int ret;
+            bool bret;
+            ret = confMan.ActiveConfiguration.CustomPropertyManager.Set(paramName, paramVal);
+            bret = ret >= 0;
+            return bret;
+        }
         
-
-
-
-
 
     }
 

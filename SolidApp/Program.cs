@@ -27,9 +27,11 @@ namespace SolidApp
 
             string pathToFile =  @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Test.pdf";
 
-            Console.WriteLine("GetDocType {0}", swModelCls.PrpMan.DocType);
-            swModelCls.PrpMan.SetActiveConf("test");
-            Console.WriteLine("test {0}", swModelCls.PrpMan.GetSheetThickness);
+
+            //Console.WriteLine("GetSheetThickness = {0}", swModelCls.PrpMan.GetSheetThickness); //Проверка isSheet
+
+            Console.WriteLine("GetParam = {0}", swModelCls.PrpMan.GetParam("Наименование")); 
+
             Console.WriteLine("GetActiveConfig {0}", swModelCls.PrpMan.GetActiveConf);
             
             Console.WriteLine("Press any key");
