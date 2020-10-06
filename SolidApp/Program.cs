@@ -61,15 +61,8 @@ namespace SolidApp
         }
     }
 
-    public static class TestFunctions
-    {
-        public static void GetFileAttr(string path)
+    public class SimpleSaver
         {
-            FileAttributes fAttr = File.GetAttributes(path);
-            FileAttributes fAttr2 = FileAttributes.Archive;
 
-            Console.WriteLine(fAttr == fAttr2);
         }
-
-    }
 }
