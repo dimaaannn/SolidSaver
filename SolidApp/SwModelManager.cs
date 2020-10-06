@@ -79,7 +79,7 @@ namespace SolidApp
                 return string.Concat(this.FolderPath, this.FileNameWhithoutExt);
             }
         }
-        private string GetFileExtension
+        public string GetFileExtension
         {
             get
             {
@@ -590,7 +590,7 @@ namespace SolidApp
                 swModel = swApp.OpenDoc(drawName, (int)swDocumentTypes_e.swDocDRAWING);
             }
 
-            if(!(swModel == null))
+            if (!(swModel == null))
                 ret = true;
 
             return ret;
@@ -618,6 +618,20 @@ namespace SolidApp
                 $"directory = {dir}\n" +
                 $"random = {rand}\n" +
                 $"change ext = {changeExt}");
+        }
+
+        public static bool CreateFolder(string folderPath)
+        {
+            bool ret = false;
+            System.IO.DirectoryInfo dirInfo;
+            if (System.IO.Directory.Exists(folderPath))
+                ret = true;
+            else
+            {
+                dirInfo = Directory.CreateDirectory(folderPath);
+                ret = dirInfo.Exists;
+            }
+            return ret;
         }
     }
 }
