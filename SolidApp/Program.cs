@@ -7,6 +7,8 @@ using SolidDrawing;
 using SolidWorks.Interop.sldworks;
 using System.Diagnostics;
 using System.IO;
+using SwConst;
+using System.Linq;
 
 namespace SolidApp
 {
@@ -62,7 +64,136 @@ namespace SolidApp
     }
 
     public class SimpleSaver
+    {
+        private ModelDoc2 _swModel;
+        private SwModelManager _swManager;
+        private SwExporter _exporter;
+
+        private readonly string filePath;
+        private System.Collections.Generic.Dictionary<string, string> _modelParams;
+        private string _configName;
+
+        /// <summary>
+        /// Создать класс
+        /// </summary>
+        /// <param name="swModel">Модель ТОЛЬКО DocPart</param>
+        public SimpleSaver(ModelDoc2 swModel)
         {
+            //Check model and save as param
+            Debug.WriteLine("SimpleSaver: Begin checking file");
+            if (CheckModel(swModel))
+            {
+                Debug.WriteLine("Class simpleSaver created");
+                _swModel = swModel;
+            }
+
+            _modelParams = new Dictionary<string, string>();
+            _exporter = new SwExporter(SwModelManager.swApp);
+            _swManager = new SwModelManager(_swModel);
+
+            GetDocParams();
 
         }
+        /// <summary>
+        /// Проверить модель перед созданием класса
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        private static bool CheckModel(ModelDoc2 swModel)
+        {
+            bool ret = false;
+            if (!(swModel is null))
+            {
+                if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+                    ret = true;
+                else
+                    throw new ArgumentException("SimpleSaver: Document is not PartDoc");
+            }
+            else
+                throw new NullReferenceException("SimpleSaver - modelReference is not exist");
+            Debug.WriteLine("CheckModel: Succes");
+            return ret;
+        }
+
+        //public static ModelDoc2 GetDocument() { }
+
+        /// <summary>
+        /// Получить параметры из детали
+        /// </summary>
+        /// <returns>Список НЕ полученных параметров</returns>
+        private string[] GetDocParams()
+        {
+            Debug.WriteLine("GetDocParams: Begin");
+            var paramSet = new HashSet<string>() {
+                "Обозначение",
+                "Наименование",
+                "Material"
+            };
+
+            foreach (string paramname in paramSet)
+            {
+                _modelParams.Add(paramname, _swManager.PrpMan.GetParam(paramname));
+                if (string.IsNullOrEmpty(_modelParams[paramname]))
+                    _modelParams[paramname] = "";
+                else
+                    paramSet.Remove(paramname);
+            }
+
+            _configName = _swManager.PrpMan.GetActiveConf;
+
+            Debug.WriteLine("GetDocParams: Config name = {0}\nFailed params count = {1}", _configName, paramSet.Count);
+            return paramSet.ToArray();
+        }
+
+        /// <summary>
+        /// Сохранить все листы чертежа, если он существует
+        /// </summary>
+        /// <param name="pdfFilePath">Имя файла</param>
+        /// <param name="swDrawing">Документ чертежа (опционально)</param>
+        /// <returns>Success</returns>
+        public bool SavePdf(string pdfFilePath, DrawingDoc swDrawing = null )
+        {
+            bool ret = false;
+            bool drawExcist = true;
+            Debug.WriteLine("SavePdf: Path = " + pdfFilePath);
+            if (swDrawing is null)
+                Debug.WriteLine("SavePdf: Try opening draw doc");
+                drawExcist = SwFileManager.OpenDraw(_swManager.FilePath, out swDrawing);
+
+            if (drawExcist)
+                Debug.WriteLine("SavePdf: Try save draw to pdf");
+            ret = _exporter.SavePdf((ModelDoc2)swDrawing, pdfFilePath, true);
+
+            Debug.WriteLine("SavePdf: Saving {0}", ret ? "Success" : "Fail");
+            return ret;
+        }
+
+        public bool SaveDxf(string dxfFileName)
+        {
+            bool ret = false;
+            if (_swManager.PrpMan.isSheet)
+            {
+                ret = _exporter.SaveDxf(_swModel, dxfFileName);
+            }
+            else
+                throw new FormatException("SaveDxf: Экспорт в DXF невозможен, деталь не является листовой");
+            return ret;
+        }
+
+        /// <summary>
+        /// Сохранить копию модели средствами SolidWorks
+        /// </summary>
+        /// <param name="copyFileName"></param>
+        /// <returns></returns>
+        public bool SaveModelCopy(string copyFileName)
+        {
+            bool ret = false;
+            ret = _exporter.Copy(_swModel, copyFileName, true);
+            return ret;
+        }
+
+
+
+
+    }
 }

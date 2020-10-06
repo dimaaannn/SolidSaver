@@ -244,7 +244,7 @@ namespace SolidApp
             switch(fileStatus)
             {
                 case SaFileStatus.ExistLocked:
-                    throw new System.IO.FileLoadException("Ошибка!\nФайл {0} \nзаблокирован для записи!", path);
+                    throw new FileLoadException("Ошибка!\nФайл {0} \nзаблокирован для записи!", path);
                 case SaFileStatus.Exist:
                     ret = overwrite;
                     break;
@@ -577,12 +577,12 @@ namespace SolidApp
         /// <summary>
         /// Open drawing doc if exist
         /// </summary>
-        /// <param name="filePath">Path to part!</param>
+        /// <param name="fileModelPath">Path to part!</param>
         /// <param name="swModel">Out DrawingDoc</param>
         /// <returns>Success</returns>
-        public static bool OpenDraw(string filePath, out DrawingDoc swModel)
+        public static bool OpenDraw(string fileModelPath, out DrawingDoc swModel)
         {
-            string drawName = Path.ChangeExtension(filePath, "SLDDRW");
+            string drawName = Path.ChangeExtension(fileModelPath, "SLDDRW");
             bool ret = false;
             swModel = null;
             if (File.Exists(drawName))
