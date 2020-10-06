@@ -325,6 +325,19 @@ namespace SolidApp
             }
             return ret;
         }
+
+        public bool SaveDxf(ModelDoc2 swModel, string filePath)
+        {
+            bool ret = false;
+            
+            if(FileChecker(filePath, true) && swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                PartDoc swPart = (PartDoc)swModel;
+                ret = swPart.ExportFlatPatternView(filePath, (int)swExportFlatPatternViewOptions_e.swExportFlatPatternOption_RemoveBends);
+            }
+
+            return ret;
+        }
     }
 
 
@@ -475,7 +488,8 @@ namespace SolidApp
         public bool SetActiveConf(string confName)
         {
             bool ret;
-            ret =  _swModel.ShowConfiguration2(confName);
+            ret =  _swModel.ShowConfiguration2(confName); //Переключить конфигурацию
+            _swModel.ForceRebuild3(false); //Перестроить модель
             Debug.WriteLine("PrpMan: WARNING! config {0} is {1}", confName, ret ? "active" : "not active");
             return ret;
         }
