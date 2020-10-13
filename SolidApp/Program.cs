@@ -62,6 +62,8 @@ namespace SolidApp
 
                 AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
 
+                AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+
             }
 
 
@@ -612,6 +614,39 @@ namespace SolidApp
             Console.Write(ret ? " OK\n" : " Не сохранено\n");
             return ret;
         }
+
+        public static bool SavePDF(SwModelManager swModelMan, string folder = null, string name = null)
+        {
+            bool ret = false;
+            int lineNum = 14;
+            const int offset = 23;
+            Console.CursorLeft = 0;
+
+            if (string.IsNullOrEmpty(folder))
+                folder = swModelMan.FolderPath;
+
+            if (string.IsNullOrEmpty(name))
+                name = swModelMan.FileNameWhithoutExt + ".pdf";
+
+
+            StringManager.ClearLine(lineNum);
+            Console.Write($"{"Сохранение PDF: ",offset}");
+
+            DrawingDoc DrawDoc;
+
+            if(SwFileManager.OpenDraw(swModelMan.FilePath, out DrawDoc))
+            {
+                var model = (ModelDoc2)DrawDoc;
+                Thread.Sleep(1000);
+                var DrawModelMan = new SwModelManager(model);
+                ret = DrawModelMan.Draw2Pdf(folder + name);
+                model.Close();
+            }
+
+            Console.Write(ret ? " OK\n" : " Не сохранено\n");
+            return ret;
+        }
+
 
 
         /// <summary>
