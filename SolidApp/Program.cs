@@ -20,20 +20,27 @@ namespace SolidApp
         {
 
             ISldWorks swApp;
-            AppConsInterface.Greenings(Version);
+            AppConsole.Greenings(Version);
+            AppConsole.RunSW();
+            AppConsole.LoadSwApp();
+            
+
+            var swProc = SwProcess.swProcess;
+            swApp = SwProcess.swApp;
+            Console.WriteLine("SWapp is exited " + SwProcess.IsRunning);
 
 
-            swApp = AppConsInterface.GetSwApp();
-            ModelDoc2 swModel;
-            do
-            {
-                swModel = AppConsInterface.GetModel(1000);
-            } while (!AppConsInterface.CheckType(swModel, swDocumentTypes_e.swDocPART));
+            //swApp = AppConsInterface.GetSwApp();
+            //ModelDoc2 swModel;
+            //do
+            //{
+            //    swModel = AppConsInterface.GetModel(1000);
+            //} while (!AppConsInterface.CheckType(swModel, swDocumentTypes_e.swDocPART));
 
-            AppConsInterface.BeginSaving(5);
+            //AppConsInterface.BeginSaving(5);
 
-            var modelSaver = new SimpleSaver(swModel);
-            AppConsInterface.ExportDXF(swModel);
+            //var modelSaver = new SimpleSaver(swModel);
+            //AppConsInterface.ExportDXF(swModel);
             
 
 
@@ -224,7 +231,7 @@ namespace SolidApp
     /// <summary>
     /// Консольный интерфейс
     /// </summary>
-    public static class AppConsInterface
+    public static class AppConsole
     {
 
         enum ColorMode
@@ -265,7 +272,6 @@ namespace SolidApp
         /// </summary>
         public static class ConsStringManager
         {
-            public delegate bool WaitAnimation(ref int charLenght);
 
             /// <summary>
             /// Очистить строку
@@ -282,22 +288,47 @@ namespace SolidApp
             /// <summary>
             /// Анимация ожидания
             /// </summary>
+            /// <param name="stringNum">Номер строки</param>
             /// <param name="processTime">Время ожидания в мс</param>
-            public static void SleepAnimation(int processTime = 700)
+            public static void SleepAnimation(int stringNum = -1, int processTime = 700)
             {
-                int printTime = 200;
-                int repeats = processTime / printTime;
+                int printTime = 100;
+                int StringLenght = 10;
+                int repeats = processTime / printTime / StringLenght;
 
-                while (repeats > 0)
+                if(stringNum != -1)
                 {
-                    for(int i = 5; i > 0; --i)
-                    {
-                        Console.Write(". ");
-                        Thread.Sleep(printTime);
-                    }
-                    ClearLine(Console.CursorTop);
-                    repeats--;
+                    Console.CursorTop = stringNum;
                 }
+
+                Console.CursorVisible = false; //Выключить курсор
+                try
+                {
+
+                    while (repeats > 0)
+                    {
+                        for (int i = StringLenght; i > 0; --i)
+                        {
+                            Thread.Sleep(printTime);
+                            Console.Write("- ");
+                        }
+                        Thread.Sleep(printTime);
+                        ClearLine(Console.CursorTop);
+                        repeats--;
+
+                        Thread.Sleep(printTime);
+                        ClearLine(Console.CursorTop);
+                    }
+                }
+                catch(ThreadInterruptedException e)
+                {
+                    ClearLine(Console.CursorTop);
+                }
+                finally
+                {
+                    Console.CursorVisible = true; //Включить курсор
+                }
+
             }
 
         }
@@ -314,59 +345,55 @@ namespace SolidApp
         }
 
         /// <summary>
-        /// Получить экземпляр программы SolidWorks
+        /// Приглашение запустить SW
         /// </summary>
         /// <param name="sleepTime">Время ожидания</param>
         /// <returns></returns>
-        public static ISldWorks GetSwApp(int sleepTime = 1000)
+        public static bool RunSW(int sleepTime = 1000)
         {
-            ISldWorks swApp = null;
-
             Console.CursorLeft = 0;
             Console.CursorTop = 3;
             Console.WriteLine("Ожидание запуска SolidWorks");
-            SwitchColor(ColorMode.Warning);
-            Console.WriteLine("Не нужно запускать приложение ДО запуска SolidWorks. \n" +
-                "Теперь Иди в диспетчер и убивай процесс");
-            SwitchColor(ColorMode.Default);
-            while (swApp is null)
+
+            while (SwProcess.IsRunning == false)
             {
-                swApp = SolidTools.GetSWApp();
-                if (swApp is null)
-                    ConsStringManager.SleepAnimation();
+                ConsStringManager.SleepAnimation(stringNum: 2, processTime: sleepTime);
             }
+
             ConsStringManager.ClearLine(3);
-            ConsStringManager.ClearLine(4);
-            ConsStringManager.ClearLine(5);
-            return swApp;
+            return true;
         }
 
         /// <summary>
-        /// Получить экземпляр активного документа
+        /// Сообщение о загрузке SW
         /// </summary>
-        /// <param name="sleepTime">Время ожидания</param>
         /// <returns></returns>
-        public static ModelDoc2 GetModel(int sleepTime = 1000)
+        public static bool LoadSwApp()
         {
-            var swApp = SwModelManager.swApp;
-            ModelDoc2 swModel = null;
-
             Console.CursorLeft = 0;
             Console.CursorTop = 3;
-            Console.WriteLine("Ожидание открытия документа");
-            SwitchColor(ColorMode.Info);
-            Console.WriteLine("На текущий момент поддерживаются только отдельные детали");
-            SwitchColor(ColorMode.Default);
+            Console.WriteLine("Ожидание загрузки SolidWorks");
 
-            while (swModel is null)
+            Thread Animation = new Thread( () => ConsStringManager.SleepAnimation(2, 5000));
+            Animation.Start(); // Запуск потока с анимацией
+
+            while(SwProcess.swApp is null)
             {
-                swModel = swApp.ActiveDoc;
-                if(swModel is null)
-                    ConsStringManager.SleepAnimation();
+                ConsStringManager.SleepAnimation(2);
             }
             ConsStringManager.ClearLine(3);
-            ConsStringManager.ClearLine(4);
-            return swModel;
+            Animation.Interrupt(); //Прервать поток анимации загрузки
+            return true;
+        }
+
+        public static bool ShowDocType()
+        {
+            Console.CursorLeft = 0;
+            Console.CursorTop = 3;
+            Console.WriteLine("Откройте документ");
+
+
+            return true;
         }
 
         /// <summary>

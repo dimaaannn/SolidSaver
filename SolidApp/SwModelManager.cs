@@ -636,7 +636,7 @@ namespace SolidApp
         }
     }
 
-    public static class SwChecker
+    public static class SwProcess
     {
         private static Process _swProcess;
         private static ISldWorks _swApp;
@@ -652,8 +652,11 @@ namespace SolidApp
                 {
                     Process[] ProcessList;
                     ProcessList = Process.GetProcessesByName("SLDWORKS");
-                    if(ProcessList.Count() > 0)
+                    if (ProcessList.Count() > 0)
+                    {
                         _swProcess = ProcessList.First();
+                        _swProcess.EnableRaisingEvents = true;
+                    }
                 }
                 return _swProcess;
             }
@@ -674,11 +677,14 @@ namespace SolidApp
             
         }
 
+        /// <summary>
+        /// Получить экземпляр АПИ
+        /// </summary>
         public static ISldWorks swApp
         {
             get
             {
-                if (!(_swApp is null))
+                if (_swApp is null)
                 {
                     Debug.Print("geting SWapp");
                     _swApp = SolidTools.GetSWApp();
