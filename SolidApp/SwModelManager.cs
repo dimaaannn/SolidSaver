@@ -34,6 +34,7 @@ namespace SolidApp
         public readonly swDocumentTypes_e DocType;
         private readonly ModelDoc2 _swModel;
         private PartPrpManager _PrpMan;
+        
         public string FilePath => _swModel.GetPathName();
         public PartPrpManager PrpMan
         {

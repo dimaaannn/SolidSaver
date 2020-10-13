@@ -10,6 +10,7 @@ using System.IO;
 using SwConst;
 using System.Linq;
 using System.Threading;
+using System.Security.Policy;
 
 namespace SolidApp
 {
@@ -516,7 +517,7 @@ namespace SolidApp
             bool isSheet = swModelMan.PrpMan.isSheet;
 
             string DrawIsFound = isDrawExist ? "Найден" : "Не найден";
-            string isSheetMetal = isSheet ? "Листовая" : "Не листовая";
+            string isSheetMetal = isSheet ? $"Листовая - {swModelMan.PrpMan.GetSheetThickness}мм" : "Не листовая";
 
             //Clear console below
             for (int i = lineNum; i < lineNum + 5; ++i)
@@ -535,7 +536,26 @@ namespace SolidApp
 
         }
 
+        public static bool SaveDXF(SwModelManager swModelMan, string path)
+        {
+            bool ret = false;
+            int lineNum = 11;
+            const int offset = 23;
+            Console.CursorLeft = 0;
+            //Console.CursorTop = lineNum;
 
+            if (swModelMan.PrpMan.isSheet)
+            {
+                bool isSaved;
+                StringManager.ClearLine(lineNum);
+                Console.WriteLine($"{"Сохранение DXF: ",offset} {0}");
+                
+                
+
+                ret = true;
+            }
+            return ret;
+        }
 
         /// <summary>
         /// Проверка типа modelDoc2 на соответствие
