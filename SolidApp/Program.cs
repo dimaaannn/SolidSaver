@@ -20,13 +20,20 @@ namespace SolidApp
         {
 
             ISldWorks swApp;
+            ModelDoc2 swModel;
+
             AppConsole.Greenings(Version);
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
-            
 
-            var swProc = SwProcess.swProcess;
+
             swApp = SwProcess.swApp;
+            swModel = AppConsole.LoadActiveDoc();
+
+            
+            var swProc = SwProcess.swProcess;
+
+
             Console.WriteLine("SWapp is exited " + SwProcess.IsRunning);
 
 
@@ -51,6 +58,8 @@ namespace SolidApp
         }
     }
 
+
+    //TODO убрать нафиг
     public class SolidTools
     {
         static string progId = "SldWorks.Application";
@@ -270,7 +279,7 @@ namespace SolidApp
         /// <summary>
         /// Work with console
         /// </summary>
-        public static class ConsStringManager
+        public static class StringManager
         {
 
             /// <summary>
@@ -314,21 +323,46 @@ namespace SolidApp
                         }
                         Thread.Sleep(printTime);
                         ClearLine(Console.CursorTop);
-                        repeats--;
+                        //repeats--;
 
                         Thread.Sleep(printTime);
                         ClearLine(Console.CursorTop);
+
                     }
                 }
-                catch(ThreadInterruptedException e)
-                {
-                    ClearLine(Console.CursorTop);
-                }
+                catch (ThreadInterruptedException e) { }
                 finally
                 {
+                    ClearLine(Console.CursorTop);
                     Console.CursorVisible = true; //Включить курсор
                 }
 
+            }
+
+            /// <summary>
+            /// Название типа детали
+            /// </summary>
+            /// <param name="docType"></param>
+            /// <returns></returns>
+            public static string DocTypeName(swDocumentTypes_e docType)
+            {
+                string typeMessage;
+                switch (docType)
+                {
+                    case swDocumentTypes_e.swDocASSEMBLY:
+                        typeMessage = "Сборка";
+                        break;
+                    case swDocumentTypes_e.swDocDRAWING:
+                        typeMessage = "Чертёж";
+                        break;
+                    case swDocumentTypes_e.swDocPART:
+                        typeMessage = "Деталь";
+                        break;
+                    default:
+                        typeMessage = "Что то непонятное";
+                        break;
+                }
+                return typeMessage;
             }
 
         }
@@ -355,12 +389,16 @@ namespace SolidApp
             Console.CursorTop = 3;
             Console.WriteLine("Ожидание запуска SolidWorks");
 
+            Thread Animation = new Thread(() => StringManager.SleepAnimation(2, 5000));
+            Animation.Start(); // Запуск потока с анимацией
             while (SwProcess.IsRunning == false)
             {
-                ConsStringManager.SleepAnimation(stringNum: 2, processTime: sleepTime);
+                Thread.Sleep(500);
+                //StringManager.SleepAnimation(stringNum: 2, processTime: sleepTime);
             }
 
-            ConsStringManager.ClearLine(3);
+            StringManager.ClearLine(3);
+            Animation.Interrupt(); //Прервать поток анимации загрузки
             return true;
         }
 
@@ -374,27 +412,94 @@ namespace SolidApp
             Console.CursorTop = 3;
             Console.WriteLine("Ожидание загрузки SolidWorks");
 
-            Thread Animation = new Thread( () => ConsStringManager.SleepAnimation(2, 5000));
+            Thread Animation = new Thread( () => StringManager.SleepAnimation(2, 5000));
             Animation.Start(); // Запуск потока с анимацией
 
             while(SwProcess.swApp is null)
             {
-                ConsStringManager.SleepAnimation(2);
+                Thread.Sleep(500);
+                //StringManager.SleepAnimation(2);
             }
-            ConsStringManager.ClearLine(3);
+            StringManager.ClearLine(3);
             Animation.Interrupt(); //Прервать поток анимации загрузки
             return true;
-        }
+        }        
 
-        public static bool ShowDocType()
+        /// <summary>
+        /// Ожидание активного документа
+        /// </summary>
+        /// <returns></returns>
+        public static ModelDoc2 LoadActiveDoc()
         {
             Console.CursorLeft = 0;
             Console.CursorTop = 3;
-            Console.WriteLine("Откройте документ");
+            Console.WriteLine("Откройте деталь");
 
+            Thread Animation = new Thread( () => StringManager.SleepAnimation(2, 5000));
+            Animation.Start(); // Запуск потока с анимацией
 
-            return true;
+            ModelDoc2 swModel;
+            do
+            {
+                
+                swModel = SwProcess.swApp.ActiveDoc;
+                Thread.Sleep(500);
+                //StringManager.SleepAnimation(2);
+            }
+            while (swModel is null);
+
+            StringManager.ClearLine(3);
+            Animation.Interrupt(); //Прервать поток анимации загрузки
+            StringManager.ClearLine(2);
+            return swModel;
         }
+
+        /// <summary>
+        /// Напечатать тип детали
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static bool ShowDocType(SwModelManager swModelMan)
+        {
+            swDocumentTypes_e docType;
+            bool ret = false;
+            int lineNum = 3;
+            Console.CursorLeft = 0;
+            Console.CursorTop = lineNum;
+            Console.WriteLine("Открытый документ отсутствует");
+            if(!(swModelMan is null))
+            {
+                docType = swModelMan.DocType;
+
+                StringManager.ClearLine(lineNum);
+                Console.Write("Тип открытой детали: " + StringManager.DocTypeName(docType));
+                ret = true;
+            }
+
+            return ret;
+        }
+        /// <summary>
+        /// Напечатать имя файла
+        /// </summary>
+        /// <param name="swModelMan"></param>
+        /// <returns></returns>
+        public static bool ShowDocName(SwModelManager swModelMan)
+        {
+            bool ret = false;
+            int lineNum = 4;
+            Console.CursorLeft = 0;
+            Console.CursorTop = lineNum;
+            Console.WriteLine("Отсутствует");
+            if (!(swModelMan is null))
+            {
+                StringManager.ClearLine(lineNum);
+                Console.Write("Имя документа :" + swModelMan.FileName);
+                ret = true;
+            }
+            return ret;
+        }
+
+
 
         /// <summary>
         /// Проверка типа modelDoc2 на соответствие
@@ -408,7 +513,7 @@ namespace SolidApp
             if((swDocumentTypes_e)swModel.GetType() == swDocType)
                 ret = true;
 
-            ConsStringManager.ClearLine(5);
+            StringManager.ClearLine(5);
             Console.CursorTop = 5;
             if (!ret)
             {
@@ -418,7 +523,7 @@ namespace SolidApp
                 SwitchColor(ColorMode.Default);
                 Console.CursorTop = 4;
                 Console.CursorLeft = 0;
-                ConsStringManager.SleepAnimation();
+                StringManager.SleepAnimation();
 
             }
             else
@@ -427,8 +532,8 @@ namespace SolidApp
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Документ {0} загружен успешно", swDocType);
                 SwitchColor(ColorMode.Default);
-                ConsStringManager.ClearLine(5);
-                ConsStringManager.ClearLine(6);
+                StringManager.ClearLine(5);
+                StringManager.ClearLine(6);
                 Console.CursorTop = 5;
                 Console.CursorLeft = 0;
             }

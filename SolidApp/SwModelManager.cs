@@ -678,6 +678,19 @@ namespace SolidApp
         }
 
         /// <summary>
+        /// Подключение к com API
+        /// </summary>
+        /// <returns></returns>
+        private static ISldWorks GetSWApp()
+        {
+            string progId = "SldWorks.Application";
+            var progType = System.Type.GetTypeFromProgID(progId);
+
+            ISldWorks swApp = System.Activator.CreateInstance(progType) as SolidWorks.Interop.sldworks.ISldWorks;
+            return swApp;
+        }
+
+        /// <summary>
         /// Получить экземпляр АПИ
         /// </summary>
         public static ISldWorks swApp
@@ -687,7 +700,7 @@ namespace SolidApp
                 if (_swApp is null)
                 {
                     Debug.Print("geting SWapp");
-                    _swApp = SolidTools.GetSWApp();
+                    _swApp = GetSWApp();
                 }
 
                 if (_swApp is null) 
@@ -696,6 +709,7 @@ namespace SolidApp
             }
             
         }
+
     }
 }
 
