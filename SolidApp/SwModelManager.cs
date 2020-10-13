@@ -7,7 +7,8 @@ using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Data;
 using System.IO;
-
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace SolidApp
 {
@@ -632,6 +633,62 @@ namespace SolidApp
                 ret = dirInfo.Exists;
             }
             return ret;
+        }
+    }
+
+    public static class SwChecker
+    {
+        private static Process _swProcess;
+        private static ISldWorks _swApp;
+
+        /// <summary>
+        /// GetSolidWorks process
+        /// </summary>
+        public static Process swProcess
+        {
+            get
+            {
+                if(_swProcess is null)
+                {
+                    Process[] ProcessList;
+                    ProcessList = Process.GetProcessesByName("SLDWORKS");
+                    if(ProcessList.Count() > 0)
+                        _swProcess = ProcessList.First();
+                }
+                return _swProcess;
+            }
+        }
+
+        /// <summary>
+        /// Check SolidWorks is running
+        /// </summary>
+        public static bool IsRunning
+        {
+            get
+            {
+                bool ret = false;
+                if (!(swProcess is null))
+                    ret = true;
+                return ret;
+            }
+            
+        }
+
+        public static ISldWorks swApp
+        {
+            get
+            {
+                if (!(_swApp is null))
+                {
+                    Debug.Print("geting SWapp");
+                    _swApp = SolidTools.GetSWApp();
+                }
+
+                if (_swApp is null) 
+                    throw new ArgumentNullException("SwApp is null");
+                return _swApp;
+            }
+            
         }
     }
 }

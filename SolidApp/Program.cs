@@ -22,6 +22,7 @@ namespace SolidApp
             ISldWorks swApp;
             AppConsInterface.Greenings(Version);
 
+
             swApp = AppConsInterface.GetSwApp();
             ModelDoc2 swModel;
             do
@@ -35,26 +36,6 @@ namespace SolidApp
             AppConsInterface.ExportDXF(swModel);
             
 
-
-            //var swModelCls = new SolidApp.SwModelManager(swModel);
-            //Console.WriteLine("DocType = " + swModelCls.DocType);
-
-            //Console.WriteLine("Is saved = " + swModelCls.Draw2Pdf()) ;
-
-            //Console.WriteLine("GetParam = {0}", swModelCls.PrpMan.GetParam("Наименование")); 
-            //Console.WriteLine("GetActiveConfig {0}", swModelCls.PrpMan.GetActiveConf);
-
-            //SwFileManager.Tests(pathToPart);
-            //Console.WriteLine("Draw is {0}", SwFileManager.isDrawExcist(pathToPart) ? "Excist" : "Not excist");
-
-            //DrawingDoc openedDraw;
-            //var isOpened = SwFileManager.OpenDraw(pathToPart, out openedDraw);
-            //ModelDoc2 openedModel = (ModelDoc2)openedDraw;
-            //Console.WriteLine("Draw is opened {0}, type = {1}", isOpened, openedModel.GetTitle());
-
-            //SwExporter exporter = new SwExporter(SwFileManager.swApp);
-            //string pathToSave = swModelCls.FolderPath + swModelCls.FileNameWhithoutExt + ".dxf";
-            //Console.WriteLine("Success = " + exporter.SaveDxf(swModel, pathToSave));
 
 
             Console.WriteLine("Press any key");
