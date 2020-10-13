@@ -23,21 +23,46 @@ namespace SolidApp
             ISldWorks swApp;
             ModelDoc2 swModel;
 
+            string rootFolder;
+            string workFolder;
+            string name;
+            string partName;
+
             AppConsole.Greenings(Version);
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
-
-            swApp = SwProcess.swApp;
             swModel = AppConsole.LoadActiveDoc();
-
             var part = new SwModelManager(swModel);
+
+            name = part.PrpMan.Title;
+            partName = part.PrpMan.GetParam("Обозначение");
+
+            string newFolderName = @"Развёртки/";
+            rootFolder = part.FolderPath;
+            workFolder = rootFolder + "/" + newFolderName;
+
+            if (!Directory.Exists(workFolder))
+                Directory.CreateDirectory(workFolder);
+                
 
             AppConsole.ShowDocType(part);
             AppConsole.ShowDocName(part);
             AppConsole.ShowProp(part);
 
-            AppConsole.SaveDXF(part);
+
+
+            Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
+            var userAnswer = Console.ReadKey(true);
+            //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
+            if(userAnswer.Key == ConsoleKey.Spacebar)
+            {
+                string savingName = partName + " - " + name;
+                AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
+
+                AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
+
+            }
 
 
             //swApp = AppConsInterface.GetSwApp();
@@ -56,7 +81,7 @@ namespace SolidApp
 
 
             Console.WriteLine("Press any key");
-            Console.ReadKey();
+            Console.ReadKey(true);
 
         }
     }
@@ -541,7 +566,7 @@ namespace SolidApp
         public static bool SaveDXF(SwModelManager swModelMan, string folder = null, string name = null)
         {
             bool ret = false;
-            int lineNum = 11;
+            int lineNum = 12;
             const int offset = 23;
             Console.CursorLeft = 0;
             //Console.CursorTop = lineNum;
@@ -564,6 +589,30 @@ namespace SolidApp
             Console.Write(ret ? " OK\n" : " Не сохранено\n");
             return ret;
         }
+
+        public static bool SaveCopy(SwModelManager swModelMan, string folder = null, string name = null)
+        {
+            bool ret = false;
+            int lineNum = 13;
+            const int offset = 23;
+            Console.CursorLeft = 0;
+
+            if (string.IsNullOrEmpty(folder))
+                folder = swModelMan.FolderPath;
+
+            if (string.IsNullOrEmpty(name))
+                name = swModelMan.FileName;
+
+
+            StringManager.ClearLine(lineNum);
+            Console.Write($"{"Сохранение копии: ",offset}");
+
+            ret = swModelMan.SaveAsCopy(folder + name);
+
+            Console.Write(ret ? " OK\n" : " Не сохранено\n");
+            return ret;
+        }
+
 
         /// <summary>
         /// Проверка типа modelDoc2 на соответствие
