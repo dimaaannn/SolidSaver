@@ -37,6 +37,8 @@ namespace SolidApp
             AppConsole.ShowDocName(part);
             AppConsole.ShowProp(part);
 
+            AppConsole.SaveDXF(part);
+
 
             //swApp = AppConsInterface.GetSwApp();
             //ModelDoc2 swModel;
@@ -103,7 +105,7 @@ namespace SolidApp
             }
 
             _modelParams = new Dictionary<string, string>();
-            _exporter = new SwExporter(SwModelManager.swApp);
+            //_exporter = new SwExporter(SwModelManager.swApp);
             _swManager = new SwModelManager(_swModel);
 
             folderToSave = _swManager.FolderPath + @"\Сохранение";
@@ -210,7 +212,7 @@ namespace SolidApp
 
             if (_swManager.PrpMan.isSheet)
             {
-                ret = _exporter.SaveDxf(_swModel, dxfFileName);
+                //ret = _exporter.SaveDxf(_swModel, dxfFileName);
             }
             else
                 throw new FormatException("SaveDxf: Экспорт в DXF невозможен, деталь не является листовой");
@@ -536,7 +538,7 @@ namespace SolidApp
 
         }
 
-        public static bool SaveDXF(SwModelManager swModelMan, string path)
+        public static bool SaveDXF(SwModelManager swModelMan, string folder = null, string name = null)
         {
             bool ret = false;
             int lineNum = 11;
@@ -544,16 +546,22 @@ namespace SolidApp
             Console.CursorLeft = 0;
             //Console.CursorTop = lineNum;
 
+            if (string.IsNullOrEmpty(folder))
+                folder = swModelMan.FolderPath;
+
+            if (string.IsNullOrEmpty(name))
+                name = swModelMan.FileNameWhithoutExt + ".dxf";
+
+
+            StringManager.ClearLine(lineNum);
+            Console.Write($"{"Сохранение DXF: ",offset}");
+
             if (swModelMan.PrpMan.isSheet)
             {
-                bool isSaved;
-                StringManager.ClearLine(lineNum);
-                Console.WriteLine($"{"Сохранение DXF: ",offset} {0}");
-                
-                
-
-                ret = true;
+                ret = swModelMan.Export.SaveDxf(folder + name);
             }
+
+            Console.Write(ret ? " OK\n" : " Не сохранено\n");
             return ret;
         }
 
@@ -606,17 +614,6 @@ namespace SolidApp
             SwitchColor(ColorMode.Default);
         }
 
-        public static bool ExportDXF(ModelDoc2 swModel, string pathDxf = null)
-        {
-            bool ret = false;
-            var saver = new SimpleSaver(swModel);
-            ret = saver.SaveDxf(pathDxf);
-            Console.CursorTop = 6;
-            Console.CursorLeft = 0;
-            Console.WriteLine("DXF is {0}", ret ? "saved" : "not saved");
-            return ret;
-
-        }
 
     }
 }

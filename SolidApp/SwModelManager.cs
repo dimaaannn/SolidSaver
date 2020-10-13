@@ -34,7 +34,7 @@ namespace SolidApp
         public readonly swDocumentTypes_e DocType;
         private readonly ModelDoc2 _swModel;
         private PartPrpManager _PrpMan;
-        
+        private SwExporter _swExporter;
         public string FilePath => _swModel.GetPathName();
         public PartPrpManager PrpMan
         {
@@ -43,6 +43,16 @@ namespace SolidApp
                 if (_PrpMan is null)
                     _PrpMan = PartPrpManager.CreateInstance(_swModel);
                 return _PrpMan;
+            }
+        }
+
+        public SwExporter Export
+        {
+            get
+            {
+                if (_swExporter is null)
+                    _swExporter = new SwExporter(_swModel);
+                return _swExporter;
             }
         }
 
@@ -102,8 +112,7 @@ namespace SolidApp
         public bool SavePreview(string bmpPath = null, int height = 1000, int width = 1000)  //Сохранить превью как BMP файл
         {
             if (string.IsNullOrEmpty( bmpPath)) bmpPath = string.Concat(this.GetDefaultPath, ".bmp");
-            var swExp = new SwExporter(swApp);
-            return swExp.SavePreview(_swModel, bmpPath);
+            return _swExporter.SavePreview(_swModel, bmpPath);
         }
 
         /// <summary>
@@ -114,11 +123,10 @@ namespace SolidApp
         public bool SaveAsCopy(string path = null)
         {
             bool ret = false;
-            var expMan = new SwExporter(swApp);
             if (string.IsNullOrEmpty( path)) 
                 path = string.Concat(this.FolderPath, FileNameWhithoutExt, "-Copy", this.GetFileExtension);
 
-            ret = expMan.Copy(_swModel, path, true);
+            ret = _swExporter.Copy(_swModel, path, true);
             return ret;
         }
 
@@ -138,8 +146,7 @@ namespace SolidApp
             Debug.Print("Draw2pdf: begin saving to path {0}", path);
             if (DocType == swDocumentTypes_e.swDocDRAWING)
             {
-                var expMan = new SwExporter(swApp);
-                ret = expMan.SavePdf(_swModel, path, true, sheetnames);
+                ret = _swExporter.SavePdf(_swModel, path, true, sheetnames);
             }
             return ret;
         }
@@ -159,7 +166,8 @@ namespace SolidApp
     /// </summary>
     public class SwExporter
     {
-        private static ISldWorks _swApp;
+        private ISldWorks _swApp => SwProcess.swApp;
+        private ModelDoc2 _swModel;
         private int _warning, _errors;
         /// <summary>
         /// Ошибки при последнем сохранении
@@ -174,9 +182,9 @@ namespace SolidApp
         /// Конструктор класса SwExporter
         /// </summary>
         /// <param name="swApp">SolidWorks application instance</param>
-        public SwExporter(ISldWorks swApp)
+        public SwExporter(ModelDoc2 swModel)
         {
-            if(_swApp is null) _swApp = swApp;
+            _swModel = swModel;
             _warning = 0;
             _errors = 0;
             Debug.Print("SwExporter: Cls created");
@@ -322,15 +330,15 @@ namespace SolidApp
             return ret;
         }
 
-        public bool SaveDxf(ModelDoc2 swModel, string filePath)
+        public bool SaveDxf(string filePath)
         {
             bool ret = false;
 
-            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            if (_swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
             {
                 if (FileChecker(filePath, true))
                 {
-                    PartDoc swPart = (PartDoc)swModel;
+                    PartDoc swPart = (PartDoc)_swModel;
                     ret = swPart.ExportFlatPatternView(filePath, (int)swExportFlatPatternViewOptions_e.swExportFlatPatternOption_RemoveBends);
                 }
             }
