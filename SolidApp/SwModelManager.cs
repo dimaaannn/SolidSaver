@@ -51,28 +51,11 @@ namespace SolidApp
             {
                 string result = this.FilePath;
                 int lastSlash = result.LastIndexOf("\\");
-                return result.Substring(0, lastSlash + 1);
+                return result.Substring(0, lastSlash + 1); //TODO заменить на функцию из Path
             }
         }
-        public string FileName
-        {
-            get
-            {
-                string result = this.FilePath;
-                int lastSlash = result.LastIndexOf("\\");
-                return result.Substring(lastSlash);
-            }
-        }
-        public string FileNameWhithoutExt
-        {
-            get
-            {
-                string result = this.FilePath;
-                int lastSlash = result.LastIndexOf("\\");
-                int lastPoint = result.LastIndexOf(".");
-                return result.Substring(lastSlash + 1, lastPoint - lastSlash - 1);
-            }
-        }
+        public string FileName => Path.GetFileName(FilePath);
+        public string FileNameWhithoutExt => Path.GetFileNameWithoutExtension(FilePath);
         private string GetDefaultPath
         {
             get
@@ -435,9 +418,13 @@ namespace SolidApp
         private Body2[] GetBodies()
         {
             object[] bodiesArray;
-            PartDoc swpart = (PartDoc)_swModel;
-            bodiesArray = swpart.GetBodies2((int)swBodyType_e.swAllBodies, true);
-            return Array.ConvertAll(bodiesArray, item => (Body2)item);
+            if(_swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                PartDoc swpart = (PartDoc)_swModel;
+                bodiesArray = swpart.GetBodies2((int)swBodyType_e.swAllBodies, true);
+                return Array.ConvertAll(bodiesArray, item => (Body2)item);
+            }
+            return null;
         }
 
         //Public Property

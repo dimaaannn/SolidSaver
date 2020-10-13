@@ -30,11 +30,11 @@ namespace SolidApp
             swApp = SwProcess.swApp;
             swModel = AppConsole.LoadActiveDoc();
 
-            
-            var swProc = SwProcess.swProcess;
+            var part = new SwModelManager(swModel);
 
-
-            Console.WriteLine("SWapp is exited " + SwProcess.IsRunning);
+            AppConsole.ShowDocType(part);
+            AppConsole.ShowDocName(part);
+            AppConsole.ShowProp(part);
 
 
             //swApp = AppConsInterface.GetSwApp();
@@ -472,12 +472,14 @@ namespace SolidApp
                 docType = swModelMan.DocType;
 
                 StringManager.ClearLine(lineNum);
-                Console.Write("Тип открытой детали: " + StringManager.DocTypeName(docType));
+                Console.WriteLine("{0, 23} {1}", "Тип открытой детали: ", StringManager.DocTypeName(docType));
                 ret = true;
             }
 
             return ret;
         }
+
+
         /// <summary>
         /// Напечатать имя файла
         /// </summary>
@@ -493,10 +495,44 @@ namespace SolidApp
             if (!(swModelMan is null))
             {
                 StringManager.ClearLine(lineNum);
-                Console.Write("Имя документа :" + swModelMan.FileName);
+                Console.WriteLine("{0, 23} {1}", "Имя документа: ", swModelMan.FileName);
                 ret = true;
             }
             return ret;
+        }
+
+        public static void ShowProp(SwModelManager swModelMan)
+        {
+            bool ret = false;
+            const int offset = 23;
+            int lineNum = 6;
+            
+            Console.CursorTop = lineNum;
+
+            string NameProp = swModelMan.PrpMan.Title;
+            string parnNum = swModelMan.PrpMan.GetParam("Обозначение");
+            string configName = swModelMan.PrpMan.GetActiveConf;
+            bool isDrawExist = SwFileManager.isDrawExcist(swModelMan.FilePath);
+            bool isSheet = swModelMan.PrpMan.isSheet;
+
+            string DrawIsFound = isDrawExist ? "Найден" : "Не найден";
+            string isSheetMetal = isSheet ? "Листовая" : "Не листовая";
+
+            //Clear console below
+            for (int i = lineNum; i < lineNum + 5; ++i)
+            {
+                StringManager.ClearLine(i);
+            }
+
+            Console.CursorLeft = 0;
+            Console.CursorTop = lineNum;
+
+            Console.WriteLine($"{"Обозначение: ", offset} {parnNum}");
+            Console.WriteLine($"{"Наименование: ", offset} {NameProp}");
+            Console.WriteLine($"{"Активная конфигурация: ", offset} {configName}");
+            Console.WriteLine($"{"Одноимённый чертёж: ", offset} {DrawIsFound}");
+            Console.WriteLine($"{"Тип детали: ", offset} {isSheetMetal}");
+
         }
 
 
