@@ -46,15 +46,7 @@ namespace SolidApp
         }
 
         public ModelDoc2 swModel => _swModel;
-        public string FolderPath
-        {
-            get
-            {
-                string result = this.FilePath;
-                int lastSlash = result.LastIndexOf("\\");
-                return result.Substring(0, lastSlash + 1); //TODO заменить на функцию из Path
-            }
-        }
+        public string FolderPath => Path.GetDirectoryName(FilePath);
         public string FileName => Path.GetFileName(FilePath);
         public string FileNameWhithoutExt => Path.GetFileNameWithoutExtension(FilePath);
         private string GetDefaultPath

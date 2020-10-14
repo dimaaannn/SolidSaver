@@ -16,7 +16,7 @@ namespace SolidApp
 {
     class Program
     {
-        static string Version = "0.4 Beta";
+        static string Version = "0.41 Beta";
         static void Main(string[] args)
         {
 
