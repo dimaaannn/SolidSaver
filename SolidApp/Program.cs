@@ -16,7 +16,7 @@ namespace SolidApp
 {
     class Program
     {
-        static string Version = "0.2 Alpha";
+        static string Version = "0.4 Beta";
         static void Main(string[] args)
         {
 
@@ -32,52 +32,61 @@ namespace SolidApp
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
-            //Загрузить активный документ
-            swModel = AppConsole.LoadActiveDoc();
-            var part = new SwModelManager(swModel);
-
-            //Получить информацию из открытого документа
-            name = part.PrpMan.Title;
-            partName = part.PrpMan.GetParam("Обозначение");
-
-            string newFolderName = @"Экспорт/";
-            rootFolder = part.FolderPath;
-            workFolder = rootFolder + "/" + newFolderName;
-
-            // Создать директорию
-            if (!Directory.Exists(workFolder))
-                Directory.CreateDirectory(workFolder);
-                
-            //Отобразить информацию на экране
-            AppConsole.ShowDocType(part);
-            AppConsole.ShowDocName(part);
-            AppConsole.ShowProp(part);
-
-            //Экспорт
-            if ((int)part.DocType == 1 || (int)part.DocType == 2)
+            do
             {
 
-                Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
-                var userAnswer = Console.ReadKey(true);
-                //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
-                if (userAnswer.Key == ConsoleKey.Spacebar)
+
+                //Загрузить активный документ
+                swModel = AppConsole.LoadActiveDoc();
+                var part = new SwModelManager(swModel);
+
+                //Получить информацию из открытого документа
+                name = part.PrpMan.Title;
+                partName = part.PrpMan.GetParam("Обозначение");
+
+                string newFolderName = @"Экспорт/";
+                rootFolder = part.FolderPath;
+                workFolder = rootFolder + "/" + newFolderName;
+
+                // Создать директорию
+                if (!Directory.Exists(workFolder))
+                    Directory.CreateDirectory(workFolder);
+
+                //Отобразить информацию на экране
+                AppConsole.ShowDocType(part);
+                AppConsole.ShowDocName(part);
+                AppConsole.ShowProp(part);
+
+                //Экспорт
+                if ((int)part.DocType == 1 || (int)part.DocType == 2)
                 {
-                    string savingName = partName + " - " + name;
-                    AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
-                    AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
+                    Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
+                    var userAnswer = Console.ReadKey(true);
+                    //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
+                    if (userAnswer.Key == ConsoleKey.Spacebar)
+                    {
+                        string savingName = partName + " - " + name;
+                        AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
-                    AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+                        AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
 
+                        AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+
+                    }
                 }
+                else
+                {
+                    AppConsole.SwitchColor(AppConsole.ColorMode.Warning);
+                    Console.WriteLine("\nСохранение невозможно.");
+                    AppConsole.SwitchColor();
+                }
+
             }
-            else
-                Console.WriteLine("\nСохранение невозможно.");
+            while (AppConsole.ReloadModel());
 
-
-
-            Console.WriteLine("Текущий номер строки = {0}", Console.CursorTop);
-            Console.ReadKey(true);
+            Console.WriteLine("Пока-пока");
+            Thread.Sleep(400);
 
         }
     }
@@ -253,14 +262,14 @@ namespace SolidApp
     public static class AppConsole
     {
 
-        enum ColorMode
+        public enum ColorMode
         {
             Default,
             Title,
             Warning,
             Info
         }
-        private static void SwitchColor(ColorMode colorMode = ColorMode.Default)
+        public static void SwitchColor(ColorMode colorMode = ColorMode.Default)
         {
             switch (colorMode)
             {
@@ -550,11 +559,43 @@ namespace SolidApp
             }
             else
             {
-                Console.WriteLine($"{"Имя чертежа ",offset} {swModelMan.swModel.GetTitle()}");
+                Console.WriteLine($"{"Имя чертежа: ",offset} {swModelMan.swModel.GetTitle()}");
             }
         }
 
 
+        public static bool ReloadModel()
+        {
+            bool ret;
+            ConsoleKeyInfo userAnswer;
+            int lineNum = 15;
+            Console.CursorTop = lineNum;
+            StringManager.ClearLine(lineNum);
+            Console.CursorLeft = 0;
+
+            Console.WriteLine("Для выхода нажмите Esc, перезагрузка модели - пробел");
+            userAnswer = Console.ReadKey(true);
+
+            switch (userAnswer.Key)
+            {
+                case ConsoleKey.Spacebar:
+                    ret = true;
+                    break;
+                case ConsoleKey.Escape:
+                    ret = false;
+                    break;
+                default:
+                    ret = true;
+                    break;
+            }
+
+            for(int i = lineNum; i >= 1; --i)
+            {
+                StringManager.ClearLine(i);
+            }
+
+            return ret;
+        }
 
         /// <summary>
         /// Сохранить развёртку
