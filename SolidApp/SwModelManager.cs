@@ -350,25 +350,7 @@ namespace SolidApp
     }
 
 
-    //Todo Create class for part types
-    public class SwPartManager : SwModelManager
-    {
-        private readonly PartDoc _swPartDoc;
 
-        public SwPartManager(ModelDoc2 swpartdoc) :base(swpartdoc)
-        {
-            if(DocType == swDocumentTypes_e.swDocPART)
-            {
-                _swPartDoc = (PartDoc)swpartdoc;
-                Debug.Print("SwPart initialised");
-            }
-            else
-            {
-                throw new TypeLoadException("SwPartManager: Wrong model type");
-            }
-        } //init PartDoc
-
-    }
 
 
     //Добавить проверку типа детали
