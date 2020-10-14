@@ -602,9 +602,11 @@ namespace SolidApp
             string drawName = Path.ChangeExtension(fileModelPath, "SLDDRW");
             bool ret = false;
             swModel = null;
+            int temp = 0;
             if (File.Exists(drawName))
             {
-                swModel = swApp.OpenDoc(drawName, (int)swDocumentTypes_e.swDocDRAWING);
+                //swModel = swApp.OpenDoc(drawName, (int)swDocumentTypes_e.swDocDRAWING);
+                swModel = swApp.OpenDocSilent(drawName, (int)swDocumentTypes_e.swDocDRAWING, ref temp);
             }
 
             if (!(swModel == null))

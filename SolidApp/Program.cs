@@ -634,68 +634,26 @@ namespace SolidApp
 
             DrawingDoc DrawDoc;
 
-            if(SwFileManager.OpenDraw(swModelMan.FilePath, out DrawDoc))
-            {
-                //var model = (ModelDoc2)DrawDoc;
+            string drawName = Path.ChangeExtension(swModelMan.FileName, "SLDDRW");
+            var openedDraw = SwProcess.swApp.GetOpenDocument(drawName);
+            bool docIsOpened = false;
+            if (!(openedDraw is null))
+                docIsOpened = true;
 
+            if (SwFileManager.OpenDraw(swModelMan.FilePath, out DrawDoc))
+            {
+                var model = (ModelDoc2)DrawDoc;
+                
                 ret = swModelMan.Export.SavePdf(DrawDoc, folder + name, true);
-                //model.Close();
+                
+                if(!docIsOpened)
+                    SwProcess.swApp.CloseDoc(model.GetTitle());
             }
 
             Console.Write(ret ? " OK\n" : " Не сохранено\n");
             return ret;
         }
 
-
-
-        /// <summary>
-        /// Проверка типа modelDoc2 на соответствие
-        /// </summary>
-        /// <param name="swModel">Модель</param>
-        /// <param name="swDocType">Тип</param>
-        /// <returns>Совпадает</returns>
-        public static bool CheckType(ModelDoc2 swModel, swDocumentTypes_e swDocType)
-        {
-            bool ret = false;
-            if((swDocumentTypes_e)swModel.GetType() == swDocType)
-                ret = true;
-
-            StringManager.ClearLine(5);
-            Console.CursorTop = 5;
-            if (!ret)
-            {
-                Console.CursorTop = 6;
-                SwitchColor(ColorMode.Warning);
-                Console.Write("Некорректный тип открытого документа");
-                SwitchColor(ColorMode.Default);
-                Console.CursorTop = 4;
-                Console.CursorLeft = 0;
-                StringManager.SleepAnimation();
-
-            }
-            else
-            {
-                Console.CursorTop = 4;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Документ {0} загружен успешно", swDocType);
-                SwitchColor(ColorMode.Default);
-                StringManager.ClearLine(5);
-                StringManager.ClearLine(6);
-                Console.CursorTop = 5;
-                Console.CursorLeft = 0;
-            }
-
-            return ret;
-        }
-
-        public static void BeginSaving(int stringNum)
-        {
-            Console.CursorTop = stringNum;
-            Console.CursorLeft = 0;
-            SwitchColor(ColorMode.Info);
-            Console.WriteLine("Производится попытка сохранения");
-            SwitchColor(ColorMode.Default);
-        }
 
 
     }
