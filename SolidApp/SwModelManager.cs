@@ -312,6 +312,44 @@ namespace SolidApp
         }
 
         /// <summary>
+        /// Экспорт листов чертежа в PDF
+        /// </summary>
+        /// <param name="swDrawing">Деталь чертежа</param>
+        /// <param name="path">Путь сохранения</param>
+        /// <param name="overwrite">Перезаписать</param>
+        /// <param name="sheetNames">Имена листов для экспорта (опционально)</param>
+        /// <returns>Статус</returns>
+        public bool SavePdf(DrawingDoc swDrawing, 
+            string path,
+            bool overwrite = false,
+            string[] sheetNames = null)
+        {
+            bool ret = false;
+
+            var swModel = (ModelDoc2)swDrawing;
+
+            swExportDataSheetsToExport_e exportSheets = 
+                swExportDataSheetsToExport_e.swExportData_ExportSpecifiedSheets;
+
+            if (swDrawing is null) 
+                throw new NullReferenceException("SavePdf: Wrong reference!");
+            Debug.Print("SavePdf: begin.");
+
+            if (sheetNames is null) exportSheets = swExportDataSheetsToExport_e.swExportData_ExportAllSheets;
+            
+            if(FileChecker(path, overwrite))
+            {
+                ExportPdfData ExportPdfParams = _swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
+                ExportPdfParams.SetSheets((int)exportSheets, sheetNames);
+                ret = swModel.Extension.SaveAs(path, 0, 0, ExportPdfParams, ref _errors, ref _warning);
+                Debug.Print("SavePdf status {0}", ret ? "Success" : "Failed");
+            }
+            return ret;
+        }
+
+
+
+        /// <summary>
         /// Сохранить .bmp файл с превью
         /// </summary>
         /// <param name="swModel">Модель документа</param>

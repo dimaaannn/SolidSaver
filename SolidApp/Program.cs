@@ -636,11 +636,10 @@ namespace SolidApp
 
             if(SwFileManager.OpenDraw(swModelMan.FilePath, out DrawDoc))
             {
-                var model = (ModelDoc2)DrawDoc;
-                Thread.Sleep(1000);
-                var DrawModelMan = new SwModelManager(model);
-                ret = DrawModelMan.Draw2Pdf(folder + name);
-                model.Close();
+                //var model = (ModelDoc2)DrawDoc;
+
+                ret = swModelMan.Export.SavePdf(DrawDoc, folder + name, true);
+                //model.Close();
             }
 
             Console.Write(ret ? " OK\n" : " Не сохранено\n");
