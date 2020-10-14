@@ -48,9 +48,7 @@ namespace SolidApp
                 rootFolder = part.FolderPath;
                 workFolder = rootFolder + "/" + newFolderName;
 
-                // Создать директорию
-                if (!Directory.Exists(workFolder))
-                    Directory.CreateDirectory(workFolder);
+                
 
                 //Отобразить информацию на экране
                 AppConsole.ShowDocType(part);
@@ -66,6 +64,10 @@ namespace SolidApp
                     //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
                     if (userAnswer.Key == ConsoleKey.Spacebar)
                     {
+                        // Создать директорию
+                        if (!Directory.Exists(workFolder))
+                            Directory.CreateDirectory(workFolder);
+
                         string savingName = partName + " - " + name;
                         AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
