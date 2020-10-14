@@ -18,18 +18,7 @@ namespace SolidApp
         /// <summary>
         /// swApp singleton
         /// </summary>
-        public static ISldWorks swApp
-        {
-            get
-            {
-                if (_swApp is null)
-                {
-                    Debug.Print("geting SWapp");
-                    _swApp = SolidTools.GetSWApp();
-                }
-                return _swApp;
-            }
-        }
+        public static ISldWorks swApp => SwProcess.swApp;
 
         public readonly swDocumentTypes_e DocType;
         private readonly ModelDoc2 _swModel;
@@ -56,6 +45,7 @@ namespace SolidApp
             }
         }
 
+        public ModelDoc2 swModel => _swModel;
         public string FolderPath
         {
             get
@@ -168,6 +158,7 @@ namespace SolidApp
     {
         private ISldWorks _swApp => SwProcess.swApp;
         private ModelDoc2 _swModel;
+        
         private int _warning, _errors;
         /// <summary>
         /// Ошибки при последнем сохранении
@@ -570,15 +561,7 @@ namespace SolidApp
         /// <summary>
         /// swApp singleton
         /// </summary>
-        public static ISldWorks swApp
-        {
-            get
-            {
-                if (_swApp is null)
-                    _swApp = SolidTools.GetSWApp();
-                return _swApp;
-            }
-        }
+        public static ISldWorks swApp => SwProcess.swApp;
 
         /// <summary>
         /// Check for existence of drawing with part name

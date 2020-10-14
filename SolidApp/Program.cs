@@ -35,10 +35,11 @@ namespace SolidApp
             swModel = AppConsole.LoadActiveDoc();
             var part = new SwModelManager(swModel);
 
+
             name = part.PrpMan.Title;
             partName = part.PrpMan.GetParam("Обозначение");
 
-            string newFolderName = @"Развёртки/";
+            string newFolderName = @"Экспорт/";
             rootFolder = part.FolderPath;
             workFolder = rootFolder + "/" + newFolderName;
 
@@ -88,20 +89,6 @@ namespace SolidApp
         }
     }
 
-
-    //TODO убрать нафиг
-    public class SolidTools
-    {
-        static string progId = "SldWorks.Application";
-
-        public static ISldWorks GetSWApp()
-        {
-            var progType = System.Type.GetTypeFromProgID(progId);
-
-            ISldWorks swApp = System.Activator.CreateInstance(progType) as SolidWorks.Interop.sldworks.ISldWorks;
-            return swApp;
-        }
-    }
 
     /// <summary>
     /// Основной функционал программы сохранения
@@ -530,7 +517,10 @@ namespace SolidApp
             }
             return ret;
         }
-
+        /// <summary>
+        /// Написать список параметров сборки или детали
+        /// </summary>
+        /// <param name="swModelMan"></param>
         public static void ShowProp(SwModelManager swModelMan)
         {
             bool ret = false;
@@ -538,31 +528,38 @@ namespace SolidApp
             int lineNum = 6;
             
             Console.CursorTop = lineNum;
-
-            string NameProp = swModelMan.PrpMan.Title;
-            string parnNum = swModelMan.PrpMan.GetParam("Обозначение");
-            string configName = swModelMan.PrpMan.GetActiveConf;
-            bool isDrawExist = SwFileManager.isDrawExcist(swModelMan.FilePath);
-            bool isSheet = swModelMan.PrpMan.isSheet;
-
-            string DrawIsFound = isDrawExist ? "Найден" : "Не найден";
-            string isSheetMetal = isSheet ? $"Листовая - {swModelMan.PrpMan.GetSheetThickness}мм" : "Не листовая";
-
-            //Clear console below
-            for (int i = lineNum; i < lineNum + 5; ++i)
+            swDocumentTypes_e doctype = swModelMan.DocType;
+            if (doctype == swDocumentTypes_e.swDocPART || doctype == swDocumentTypes_e.swDocASSEMBLY)
             {
-                StringManager.ClearLine(i);
+
+                string NameProp = swModelMan.PrpMan.Title;
+                string parnNum = swModelMan.PrpMan.GetParam("Обозначение");
+                string configName = swModelMan.PrpMan.GetActiveConf;
+                bool isDrawExist = SwFileManager.isDrawExcist(swModelMan.FilePath);
+                bool isSheet = swModelMan.PrpMan.isSheet;
+
+                string DrawIsFound = isDrawExist ? "Найден" : "Не найден";
+                string isSheetMetal = isSheet ? $"Листовая - {swModelMan.PrpMan.GetSheetThickness}мм" : "Не листовая";
+
+                //Clear console below
+                for (int i = lineNum; i < lineNum + 5; ++i)
+                {
+                    StringManager.ClearLine(i);
+                }
+
+                Console.CursorLeft = 0;
+                Console.CursorTop = lineNum;
+
+                Console.WriteLine($"{"Обозначение: ",offset} {parnNum}");
+                Console.WriteLine($"{"Наименование: ",offset} {NameProp}");
+                Console.WriteLine($"{"Активная конфигурация: ",offset} {configName}");
+                Console.WriteLine($"{"Одноимённый чертёж: ",offset} {DrawIsFound}");
+                Console.WriteLine($"{"Тип детали: ",offset} {isSheetMetal}");
             }
-
-            Console.CursorLeft = 0;
-            Console.CursorTop = lineNum;
-
-            Console.WriteLine($"{"Обозначение: ", offset} {parnNum}");
-            Console.WriteLine($"{"Наименование: ", offset} {NameProp}");
-            Console.WriteLine($"{"Активная конфигурация: ", offset} {configName}");
-            Console.WriteLine($"{"Одноимённый чертёж: ", offset} {DrawIsFound}");
-            Console.WriteLine($"{"Тип детали: ", offset} {isSheetMetal}");
-
+            else
+            {
+                Console.WriteLine($"{"Имя чертежа ",offset} {swModelMan.swModel.GetTitle()}");
+            }
         }
 
         public static bool SaveDXF(SwModelManager swModelMan, string folder = null, string name = null)
