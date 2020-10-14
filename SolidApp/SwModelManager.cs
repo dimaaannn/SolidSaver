@@ -387,6 +387,7 @@ namespace SolidApp
     {
         private readonly ModelDoc2 _swModel;
         private Feature _swFeat;
+        private swDocumentTypes_e _docType;
 
         /// <summary>
         /// Constructor
@@ -397,6 +398,7 @@ namespace SolidApp
             if(!(swmodel is null))
             {
                 _swModel = swmodel;
+                _docType = (swDocumentTypes_e) _swModel.GetType();
                 Debug.Print("PrpMan: Created instance");
             }
         }
@@ -525,14 +527,17 @@ namespace SolidApp
         /// <returns>null or Field value</returns>
         public string GetParam(string paramName)
         {
-            string propVal, valout;
-            bool bret;
-            //Todo set confman singleton
-            ConfigurationManager confMan = _swModel.ConfigurationManager;
-            bret = confMan.ActiveConfiguration.CustomPropertyManager.Get3(paramName, true, out valout, out propVal);
+            
+            string propVal = null, valout;
+            bool bret = false;
 
-            if (bret == false)
-                propVal = null;
+            //Todo set confman singleton
+            if(_docType == swDocumentTypes_e.swDocASSEMBLY || _docType == swDocumentTypes_e.swDocPART)
+            {
+                ConfigurationManager confMan = _swModel.ConfigurationManager;
+                bret = confMan.ActiveConfiguration.CustomPropertyManager.Get3(paramName, true, out valout, out propVal);
+            }
+
 
             return propVal;
         }

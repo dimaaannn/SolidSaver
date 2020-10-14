@@ -32,10 +32,11 @@ namespace SolidApp
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
+            //Загрузить активный документ
             swModel = AppConsole.LoadActiveDoc();
             var part = new SwModelManager(swModel);
 
-
+            //Получить информацию из открытого документа
             name = part.PrpMan.Title;
             partName = part.PrpMan.GetParam("Обозначение");
 
@@ -43,47 +44,39 @@ namespace SolidApp
             rootFolder = part.FolderPath;
             workFolder = rootFolder + "/" + newFolderName;
 
+            // Создать директорию
             if (!Directory.Exists(workFolder))
                 Directory.CreateDirectory(workFolder);
                 
-
+            //Отобразить информацию на экране
             AppConsole.ShowDocType(part);
             AppConsole.ShowDocName(part);
             AppConsole.ShowProp(part);
 
-
-
-            Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
-            var userAnswer = Console.ReadKey(true);
-            //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
-            if(userAnswer.Key == ConsoleKey.Spacebar)
+            //Экспорт
+            if ((int)part.DocType == 1 || (int)part.DocType == 2)
             {
-                string savingName = partName + " - " + name;
-                AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
-                AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
+                Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
+                var userAnswer = Console.ReadKey(true);
+                //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
+                if (userAnswer.Key == ConsoleKey.Spacebar)
+                {
+                    string savingName = partName + " - " + name;
+                    AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
-                AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+                    AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
 
+                    AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+
+                }
             }
-
-
-            //swApp = AppConsInterface.GetSwApp();
-            //ModelDoc2 swModel;
-            //do
-            //{
-            //    swModel = AppConsInterface.GetModel(1000);
-            //} while (!AppConsInterface.CheckType(swModel, swDocumentTypes_e.swDocPART));
-
-            //AppConsInterface.BeginSaving(5);
-
-            //var modelSaver = new SimpleSaver(swModel);
-            //AppConsInterface.ExportDXF(swModel);
-            
+            else
+                Console.WriteLine("\nСохранение невозможно.");
 
 
 
-            Console.WriteLine("Press any key");
+            Console.WriteLine("Текущий номер строки = {0}", Console.CursorTop);
             Console.ReadKey(true);
 
         }
@@ -496,7 +489,6 @@ namespace SolidApp
             return ret;
         }
 
-
         /// <summary>
         /// Напечатать имя файла
         /// </summary>
@@ -562,6 +554,15 @@ namespace SolidApp
             }
         }
 
+
+
+        /// <summary>
+        /// Сохранить развёртку
+        /// </summary>
+        /// <param name="swModelMan"></param>
+        /// <param name="folder">Папка сохранения</param>
+        /// <param name="name">Имя файла с расширением</param>
+        /// <returns></returns>
         public static bool SaveDXF(SwModelManager swModelMan, string folder = null, string name = null)
         {
             bool ret = false;
@@ -588,7 +589,13 @@ namespace SolidApp
             Console.Write(ret ? " OK\n" : " Не сохранено\n");
             return ret;
         }
-
+        /// <summary>
+        /// Сохранить копию документа
+        /// </summary>
+        /// <param name="swModelMan"></param>
+        /// <param name="folder">Папка сохранения</param>
+        /// <param name="name">Имя файла с расширением</param>
+        /// <returns></returns>
         public static bool SaveCopy(SwModelManager swModelMan, string folder = null, string name = null)
         {
             bool ret = false;
@@ -612,6 +619,13 @@ namespace SolidApp
             return ret;
         }
 
+        /// <summary>
+        /// Сохранить PDF из чертежа с тем же именем
+        /// </summary>
+        /// <param name="swModelMan"></param>
+        /// <param name="folder">Папка сохранения</param>
+        /// <param name="name">Имя файла с расширением</param>
+        /// <returns></returns>
         public static bool SavePDF(SwModelManager swModelMan, string folder = null, string name = null)
         {
             bool ret = false;

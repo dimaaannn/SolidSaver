@@ -52,7 +52,7 @@ namespace SolidDrawing
             _drawModel = drawModel;
             if (_drawModel.GetType() == (int)DocType)
             {
-                _swApp = SolidTools.GetSWApp();
+                _swApp = SwProcess.swApp;
                 _swDraw = (DrawingDoc)_drawModel;
                 Debug.Print("SwDrawing initialised");
             }
