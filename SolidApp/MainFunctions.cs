@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 namespace SolidApp
 {
     #region Функции
-    
 
 
+    public static class AppMethods
+    {
+        public static IMainInterface MainUI;
+        public static void Init()
+        {
+            MainUI.Hello();
+        }
+
+    }
 
 
     #endregion
