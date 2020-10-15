@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 namespace SolidApp
 {
     #region Функции
-    class MainFunctions
-    {
+    
 
-
-
-
-    }
 
 
 
     #endregion
 
+    #region Interfaces
 
     public interface IMainInterface
     {
@@ -28,9 +24,22 @@ namespace SolidApp
         /// Запустить анимацию загрузки
         /// </summary>
         /// <param name="message">Текст загрузки</param>
-        void LoadMessage(string message);
-
+        void ShowProcess(string message);
+        int UserSelect(string[] variants);
+        string WorkFolder { get; set; }
 
     }
+
+    public interface IPartInterface
+    {
+        void ShowFileName(string filename);
+        void ShowDocType(string docType);
+        string ActiveConfigName { get; set; }
+        void PropList(ref Dictionary<string, string> propDict);
+        void OperationStatus(ref Dictionary<string, string> operationsDict);
+
+    }
+
+    #endregion
 
 }
