@@ -62,7 +62,7 @@ namespace SolidApp
                     Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
                     var userAnswer = Console.ReadKey(true);
                     //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
-                    if (userAnswer.Key == ConsoleKey.Spacebar)
+                    if (userAnswer.Key == ConsoleKey.Spacebar && part.DocType == swDocumentTypes_e.swDocPART)
                     {
                         // Создать директорию
                         if (!Directory.Exists(workFolder))
@@ -75,6 +75,12 @@ namespace SolidApp
 
                         AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
 
+                    }
+                    else
+                    {
+                        AppConsole.SwitchColor(AppConsole.ColorMode.Warning);
+                        Console.WriteLine("Сохранение из сборки не поддерживается");
+                        AppConsole.SwitchColor();
                     }
                 }
                 else
