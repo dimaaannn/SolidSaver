@@ -17,6 +17,8 @@ namespace SolidApp
     class Program
     {
         static string Version = "0.42 Beta";
+
+        [STAThread]
         static void Main(string[] args)
         {
 
@@ -32,6 +34,7 @@ namespace SolidApp
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
+            WorkFolder.GetFolderDialog();
 
             do
             {

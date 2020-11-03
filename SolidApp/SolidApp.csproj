@@ -49,7 +49,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SolidApp.Test</StartupObject>
+    <StartupObject>SolidApp.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>solidworks_icon_square_icon.ico</ApplicationIcon>

@@ -10,70 +10,34 @@ using System.Windows.Forms;
 
 namespace SolidApp
 {
-    static class Test
+
+
+    static class WorkFolder
     {
-        [STAThread]
-        public static void Main()
+        static string _folderPath;
+        static public string FolderPath 
         {
-
-            string testpath = @"c:\Users\Красиков\source\repos\SolidApp\";
-            string s = "";
-
-            var fw = new FilesWorker();
-            s = fw.GetFolderDialog(testpath);
-
-            var dial = new FolderBrowserDialog
+            get
             {
-                SelectedPath = testpath
-            };
-
-
-            using (dial)
-            {
-                if (dial.ShowDialog() == DialogResult.OK)
-                {
-                    s = dial.SelectedPath;
-                }
+                if (string.IsNullOrEmpty(_folderPath))
+                    _folderPath = GetFolderDialog();
+                return _folderPath;
             }
-
-            var fileDial = new OpenFileDialog
+            set
             {
-                Multiselect = false,
-                Title = "test",
-                InitialDirectory = testpath
-            };
-
-            using (fileDial)
-            {
-                if(fileDial.ShowDialog() == DialogResult.OK)
-                {
-                    s = fileDial.FileName;
-                }
+                _folderPath = value;
             }
-
-                Console.WriteLine(s);
-            Console.ReadKey();
-
-            //var fw = new FilesWorker();
-            //Task.Run(() => fw.GetFolderDialog(s));
-
         }
-    }
 
-
-    class FilesWorker
-    {
-
-        public string GetFolderDialog(string defaultPath)
+        public static string GetFolderDialog(string defaultPath = "C:\\")
         {
             
-
             string result = "";
             var dialog = new CommonOpenFileDialog();
             dialog.InitialDirectory = defaultPath;
             dialog.IsFolderPicker = true;
-            dialog.ShowDialog();
-            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            var dialResult = dialog.ShowDialog();
+            if (dialResult == CommonFileDialogResult.Ok)
             {
                 Console.WriteLine("SelectedFolder = " + dialog.FileName);
                 result = dialog.FileName;
