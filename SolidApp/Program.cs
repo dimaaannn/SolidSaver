@@ -32,6 +32,7 @@ namespace SolidApp
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
+
             do
             {
 
