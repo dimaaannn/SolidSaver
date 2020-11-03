@@ -34,7 +34,6 @@ namespace SolidApp
             AppConsole.RunSW();
             AppConsole.LoadSwApp();
 
-            WorkFolder.GetFolderDialog();
 
             do
             {
@@ -45,15 +44,12 @@ namespace SolidApp
                 var part = new SwModelManager(swModel);
 
                 //Получить информацию из открытого документа
-                name = part.PrpMan.Title;
+                name = part.PrpMan.GetParam("Наименование");
                 partName = part.PrpMan.GetParam("Обозначение");
 
-                string newFolderName = @"Экспорт/";
-                rootFolder = part.FolderPath;
-                workFolder = rootFolder + "/" + newFolderName;
-
+                workFolder = WorkFolder.FolderPath ?? part.FolderPath;
                 
-
+                
                 //Отобразить информацию на экране
                 AppConsole.ShowDocType(part);
                 AppConsole.ShowDocName(part);
@@ -62,10 +58,14 @@ namespace SolidApp
                 //Экспорт
                 if ((int)part.DocType == 1 || (int)part.DocType == 2)
                 {
-
-                    Console.WriteLine("\nДля сохранения нажмите пробел. Для отмены, другую кнопку");
+                    Console.CursorTop = 18;
+                    AppConsole.SwitchColor(AppConsole.ColorMode.Info);
+                    Console.WriteLine($"Рабочая папка\n{workFolder}");
+                    AppConsole.SwitchColor(AppConsole.ColorMode.Default);
+                    Console.CursorTop = 11;
+                    Console.WriteLine("Чтобы изменить рабочую папку - Ввод. Для отмены, другую кнопку");
                     var userAnswer = Console.ReadKey(true);
-                    //Console.WriteLine("char pressed = " + userAnswer.KeyChar);
+                    
                     if (userAnswer.Key == ConsoleKey.Spacebar && part.DocType == swDocumentTypes_e.swDocPART)
                     {
                         // Создать директорию
@@ -79,6 +79,14 @@ namespace SolidApp
 
                         AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
 
+                    }
+
+                    //Изменить рабочую папку
+                    else if(userAnswer.Key == ConsoleKey.Enter)
+                    {
+                        WorkFolder.FolderPath = WorkFolder.GetFolderDialog(workFolder);
+                        for (int i = 18; i < 25; i++)
+                            AppConsole.StringManager.ClearLine(i);
                     }
                     else
                     {
@@ -244,6 +252,23 @@ namespace SolidApp
             SwitchColor(ColorMode.Default);
 
         }
+                
+        public static void SelectFolder(string defPath = null)
+        {
+            string text = $"Выберите рабочую папку";
+
+            Console.CursorLeft = 0;
+            Console.CursorTop = 2;
+            SwitchColor(ColorMode.Info);
+            Console.WriteLine(text);
+            SwitchColor(ColorMode.Default);
+            Thread.Sleep(500);
+
+            WorkFolder.FolderPath = WorkFolder.GetFolderDialog(defPath);
+
+        }
+
+
 
         /// <summary>
         /// Приглашение запустить SW
@@ -554,7 +579,17 @@ namespace SolidApp
             return ret;
         }
 
+        public static bool CheckParams(params string[] args)
+        {
+            bool result = true;
 
+            if(args.Contains(null) || args.Count() == 0)
+            {
+                result = false;
+            }
+
+            return result;
+        }
 
     }
 }

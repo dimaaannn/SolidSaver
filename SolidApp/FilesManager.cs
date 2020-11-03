@@ -14,13 +14,12 @@ namespace SolidApp
 
     static class WorkFolder
     {
+        static string defPath = "C:\\";
         static string _folderPath;
         static public string FolderPath 
         {
             get
             {
-                if (string.IsNullOrEmpty(_folderPath))
-                    _folderPath = GetFolderDialog();
                 return _folderPath;
             }
             set
@@ -29,19 +28,20 @@ namespace SolidApp
             }
         }
 
-        public static string GetFolderDialog(string defaultPath = "C:\\")
+
+        public static string GetFolderDialog(string defaultPath = null)
         {
             
             string result = "";
             var dialog = new CommonOpenFileDialog();
-            dialog.InitialDirectory = defaultPath;
+            dialog.InitialDirectory = defaultPath ?? defPath;
             dialog.IsFolderPicker = true;
             var dialResult = dialog.ShowDialog();
             if (dialResult == CommonFileDialogResult.Ok)
             {
-                Console.WriteLine("SelectedFolder = " + dialog.FileName);
                 result = dialog.FileName;
             }
+            else result = defaultPath ?? defPath;
             return result;
         }
 
