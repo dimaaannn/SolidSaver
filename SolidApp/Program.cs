@@ -16,11 +16,12 @@ namespace SolidApp
 {
     class Program
     {
-        static string Version = "0.41 Beta";
+        static string Version = "0.51 Beta";
 
         static void Main(string[] args)
         {
-
+            var swModel = AppConsole.LoadActiveDoc();
+            Console.WriteLine(string.Join(",", PropertyGetter.GetConfigList(swModel)));
         }
 
 

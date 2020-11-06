@@ -371,7 +371,43 @@ namespace SolidApp
     }
 
 
+    public static class PropertyGetter
+    {
 
+        static bool IsPartOrAsm(ModelDoc2 swModel)
+        {
+            bool ret = false;
+            var docType = (swDocumentTypes_e)swModel.GetType();
+            if (docType == swDocumentTypes_e.swDocASSEMBLY || docType == swDocumentTypes_e.swDocPART)
+                ret = true;
+            return ret;
+        }
+
+        /// <summary>
+        /// Получить имя активной конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static string GetActiveConfName(ModelDoc2 swModel)
+        {
+            string ret = null;
+            if(IsPartOrAsm(swModel))
+            {
+                ret = swModel.IGetActiveConfiguration().Name;
+            }
+            return ret;
+        }
+
+        public static string[] GetConfigList(ModelDoc2 swModel)
+        {
+            string[] configsList = new string[] { };
+            if (IsPartOrAsm(swModel))
+            {
+                configsList = swModel.GetConfigurationNames();
+            }
+            return configsList;
+        }
+    }
 
 
     //Добавить проверку типа детали
