@@ -371,10 +371,10 @@ namespace SolidApp
     }
 
 
-    public static class PropertyGetter
+    public static class PartsMan
     {
 
-        static bool IsPartOrAsm(ModelDoc2 swModel)
+        public static bool IsPartOrAsm(ModelDoc2 swModel)
         {
             bool ret = false;
             var docType = (swDocumentTypes_e)swModel.GetType();
@@ -398,6 +398,11 @@ namespace SolidApp
             return ret;
         }
 
+        /// <summary>
+        /// Получить список имён конфигураций
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
         public static string[] GetConfigList(ModelDoc2 swModel)
         {
             string[] configsList = new string[] { };
@@ -406,6 +411,22 @@ namespace SolidApp
                 configsList = swModel.GetConfigurationNames();
             }
             return configsList;
+        }
+
+        /// <summary>
+        /// Получить объект конфигурации
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <returns>Конфигурация</returns>
+        public static Configuration GetConfByName(ModelDoc2 swModel, string configName)
+        {
+            Configuration conf = null;
+            if (IsPartOrAsm(swModel))
+            {
+                conf = swModel.GetConfigurationByName(configName);
+            }
+            return conf;
         }
     }
 
