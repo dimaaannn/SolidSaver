@@ -16,7 +16,7 @@ namespace SolidApp
 {
     class Program
     {
-        static string Version = "0.42 Beta";
+        static string Version = "0.43 Beta";
 
         [STAThread]
         static void Main(string[] args)
@@ -63,7 +63,7 @@ namespace SolidApp
                     Console.WriteLine($"Рабочая папка\n{workFolder}");
                     AppConsole.SwitchColor(AppConsole.ColorMode.Default);
                     Console.CursorTop = 11;
-                    Console.WriteLine("Чтобы изменить рабочую папку - Ввод. Для отмены, другую кнопку");
+                    Console.WriteLine("Чтобы изменить рабочую папку - Ввод. Для продолжения кнопку пробел");
                     var userAnswer = Console.ReadKey(true);
                     
                     if (userAnswer.Key == ConsoleKey.Spacebar && part.DocType == swDocumentTypes_e.swDocPART)
@@ -72,13 +72,22 @@ namespace SolidApp
                         if (!Directory.Exists(workFolder))
                             Directory.CreateDirectory(workFolder);
 
-                        string savingName = partName + " - " + name;
-                        AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
+                        if (partName.Length > 3 && name.Length > 3)
+                        {
+                            string savingName = partName + " - " + name;
+                            AppConsole.SaveDXF(part, workFolder, savingName + ".dxf");
 
-                        AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
+                            AppConsole.SaveCopy(part, workFolder, savingName + part.GetFileExtension);
 
-                        AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+                            AppConsole.SavePDF(part, workFolder, savingName + ".pdf");
+                        }
+                        else
+                        {
+                            AppConsole.SwitchColor(AppConsole.ColorMode.Warning);
+                            Console.WriteLine("Отсутствует обозначение или описание");
+                            AppConsole.SwitchColor(AppConsole.ColorMode.Default);
 
+                        }
                     }
 
                     //Изменить рабочую папку

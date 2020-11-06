@@ -39,7 +39,7 @@ namespace SolidApp
             var dialResult = dialog.ShowDialog();
             if (dialResult == CommonFileDialogResult.Ok)
             {
-                result = dialog.FileName;
+                result = dialog.FileName + "\\";
             }
             else result = defaultPath ?? defPath;
             return result;
