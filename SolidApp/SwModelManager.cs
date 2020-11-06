@@ -391,9 +391,62 @@ namespace SolidApp
         public static string GetActiveConfName(ModelDoc2 swModel)
         {
             string ret = null;
-            if(IsPartOrAsm(swModel))
+            if (IsPartOrAsm(swModel))
             {
                 ret = swModel.IGetActiveConfiguration().Name;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Отобразить конфигурацию
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="confName">Имя конфигурации</param>
+        /// <returns>Конфигурация активна</returns>
+        public static bool SetActiveConf(ModelDoc2 swModel, string confName)
+        {
+            bool ret = false;
+            if (IsPartOrAsm(swModel))
+            {
+                if (swModel.IGetActiveConfiguration().Name == confName)
+                    ret = true;
+                else
+                    ret = swModel.ShowConfiguration2(confName);
+            }
+            return ret;
+        }
+
+        
+        /// <summary>
+        /// Получить спискок параметров и значений в конфигурации
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <returns>Словарь значений</returns>
+        public static Dictionary<string, string> GetParamsDict(ModelDoc2 swModel, string configName)
+        {
+            var ret = new Dictionary<string, string> { };
+            object names = null, values = null;
+            bool bret = false;
+
+            if (IsPartOrAsm(swModel))
+            {
+                bret = swModel.ConfigurationManager.GetConfigurationParams(
+                    configName, 
+                    out names, 
+                    out values);
+            }
+
+            if (bret)
+            {
+                string[] nam = (string[]) names;
+                var val = (string[])values;
+
+                for(int i = 0; i < nam.Count(); ++i)
+                {
+                    ret.Add(nam[i], val[i]);
+                }
             }
             return ret;
         }
@@ -428,6 +481,60 @@ namespace SolidApp
             }
             return conf;
         }
+
+        /// <summary>
+        /// Получить вычисленное значение параметра конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <returns>Значение</returns>
+        public static string GetConfParamValue(ModelDoc2 swModel, string configName, string fieldName)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.GetCustomInfoValue(configName, fieldName);
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Получить параметр конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <returns></returns>
+        public static string GetConfParam(ModelDoc2 swModel, string configName, string fieldName)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.CustomInfo2[configName, fieldName];
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Установить значение параметра конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <param name="fieldVal">Значение параметра</param>
+        /// <returns>Статус операции</returns>"
+        public static bool SetConfParam(ModelDoc2 swModel, string configName, string fieldName, string fieldVal)
+        {
+            bool ret = false;
+            if (IsPartOrAsm(swModel))
+            {
+                swModel.CustomInfo2[configName, fieldName] = fieldVal;
+
+                if(swModel.CustomInfo2[configName, fieldName] == fieldVal)
+                    ret = true;
+            }
+            return ret;
+        }
+
     }
 
 

@@ -21,7 +21,9 @@ namespace SolidApp
         static void Main(string[] args)
         {
             var swModel = AppConsole.LoadActiveDoc();
-            Console.WriteLine(string.Join(",", PropertyGetter.GetConfigList(swModel)));
+            
+            Console.WriteLine(PartsMan.SetActiveConf(swModel, "По умолчанию"));
+            //PartsMan.SetConfParam(swModel, swModel.GetActiveConfiguration().Name, "Наименование", "новое значение");
         }
 
 
