@@ -9,6 +9,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.CodeDom;
 
 namespace SolidApp
 {
@@ -134,6 +135,50 @@ namespace SolidApp
         }
     }
 
+    public static class ModelProxy
+    {
+        public static string GetName(ModelDoc2 swModel)
+        {
+            return swModel.GetTitle();
+        }
+
+        public static string GetPathName(ModelDoc2 swModel)
+        {
+            return swModel.GetPathName();
+        }
+
+        public static ModelDoc2 Open(string filePath, swOpenDocOptions_e options, string confName = "")
+        {
+            swDocumentTypes_e partType = swDocumentTypes_e.swDocNONE;
+
+            switch(Path.GetExtension(filePath).ToUpper())
+            {
+                case ".SLDASM":
+                    partType = swDocumentTypes_e.swDocASSEMBLY;
+                    break;
+                case ".SLDPRT":
+                    partType = swDocumentTypes_e.swDocPART;
+                    break;
+                case ".SLDDRW":
+                    partType = swDocumentTypes_e.swDocDRAWING;
+                    break;
+            }
+
+            ModelDoc2 swModel = default;
+            int e = 0, w = 0;
+
+            if (!string.IsNullOrEmpty(filePath))
+                swModel = SwProcess.swApp.OpenDoc6(
+                    filePath,
+                    (int)partType,
+                    (int)options, 
+                    confName,
+                    ref e,
+                    ref w);
+
+            return swModel;
+        }
+    }
 
     public enum SaFileStatus
     {
@@ -371,6 +416,9 @@ namespace SolidApp
     }
 
 
+    /// <summary>
+    /// Управление параметрами детали ModelDoc2
+    /// </summary>
     public static class ConfigProxy
     {
 
@@ -540,7 +588,6 @@ namespace SolidApp
     public class PartPrpManager
     {
         private readonly ModelDoc2 _swModel;
-        private Feature _swFeat;
         private swDocumentTypes_e _docType;
 
         /// <summary>
@@ -716,11 +763,6 @@ namespace SolidApp
 
     public static class SwFileManager
     {
-        private static ISldWorks _swApp;
-        /// <summary>
-        /// swApp singleton
-        /// </summary>
-        public static ISldWorks swApp => SwProcess.swApp;
 
         /// <summary>
         /// Check for existence of drawing with part name
@@ -747,38 +789,13 @@ namespace SolidApp
             int temp = 0;
             if (File.Exists(drawName))
             {
-                //swModel = swApp.OpenDoc(drawName, (int)swDocumentTypes_e.swDocDRAWING);
-                swModel = swApp.OpenDocSilent(drawName, (int)swDocumentTypes_e.swDocDRAWING, ref temp);
+                swModel = SwProcess.swApp.OpenDocSilent(drawName, (int)swDocumentTypes_e.swDocDRAWING, ref temp);
             }
 
             if (!(swModel == null))
                 ret = true;
 
             return ret;
-        }
-
-
-        /// <summary>
-        /// Some debug tests
-        /// </summary>
-        /// <param name="filePath"></param>
-        public static void Tests(string filePath)
-        {
-            var directory = Path.GetDirectoryName(filePath);
-            var filenameWhithoutExt = Path.GetFileNameWithoutExtension(filePath);
-            var filename = Path.GetFileName(filePath);
-            var ext = Path.GetExtension(filePath);
-            var dir = Path.GetDirectoryName(filePath);
-            var rand = Path.GetRandomFileName();
-            var changeExt = Path.ChangeExtension(filePath, "test");
-
-            Console.WriteLine($"Directory = {directory}\n" +
-                $"filename whithout ext = {filenameWhithoutExt}\n" +
-                $"file name = {filename}\n" +
-                $"file extension = {ext}\n" +
-                $"directory = {dir}\n" +
-                $"random = {rand}\n" +
-                $"change ext = {changeExt}");
         }
 
         public static bool CreateFolder(string folderPath)
@@ -796,6 +813,9 @@ namespace SolidApp
         }
     }
 
+    /// <summary>
+    /// Основные операции с приложением
+    /// </summary>
     public static class SwProcess
     {
         private static Process _swProcess;

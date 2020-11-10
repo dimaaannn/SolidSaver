@@ -20,11 +20,14 @@ namespace SolidApp
 
         static void Main(string[] args)
         {
-            var swModel = AppConsole.LoadActiveDoc();
+            //var swModel = AppConsole.LoadActiveDoc();
 
+
+            string path = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 печать топпера.SLDPRT";
+            var openModel = ModelProxy.Open(path, swOpenDocOptions_e.swOpenDocOptions_LoadModel);
             
 
-            Console.WriteLine();
+            Console.WriteLine(openModel.GetType());
         }
 
 
