@@ -135,6 +135,9 @@ namespace SolidApp
         }
     }
 
+    /// <summary>
+    /// Прокси класс методов ModelDoc
+    /// </summary>
     public static class ModelProxy
     {
         public static string GetName(ModelDoc2 swModel)
@@ -147,7 +150,16 @@ namespace SolidApp
             return swModel.GetPathName();
         }
 
-        public static ModelDoc2 Open(string filePath, swOpenDocOptions_e options, string confName = "")
+        /// <summary>
+        /// Открыть документ
+        /// </summary>
+        /// <param name="filePath">Путь к файлу</param>
+        /// <param name="options">Опции открытия документа</param>
+        /// <param name="confName">Имя конфигурации</param>
+        /// <returns></returns>
+        public static ModelDoc2 Open(string filePath,
+            swOpenDocOptions_e options, 
+            string confName = "")
         {
             swDocumentTypes_e partType = swDocumentTypes_e.swDocNONE;
 
@@ -177,6 +189,35 @@ namespace SolidApp
                     ref w);
 
             return swModel;
+        }
+
+        /// <summary>
+        /// Сохранить документ
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="path">сохранить как</param>
+        /// <param name="options">Опции сохранения def= copy</param>
+        /// <returns></returns>
+        public static bool SaveDocument(ModelDoc2 swModel, 
+            string path = null, 
+            swSaveAsOptions_e options = swSaveAsOptions_e.swSaveAsOptions_Copy)
+        {
+            bool ret = false;
+            int res;
+            if (path == null)
+            {
+                swModel.Save2(true);
+                ret = true;
+            }
+            else if (!string.IsNullOrEmpty(path))
+            {
+                res = swModel.SaveAs3(path, 
+                    (int) swSaveAsVersion_e.swSaveAsCurrentVersion, 
+                    (int)options);
+                ret = true;
+            }
+
+            return ret;
         }
     }
 
