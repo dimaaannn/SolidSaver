@@ -371,7 +371,7 @@ namespace SolidApp
     }
 
 
-    public static class PartsMan
+    public static class ConfigProxy
     {
 
         public static bool IsPartOrAsm(ModelDoc2 swModel)
@@ -415,59 +415,6 @@ namespace SolidApp
             }
             return ret;
         }
-        
-        /// <summary>
-        /// Получить спискок параметров и значений в конфигурации
-        /// </summary>
-        /// <param name="swModel">Модель</param>
-        /// <param name="configName">Имя конфигурации</param>
-        /// <returns>Словарь значений</returns>
-        public static Dictionary<string, string> GetParamsDict(ModelDoc2 swModel, string configName)
-        {
-            var ret = new Dictionary<string, string> { };
-            object names = null, values = null;
-            bool bret = false;
-
-            if (IsPartOrAsm(swModel))
-            {
-                bret = swModel.ConfigurationManager.GetConfigurationParams(
-                    configName, 
-                    out names, 
-                    out values);
-            }
-
-            if (bret)
-            {
-                string[] nam = (string[]) names;
-                var val = (string[])values;
-
-                for(int i = 0; i < nam.Count(); ++i)
-                {
-                    ret.Add(nam[i], val[i]);
-                }
-            }
-            return ret;
-        }
-
-        /// <summary>
-        /// Отобразить конфигурацию
-        /// </summary>
-        /// <param name="swModel">Модель</param>
-        /// <param name="confName">Имя конфигурации</param>
-        /// <returns>Конфигурация активна</returns>
-        public static bool SetActiveConf(ModelDoc2 swModel, string confName)
-        {
-            bool ret = false;
-            if (IsPartOrAsm(swModel))
-            {
-                if (swModel.IGetActiveConfiguration().Name == confName)
-                    ret = true;
-                else
-                    ret = swModel.ShowConfiguration2(confName);
-            }
-            return ret;
-        }
-
         
         /// <summary>
         /// Получить спискок параметров и значений в конфигурации
