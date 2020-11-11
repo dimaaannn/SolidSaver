@@ -371,6 +371,29 @@ namespace SWAPIlib
 
             return ret;
         }
+
+        /// <summary>
+        /// Get Features from model
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="TopLevelOnly">Только верхнего уровня</param>
+        /// <returns></returns>
+        public static Feature[] GetFeatures(ModelDoc2 swModel, bool TopLevelOnly = true)
+        {
+            Feature[] fArray = null;
+            object[] oArray;
+
+            oArray = swModel.FeatureManager.GetFeatures(TopLevelOnly);
+            int itemCounter = oArray.Count();
+
+            fArray = new Feature[itemCounter];
+            for (int i = 0; i < itemCounter; ++i)
+            {
+                fArray[i] = (Feature)oArray[i];
+            }
+
+            return fArray;
+        }
     }
 
 
@@ -395,6 +418,11 @@ namespace SWAPIlib
             return bodyArr as Body2[];
         }
 
+        /// <summary>
+        /// Get Features list from body
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
         public static Feature[] GetFeatures(Body2 body)
         {
             object[] f = body?.GetFeatures();
@@ -407,6 +435,17 @@ namespace SWAPIlib
                 fArray[i] = (Feature) f[i];
             }
             return fArray;
+        }
+
+        /// <summary>
+        /// Get Features from model
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="TopLevelOnly">Только верхнего уровня</param>
+        /// <returns></returns>
+        public static Feature[] GetFeatures(ModelDoc2 swModel, bool TopLevelOnly = true)
+        {
+            return ModelProxy.GetFeatures(swModel, TopLevelOnly);
         }
         
     }
