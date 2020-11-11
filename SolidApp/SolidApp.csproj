@@ -124,5 +124,11 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SWAPIlib\SWAPIlib.csproj">
+      <Project>{bbd94c80-7d5f-4ce9-872a-65f45dd46b38}</Project>
+      <Name>SWAPIlib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

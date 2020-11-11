@@ -1,0 +1,421 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Security.Policy;
+using System.Runtime.CompilerServices;
+using SolidWorks.Interop.sldworks;
+using SwConst;
+using SWAPIlib;
+
+namespace SWAPIlib
+{
+
+    /// <summary>
+    /// Основные операции с API
+    /// </summary>
+    public static class SwAPI
+    {
+        private static Process _swProcess;
+        private static ISldWorks _swApp;
+
+        /// <summary>
+        /// Процесс SolidWorks найден
+        /// </summary>
+        public static event System.EventHandler SwIsRunning;
+        public static event System.EventHandler SwIsDisposed
+        {
+            add => _swProcess.Disposed += value;
+            remove => _swProcess.Disposed -= value;
+        }
+        public static event System.EventHandler ComConnected;
+        
+
+        /// <summary>
+        /// GetSolidWorks process
+        /// </summary>
+        public static Process swProcess
+        {
+            get
+            {
+                if (_swProcess is null)
+                {
+                    Process[] ProcessList;
+                    ProcessList = Process.GetProcessesByName("SLDWORKS");
+                    if (ProcessList.Count() > 0)
+                    {
+                        _swProcess = ProcessList.First();
+                        _swProcess.EnableRaisingEvents = true;
+                        string evText = "SolidWorks process is running";
+                        SwIsRunning?.Invoke(_swProcess, new SwEventArgs(evText));
+                        Debug.WriteLine(evText);
+                    }
+                }
+                return _swProcess;
+            }
+        }
+
+        /// <summary>
+        /// Check SolidWorks is running
+        /// </summary>
+        public static bool IsRunning
+        {
+            get
+            {
+                bool ret = false;
+                if (!(swProcess is null))
+                    ret = true;
+                return ret;
+            }
+
+        }
+
+        /// <summary>
+        /// Подключение к com API
+        /// </summary>
+        /// <returns></returns>
+        private static ISldWorks GetSWApp()
+        {
+            string progId = "SldWorks.Application";
+            var progType = System.Type.GetTypeFromProgID(progId);
+            ISldWorks swApp = null;
+
+            Debug.Print("geting SWapp");
+            string evText = "Sw API connected";
+            swApp = System.Activator.CreateInstance(progType) as SolidWorks.Interop.sldworks.ISldWorks;
+            
+            if(swApp != null)
+            {
+                Debug.WriteLine(evText);
+                ComConnected?.Invoke(swApp, new SwEventArgs(evText));
+            }
+            return swApp;
+        }
+
+        /// <summary>
+        /// Получить экземпляр АПИ
+        /// </summary>
+        public static ISldWorks swApp
+        {
+            get
+            {
+                if (_swApp is null)
+                    _swApp = GetSWApp();
+                return _swApp;
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// Аргументы события
+    /// </summary>
+    public class SwEventArgs : EventArgs
+    {
+        public readonly string Text;
+
+        public SwEventArgs(string text) =>
+            Text = text;
+        public SwEventArgs() => Text = null;
+    }
+
+    /// <summary>
+    /// Управление конфигурациями детали ModelDoc2
+    /// </summary>
+    public static class ModelConfigProxy
+    {
+        public static bool IsPartOrAsm(ModelDoc2 swModel)
+        {
+            bool ret = false;
+            var docType = (swDocumentTypes_e)swModel.GetType();
+            if (docType == swDocumentTypes_e.swDocASSEMBLY || docType == swDocumentTypes_e.swDocPART)
+                ret = true;
+            return ret;
+        }
+
+        /// <summary>
+        /// Получить имя активной конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static string GetActiveConfName(ModelDoc2 swModel)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.IGetActiveConfiguration().Name;
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Отобразить конфигурацию
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="confName">Имя конфигурации</param>
+        /// <returns>Конфигурация активна</returns>
+        public static bool SetActiveConf(ModelDoc2 swModel, string confName)
+        {
+            bool ret = false;
+            if (IsPartOrAsm(swModel))
+            {
+                if (swModel.IGetActiveConfiguration().Name == confName)
+                    ret = true;
+                else
+                    ret = swModel.ShowConfiguration2(confName);
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Получить спискок параметров и значений в конфигурации
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <returns>Словарь значений</returns>
+        public static Dictionary<string, string> GetParamsDict(ModelDoc2 swModel, string configName)
+        {
+            var ret = new Dictionary<string, string> { };
+            object names = null, values = null;
+            bool bret = false;
+
+            if (IsPartOrAsm(swModel))
+            {
+                bret = swModel.ConfigurationManager.GetConfigurationParams(
+                    configName,
+                    out names,
+                    out values);
+            }
+
+            if (bret)
+            {
+                string[] nam = (string[])names;
+                var val = (string[])values;
+
+                for (int i = 0; i < nam.Count(); ++i)
+                {
+                    ret.Add(nam[i], val[i]);
+                }
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Получить список имён конфигураций
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static string[] GetConfigList(ModelDoc2 swModel)
+        {
+            string[] configsList = new string[] { };
+            if (IsPartOrAsm(swModel))
+            {
+                configsList = swModel.GetConfigurationNames();
+            }
+            return configsList;
+        }
+
+        /// <summary>
+        /// Получить объект конфигурации
+        /// </summary>
+        /// <param name="swModel">Модель</param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <returns>Конфигурация</returns>
+        public static Configuration GetConfByName(ModelDoc2 swModel, string configName)
+        {
+            Configuration conf = null;
+            if (IsPartOrAsm(swModel))
+            {
+                conf = swModel.GetConfigurationByName(configName);
+            }
+            return conf;
+        }
+
+        /// <summary>
+        /// Получить вычисленное значение параметра конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <returns>Значение</returns>
+        public static string GetConfParamValue(ModelDoc2 swModel, string configName, string fieldName)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.GetCustomInfoValue(configName, fieldName);
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Получить параметр конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <returns></returns>
+        public static string GetConfParam(ModelDoc2 swModel, string configName, string fieldName)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.CustomInfo2[configName, fieldName];
+            }
+            return ret;
+        }
+        /// <summary>
+        /// Установить значение параметра конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <param name="fieldVal">Значение параметра</param>
+        /// <returns>Статус операции</returns>"
+        public static bool SetConfParam(ModelDoc2 swModel, string configName, string fieldName, string fieldVal)
+        {
+            bool ret = false;
+            if (IsPartOrAsm(swModel))
+            {
+                swModel.CustomInfo2[configName, fieldName] = fieldVal;
+
+                if (swModel.CustomInfo2[configName, fieldName] == fieldVal)
+                    ret = true;
+            }
+            return ret;
+        }
+
+    }
+
+    /// <summary>
+    /// Основные операции ModelDoc2
+    /// </summary>
+    public static class ModelProxy
+    {
+        public static string GetName(ModelDoc2 swModel)
+        {
+            return swModel.GetTitle();
+        }
+
+        public static string GetPathName(ModelDoc2 swModel)
+        {
+            return swModel.GetPathName();
+        }
+
+        /// <summary>
+        /// Открыть документ
+        /// </summary>
+        /// <param name="filePath">Путь к файлу</param>
+        /// <param name="options">Опции открытия документа</param>
+        /// <param name="confName">Имя конфигурации</param>
+        /// <returns></returns>
+        public static ModelDoc2 Open(string filePath,
+            swOpenDocOptions_e options,
+            string confName = "")
+        {
+            swDocumentTypes_e partType = swDocumentTypes_e.swDocNONE;
+
+            switch (System.IO.Path.GetExtension(filePath).ToUpper())
+            {
+                case ".SLDASM":
+                    partType = swDocumentTypes_e.swDocASSEMBLY;
+                    break;
+                case ".SLDPRT":
+                    partType = swDocumentTypes_e.swDocPART;
+                    break;
+                case ".SLDDRW":
+                    partType = swDocumentTypes_e.swDocDRAWING;
+                    break;
+            }
+
+            ModelDoc2 swModel = default;
+            int e = 0, w = 0;
+
+            if (!string.IsNullOrEmpty(filePath))
+                swModel = SwAPI.swApp.OpenDoc6(
+                    filePath,
+                    (int)partType,
+                    (int)options,
+                    confName,
+                    ref e,
+                    ref w);
+            
+
+            return swModel;
+        }
+
+        /// <summary>
+        /// Сохранить документ
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="path">сохранить как</param>
+        /// <param name="options">Опции сохранения def= copy</param>
+        /// <returns></returns>
+        public static bool SaveDocument(ModelDoc2 swModel,
+            string path = null,
+            swSaveAsOptions_e options = swSaveAsOptions_e.swSaveAsOptions_Copy)
+        {
+            bool ret = false;
+            int res;
+            if (path == null)
+            {
+                swModel.Save2(true);
+                ret = true;
+            }
+            else if (!string.IsNullOrEmpty(path))
+            {
+                res = swModel.SaveAs3(path,
+                    (int)swSaveAsVersion_e.swSaveAsCurrentVersion,
+                    (int)options);
+                ret = true;
+            }
+
+            return ret;
+        }
+    }
+
+    /// <summary>
+    /// Методы чертежей
+    /// </summary>
+    public static class DrawDocProxy
+    {
+        /// <summary>
+        /// Экспортировать чертёж в PDF
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="path">Файл сохранения</param>
+        /// <param name="sheetNames">Имена листов для сохранения (опционально)</param>
+        /// <returns></returns>
+        public static bool ExportPDF(
+            ModelDoc2 swModel, 
+            string path, string[] 
+            sheetNames = null)
+        {
+            bool ret = false;
+
+            //Сохранить конкретные страницы чертежа
+
+            swExportDataSheetsToExport_e SheetSavingMode =
+                swExportDataSheetsToExport_e.swExportData_ExportSpecifiedSheets;
+            if (sheetNames is null) SheetSavingMode = 
+                    swExportDataSheetsToExport_e.swExportData_ExportAllSheets;
+
+            if (swModel.GetType() != (int)swDocumentTypes_e.swDocDRAWING)
+                throw new System.TypeLoadException("Модель не является чертежом");
+
+            DrawingDoc swDrawing = (DrawingDoc)swModel;
+            int _errors = 0, _warning = 0;
+
+            //Параметры сохранения PDF
+            ExportPdfData ExportPdfParams = 
+                SwAPI.swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
+            ExportPdfParams.SetSheets((int)SheetSavingMode, sheetNames);
+
+            ret = swModel.Extension.SaveAs(path, 0, 0, ExportPdfParams, ref _errors, ref _warning);
+            Debug.Print("ExportPDF status {0}", ret ? "Success" : "Failed");
+
+            return ret;
+        }
+    }
+}
+
