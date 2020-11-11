@@ -447,6 +447,27 @@ namespace SWAPIlib
         {
             return ModelProxy.GetFeatures(swModel, TopLevelOnly);
         }
+
+        public static bool IsSheetMetal(ModelDoc2 swModel)
+        {
+            bool ret = false;
+            if(swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                //Найти тело с свойством IsSheetMetal
+                Body2[] bodyList;
+                bodyList = GetBodies(swModel);
+
+                foreach(Body2 body in bodyList)
+                {
+                    if (body.IsSheetMetal())
+                    {
+                        ret = true;
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
         
     }
 
