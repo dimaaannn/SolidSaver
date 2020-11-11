@@ -8,7 +8,6 @@ using System.Security.Policy;
 using System.Runtime.CompilerServices;
 using SolidWorks.Interop.sldworks;
 using SwConst;
-using SWAPIlib;
 
 namespace SWAPIlib
 {
@@ -372,6 +371,44 @@ namespace SWAPIlib
 
             return ret;
         }
+    }
+
+
+    public static class PartDocProxy
+    {
+        /// <summary>
+        /// Получить массив тел в детали
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static Body2[] GetBodies(ModelDoc2 swModel)
+        {
+            object[] bodyArr = null;
+
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                PartDoc swpart = (PartDoc)swModel;
+                bodyArr = swpart.GetBodies2((int)swBodyType_e.swAllBodies, true);
+                return Array.ConvertAll(bodyArr, item => (Body2)item);
+            }
+
+            return bodyArr as Body2[];
+        }
+
+        public static Feature[] GetFeatures(Body2 body)
+        {
+            object[] f = body?.GetFeatures();
+
+            int featCount = f.Count();
+            Feature[] fArray = new Feature[featCount];
+
+            for(int i = 0; i < featCount; ++i)
+            {
+                fArray[i] = (Feature) f[i];
+            }
+            return fArray;
+        }
+        
     }
 
     /// <summary>
