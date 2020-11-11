@@ -11,6 +11,7 @@ using SwConst;
 using System.Linq;
 using System.Threading;
 using System.Security.Policy;
+using SWAPIlib;
 
 namespace SolidApp
 {
@@ -22,12 +23,15 @@ namespace SolidApp
         {
             var swModel = AppConsole.LoadActiveDoc();
 
+            Body2[] arr;
+            arr = SWAPIlib.PartDocProxy.GetSheetBodies(swModel);
 
-            string path = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\TestPart.SLDPRT";
-            //var openModel = ModelProxy.Open(path, swOpenDocOptions_e.swOpenDocOptions_LoadModel);
-            ModelProxy.SaveDocument(swModel, path, swSaveAsOptions_e.swSaveAsOptions_Copy);
+            foreach(var body in arr)
+            {
+                Console.WriteLine(PartDocProxy.GetSheetThickness(swModel).First());
+            }
 
-            Console.WriteLine(swModel.GetType());
+            //Console.WriteLine(f.First().Name);
         }
 
 

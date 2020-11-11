@@ -397,7 +397,7 @@ namespace SWAPIlib
     }
 
 
-    public static class PartDocProxy
+    public static class PartDocProxy 
     {
         /// <summary>
         /// Получить массив тел в детали
@@ -448,6 +448,57 @@ namespace SWAPIlib
             return ModelProxy.GetFeatures(swModel, TopLevelOnly);
         }
 
+
+        /// <summary>
+        /// Получить тела листового металла из детали
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static Body2[] GetSheetBodies(ModelDoc2 swModel)
+        {
+            Body2[] retList = null;
+            var tempList = new List<Body2>();
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART)
+            {
+                //Найти тело с свойством IsSheetMetal
+                Body2[] bodyList;
+                bodyList = GetBodies(swModel);
+
+                foreach (Body2 body in bodyList)
+                {
+                    if (body.IsSheetMetal())
+                    {
+                        tempList.Add(body);
+                    }
+                }
+                retList = tempList.ToArray();
+            }
+            return retList;
+        }
+
+        /// <summary>
+        /// Получить Feature листового металла из тела
+        /// </summary>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public static Feature GetSheetFeature(Body2 body)
+        {
+            Feature ret = null;
+            if(body != null)
+            {
+                Feature[] featList = GetFeatures(body);
+                foreach(Feature feat in featList)
+                {
+                    if (feat.GetTypeName() == "SheetMetal")
+                    {
+                        ret = feat;
+                        break;
+                    }
+                }
+            }
+            return ret;
+        }
+
         public static bool IsSheetMetal(ModelDoc2 swModel)
         {
             bool ret = false;
@@ -468,6 +519,24 @@ namespace SWAPIlib
             }
             return ret;
         }
+
+        public static double[] GetSheetThickness(ModelDoc2 swModel)
+        {
+            double[] ret = null;
+
+            var tempList = new List<double>();
+            var bodyArr = GetSheetBodies(swModel);
+            if(bodyArr.Count() > 0)
+            {
+                foreach(Body2 body in bodyArr)
+                    tempList.Add(GetSheetFeature(body).IParameter("Толщина").Value);
+
+                ret = tempList.ToArray();
+            }
+
+            return ret;
+        }
+
         
     }
 
