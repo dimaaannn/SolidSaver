@@ -757,6 +757,18 @@ namespace SWAPIlib
             return swComp.ReferencedConfiguration;
         }
 
+        /// <summary>
+        /// Статус компонента сборки
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static swComponentSuppressionState_e GetSuppressionState(Component2 swComp)
+        {
+            swComponentSuppressionState_e ret = default;
+            ret = (swComponentSuppressionState_e)swComp.GetSuppression();
+            return ret;
+        }
+
     }
 }
 
