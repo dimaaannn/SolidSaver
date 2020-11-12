@@ -23,15 +23,29 @@ namespace SolidApp
         {
             var swModel = AppConsole.LoadActiveDoc();
 
-            Body2[] arr;
-            arr = SWAPIlib.PartDocProxy.GetSheetBodies(swModel);
+            Component2[] cArr;
 
-            foreach(var body in arr)
+            cArr = AsmDocProxy.GetComponents(swModel, false);
+
+            Component2 rootComp =  ComponentProxy.GetRoot( cArr[0]);
+
+            foreach (var comp in cArr)
             {
-                Console.WriteLine(PartDocProxy.GetSheetThickness(swModel).First());
+                var box = comp.GetBox(false, false);
+
+                //TODO разобраться с вычислением площади и точек
+
+                Console.Write(comp.Name);
+                
+                Console.CursorLeft = 20;
+                Console.WriteLine($" - Видимость = {comp.Visible}, ");
             }
 
-            //Console.WriteLine(f.First().Name);
+            //var tempComp = ComponentProxy.GetRoot(rootComp);
+            //Console.WriteLine($"Component name {rootComp.Name} is root { rootComp.IsRoot()}");
+
+
+            Console.ReadKey();
         }
 
 

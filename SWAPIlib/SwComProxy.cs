@@ -312,7 +312,7 @@ namespace SWAPIlib
         }
 
     }
-
+    
     /// <summary>
     /// Основные операции ModelDoc2
     /// </summary>
