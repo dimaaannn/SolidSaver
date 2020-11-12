@@ -634,5 +634,40 @@ namespace SWAPIlib
             return ret;
         }
     }
+
+    /// <summary>
+    /// Методы сборки
+    /// </summary>
+    public static class AsmDocProxy
+    {
+        /// <summary>
+        /// Получить компоненты сборки
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="TopLevelOnly">Только верхнего уровня</param>
+        /// <returns></returns>
+        public static Component2[] GetComponents(ModelDoc2 swModel, bool TopLevelOnly = true)
+        {
+            Component2[] retArr = null;
+
+            if(swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                object[] tempArr;
+                AssemblyDoc swAsm = swModel as AssemblyDoc;
+
+                tempArr = swAsm.GetComponents(TopLevelOnly);
+
+                int itemCounter = tempArr.Count();
+                retArr = new Component2[itemCounter];
+
+                for(int i = 0; i < itemCounter; ++i)
+                {
+                    retArr[i] = (Component2)tempArr[i];
+                }
+            }
+
+            return retArr;
+        }
+    }
 }
 
