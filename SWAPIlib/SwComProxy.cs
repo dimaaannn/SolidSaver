@@ -394,6 +394,24 @@ namespace SWAPIlib
 
             return fArray;
         }
+
+        /// <summary>
+        /// Сохранить превью в bmp
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool CreateBmpPreview(
+            ModelDoc2 swModel, 
+            string path, 
+            int height = 1000, 
+            int width = 1000)
+        {
+            bool ret = false;
+
+            ret = swModel.SaveBMP(path, height, width);
+            return ret;
+        }
     }
 
 
@@ -499,6 +517,11 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Быстрая проверка, содержит ли деталь листовые тела
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
         public static bool IsSheetMetal(ModelDoc2 swModel)
         {
             bool ret = false;
@@ -520,6 +543,11 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Получить список толщин тел в детали
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
         public static double[] GetSheetThickness(ModelDoc2 swModel)
         {
             double[] ret = null;
