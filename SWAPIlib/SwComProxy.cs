@@ -537,6 +537,29 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Экспорт развёртки в DXF
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool ExportDXF(ModelDoc2 swModel, string path)
+        {
+            bool ret = false;
+            Debug.WriteLine("ExportDXF start");
+            PartDoc partDoc = (PartDoc)swModel;
+            if (partDoc != null)
+            {
+                swExportFlatPatternViewOptions_e sOptions =
+                    swExportFlatPatternViewOptions_e.swExportFlatPatternOption_RemoveBends;
+                ret = partDoc.ExportFlatPatternView(path, (int)sOptions);
+                Debug.WriteLine("ExportDXF is {0}\n{1}", ret ? "success" : "failed", path);
+            }
+            else Debug.WriteLine("ExportDXF - can't convert to PartDoc");
+
+            return ret;
+        }
+
         
     }
 
