@@ -689,6 +689,64 @@ namespace SWAPIlib
 
             return retArr;
         }
+
+
+    }
+
+    public static class ComponentProxy
+    {
+        /// <summary>
+        /// Get modelDoc2 from component2
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static ModelDoc2 GetModelDoc2(Component2 swComp)
+        {
+            return swComp.GetModelDoc2() as ModelDoc2;
+        }
+
+        /// <summary>
+        /// Получить родительский компонент
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns>Null if not exist</returns>
+        public static Component2 GetParent(Component2 swComp)
+        {
+            //Метод Component.GetParent() не работает
+            //Прикручен костыль
+
+            Component2 retComp = null;
+
+            if (!swComp.IsRoot())
+            {
+                ModelDoc2 swModel = swComp.GetModelDoc2();
+                Configuration conf = swModel.ConfigurationManager
+                    .ActiveConfiguration;
+
+                retComp = conf.GetRootComponent3(false);
+            }
+            return retComp;
+        }
+
+        /// <summary>
+        /// Get root assembly component
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns>Assembly root (not null)</returns>
+        public static Component2 GetRoot(Component2 swComp)
+        {
+            Component2 retComp = swComp;
+            int EmergencyBreak = 10;
+            while (!retComp.IsRoot())
+            {
+                retComp = GetParent(retComp);
+                if (EmergencyBreak-- <= 0)
+                    break;
+            }
+
+            return retComp;
+        }
+
     }
 }
 
