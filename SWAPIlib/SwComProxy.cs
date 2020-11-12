@@ -286,6 +286,22 @@ namespace SWAPIlib
 
     }
 
+
+    public static class ServiceCl
+    {
+        public static void ObjArrConverter<Tout>(object[] inputArray, ref Tout[] outputArray)
+        {
+            int itemCounter = inputArray.Count();
+            outputArray = new Tout[itemCounter];
+
+            for(int i = 0; i < itemCounter; ++i)
+            {
+                outputArray[i] = (Tout) inputArray[i];
+            }
+        }
+
+    }
+
     /// <summary>
     /// Основные операции ModelDoc2
     /// </summary>
@@ -657,13 +673,7 @@ namespace SWAPIlib
 
                 tempArr = swAsm.GetComponents(TopLevelOnly);
 
-                int itemCounter = tempArr.Count();
-                retArr = new Component2[itemCounter];
-
-                for(int i = 0; i < itemCounter; ++i)
-                {
-                    retArr[i] = (Component2)tempArr[i];
-                }
+                ServiceCl.ObjArrConverter(tempArr, ref retArr);
             }
 
             return retArr;
