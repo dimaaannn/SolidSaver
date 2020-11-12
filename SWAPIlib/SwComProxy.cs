@@ -747,6 +747,16 @@ namespace SWAPIlib
             return retComp;
         }
 
+        /// <summary>
+        /// Имя зависимой конфигурации компонента сборки
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static string RefConfigName(Component2 swComp)
+        {
+            return swComp.ReferencedConfiguration;
+        }
+
     }
 }
 
