@@ -297,7 +297,7 @@ namespace SWAPIlib
         /// <typeparam name="Tout">Тип элемента массива</typeparam>
         /// <param name="inputArray">Массив объектов</param>
         /// <returns>Типизированный массив</returns>
-        public static Tout[] ObjArrConverter<Tout>(object[] inputArray)
+        public static Tout[] ObjArrConverter<Tout>( IList<object> inputArray)
         {
             Tout[] outputArray;
 
