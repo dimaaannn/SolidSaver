@@ -286,11 +286,21 @@ namespace SWAPIlib
 
     }
 
-
+    /// <summary>
+    /// Вспомогательные функции
+    /// </summary>
     public static class ServiceCl
     {
-        public static void ObjArrConverter<Tout>(object[] inputArray, ref Tout[] outputArray)
+        /// <summary>
+        /// Конвертировать массив объектов в массив типа
+        /// </summary>
+        /// <typeparam name="Tout">Тип элемента массива</typeparam>
+        /// <param name="inputArray">Массив объектов</param>
+        /// <returns>Типизированный массив</returns>
+        public static Tout[] ObjArrConverter<Tout>(object[] inputArray)
         {
+            Tout[] outputArray;
+
             int itemCounter = inputArray.Count();
             outputArray = new Tout[itemCounter];
 
@@ -298,6 +308,7 @@ namespace SWAPIlib
             {
                 outputArray[i] = (Tout) inputArray[i];
             }
+            return outputArray;
         }
 
     }
@@ -673,7 +684,7 @@ namespace SWAPIlib
 
                 tempArr = swAsm.GetComponents(TopLevelOnly);
 
-                ServiceCl.ObjArrConverter(tempArr, ref retArr);
+                retArr = ServiceCl.ObjArrConverter<Component2>(tempArr);
             }
 
             return retArr;
