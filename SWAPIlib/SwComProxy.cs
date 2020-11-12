@@ -769,6 +769,20 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Получить дочерние компоненты компонента
+        /// Для подсчёта использовать GetChildrenCount
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns>Пустой массив если отсутствуют</returns>
+        public static Component2[] GetChildren(Component2 swComp)
+        {
+            Component2[] retArr = null;
+            Component2 testcomp;
+            object[] temp = swComp.GetChildren();
+            retArr = ServiceCl.ObjArrConverter<Component2>(temp);
+            return retArr;
+        }
     }
 }
 
