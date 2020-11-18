@@ -14,7 +14,6 @@ namespace SWAPIlib
         public double x;
         public double y;
         public double z;
-        public byte dimensions;
         static int unitCorrect = 1000;
 
         public Point(double x, double y, double z)
@@ -22,50 +21,38 @@ namespace SWAPIlib
             this.x = x;
             this.y = y;
             this.z = z;
-            dimensions = 3;
         }
 
-        public Point(double x, double y)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = 0;
-            dimensions = 2;
-        }
-
-        public static Box operator +(Point a, Point b)
+        public static Box operator +(Point p1, Point p2)
         {
             //TODO добавить вычисление площади кубика
-            return new Box();
+            return new Box(p1, p2);
         }
 
         public override string ToString()
         {
-            if (dimensions == 2)
-                return $"p x={x * unitCorrect}, " +
-                    $"y={y * unitCorrect}";
-
-            else
-                return $"p x={x * unitCorrect}, " +
+            return $"x={x * unitCorrect}, " +
                     $"y={y * unitCorrect}, " +
                     $"z={z * unitCorrect}";
         }
-
 
     }
 
     public struct Box
     {
-        public double x, y, z;
-        public readonly byte dimensions;
+        public Point p1;
+        public Point p2;
         public static readonly int unitCorrect = 1000;
 
-        public Box(double x, double y, double z)
+        public Box(Point p1, Point p2)
         {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            dimensions = 3;
+            this.p1 = p1;
+            this.p2 = p2;
+        }
+
+        public override string ToString()
+        {
+            return $"Box[{p1}:{p2}]";
         }
     }
 }
