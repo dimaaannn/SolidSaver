@@ -42,9 +42,9 @@ namespace SWAPIlib
 
         public override string ToString()
         {
-            return $"x={x * unitCorrect}, " +
-                    $"y={y * unitCorrect}, " +
-                    $"z={z * unitCorrect}";
+            return $"x={x * unitCorrect:0.00}:" +
+                    $"y={y * unitCorrect:0.00}:" +
+                    $"z={z * unitCorrect:0.00}";
         }
 
     }
@@ -70,7 +70,7 @@ namespace SWAPIlib
 
         public override string ToString()
         {
-            return $"Box[{p1}:{p2}]";
+            return $"Box[{p1}|{p2}]";
         }
     }
 }

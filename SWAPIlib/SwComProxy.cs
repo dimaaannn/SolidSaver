@@ -783,6 +783,22 @@ namespace SWAPIlib
             retArr = ServiceCl.ObjArrConverter<Component2>(temp);
             return retArr;
         }
+
+        public static Box? GetBox(Component2 swComp, bool includeSketches = false)
+        {
+            Box? ret = null;
+            if (swComp != null)
+            {
+                var points = swComp.GetBox(
+                    IncludeRefPlanes: false, 
+                    IncludeSketches: includeSketches);
+
+                if(!(points is DBNull))
+                    ret = new Box(points);
+            }
+
+            return ret;
+        }
     }
 }
 
