@@ -22,6 +22,17 @@ namespace SWAPIlib
             this.y = y;
             this.z = z;
         }
+        public Point(IEnumerable<double> coord)
+        {
+            if(coord.Count() > 3)
+            {
+                throw new ArrayTypeMismatchException(
+                    "Point: array must contain less than 3 elements");
+            }
+            x = coord.ElementAtOrDefault(0);
+            y = coord.ElementAtOrDefault(1);
+            z = coord.ElementAtOrDefault(2);
+        }
 
         public static Box operator +(Point p1, Point p2)
         {
@@ -48,6 +59,13 @@ namespace SWAPIlib
         {
             this.p1 = p1;
             this.p2 = p2;
+        }
+        public Box(IEnumerable<double> coord)
+        {
+            if (coord.Count() != 6)
+                throw new ArrayTypeMismatchException("Box: array must contains 6 elements");
+            this.p1 = new Point(coord.Take(3));
+            this.p2 = new Point(coord.Skip(3));
         }
 
         public override string ToString()
