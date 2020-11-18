@@ -31,14 +31,14 @@ namespace SolidApp
 
             foreach (var comp in cArr)
             {
-                var box = comp.GetBox(false, false);
-
+                //var box = comp.GetBox(false, false);
+                var b = ComponentProxy.GetBox(comp);
                 //TODO разобраться с вычислением площади и точек
 
-                Console.Write(comp.Name);
+                Console.Write($"{"",10}{b} - {comp.Name}\n");
                 
-                Console.CursorLeft = 20;
-                Console.WriteLine($" - Видимость = {comp.Visible}, ");
+                //Console.CursorLeft = 20;
+                //Console.WriteLine($"\n - Видимость = {comp.Visible,5}, ");
             }
 
             //var tempComp = ComponentProxy.GetRoot(rootComp);
