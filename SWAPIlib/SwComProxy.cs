@@ -690,6 +690,28 @@ namespace SWAPIlib
             return retArr;
         }
 
+        /// <summary>
+        /// Габариты сборки
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
+        public static Box? GetBox(ModelDoc2 swModel)
+        {
+            Box? ret = null;
+
+            if (swModel != null)
+            {
+
+                var points = (swModel as AssemblyDoc).GetBox(0);
+
+                if (!(points is DBNull))
+                    ret = new Box(points);
+            }
+
+            return ret;
+        }
+
+
 
     }
 
@@ -784,6 +806,12 @@ namespace SWAPIlib
             return retArr;
         }
 
+        /// <summary>
+        /// Габаритный размер
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <param name="includeSketches"></param>
+        /// <returns></returns>
         public static Box? GetBox(Component2 swComp, bool includeSketches = false)
         {
             Box? ret = null;
