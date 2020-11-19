@@ -21,19 +21,13 @@ namespace SolidApp
 
         static void Main(string[] args)
         {
-            var swModel = AppConsole.LoadActiveDoc();
+            //var swModel = AppConsole.LoadActiveDoc();
+            SwAppControl.Connect();
+            var swModel = SwAppControl.MainModel;
 
             var asmbox = AsmDocProxy.GetBox(swModel);
             Console.WriteLine($"asmBox = {string.Join(",", asmbox.Value.dim)}");
 
-            var selArr = AsmDocProxy.GetSelectedComponent(swModel);
-
-            Component2[] cArr;
-
-
-
-            //var tempComp = ComponentProxy.GetRoot(rootComp);
-            //Console.WriteLine($"Component name {rootComp.Name} is root { rootComp.IsRoot()}");
 
 
             Console.ReadKey();
