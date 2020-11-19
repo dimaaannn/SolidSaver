@@ -26,8 +26,8 @@ namespace SWAPIlib
         public static event System.EventHandler SwIsRunning;
         public static event System.EventHandler SwIsDisposed
         {
-            add => _swProcess.Disposed += value;
-            remove => _swProcess.Disposed -= value;
+            add => swProcess.Disposed += value;
+            remove => swProcess.Disposed -= value;
         }
         public static event System.EventHandler ComConnected;
         
@@ -115,8 +115,8 @@ namespace SWAPIlib
     {
         public readonly string Text;
 
-        public SwEventArgs(string text) =>
-            Text = text;
+        public SwEventArgs(string EventText) =>
+            Text = EventText;
         public SwEventArgs() => Text = null;
     }
 
