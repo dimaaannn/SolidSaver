@@ -64,7 +64,7 @@ namespace SWAPIlib
             get
             {
                 bool ret = false;
-                if (!(swProcess is null))
+                if (_swProcess != null)
                     ret = true;
                 return ret;
             }
