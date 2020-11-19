@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Sld = SldWorks;
+//using Sld = SldWorks;
 using SolidApp;
 using SolidWorks.Interop.sldworks;
-using SwConst;
+//using SwConst;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.CodeDom;
+using SolidWorks.Interop.swconst;
 
 namespace SolidApp
 {
