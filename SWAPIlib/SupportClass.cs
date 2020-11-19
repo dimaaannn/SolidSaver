@@ -36,7 +36,6 @@ namespace SWAPIlib
 
         public static Box operator +(Point p1, Point p2)
         {
-            //TODO добавить вычисление площади кубика
             return new Box(p1, p2);
         }
 
@@ -54,6 +53,12 @@ namespace SWAPIlib
         public Point p1;
         public Point p2;
         public static readonly int unitCorrect = 1000;
+
+        public double dimX { get => System.Math.Abs(p1.x - p2.x) * unitCorrect; }
+        public double dimY { get => System.Math.Abs(p1.y - p2.y) * unitCorrect; }
+        public double dimZ { get => System.Math.Abs(p1.z - p2.z) * unitCorrect; }
+
+        public double[] dim { get => new double[3] { dimX, dimY, dimZ }; }
 
         public Box(Point p1, Point p2)
         {
