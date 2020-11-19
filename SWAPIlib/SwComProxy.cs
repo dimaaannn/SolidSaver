@@ -711,6 +711,38 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Get selected components from assembly
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="SwSelectionMark"></param>
+        /// <returns></returns>
+        public static Component2[] GetSelectedComponent(ModelDoc2 swModel, int SwSelectionMark = 0)
+        {
+            Component2[] ret = null;
+            var tempList = new List<Component2>();
+
+            if(swModel is AssemblyDoc swAsm)
+            {
+                SelectionMgr swSelMan = swModel.SelectionManager;
+                int selectCounter = swSelMan.GetSelectedObjectCount2(SwSelectionMark);
+                Debug.WriteLine($"GetSelectedComponent2 count = {selectCounter}");
+
+                for(; selectCounter >= 1; --selectCounter)
+                {
+                    var comp = (Component2) swSelMan.GetSelectedObjectsComponent2(selectCounter);
+                    Debug.WriteLine($"Selected comp name = {(comp as Component2).Name}");
+                    tempList.Add(comp);
+                    //swSelectionReferenceTypes_e seltype = (swSelectionReferenceTypes_e)
+                    //    swSelMan.GetSelectedObjectType2(selectCounter);
+                }
+
+                ret = tempList.ToArray();
+            }     
+
+            return ret;
+        }
+
 
 
     }
