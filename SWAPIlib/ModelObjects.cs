@@ -105,4 +105,14 @@ namespace SWAPIlib
 
     }
     
+    public interface ISwPartData
+    {
+        string PartType { get; }
+        string FileName { get; }
+        bool IsSelected { get; }
+
+    }
+
+
+
 }
