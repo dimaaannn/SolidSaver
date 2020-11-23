@@ -25,6 +25,7 @@ namespace SolidSaverWPF
         {
             InitializeComponent();
             PartsList.ItemsSource = TestClass.CreateTestPartList();
+
         }
     }
 
@@ -36,6 +37,8 @@ namespace SolidSaverWPF
 
         public string TestProperty { get; set; }
         public string TestProperty2 { get; set; }
+
+        
     }
 
     public static class TestClass

@@ -5,18 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SolidSaverWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="500" MinWidth="300">
+        Title="MainWindow" Height="500" Width="530" MinWidth="350">
     <Window.Resources>
+        <!--#region Button style-->
         <Style TargetType="{x:Type Control}" x:Key="baseStyle">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="5"/>
-            
         </Style>
         <Style TargetType="Button" BasedOn="{StaticResource baseStyle}"/>
+        <!--#endregion-->
+        
+        <!--#region Part params block-->
+        <Style TargetType="{x:Type Border}" x:Key="StackParamItem">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Margin" Value="5, 5, 0, 0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}" x:Key="StackParamText">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+            <!--#endregion-->
     </Window.Resources>
 
-    <Grid ShowGridLines="True">
+    <Grid ShowGridLines="False">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="40" MinHeight="40" x:Name="AppHeader"/>
@@ -30,8 +48,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Подключиться">
 
-            <Button Grid.Column="0" Content="Подключиться"/>
+            </Button>
             <Button Grid.Column="1" Content="Загрузить"/>
             <Button Grid.Column="3" Content="Закрыть"/>
 
@@ -47,8 +66,8 @@
             VerticalAlignment="Stretch" Grid.Row="1"
             >
 
-            <!--Разметка рабочей области-->
-            <Grid ShowGridLines="True">
+            <Grid ShowGridLines="False">
+                <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
@@ -56,7 +75,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" MinWidth="300"/>
-                    <ColumnDefinition Width="Auto" MinWidth="150"/>
+                    <ColumnDefinition Width="Auto" MinWidth="200"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -69,7 +88,9 @@
                     VerticalAlignment="Stretch"
                     ResizeDirection="Auto"
                     />
+                <!--#endregion-->
 
+                <!--#region Список деталей интерфейс ISwPartData-->
                 <ListView Name="PartsList"
                     Grid.Row="1"
                     Margin="5"
@@ -96,9 +117,27 @@
                             </GridViewColumn>
                         </GridView>
                     </ListView.View>
-                    
-                </ListView>
 
+                </ListView>
+                <!--#endregion-->
+
+                <!--#region Список параметров-->
+                <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="3">
+                    <Border Style="{StaticResource StackParamItem}">
+                        <Grid ShowGridLines="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="23"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Style="{StaticResource StackParamText}" Text="Обозначение"/>
+                            <TextBox Grid.Row="1" Text="{Binding TestProperty}"/>
+                        </Grid>
+                    </Border>
+
+
+                </StackPanel>
+
+                <!--#endregion-->
             </Grid>
 
         </Border>
