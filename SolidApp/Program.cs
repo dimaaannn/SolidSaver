@@ -33,7 +33,6 @@ namespace SolidApp
             Console.ReadKey();
         }
 
-
         static void PrevMain(string[] args)
         {
 
