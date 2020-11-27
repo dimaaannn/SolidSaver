@@ -27,6 +27,10 @@ namespace SWAPIlib
         /// Наименование модели
         /// </summary>
         string Title { get; }
+        /// <summary>
+        /// Close file event
+        /// </summary>
+        event EventHandler<SwEventArgs> CloseFile;
     }
 
     public interface ISwOperation
@@ -41,9 +45,9 @@ namespace SWAPIlib
     }
 
 
-    public interface ISwComponent : ISwModel
+    public interface ISwComponent :ISwModel
     {
-        Component2 swComp { get; }
+        Component2 SwComp { get; }
         bool SuppressionStatus { get; }
         int ComponentCount(bool TopLevelOnly);
         ISwComponent GetRootComponent();
@@ -75,5 +79,30 @@ namespace SWAPIlib
         bool SetPropValue(string confName, string fieldName, string fieldVal);
     }
 
+    public interface IPropertyManager : IEnumerable<ISwProperty>
+    {
+        Model SwModel { get; }
+        void UpdateAll();
+        void WriteAll();
+        void AddItem(ISwProperty PropGetter);
+        bool RemoveItem(int Index);
+    }
+    
+    /// <summary>
+    /// Объект свойства
+    /// </summary>
+    public interface ISwProperty
+    {
+        Model SwModel { get; set; }
+        bool IsReadable { get; }
+        bool IsWritable { get; }
 
+        string UserName { get; set; }
+        string PropertyName { get; }
+        string PropertyValue { get; set; }
+        
+        void Update();
+        bool WriteValue();
+
+    }
 }

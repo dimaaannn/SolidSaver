@@ -130,6 +130,9 @@ namespace SWAPIlib
 
     }
 
+    /// <summary>
+    /// Базовый класс модели
+    /// </summary>
     public class Model :ISwModel
     {
         private ModelDoc2 _swModel;
@@ -138,9 +141,10 @@ namespace SWAPIlib
         public ModelDoc2 SwModel { get => _swModel; }
         public SwDocType DocType { get; }
         public string FileName { get => System.IO.Path.GetFileName(Path); }
-        public string Path { get; } 
+        public string Path { get; private set; } 
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
-        
+
+        public event EventHandler<SwEventArgs> CloseFile;
 
         /// <summary>
         /// ModelDoc2 Constructor
@@ -178,12 +182,34 @@ namespace SWAPIlib
         private int CloseFileHandler()
         {
             IsExist = false;
+            string evT = $"Document {FileName} closed";
+            var evArg = new SwEventArgs(evT);
+            CloseFile?.Invoke(this, evArg);
             return 0;
         }
     }
 
-    public class SwComponent
+    public class SwProperty : ISwProperty
     {
+        public Model SwModel { get; set; }
+        public bool IsReadable { get; }
+        public bool IsWritable { get; }
 
+        public string UserName { get; set; }
+        public string PropertyName { get; set; }
+        public string PropertyValue { get; set; }
+
+        public void Update() { }
+        public bool WriteValue() 
+        {
+            return false;
+        }
+    }
+
+    public class SwComponent :Model //, ISwComponent
+    {
+        public Component2 SwComp { get; private set; }
+
+        public SwComponent(ModelDoc2 swModel) : base(swModel) { }
     }
 }
