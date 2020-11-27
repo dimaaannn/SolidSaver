@@ -114,7 +114,7 @@ namespace SWAPIlib
     /// </summary>
     public class SwEventArgs : EventArgs
     {
-        public readonly string Text;
+        public string Text;
 
         public SwEventArgs(string EventText) =>
             Text = EventText;
