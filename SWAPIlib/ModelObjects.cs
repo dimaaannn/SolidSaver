@@ -113,6 +113,18 @@ namespace SWAPIlib
 
     }
 
+    public class PartParamGetter
+    {
+        public ModelDoc2 SwModel { get; set; }
+        Dictionary<string, string> paramsDict;
+        public Dictionary<string, string> ParamsDict 
+        { 
+            get => paramsDict; 
+            set => paramsDict = value; 
+        }
 
+    }
+
+    
 
 }

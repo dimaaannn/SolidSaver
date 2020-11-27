@@ -21,16 +21,49 @@ namespace SolidSaverWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public swPart sw_part { get; set; }
+        public List<swPart> SwPartList { get; set; }
+        public List<PropertyTemplate> PropList { get; set; }
+        public PropertyTemplate PropObj { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-            PartsList.ItemsSource = TestClass.CreateTestPartList();
+            SwPartList = TestClass.CreateTestPartList();
+            PartsList.ItemsSource = SwPartList;
 
+            sw_part = new swPart
+            {
+                FileName = "TestName",
+                IsSelected = false,
+                TestProperty = "TestProp"
+            };
+
+            var propTemplate = new PropertyTemplate
+            {
+                PrpName = "TestPropertyName",
+                PrpValue = "TestPropertyValue"
+            };
+
+            PropList = new List<PropertyTemplate>() { propTemplate };
+
+            this.DataContext = sw_part;
+            this.DataContext = PropObj;
+
+            PropertyListBox.ItemsSource = PropList;
+        }
+
+
+        private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var index = PartsList.SelectedIndex;
+            PropertyListBox.ItemsSource = SwPartList[index].PropList;
         }
     }
 
     public class swPart : ISwPartData
     {
+        public List<PropertyTemplate> PropList { get; set; }
         public bool IsSelected { get; set; }
         public string PartType { get; set; }
         public string FileName { get; set; }
@@ -48,9 +81,18 @@ namespace SolidSaverWPF
             var partsList = new List<swPart>();
             partsList.Add(new swPart()
             {
+
                 FileName = "TestFileName.sldprt",
                 IsSelected = true, PartType = "Assembly",
-                TestProperty = "Сборка 12345"
+                TestProperty = "Сборка 12345",
+                PropList = new List<PropertyTemplate>()
+                {
+                    new PropertyTemplate
+                    {
+                        PrpName = "TestPropertyName",
+                        PrpValue = "TestPropertyValue"
+                    }
+                }
             });
 
             partsList.Add(new swPart()
@@ -58,10 +100,24 @@ namespace SolidSaverWPF
                 FileName = "TestFileName2.sldprt",
                 IsSelected = false, PartType = "part",
                 TestProperty = "Деталь 12345",
-                TestProperty2 = "Второе свойство"
+                TestProperty2 = "Второе свойство",
+                PropList = new List<PropertyTemplate>()
+                {
+                    new PropertyTemplate
+                    {
+                        PrpName = "TestAaaaaName2",
+                        PrpValue = "TestPropertyValue2"
+                    }
+                }
             });
 
             return partsList;
         }
+    }
+
+    public class PropertyTemplate
+    {
+        public string PrpName { get; set; }
+        public string PrpValue { get; set; }
     }
 }
