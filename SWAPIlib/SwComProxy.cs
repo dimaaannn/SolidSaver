@@ -691,6 +691,23 @@ namespace SWAPIlib
         }
 
         /// <summary>
+        /// Количество компонентов в сборке
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="TopLevelOnly">Только верхнего уровня</param>
+        /// <returns></returns>
+        public static int GetComponentCount(ModelDoc2 swModel, bool TopLevelOnly = true)
+        {
+            int ret = 0;
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                AssemblyDoc swAsm = swModel as AssemblyDoc;
+                ret = swAsm.GetComponentCount(TopLevelOnly);
+            }
+            return ret;
+        }
+
+        /// <summary>
         /// Габариты сборки
         /// </summary>
         /// <param name="swModel"></param>
