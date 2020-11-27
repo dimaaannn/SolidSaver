@@ -104,6 +104,8 @@ namespace SWAPIlib
         }
 
     }
+
+
     
     public interface ISwPartData
     {
@@ -125,6 +127,9 @@ namespace SWAPIlib
 
     }
 
-    
+    public class SwModel
+    {
+        
+    }
 
 }
