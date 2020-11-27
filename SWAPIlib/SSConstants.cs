@@ -8,6 +8,7 @@ namespace SWAPIlib
 {
     public enum SwDocType
     {
+        swNONE = 0,
         swPART = 1,
         swASM = 2,
         swDRAWING = 3,
