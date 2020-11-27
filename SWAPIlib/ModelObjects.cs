@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 //using SwConst;
 using SolidWorks.Interop.swconst;
+using System.Diagnostics;
+
 
 
 namespace SWAPIlib
@@ -105,5 +107,83 @@ namespace SWAPIlib
         }
 
     }
+
+
     
+    public interface ISwPartData
+    {
+        string PartType { get; }
+        string FileName { get; }
+        bool IsSelected { get; }
+
+    }
+
+    public class PartParamGetter
+    {
+        public ModelDoc2 SwModel { get; set; }
+        Dictionary<string, string> paramsDict;
+        public Dictionary<string, string> ParamsDict 
+        { 
+            get => paramsDict; 
+            set => paramsDict = value; 
+        }
+
+    }
+
+    public class Model :ISwModel
+    {
+        private ModelDoc2 _swModel;
+
+        public bool IsExist { get; private set; }
+        public ModelDoc2 SwModel { get => _swModel; }
+        public SwDocType DocType { get; }
+        public string FileName { get => System.IO.Path.GetFileName(Path); }
+        public string Path { get; } 
+        public virtual string Title { get => ModelProxy.GetName(_swModel); }
+        
+
+        /// <summary>
+        /// ModelDoc2 Constructor
+        /// </summary>
+        /// <param name="swModel"></param>
+        public Model(ModelDoc2 swModel)
+        {
+            if (swModel != null)
+            {
+                this._swModel = swModel;
+                DocType = ModelProxy.GetSWType(swModel);
+                Path = ModelProxy.GetPathName(SwModel);
+                if(DocType == SwDocType.swASM)
+                {
+                    (swModel as AssemblyDoc).DestroyNotify += CloseFileHandler;
+                }
+                else if(DocType == SwDocType.swPART)
+                {
+                    (swModel as PartDoc).DestroyNotify += CloseFileHandler;
+                }
+                else if (DocType == SwDocType.swDRAWING)
+                {
+                    (swModel as DrawingDoc).DestroyNotify += CloseFileHandler;
+                }
+            }
+            else
+            {
+                string msg = "new Model- wrong reference";
+                Debug.WriteLine(msg);
+                throw new NullReferenceException("msg");
+            }
+            string succes = $"Class Model created - {DocType} - {FileName}";
+        }
+
+        private int CloseFileHandler()
+        {
+            IsExist = false;
+            return 0;
+        }
+    }
+
+    public class SwComponent
+    {
+
+    }
 }

@@ -311,7 +311,6 @@ namespace SWAPIlib
             }
             return outputArray;
         }
-
     }
     
     /// <summary>
@@ -438,6 +437,35 @@ namespace SWAPIlib
             bool ret = false;
 
             ret = swModel.SaveBMP(path, height, width);
+            return ret;
+        }
+
+        /// <summary>
+        /// Проверить тип объекта
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public static SwDocType GetSWType(ModelDoc2 model)
+        {
+            SwDocType ret = SwDocType.swNONE;
+            swDocumentTypes_e swType;
+            if (model is ModelDoc2 swModel)
+            {
+                swType = (swDocumentTypes_e)swModel.GetType();
+                switch (swType)
+                {
+                    case swDocumentTypes_e.swDocASSEMBLY:
+                        ret = SwDocType.swASM;
+                        break;
+                    case swDocumentTypes_e.swDocPART:
+                        ret = SwDocType.swPART;
+                        break;
+                    case swDocumentTypes_e.swDocDRAWING:
+                        ret = SwDocType.swDRAWING;
+                        break;
+                }
+            }
+
             return ret;
         }
     }
@@ -689,6 +717,23 @@ namespace SWAPIlib
             }
 
             return retArr;
+        }
+
+        /// <summary>
+        /// Количество компонентов в сборке
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="TopLevelOnly">Только верхнего уровня</param>
+        /// <returns></returns>
+        public static int GetComponentCount(ModelDoc2 swModel, bool TopLevelOnly = true)
+        {
+            int ret = 0;
+            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                AssemblyDoc swAsm = swModel as AssemblyDoc;
+                ret = swAsm.GetComponentCount(TopLevelOnly);
+            }
+            return ret;
         }
 
         /// <summary>
