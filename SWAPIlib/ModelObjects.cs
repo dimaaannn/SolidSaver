@@ -133,16 +133,16 @@ namespace SWAPIlib
     /// <summary>
     /// Базовый класс модели
     /// </summary>
-    public class Model :ISwModel
+    public class AppModel : ISwModel
     {
         private ModelDoc2 _swModel;
 
         public bool IsExist { get; private set; }
         public ModelDoc2 SwModel { get => _swModel; }
-        public SwDocType DocType { get; }
+        public AppDocType DocType { get; }
         public string FileName { get => System.IO.Path.GetFileName(Path); }
-        public string Path { get; private set; } 
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
+        public string Path { get; }
 
         public event EventHandler<SwEventArgs> CloseFile;
 
@@ -150,25 +150,28 @@ namespace SWAPIlib
         /// ModelDoc2 Constructor
         /// </summary>
         /// <param name="swModel"></param>
-        public Model(ModelDoc2 swModel)
+        public AppModel(ModelDoc2 swModel)
         {
             if (swModel != null)
             {
                 this._swModel = swModel;
-                DocType = ModelProxy.GetSWType(swModel);
+                DocType = PartTypeChecker.GetSWType(swModel);
                 Path = ModelProxy.GetPathName(SwModel);
-                if(DocType == SwDocType.swASM)
+
+                #region EventProxy
+                if (DocType == AppDocType.swASM)
                 {
                     (swModel as AssemblyDoc).DestroyNotify += CloseFileHandler;
                 }
-                else if(DocType == SwDocType.swPART)
+                else if(DocType == AppDocType.swPART)
                 {
                     (swModel as PartDoc).DestroyNotify += CloseFileHandler;
                 }
-                else if (DocType == SwDocType.swDRAWING)
+                else if (DocType == AppDocType.swDRAWING)
                 {
                     (swModel as DrawingDoc).DestroyNotify += CloseFileHandler;
                 }
+                #endregion
             }
             else
             {
@@ -177,6 +180,7 @@ namespace SWAPIlib
                 throw new NullReferenceException("msg");
             }
             string succes = $"Class Model created - {DocType} - {FileName}";
+
         }
 
         private int CloseFileHandler()
@@ -191,7 +195,7 @@ namespace SWAPIlib
 
     public class SwProperty : ISwProperty
     {
-        public Model SwModel { get; set; }
+        public AppModel SwModel { get; set; }
         public bool IsReadable { get; }
         public bool IsWritable { get; }
 
@@ -206,7 +210,7 @@ namespace SWAPIlib
         }
     }
 
-    public class SwComponent :Model //, ISwComponent
+    public class SwComponent :AppModel //, ISwComponent
     {
         public Component2 SwComp { get; private set; }
 

@@ -14,7 +14,7 @@ namespace SWAPIlib
         /// <summary>
         /// Тип документа
         /// </summary>
-        SwDocType  DocType { get; }
+        AppDocType  DocType { get; }
         /// <summary>
         /// Имя файла модели
         /// </summary>
@@ -79,9 +79,27 @@ namespace SWAPIlib
         bool SetPropValue(string confName, string fieldName, string fieldVal);
     }
 
+    public interface IAppModelProp
+    {
+        bool IsRoot { get; }
+        string WorkFolder { get; set; }
+        string ModelFolder { get; }
+        bool GetProjectData { get; }
+        string ProjectNumber { get; }
+        string ProjectClient { get; }
+        string ProjectName { get; }
+        string ProjectType { get; }
+
+        bool IsImported { get; }
+        bool IsLibModel { get; }
+
+        bool IsSheetPart { get; }
+        bool IsHasDrawing { get; }
+
+    }   
     public interface IPropertyManager : IEnumerable<ISwProperty>
     {
-        Model SwModel { get; }
+        AppModel SwModel { get; }
         void UpdateAll();
         void WriteAll();
         void AddItem(ISwProperty PropGetter);
@@ -93,7 +111,7 @@ namespace SWAPIlib
     /// </summary>
     public interface ISwProperty
     {
-        Model SwModel { get; set; }
+        AppModel SwModel { get; set; }
         bool IsReadable { get; }
         bool IsWritable { get; }
 

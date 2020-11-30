@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ModelObjects.cs" />
     <Compile Include="PartInterfaces.cs" />
+    <Compile Include="PartTyper.cs" />
     <Compile Include="SSConstants.cs" />
     <Compile Include="SupportClass.cs" />
     <Compile Include="Exporting.cs" />
