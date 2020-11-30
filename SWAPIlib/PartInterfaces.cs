@@ -14,7 +14,7 @@ namespace SWAPIlib
         /// <summary>
         /// Тип документа
         /// </summary>
-        SwDocType  DocType { get; }
+        AppDocType  DocType { get; }
         /// <summary>
         /// Имя файла модели
         /// </summary>
@@ -75,5 +75,23 @@ namespace SWAPIlib
         bool SetPropValue(string confName, string fieldName, string fieldVal);
     }
 
+    public interface IAppModelProp
+    {
+        bool IsRoot { get; }
+        string WorkFolder { get; set; }
+        string ModelFolder { get; }
 
+        bool GetProjectData { get; }
+        string ProjectNumber { get; }
+        string ProjectClient { get; }
+        string ProjectName { get; }
+        string ProjectType { get; }
+
+        bool IsImported { get; }
+        bool IsLibModel { get; }
+
+        bool IsSheetPart { get; }
+        bool IsHasDrawing { get; }
+
+    }   
 }

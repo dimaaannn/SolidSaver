@@ -439,34 +439,7 @@ namespace SWAPIlib
             return ret;
         }
 
-        /// <summary>
-        /// Проверить тип объекта
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public static SwDocType GetSWType(ModelDoc2 model)
-        {
-            SwDocType ret = SwDocType.swNONE;
-            swDocumentTypes_e swType;
-            if (model is ModelDoc2 swModel)
-            {
-                swType = (swDocumentTypes_e)swModel.GetType();
-                switch (swType)
-                {
-                    case swDocumentTypes_e.swDocASSEMBLY:
-                        ret = SwDocType.swASM;
-                        break;
-                    case swDocumentTypes_e.swDocPART:
-                        ret = SwDocType.swPART;
-                        break;
-                    case swDocumentTypes_e.swDocDRAWING:
-                        ret = SwDocType.swDRAWING;
-                        break;
-                }
-            }
-
-            return ret;
-        }
+        
     }
 
 
