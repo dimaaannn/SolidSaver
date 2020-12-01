@@ -69,7 +69,7 @@ namespace SWAPIlib
 
     }
 
-    public class AppModelProp : IAppModelProp
+    public class AppModelProp // : IAppModelProp
     {
 
     }

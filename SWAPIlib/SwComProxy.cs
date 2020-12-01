@@ -7,8 +7,7 @@ using System.Diagnostics;
 using System.Security.Policy;
 using System.Runtime.CompilerServices;
 using SolidWorks.Interop.sldworks;
-//using SwConst;
-using SolidWorks.Interop.swconst;
+using SwConst;
 
 namespace SWAPIlib
 {
