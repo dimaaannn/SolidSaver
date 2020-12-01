@@ -155,9 +155,12 @@ namespace SWAPIlib
 
 
 
-
+    /// <summary>
+    /// свойство модели
+    /// </summary>
     public class AppBaseModelProp  : ISwProperty
     {
+
         public AppModel AppModel 
         { 
             get => _appModel;
@@ -167,22 +170,21 @@ namespace SWAPIlib
                 IsValid = Validator(_appModel);
             } 
         }
-        public bool IsReadable { get; set; }
-        public bool IsWritable { get; set; }
 
-        public string UserName { get; set; }
-        public string PropertyName { get; set; }
-        public bool IsValid { get; private set; }
-        public string PropertyValue 
+        public virtual bool IsReadable { get; set; }
+
+        public virtual bool IsWritable { get; set; }
+
+        public virtual string UserName { get; set; }
+        public virtual string PropertyName { get; set; }
+        public virtual bool IsValid { get; private set; }
+        public virtual string PropertyValue 
         { 
             get => _propertyValue; 
             set => _tempPropertyValue = value; 
         }
 
-        /// <summary>
-        /// Задать имя конфигурации
-        /// </summary>
-        public string ConfigName 
+        public virtual string ConfigName 
         { 
             get => _configName ?? ModelConfigProxy.GetActiveConfName(AppModel.SwModel); 
             set => _configName = value; 

@@ -115,17 +115,47 @@ namespace SWAPIlib
     /// </summary>
     public interface ISwProperty
     {
+        /// <summary>
+        /// Ссылка на активную модель
+        /// </summary>
         AppModel AppModel { get; set; }
+        /// <summary>
+        /// Доступ для чтения
+        /// </summary>
         bool IsReadable { get; }
+        /// <summary>
+        /// Доступ для записи
+        /// </summary>
         bool IsWritable { get; }
+        /// <summary>
+        /// Применимо к типу текущей модели
+        /// </summary>
         bool IsValid { get; }
 
+        /// <summary>
+        /// Имя свойства (пользовательское)
+        /// </summary>
         string UserName { get; set; }
+        /// <summary>
+        /// Запрашиваемый параметр
+        /// </summary>
         string PropertyName { get; }
+        /// <summary>
+        /// Значение параметра
+        /// </summary>
         string PropertyValue { get; set; }
+        /// <summary>
+        /// Имя конфигурации (опционально)
+        /// </summary>
         string ConfigName { get; set; }
-        
+        /// <summary>
+        /// Обновить значения
+        /// </summary>
         void Update();
+        /// <summary>
+        /// Записать изменённое значение
+        /// </summary>
+        /// <returns></returns>
         bool WriteValue();
 
     }
