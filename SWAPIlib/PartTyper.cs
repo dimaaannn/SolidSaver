@@ -41,6 +41,41 @@ namespace SWAPIlib
             return ret;
         }
 
+
+        /// <summary>
+        /// Получить статус отображения компонента
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static AppSuppressionState GetAppSuppressionState(Component2 component)
+        {
+            AppSuppressionState ret = AppSuppressionState.None;
+            if(component != null)
+            {
+                var compType = ComponentProxy.GetSuppressionState(component);
+                switch (compType)
+                {
+                    case swComponentSuppressionState_e.swComponentSuppressed:
+                        ret = AppSuppressionState.Suppressed;
+                        break;
+                    case swComponentSuppressionState_e.swComponentLightweight:
+                        ret = AppSuppressionState.FullyLightweight;
+                        break;
+                    case swComponentSuppressionState_e.swComponentFullyResolved:
+                        ret = AppSuppressionState.FullyResolved;
+                        break;
+                    case swComponentSuppressionState_e.swComponentResolved:
+                        ret = AppSuppressionState.Resolved;
+                        break;
+                    case swComponentSuppressionState_e.swComponentFullyLightweight:
+                        ret = AppSuppressionState.FullyLightweight;
+                        break;
+                }
+            }
+            return ret;
+
+        }
+
         /// <summary>
         /// Является ли модель сборкой
         /// </summary>

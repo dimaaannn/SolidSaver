@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.RegularExpressions;
 
 
 namespace SWAPIlib
@@ -154,6 +156,49 @@ namespace SWAPIlib
 
             return ret;
         }
+    }
+
+    public class FileModelProp : IFileModelProp
+    {
+        public bool IsRoot { get; set; }
+        public string WorkFolder { get; set; }
+        public string ModelFolder { get => Path.GetDirectoryName( _appModel.Path); }
+        public string GetProjectData 
+        {
+            get
+            {
+                string key = "ProjectData";
+                if (DataDict.ContainsKey(key))
+                    return DataDict[key];
+                else
+                {
+                    var match = ReProjectData.Match(_appModel.Path);
+                    return DataDict[key] = match?.Groups[1].Value;
+                }
+            }
+        }  
+        public string ProjectNumber { get; }
+        public string ProjectClient { get; }
+        public string ProjectName { get; }
+        public string ProjectType { get; }
+
+        public bool IsImported { get; }
+        public bool IsLibModel { get; }
+
+        public bool IsSheetPart { get; }
+        public bool IsHasDrawing { get; }
+
+        public FileModelProp(AppModel appmodel)
+        {
+            _appModel = appmodel;
+            DataDict = new Dictionary<string, string>();
+        }
+
+        private AppModel _appModel;
+        private readonly Dictionary<string, string> DataDict;
+        private static Regex ReProjectData = new Regex(
+            @"\\(.?\d+ ?-[^\\]*)");
+
     }
 
 }

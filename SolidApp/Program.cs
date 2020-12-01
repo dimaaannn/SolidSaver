@@ -27,6 +27,10 @@ namespace SolidApp
 
             var appmodel = new AppModel(swModel);
 
+            var components = AsmDocProxy.GetComponents(appmodel.SwModel);
+            var componentmodel = new SwComponent(components[3]);
+            var subcomponents = componentmodel.GetComponents(true);
+
             var builder = new StringBuilder("DATA:\n");
 
             builder.Append($"Exist :{appmodel.IsExist}\n");
@@ -48,6 +52,9 @@ namespace SolidApp
             builder.Append($"Readable :{prop.IsReadable}\n");
             builder.Append($"Value :{prop.PropertyValue}\n");
 
+
+            var ModelProp = new FileModelProp(appmodel);
+            builder.Append($"Project {ModelProp.GetProjectData}");
 
             Console.WriteLine(builder);
 

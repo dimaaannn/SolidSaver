@@ -156,6 +156,7 @@ namespace SWAPIlib
                 this._swModel = swModel;
                 DocType = PartTypeChecker.GetSWType(swModel);
                 Path = ModelProxy.GetPathName(SwModel);
+                IsExist = true;
 
                 #region EventProxy
                 if (DocType == AppDocType.swASM)
@@ -209,10 +210,36 @@ namespace SWAPIlib
         }
     }
 
-    public class SwComponent :AppModel //, ISwComponent
+    /// <summary>
+    /// Класс компонента
+    /// </summary>
+    public class SwComponent : AppModel, ISwComponent
     {
         public Component2 SwComp { get; private set; }
+        public AppSuppressionState SuppressionStatus 
+            { get => PartTypeChecker.GetAppSuppressionState(SwComp); }
+        public int ComponentCount { get => SwComp.IGetChildrenCount(); }
+        public List<SwComponent> GetComponents(bool TopLeverOnly)
+        {
+            var ret = new List<SwComponent>();
+            var components = ComponentProxy.GetChildren(SwComp);
+            Debug.WriteLine($"GetComponents from {this.FileName} begin");
+            foreach(object comp in components)
+            {
+                ret.Add(new SwComponent(comp as Component2));
+            }
+            Debug.WriteLine(ret.Count > 0 ? "Success" : "No components");
+            
+            return ret;
+        }
+        public SwComponent GetRootComponent()
+        {
+            return new SwComponent(ComponentProxy.GetRoot(SwComp));
+        }
 
-        public SwComponent(ModelDoc2 swModel) : base(swModel) { }
+        public SwComponent(Component2 component): base(ComponentProxy.GetModelDoc2(component))
+        {
+            SwComp = component;
+        }
     }
 }

@@ -41,22 +41,30 @@ namespace SWAPIlib
     public interface ISwAssembly : ISwModel, IConfProperty
     {
         int ComponentCount(bool TopLevelOnly);
-        IEnumerable<ISwComponent> GetComponents(bool TopLevelOnly);
+        IEnumerable<SwComponent> GetComponents(bool TopLevelOnly);
     }
 
 
     public interface ISwComponent :ISwModel
     {
         Component2 SwComp { get; }
-        bool SuppressionStatus { get; }
-        int ComponentCount(bool TopLevelOnly);
-        ISwComponent GetRootComponent();
+        /// <summary>
+        /// Статус отображения
+        /// </summary>
+        AppSuppressionState SuppressionStatus { get; }
+        /// <summary>
+        /// Количество подкомпонентов
+        /// </summary>
+        /// <param name="TopLevelOnly"></param>
+        /// <returns></returns>
+        int ComponentCount { get; }
+        SwComponent GetRootComponent();
         /// <summary>
         /// Получить дочерние компоненты
         /// </summary>
         /// <param name="TopLevelOnly"></param>
         /// <returns></returns>
-        IEnumerable<ISwComponent> GetComponents(bool TopLevelOnly);
+        List<SwComponent> GetComponents(bool TopLevelOnly);
     }
 
     public interface ISwPart : ISwModel, IConfProperty
@@ -82,12 +90,12 @@ namespace SWAPIlib
     /// <summary>
     /// Расширенные свойства модели
     /// </summary>
-    public interface IAppModelProp
+    public interface IFileModelProp
     {
         bool IsRoot { get; }
         string WorkFolder { get; set; }
         string ModelFolder { get; }
-        bool GetProjectData { get; }  //TODO убрать Legacy features в отдельный класс
+        string GetProjectData { get; }  //TODO убрать Legacy features в отдельный класс
         string ProjectNumber { get; }
         string ProjectClient { get; }
         string ProjectName { get; }

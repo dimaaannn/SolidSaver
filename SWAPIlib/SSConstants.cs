@@ -24,4 +24,17 @@ namespace SWAPIlib
         PROJECTPART,
         SHEETPART
     }
+    
+    /// <summary>
+    /// Статус отображения компонента
+    /// </summary>
+    public enum AppSuppressionState
+    {
+        Suppressed = 0,
+        Lightweight = 1,
+        FullyResolved = 2,
+        Resolved = 3,
+        FullyLightweight = 4,
+        None = 5
+    }
 }
