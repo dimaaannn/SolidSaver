@@ -263,6 +263,25 @@ namespace SWAPIlib
             }
             return ret;
         }
+
+        /// <summary>
+        /// Получить параметр активной конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <returns></returns>
+        public static string GetConfParam(ModelDoc2 swModel, string fieldName)
+        {
+            string ret = null;
+            if (IsPartOrAsm(swModel))
+            {
+                ret = swModel.CustomInfo[fieldName];
+            }
+            return ret;
+        }
+
+
         /// <summary>
         /// Установить значение параметра конфигурации
         /// </summary>
@@ -284,7 +303,29 @@ namespace SWAPIlib
             return ret;
         }
 
+        /// <summary>
+        /// Установить значение параметра активной конфигурации
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="fieldName">Имя параметра</param>
+        /// <param name="fieldVal">Значение параметра</param>
+        /// <returns>Статус операции</returns>"
+        public static bool SetConfParam(ModelDoc2 swModel, string fieldName, string fieldVal)
+        {
+            bool ret = false;
+            if (IsPartOrAsm(swModel))
+            {
+                swModel.CustomInfo[fieldName] = fieldVal;
+
+                if (swModel.CustomInfo[fieldName] == fieldVal)
+                    ret = true;
+            }
+            return ret;
+        }
+
     }
+
 
     /// <summary>
     /// Вспомогательные функции
