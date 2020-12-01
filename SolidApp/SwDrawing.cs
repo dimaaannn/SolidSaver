@@ -2,8 +2,7 @@
 
 using SolidApp;
 using SolidWorks.Interop.sldworks;
-//using SwConst;
-using SolidWorks.Interop.swconst;
+using SwConst;
 using System;
 using System.Diagnostics;
 

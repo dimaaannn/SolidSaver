@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
-//using SwConst;
-using SolidWorks.Interop.swconst;
+using SwConst;
 using System.Diagnostics;
 
 
@@ -193,9 +192,9 @@ namespace SWAPIlib
         }
     }
 
-    public class SwProperty : ISwProperty
+    public class SwProperty //: ISwProperty
     {
-        public AppModel SwModel { get; set; }
+        public AppModel AppModel { get; set; }
         public bool IsReadable { get; }
         public bool IsWritable { get; }
 

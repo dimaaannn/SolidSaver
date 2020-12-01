@@ -7,8 +7,7 @@ using SolidDrawing;
 using SolidWorks.Interop.sldworks;
 using System.Diagnostics;
 using System.IO;
-//using SwConst;
-using SolidWorks.Interop.swconst;
+using SwConst;
 using System.Linq;
 using System.Threading;
 using System.Security.Policy;
@@ -26,10 +25,31 @@ namespace SolidApp
             SwAppControl.Connect();
             var swModel = SwAppControl.MainModel;
 
-            var asmbox = AsmDocProxy.GetBox(swModel);
-            Console.WriteLine($"asmBox = {string.Join(",", asmbox.Value.dim)}");
+            var appmodel = new AppModel(swModel);
+
+            var builder = new StringBuilder("DATA:\n");
+
+            builder.Append($"Exist :{appmodel.IsExist}\n");
+            builder.Append($"FileName :{appmodel.FileName}\n");
+            builder.Append($"Title :{appmodel.Title}\n");
 
 
+            var prop = new AppBaseModelProp()
+            {
+                AppModel = appmodel,
+                IsReadable = true,
+                IsWritable = true,
+                PropertyName = "Наименование"
+            };
+            prop.Update();
+
+            builder.Append($"Valid :{prop.IsValid}\n");
+            builder.Append($"PropName :{prop.PropertyName}\n");
+            builder.Append($"Readable :{prop.IsReadable}\n");
+            builder.Append($"Value :{prop.PropertyValue}\n");
+
+
+            Console.WriteLine(builder);
 
             Console.ReadKey();
         }

@@ -79,12 +79,15 @@ namespace SWAPIlib
         bool SetPropValue(string confName, string fieldName, string fieldVal);
     }
 
+    /// <summary>
+    /// Расширенные свойства модели
+    /// </summary>
     public interface IAppModelProp
     {
         bool IsRoot { get; }
         string WorkFolder { get; set; }
         string ModelFolder { get; }
-        bool GetProjectData { get; }
+        bool GetProjectData { get; }  //TODO убрать Legacy features в отдельный класс
         string ProjectNumber { get; }
         string ProjectClient { get; }
         string ProjectName { get; }
@@ -97,6 +100,7 @@ namespace SWAPIlib
         bool IsHasDrawing { get; }
 
     }   
+
     public interface IPropertyManager : IEnumerable<ISwProperty>
     {
         AppModel SwModel { get; }
@@ -111,13 +115,15 @@ namespace SWAPIlib
     /// </summary>
     public interface ISwProperty
     {
-        AppModel SwModel { get; set; }
+        AppModel AppModel { get; set; }
         bool IsReadable { get; }
         bool IsWritable { get; }
+        bool IsValid { get; }
 
         string UserName { get; set; }
         string PropertyName { get; }
         string PropertyValue { get; set; }
+        string ConfigName { get; set; }
         
         void Update();
         bool WriteValue();
