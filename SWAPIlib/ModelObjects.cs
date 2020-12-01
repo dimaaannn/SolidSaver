@@ -242,4 +242,15 @@ namespace SWAPIlib
             SwComp = component;
         }
     }
+
+    public class AppPart // : ISwPart
+    {
+        int BodyCount { get; }
+        bool IsSheetMetal { get; }
+        bool HasDrawing { get; }
+        bool SheetThickness(int BodyIndex);
+        bool ExportDXF(string path);
+        bool ExportModel(string path);
+        bool ExportDrawing(string path);
+    }
 }

@@ -31,6 +31,8 @@ namespace SWAPIlib
         /// Close file event
         /// </summary>
         event EventHandler<SwEventArgs> CloseFile;
+
+        List<ISwProperty> PropList { get; set; }
     }
 
     public interface ISwOperation

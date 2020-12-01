@@ -54,7 +54,7 @@ namespace SolidApp
 
 
             var ModelProp = new FileModelProp(appmodel);
-            builder.Append($"Project {ModelProp.GetProjectData}");
+            builder.Append($"Project (неправильная папка) {ModelProp.GetProjectData}");
 
             Console.WriteLine(builder);
 
