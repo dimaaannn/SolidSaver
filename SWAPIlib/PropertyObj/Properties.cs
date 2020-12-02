@@ -74,13 +74,14 @@ namespace SWAPIlib
     }
 
 
-
-
-    /// <summary>
-    /// свойство модели
-    /// </summary>
-    public class AppBaseModelProp : ISwProperty
+    public abstract class AppModelProp : ISwProperty
     {
+        public AppModelProp(AppModel appModel)
+        {
+            this.AppModel = appModel;
+        }
+
+        public AppModelProp() { }
 
         public AppModel AppModel
         {
@@ -88,7 +89,7 @@ namespace SWAPIlib
             set
             {
                 _appModel = value;
-                IsValid = Validator(_appModel);
+                IsValid = (bool)Validator?.Invoke (_appModel);
             }
         }
 
@@ -111,14 +112,36 @@ namespace SWAPIlib
             set => _configName = value;
         }
 
-        public PropValidator Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
+        public PropValidator Validator { get; set; }
 
-        private AppModel _appModel;
-        private string _propertyValue;
-        private string _tempPropertyValue;
-        private string _configName = null;
+        protected AppModel _appModel;
+        protected string _propertyValue;
+        protected string _tempPropertyValue;
+        protected string _configName = null;
 
-        public virtual void Update()
+        public abstract void Update();
+
+        public abstract bool WriteValue();
+
+        /// <summary>
+        /// Проверка перед записью значения
+        /// </summary>
+        /// <returns></returns>
+        protected abstract bool CheckWrite();
+    }
+
+    /// <summary>
+    /// свойство модели
+    /// </summary>
+    public class AppBaseModelProp : AppModelProp
+    {
+        public AppBaseModelProp(AppModel appModel) : base(appModel)
+        {
+            Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
+        }
+
+
+        public override void Update()
         {
             _tempPropertyValue = null;
             _propertyValue = null;
@@ -129,7 +152,7 @@ namespace SWAPIlib
             }
         }
 
-        public virtual bool WriteValue()
+        public override bool WriteValue()
         {
             bool ret = false;
             if (CheckWrite())
@@ -143,7 +166,7 @@ namespace SWAPIlib
         /// Проверка перед записью значения
         /// </summary>
         /// <returns></returns>
-        private bool CheckWrite()
+        protected override bool CheckWrite()
         {
             bool ret = false;
             if (
