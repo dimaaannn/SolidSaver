@@ -73,15 +73,17 @@ namespace SWAPIlib
         }
     }
 
-
-    public abstract class AppModelProp : ISwProperty
+    /// <summary>
+    /// Базовый класс свойств
+    /// </summary>
+    public abstract class AppPropertyBase : ISwProperty
     {
-        public AppModelProp(AppModel appModel)
+        public AppPropertyBase(AppModel appModel)
         {
             this.AppModel = appModel;
         }
 
-        public AppModelProp() { }
+        public AppPropertyBase() { }
 
         public AppModel AppModel
         {
@@ -130,56 +132,6 @@ namespace SWAPIlib
         protected abstract bool CheckWrite();
     }
 
-    /// <summary>
-    /// свойство модели
-    /// </summary>
-    public class AppBaseModelProp : AppModelProp
-    {
-        public AppBaseModelProp(AppModel appModel) : base(appModel)
-        {
-            Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
-        }
-
-
-        public override void Update()
-        {
-            _tempPropertyValue = null;
-            _propertyValue = null;
-            if (IsValid && IsReadable)
-            {
-                _propertyValue = ModelConfigProxy.GetConfParam(
-                    AppModel.SwModel, ConfigName, PropertyName);
-            }
-        }
-
-        public override bool WriteValue()
-        {
-            bool ret = false;
-            if (CheckWrite())
-            {
-                ret = ModelConfigProxy.SetConfParam(AppModel.SwModel,
-                    ConfigName, PropertyName, _tempPropertyValue);
-            }
-            return ret;
-        }
-        /// <summary>
-        /// Проверка перед записью значения
-        /// </summary>
-        /// <returns></returns>
-        protected override bool CheckWrite()
-        {
-            bool ret = false;
-            if (
-                IsWritable &&
-                !String.IsNullOrEmpty(_tempPropertyValue) &&
-                _tempPropertyValue != PropertyValue)
-            {
-                ret = true;
-            }
-
-            return ret;
-        }
-    }
 
     public class FileModelProp : IFileModelProp
     {
