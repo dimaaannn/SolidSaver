@@ -52,6 +52,7 @@
     <Compile Include="ModelObj\SSConstants.cs" />
     <Compile Include="Extensions\SupportClass.cs" />
     <Compile Include="Exporting.cs" />
+    <Compile Include="PropertyObj\PropertyInterfaces.cs" />
     <Compile Include="SldComProxy\SwComProxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

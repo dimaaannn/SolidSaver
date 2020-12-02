@@ -253,7 +253,7 @@ namespace SWAPIlib
         }
     }
 
-    public class AppPart // : ISwPart
+    public class AppPart  : ISwPart
     {
         int BodyCount { get; }
         bool IsSheetMetal { get; }
