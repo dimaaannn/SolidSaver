@@ -27,7 +27,13 @@ namespace SolidApp
 
             var appmodel = new AppModel(swModel);
 
-            var components = AsmDocProxy.GetComponents(appmodel.SwModel);
+            var components = AsmDocProxy.GetComponents(appmodel.SwModel, false);
+
+            foreach(Component2 comp in components)
+            {
+                Console.WriteLine($"componentData = {ComponentProxy.GetName(comp)}");
+            }
+
             var componentmodel = new SwComponent(components[3]);
             var subcomponents = componentmodel.GetComponents(true);
 
@@ -38,9 +44,8 @@ namespace SolidApp
             builder.Append($"Title :{appmodel.Title}\n");
 
 
-            var prop = new AppBaseModelProp()
+            var prop = new AppModelPropGetter(appmodel)
             {
-                AppModel = appmodel,
                 IsReadable = true,
                 IsWritable = true,
                 PropertyName = "Наименование"
