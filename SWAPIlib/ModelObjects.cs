@@ -187,7 +187,7 @@ namespace SWAPIlib
             {
                 string msg = "new Model- wrong reference";
                 Debug.WriteLine(msg);
-                throw new NullReferenceException("msg");
+                throw new NullReferenceException(msg);
             }
             string succes = $"Class Model created - {DocType} - {FileName}";
 
