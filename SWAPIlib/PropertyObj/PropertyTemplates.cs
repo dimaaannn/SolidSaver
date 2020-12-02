@@ -7,16 +7,24 @@ using System.Threading.Tasks;
 namespace SWAPIlib
 {
 
+    //var prop = new AppModelPropGetter(appmodel)
+    //{
+    //    IsReadable = true,
+    //    IsWritable = true,
+    //    PropertyName = "Наименование"
+    //}
+    //prop.Update();
+
     /// <summary>
     /// Именованные свойства модели
     /// </summary>
     public class AppModelPropGetter : AppPropertyBase
     {
-        public AppModelPropGetter(AppModel appModel) : base(appModel)
+        public AppModelPropGetter(AppModel appModel) 
         {
+            _appModel = appModel;
             Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
         }
-
 
         public override void Update()
         {

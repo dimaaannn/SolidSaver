@@ -78,20 +78,13 @@ namespace SWAPIlib
     /// </summary>
     public abstract class AppPropertyBase : ISwProperty
     {
-        public AppPropertyBase(AppModel appModel)
-        {
-            this.AppModel = appModel;
-        }
-
-        public AppPropertyBase() { }
-
         public AppModel AppModel
         {
             get => _appModel;
             set
             {
                 _appModel = value;
-                IsValid = (bool)Validator?.Invoke (_appModel);
+                IsValid = Validator(_appModel);
             }
         }
 
