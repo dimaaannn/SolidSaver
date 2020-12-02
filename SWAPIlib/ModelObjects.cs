@@ -142,6 +142,8 @@ namespace SWAPIlib
         public string FileName { get => System.IO.Path.GetFileName(Path); }
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
+        public IList<ISwProperty> PropList { get; }
+        public IFileModelProp GlobalModelProp { get; }
 
         public event EventHandler<SwEventArgs> CloseFile;
 
@@ -153,10 +155,18 @@ namespace SWAPIlib
         {
             if (swModel != null)
             {
+                PropList = new List<ISwProperty>();
+                GlobalModelProp = new FileModelProp(this)
+                { 
+                    IsRoot = false,
+                    
+                };
+                //TODO Add default properties to list
                 this._swModel = swModel;
                 DocType = PartTypeChecker.GetSWType(swModel);
                 Path = ModelProxy.GetPathName(SwModel);
                 IsExist = true;
+
 
                 #region EventProxy
                 if (DocType == AppDocType.swASM)

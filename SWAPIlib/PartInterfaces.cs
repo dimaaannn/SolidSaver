@@ -31,8 +31,12 @@ namespace SWAPIlib
         /// Close file event
         /// </summary>
         event EventHandler<SwEventArgs> CloseFile;
-
-        List<ISwProperty> PropList { get; set; }
+        IFileModelProp GlobalModelProp { get; }
+        /// <summary>
+        /// Список свойств модели
+        /// </summary>
+        IList<ISwProperty> PropList { get;}  //TODO create propList class
+        
     }
 
     public interface ISwOperation
