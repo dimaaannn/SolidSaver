@@ -18,12 +18,11 @@ namespace SWAPIlib
     /// <summary>
     /// Именованные свойства модели
     /// </summary>
-    public class AppModelPropGetter : AppPropertyBase
+    public class AppModelPropGetter : AppPropertyBase<string>
     {
         public AppModelPropGetter(AppModel appModel) 
         {
             _appModel = appModel;
-            Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
         }
 
         public override void Update()
@@ -32,8 +31,7 @@ namespace SWAPIlib
             _propertyValue = null;
             if (IsValid && IsReadable)
             {
-                _propertyValue = ModelConfigProxy.GetConfParam(
-                    AppModel.SwModel, ConfigName, PropertyName);
+                _propertyValue = PropGetter();
             }
         }
 
@@ -64,7 +62,36 @@ namespace SWAPIlib
 
             return ret;
         }
+        public override PropValidator Validator { get => PropValidatorTemplate.IsPartOrAsm; }
+
+        public override string PropGetter() => ModelConfigProxy.GetConfParam(
+                    AppModel.SwModel, ConfigName, PropertyName);
+
     }
 
+    public class FieldProperty : AppPropertyBase<string>
+    {
+        public FieldProperty(AppModel appModel)
+        {
+            _appModel = appModel;
+            IsReadable = true;
+        }
 
+        public override PropValidator Validator => PropValidatorTemplate.IsExist;
+        public override string PropGetter() => _appModel.FileName;
+        public override void Update()
+        {
+            PropertyValue = PropGetter();
+        }
+
+        protected override bool CheckWrite()
+        {
+            throw new NotImplementedException();
+        }
+        public override bool WriteValue()
+        {
+            throw new NotImplementedException();
+        }
+
+    }
 }

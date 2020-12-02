@@ -25,8 +25,20 @@ namespace SWAPIlib
     /// <returns></returns>
     public delegate bool PropValueConvertor<T>(T value, out T outvalue);
 
+    public delegate string PropValueGetter();
+
     public static class PropValidatorTemplate
     {
+        /// <summary>
+        /// Ненулевая ссылка на модель
+        /// </summary>
+        /// <param name="appModel"></param>
+        /// <returns></returns>
+        public static bool IsExist(AppModel appModel)
+        {
+            if (appModel != null) return true;
+            else return false;
+        }
 
         /// <summary>
         /// Шаблон - является деталью или сборкой
@@ -76,7 +88,7 @@ namespace SWAPIlib
     /// <summary>
     /// Базовый класс свойств
     /// </summary>
-    public abstract class AppPropertyBase : ISwProperty
+    public abstract class AppPropertyBase<T> : ISwProperty
     {
         public AppModel AppModel
         {
@@ -107,7 +119,8 @@ namespace SWAPIlib
             set => _configName = value;
         }
 
-        public PropValidator Validator { get; set; }
+        public abstract PropValidator Validator { get; }
+        public abstract T PropGetter();
 
         protected AppModel _appModel;
         protected string _propertyValue;
