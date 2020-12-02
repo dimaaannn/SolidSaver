@@ -897,11 +897,22 @@ namespace SWAPIlib
             return retArr;
         }
 
+        /// <summary>
+        /// Имя компонента
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
         public static string GetName(Component2 swComp)
         {
             return swComp.Name2;
         }
 
+        /// <summary>
+        /// Переименовать компонент
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <param name="newName"></param>
+        /// <returns></returns>
         public static bool SetName(Component2 swComp, string newName)
         {
             bool ret = false;
@@ -910,6 +921,32 @@ namespace SWAPIlib
                 ret = true;
             return ret;
         }
+
+        /// <summary>
+        /// Имя связанной конфигурации компонента
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static string GetRefConfig(Component2 swComp)
+        {
+            return swComp.ReferencedConfiguration;
+        }
+
+        /// <summary>
+        /// Задать имя связанной конфигурации
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <param name="ConfName"></param>
+        /// <returns></returns>
+        public static bool SetRefConfig(Component2 swComp, string ConfName)
+        {
+            bool ret = false;
+            swComp.ReferencedConfiguration = ConfName;
+            if (swComp.ReferencedConfiguration == ConfName)
+                ret = true;
+            return ret;
+        }
+
 
         /// <summary>
         /// Габаритный размер
