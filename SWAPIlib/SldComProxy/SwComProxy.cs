@@ -897,6 +897,20 @@ namespace SWAPIlib
             return retArr;
         }
 
+        public static string GetName(Component2 swComp)
+        {
+            return swComp.Name2;
+        }
+
+        public static bool SetName(Component2 swComp, string newName)
+        {
+            bool ret = false;
+            swComp.Name2 = newName;
+            if (swComp.Name == newName)
+                ret = true;
+            return ret;
+        }
+
         /// <summary>
         /// Габаритный размер
         /// </summary>
