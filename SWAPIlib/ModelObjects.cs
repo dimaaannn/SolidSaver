@@ -138,7 +138,7 @@ namespace SWAPIlib
 
         public bool IsExist { get; private set; }
         public ModelDoc2 SwModel { get => _swModel; }
-        public AppDocType DocType { get; }
+        public virtual AppDocType DocType { get; }
         public string FileName { get => System.IO.Path.GetFileName(Path); }
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
@@ -153,19 +153,19 @@ namespace SWAPIlib
         /// <param name="swModel"></param>
         public AppModel(ModelDoc2 swModel)
         {
-            if (swModel != null)
-            {
                 PropList = new List<ISwProperty>();
                 GlobalModelProp = new FileModelProp(this)
                 { 
                     IsRoot = false,
-                    
                 };
+                IsExist = true;
+                DocType = PartTypeChecker.GetSWType(swModel);
+
+            if (swModel != null)
+            {
                 //TODO Add default properties to list
                 this._swModel = swModel;
-                DocType = PartTypeChecker.GetSWType(swModel);
                 Path = ModelProxy.GetPathName(SwModel);
-                IsExist = true;
 
 
                 #region EventProxy
@@ -185,9 +185,9 @@ namespace SWAPIlib
             }
             else
             {
-                string msg = "new Model- wrong reference";
+                string msg = "new Model- null reference";
                 Debug.WriteLine(msg);
-                throw new NullReferenceException(msg);
+                //throw new NullReferenceException(msg);
             }
             string succes = $"Class Model created - {DocType} - {FileName}";
 
@@ -211,6 +211,8 @@ namespace SWAPIlib
     public class SwComponent : AppModel, ISwComponent
     {
         public Component2 SwComp { get; private set; }
+        public override AppDocType DocType { get => _docType; }
+        private AppDocType _docType;
         public AppSuppressionState SuppressionStatus 
             { get => PartTypeChecker.GetAppSuppressionState(SwComp); }
         public int ComponentCount { get => SwComp.IGetChildrenCount(); }
@@ -231,14 +233,20 @@ namespace SWAPIlib
         {
             return new SwComponent(ComponentProxy.GetRoot(SwComp));
         }
+        public override string Title => ComponentProxy.GetName(SwComp);
         public string ConfigName
         {
             get => ComponentProxy.GetRefConfig(SwComp);
             set => ComponentProxy.SetRefConfig(SwComp, value);
         }
+        /// <summary>
+        /// Component Constructor
+        /// </summary>
+        /// <param name="component"></param>
         public SwComponent(Component2 component): base(ComponentProxy.GetModelDoc2(component))
         {
             SwComp = component;
+            _docType = AppDocType.swCOMPONENT;
         }
     }
 
@@ -266,13 +274,41 @@ namespace SWAPIlib
             var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
             foreach(Component2 comp in swComponents)
             {
-                ret.Add(new SwComponent(comp));
+                //swComponentSuppressionState_e state_E = ComponentProxy.GetSuppressionState(comp);
+                //if(
+                //    state_E != swComponentSuppressionState_e.swComponentSuppressed &&
+                //    state_E != swComponentSuppressionState_e.swComponentLightweight
+                //    )
+                //{
+                //}
+                    ret.Add(new SwComponent(comp));
+
+                //TODO Create component constructor without model
             }
             return ret;
         }
     }
 
-
+    public class ModelFactory
+    {
+        public AppModel GetModel(ModelDoc2 swModel)
+        {
+            AppDocType docType = PartTypeChecker.GetSWType(swModel);
+            AppModel ret = null;
+            switch (docType)
+            {
+                case AppDocType.swNONE:
+                    break;
+                case AppDocType.swASM:
+                    ret = new AppAssembly(swModel);
+                    break;
+                default:
+                    ret = new AppModel(swModel);
+                    break;
+            }
+            return ret;
+        }
+    }
 
 
     //TODO add ConfigName

@@ -656,8 +656,7 @@ namespace SWAPIlib
 
             return ret;
         }
-
-        
+                
     }
 
     /// <summary>
@@ -815,8 +814,11 @@ namespace SWAPIlib
         /// <returns></returns>
         public static ModelDoc2 GetModelDoc2(Component2 swComp)
         {
-            return swComp.GetModelDoc2() as ModelDoc2;
+            var model = swComp.GetModelDoc2();
+            var ret =  model as ModelDoc2;
+            return ret;
         }
+
 
         /// <summary>
         /// Получить родительский компонент
