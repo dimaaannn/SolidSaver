@@ -43,10 +43,10 @@ namespace SWAPIlib
     /// <summary>
     /// Интерфейс модели сборки
     /// </summary>
-    public interface ISwAssembly : ISwModel, IConfProperty
+    public interface ISwAssembly : ISwModel
     {
         int ComponentCount(bool TopLevelOnly);
-        IEnumerable<SwComponent> GetComponents(bool TopLevelOnly);
+        IList<SwComponent> GetComponents(bool TopLevelOnly);
         /// <summary>
         /// Имя конфигурации
         /// </summary>

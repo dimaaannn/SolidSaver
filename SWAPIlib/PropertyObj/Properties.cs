@@ -85,8 +85,30 @@ namespace SWAPIlib
         }
     }
 
+
     /// <summary>
     /// Базовый класс свойств
+    /// </summary>
+    public class SwProperty //: ISwProperty
+    {
+        public AppModel AppModel { get; set; }
+        public bool IsReadable { get; }
+        public bool IsWritable { get; }
+
+        public string UserName { get; set; }
+        public string PropertyName { get; set; }
+        public string PropertyValue { get; set; }
+
+        public void Update() { }
+        public bool WriteValue()
+        {
+            return false;
+        }
+    }
+
+
+    /// <summary>
+    /// Базовый класс свойств для моделей
     /// </summary>
     public abstract class AppPropertyBase : ISwProperty
     {
@@ -96,7 +118,7 @@ namespace SWAPIlib
             set
             {
                 _appModel = value;
-                IsValid = Validator(_appModel);
+                IsValid = true;
             }
         }
 
@@ -132,7 +154,7 @@ namespace SWAPIlib
             set => _configName = value;
         }
 
-        public abstract PropValidator Validator { get; }
+        public abstract PropValidator Validator { get; set; }
         public abstract string ReadValue();
 
         protected AppModel _appModel;
@@ -140,15 +162,13 @@ namespace SWAPIlib
         protected string _tempPropertyValue;
         protected string _configName = null;
 
-        public abstract void Update();
+        public virtual void Update()
+        {
+            _tempPropertyValue = ReadValue();
+        }
 
         public abstract bool WriteValue();
 
-        /// <summary>
-        /// Проверка перед записью значения
-        /// </summary>
-        /// <returns></returns>
-        protected abstract bool CheckWrite();
     }
 
     /// <summary>
@@ -160,6 +180,8 @@ namespace SWAPIlib
         public T RawPropertyValue { get; set; }
         public abstract T ReadRawValue();
     }
+
+
 
     public class FileModelProp : IFileModelProp
     {

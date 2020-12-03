@@ -37,6 +37,7 @@ namespace SWAPIlib
             }
         }
 
+        public override bool IsValid => true;
         public override bool WriteValue()
         {
             bool ret = false;
@@ -51,7 +52,7 @@ namespace SWAPIlib
         /// Проверка перед записью значения
         /// </summary>
         /// <returns></returns>
-        protected override bool CheckWrite()
+        private bool CheckWrite()
         {
             bool ret = false;
             if (
@@ -64,10 +65,19 @@ namespace SWAPIlib
 
             return ret;
         }
-        public override PropValidator Validator { get => PropValidatorTemplate.IsPartOrAsm; }
+        private PropValidator _validator = PropValidatorTemplate.IsPartOrAsmOrComp;
+        public override PropValidator Validator { get => _validator; set => _validator = value; }
 
-        public override string ReadValue() => ModelConfigProxy.GetConfParam(
+        public override string ReadValue()
+        {
+            if (AppModel.DocType == AppDocType.swPART || AppModel.DocType == AppDocType.swASM)
+            {
+                return ModelConfigProxy.GetConfParam(
                     AppModel.SwModel, ConfigName, PropertyName);
+            }
+            else
+                return (AppModel as SwComponent).ConfigName;
+        }
 
     }
 
@@ -78,22 +88,50 @@ namespace SWAPIlib
             _appModel = appModel;
             IsReadable = true;
         }
-
-        public override PropValidator Validator => PropValidatorTemplate.IsExist;
+        private PropValidator _validator = PropValidatorTemplate.IsExist;
+        public override PropValidator Validator
+        {
+            get => _validator;
+            set => _validator = value;
+        }
         public override string ReadValue() => _appModel.FileName;
         public override void Update()
         {
             PropertyValue = ReadValue();
         }
 
-        protected override bool CheckWrite()
-        {
-            throw new NotImplementedException();
-        }
         public override bool WriteValue()
         {
             throw new NotImplementedException();
         }
 
+    }
+
+    public static class PropertyFactory
+    {
+        public static class ModelProp
+        {
+            private static AppModelPropGetter CreateDefault(
+                AppModel appModel, string userName, string propertyName)
+            {
+                return new AppModelPropGetter(appModel)
+                {
+                    IsReadable = true,
+                    IsWritable = true,
+                    Validator = PropValidatorTemplate.IsPartOrAsmOrComp,
+                    UserName = userName,
+                    PropertyName = propertyName
+                };
+            }
+            public static AppModelPropGetter Denomination(AppModel appModel)
+            {
+                return CreateDefault(appModel, "Обозначение", "Обозначение");
+            }
+            public static AppModelPropGetter Nomination(AppModel appModel)
+            {
+                return CreateDefault(appModel, "Наименование", "Наименование");
+            }
+
+        }
     }
 }

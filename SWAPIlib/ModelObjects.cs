@@ -203,22 +203,7 @@ namespace SWAPIlib
         }
     }
 
-    public class SwProperty //: ISwProperty
-    {
-        public AppModel AppModel { get; set; }
-        public bool IsReadable { get; }
-        public bool IsWritable { get; }
 
-        public string UserName { get; set; }
-        public string PropertyName { get; set; }
-        public string PropertyValue { get; set; }
-
-        public void Update() { }
-        public bool WriteValue() 
-        {
-            return false;
-        }
-    }
 
     /// <summary>
     /// Класс компонента
@@ -256,6 +241,38 @@ namespace SWAPIlib
             SwComp = component;
         }
     }
+
+    public class AppAssembly: AppModel, ISwAssembly
+    {
+        public AppAssembly(ModelDoc2 swModel) : base(swModel) 
+        {
+            _swAsm = swModel as AssemblyDoc;
+        }
+        private AssemblyDoc _swAsm;
+        public string ConfigName 
+        { 
+            get => ModelConfigProxy.GetActiveConfName(SwModel);
+            set => ModelConfigProxy.SetActiveConf(SwModel, value);
+        }
+
+        public int ComponentCount(bool TopLevelOnly = true)
+        {
+            return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
+        }
+
+        public IList<SwComponent> GetComponents(bool TopLevelOnly)
+        {
+            var ret = new List<SwComponent>();
+            var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
+            foreach(Component2 comp in swComponents)
+            {
+                ret.Add(new SwComponent(comp));
+            }
+            return ret;
+        }
+    }
+
+
 
 
     //TODO add ConfigName
