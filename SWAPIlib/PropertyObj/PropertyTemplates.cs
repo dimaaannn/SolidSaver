@@ -15,10 +15,12 @@ namespace SWAPIlib
     //}
     //prop.Update();
 
+
+    //TODO Переделать базовый
     /// <summary>
     /// Именованные свойства модели
     /// </summary>
-    public class AppModelPropGetter : AppPropertyBase<string>
+    public class AppModelPropGetter : AppPropertyBase
     {
         public AppModelPropGetter(AppModel appModel) 
         {
@@ -31,7 +33,7 @@ namespace SWAPIlib
             _propertyValue = null;
             if (IsValid && IsReadable)
             {
-                _propertyValue = PropGetter();
+                _propertyValue = ReadValue();
             }
         }
 
@@ -64,12 +66,12 @@ namespace SWAPIlib
         }
         public override PropValidator Validator { get => PropValidatorTemplate.IsPartOrAsm; }
 
-        public override string PropGetter() => ModelConfigProxy.GetConfParam(
+        public override string ReadValue() => ModelConfigProxy.GetConfParam(
                     AppModel.SwModel, ConfigName, PropertyName);
 
     }
 
-    public class FieldProperty : AppPropertyBase<string>
+    public class FieldProperty : AppPropertyBase
     {
         public FieldProperty(AppModel appModel)
         {
@@ -78,10 +80,10 @@ namespace SWAPIlib
         }
 
         public override PropValidator Validator => PropValidatorTemplate.IsExist;
-        public override string PropGetter() => _appModel.FileName;
+        public override string ReadValue() => _appModel.FileName;
         public override void Update()
         {
-            PropertyValue = PropGetter();
+            PropertyValue = ReadValue();
         }
 
         protected override bool CheckWrite()

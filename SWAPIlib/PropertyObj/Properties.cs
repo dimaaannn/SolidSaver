@@ -88,7 +88,7 @@ namespace SWAPIlib
     /// <summary>
     /// Базовый класс свойств
     /// </summary>
-    public abstract class AppPropertyBase<T> : ISwProperty
+    public abstract class AppPropertyBase : ISwProperty
     {
         public AppModel AppModel
         {
@@ -115,12 +115,25 @@ namespace SWAPIlib
 
         public virtual string ConfigName
         {
-            get => _configName ?? ModelConfigProxy.GetActiveConfName(AppModel.SwModel);
+            get
+            {
+                string ret = null;
+                if (AppModel is ISwComponent swComp)
+                    ret = _configName ?? swComp.ConfigName;
+
+                if (AppModel is ISwPart swPart)
+                    ret = _configName ?? swPart.ConfigName;
+
+                if (AppModel is ISwAssembly swAsm)
+                    ret = _configName ?? swAsm.ConfigName;
+
+                return ret;
+            }
             set => _configName = value;
         }
 
         public abstract PropValidator Validator { get; }
-        public abstract T PropGetter();
+        public abstract string ReadValue();
 
         protected AppModel _appModel;
         protected string _propertyValue;
@@ -138,6 +151,15 @@ namespace SWAPIlib
         protected abstract bool CheckWrite();
     }
 
+    /// <summary>
+    /// Generic abstract property
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class AppProperty<T> : AppPropertyBase, ISwProperty<T>
+    {
+        public T RawPropertyValue { get; set; }
+        public abstract T ReadRawValue();
+    }
 
     public class FileModelProp : IFileModelProp
     {

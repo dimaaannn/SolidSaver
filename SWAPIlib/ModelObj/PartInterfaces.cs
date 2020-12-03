@@ -47,6 +47,10 @@ namespace SWAPIlib
     {
         int ComponentCount(bool TopLevelOnly);
         IEnumerable<SwComponent> GetComponents(bool TopLevelOnly);
+        /// <summary>
+        /// Имя конфигурации
+        /// </summary>
+        string ConfigName { get; set; }
     }
 
 
@@ -63,6 +67,10 @@ namespace SWAPIlib
         /// <param name="TopLevelOnly"></param>
         /// <returns></returns>
         int ComponentCount { get; }
+        /// <summary>
+        /// Связанная конфигурация
+        /// </summary>
+        string ConfigName { get; set; }
         SwComponent GetRootComponent();
         /// <summary>
         /// Получить дочерние компоненты
@@ -75,6 +83,7 @@ namespace SWAPIlib
     public interface ISwPart : ISwModel, IConfProperty
     {
         int BodyCount { get; }
+        string ConfigName { get; set; }
         bool IsSheetMetal { get; }
         bool HasDrawing { get; }
         bool SheetThickness(int BodyIndex);

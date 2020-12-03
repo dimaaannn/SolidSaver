@@ -40,6 +40,7 @@ namespace SWAPIlib
         /// Значение параметра
         /// </summary>
         string PropertyValue { get; set; }
+
         /// <summary>
         /// Имя конфигурации (опционально)
         /// </summary>
@@ -48,12 +49,19 @@ namespace SWAPIlib
         /// Обновить значения
         /// </summary>
         void Update();
+        string ReadValue();
         /// <summary>
         /// Записать изменённое значение
         /// </summary>
         /// <returns></returns>
         bool WriteValue();
 
+    }
+
+    public interface ISwProperty<T> : ISwProperty
+    {
+        T RawPropertyValue { get; set; }
+        T ReadRawValue();
     }
 
     /// <summary>

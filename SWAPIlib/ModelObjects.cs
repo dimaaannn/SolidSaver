@@ -246,13 +246,19 @@ namespace SWAPIlib
         {
             return new SwComponent(ComponentProxy.GetRoot(SwComp));
         }
-
+        public string ConfigName
+        {
+            get => ComponentProxy.GetRefConfig(SwComp);
+            set => ComponentProxy.SetRefConfig(SwComp, value);
+        }
         public SwComponent(Component2 component): base(ComponentProxy.GetModelDoc2(component))
         {
             SwComp = component;
         }
     }
 
+
+    //TODO add ConfigName
     //public class AppPart  : ISwPart
     //{
     //    int BodyCount { get; }
