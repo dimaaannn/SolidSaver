@@ -25,7 +25,7 @@ namespace SWAPIlib
         public IList<ISwProperty> PropList { get => RootModel?.PropList; }
         public IFileModelProp GlobalModelProp { get => RootModel?.GlobalModelProp; }
 
-        public IList<ISwComponent> SubComponents 
+        public List<SwComponent> SubComponents 
         {
             get
             {
@@ -35,7 +35,7 @@ namespace SWAPIlib
             }
 
         }
-        private IList<ISwComponent> _subComponents;
+        private List<SwComponent> _subComponents;
         public bool GetMainModel(string pathToModel = null)
         {
             bool ret = false;
@@ -61,20 +61,5 @@ namespace SWAPIlib
 
     }
 
-    public static class PropertySetFactory
-    {
-        public static List<ISwModel> GetDefault(AppModel appModel)
-        {
-            throw new NotImplementedException();
-        }
 
-        public static List<ISwModel> Assembly(AppModel appModel)
-        {
-            var retList = new List<ISwModel>();
-            return retList;
-        }
-
-
-
-    }
 }

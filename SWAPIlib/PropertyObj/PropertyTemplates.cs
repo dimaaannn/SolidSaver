@@ -134,4 +134,15 @@ namespace SWAPIlib
 
         }
     }
+
+    public static class PropSheetTemplate
+    {
+        public static IList<ISwProperty> Component(SwComponent swComponent)
+        {
+            var ret = new List<ISwProperty>();
+            ret.Add(PropertyFactory.ModelProp.Nomination(swComponent));
+            ret.Add(PropertyFactory.ModelProp.Denomination(swComponent));
+            return ret;
+        }
+    }
 }

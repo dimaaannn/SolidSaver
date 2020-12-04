@@ -142,7 +142,7 @@ namespace SWAPIlib
         public string FileName { get => System.IO.Path.GetFileName(Path); }
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
-        public IList<ISwProperty> PropList { get; }
+        public List<ISwProperty> PropList { get; }
         public IFileModelProp GlobalModelProp { get; }
 
         public event EventHandler<SwEventArgs> CloseFile;
@@ -247,6 +247,9 @@ namespace SWAPIlib
         {
             SwComp = component;
             _docType = AppDocType.swCOMPONENT;
+            var abc = new List<int>();
+            
+            PropList.AddRange( PropSheetTemplate.Component(this));
         }
     }
 
@@ -268,7 +271,7 @@ namespace SWAPIlib
             return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
         }
 
-        public IList<ISwComponent> GetComponents(bool TopLevelOnly)
+        public List<SwComponent> GetComponents(bool TopLevelOnly)
         {
             var ret = new List<SwComponent>();
             var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
@@ -285,7 +288,8 @@ namespace SWAPIlib
 
                 //TODO Create component constructor without model
             }
-            return (IList<ISwComponent>) ret;
+            ret.Cast<ISwComponent>();
+            return  ret ;
         }
     }
 

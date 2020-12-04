@@ -35,7 +35,7 @@ namespace SWAPIlib
         /// <summary>
         /// Список свойств модели
         /// </summary>
-        IList<ISwProperty> PropList { get;}  //TODO create propList class
+        List<ISwProperty> PropList { get;}  //TODO create propList class
         
     }
 
@@ -46,7 +46,7 @@ namespace SWAPIlib
     public interface ISwAssembly : ISwModel
     {
         int ComponentCount(bool TopLevelOnly);
-        IList<ISwComponent> GetComponents(bool TopLevelOnly);
+        List<SwComponent> GetComponents(bool TopLevelOnly);
         /// <summary>
         /// Имя конфигурации
         /// </summary>

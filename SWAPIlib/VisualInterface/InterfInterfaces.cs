@@ -15,7 +15,7 @@ namespace SWAPIlib.VisualInterface
         IList<ISwProperty> PropList { get; }
         IFileModelProp GlobalModelProp { get; }
 
-        IList<ISwComponent> SubComponents { get; }
+        List<SwComponent> SubComponents { get; }
 
         bool GetMainModel(string pathToModel);
         bool GetSubComponents();
