@@ -293,9 +293,9 @@ namespace SWAPIlib
         }
     }
 
-    public class ModelFactory
+    public static class ModelFactory
     {
-        public AppModel GetModel(ModelDoc2 swModel)
+        public static AppModel GetModel(ModelDoc2 swModel)
         {
             AppDocType docType = PartTypeChecker.GetSWType(swModel);
             AppModel ret = null;
