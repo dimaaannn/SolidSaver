@@ -246,7 +246,10 @@ namespace SWAPIlib
         public SwComponent(Component2 component): base(ComponentProxy.GetModelDoc2(component))
         {
             SwComp = component;
-            _docType = AppDocType.swCOMPONENT;
+            if (SwModel != null)
+                _docType = PartTypeChecker.GetSWType(SwModel);
+            else _docType = AppDocType.swCOMPONENT;
+
             var abc = new List<int>();
             
             PropList.AddRange( PropSheetTemplate.Component(this));

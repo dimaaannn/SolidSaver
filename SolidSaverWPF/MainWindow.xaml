@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SolidSaverWPF"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
+        xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
         Title="MainWindow" Height="500" Width="530" MinWidth="350">
     <Window.Resources>
         <!--#region Button style-->
@@ -106,7 +107,7 @@
                                 DisplayMemberBinding="{Binding FileName}"/>
                             <GridViewColumn 
                                 Header="Type" Width="40"
-                                DisplayMemberBinding="{Binding PartType}"/>
+                                DisplayMemberBinding="{Binding DocType}"/>
                             <GridViewColumn Header="Select" Width="50">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -128,8 +129,8 @@
                 <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" ShowGridLines="True">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="119*"/>
-                        <RowDefinition Height="90*"/>
-                        <RowDefinition Height="179*"/>
+                        <RowDefinition Height="150*"/>
+                        <RowDefinition Height="119*"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
                         <Button 
@@ -145,41 +146,36 @@
                         <Button Content="Test2"/>
                     </StackPanel>
 
-                    <ListBox Grid.Row="3" x:Name="PropertyListBox">
+                    <ListBox Grid.Row="2" x:Name="PropertyListBox">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <!--#region PartProperty template-->
                                 <Border Style="{StaticResource StackParamItem}">
-                                    <Grid ShowGridLines="True">
+                                    <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="23"/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Style="{StaticResource StackParamText}" Text="{Binding PrpName}"/>
-                                        <TextBox Grid.Row="1" Text="{Binding PrpValue, Mode=TwoWay}"/>
+                                        <TextBlock Style="{StaticResource StackParamText}" Text="{Binding UserName}"/>
+                                        <TextBox Grid.Row="1" Text="{Binding PropertyValue, Mode=TwoWay}"/>
                                     </Grid>
                                 </Border>
                                 <!--#endregion-->
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-                        <!--<ListBox.Items>
-                            <sys:String>test item 1</sys:String>
-                            <sys:String>test item 2</sys:String>
-                        </ListBox.Items>-->
-
                     </ListBox>
 
                     <!--#region Property object-->
-                    <Border Grid.Row="1" Style="{StaticResource StackParamItem}">
-                        <Grid ShowGridLines="True">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="23"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Style="{StaticResource StackParamText}" Text="Обозначение"/>
-                            <TextBox Grid.Row="1" Text="{Binding sw_part.TestProperty}"/>
-                        </Grid>
-                    </Border>
+                    <ListBox 
+                        HorizontalContentAlignment="Stretch"
+                        Name="PropertyBox">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <propert:PropControl/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
                     <!--#endregion-->
 
 

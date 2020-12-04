@@ -131,7 +131,7 @@ namespace SWAPIlib
         public virtual bool IsValid { get; private set; }
         public virtual string PropertyValue
         {
-            get => _propertyValue;
+            get => _tempPropertyValue ?? _propertyValue;
             set => _tempPropertyValue = value;
         }
 
@@ -159,12 +159,14 @@ namespace SWAPIlib
 
         protected AppModel _appModel;
         protected string _propertyValue;
-        protected string _tempPropertyValue;
+        protected string _tempPropertyValue = null;
         protected string _configName = null;
 
         public virtual void Update()
         {
-            _tempPropertyValue = ReadValue();
+            _propertyValue = ReadValue();
+            if (_tempPropertyValue == null)
+                _tempPropertyValue = _propertyValue;
         }
 
         public abstract bool WriteValue();

@@ -29,15 +29,15 @@ namespace SWAPIlib
 
         public override void Update()
         {
-            _tempPropertyValue = null;
-            _propertyValue = null;
             if (IsValid && IsReadable)
             {
                 _propertyValue = ReadValue();
+                if (_tempPropertyValue == null)
+                    _tempPropertyValue = _propertyValue;
             }
         }
 
-        public override bool IsValid => true;
+        public override bool IsValid => true; //TODO add is valid func to property
         public override bool WriteValue()
         {
             bool ret = false;

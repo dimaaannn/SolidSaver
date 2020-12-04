@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib
 {
-    public class MainModel : VisualInterface.IMainModel 
+    public class MainModel// : VisualInterface.IMainModel
     {
         public AppModel RootModel { get; set; }
         public AppDocType DocType 
@@ -25,32 +25,26 @@ namespace SWAPIlib
         public IList<ISwProperty> PropList { get => RootModel?.PropList; }
         public IFileModelProp GlobalModelProp { get => RootModel?.GlobalModelProp; }
 
-        public List<SwComponent> SubComponents 
-        {
-            get
-            {
-                if (_subComponents == null)
-                    GetSubComponents();
-                return _subComponents;
-            }
-
-        }
+        public List<SwComponent> SubComponents { get => _subComponents; }
         private List<SwComponent> _subComponents;
+
+        public ISwProperty MainInfoProp { get; set; }
+
         public bool GetMainModel(string pathToModel = null)
         {
             bool ret = false;
             if (String.IsNullOrEmpty(pathToModel))
             {
-                RootModel = new AppModel(SwAppControl.MainModel);
+                RootModel = ModelFactory.GetModel(SwAppControl.MainModel);
             }
             return ret;
         }
-        public bool GetSubComponents()
+        public bool GetSubComponents(bool TopLevelOnly)
         {
             bool ret = false;
             if(RootModel is ISwAssembly swAssembly)
             {
-                _subComponents = swAssembly.GetComponents(true);
+                _subComponents = swAssembly.GetComponents(TopLevelOnly);
                 if (_subComponents.Count > 0)
                     ret = true;
             }

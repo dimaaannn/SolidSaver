@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SolidSaverWPF.Prop.PropControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="80" d:DesignWidth="200">
+    <UserControl.Resources>
+        <!--#region Button style-->
+        <Style TargetType="{x:Type Control}" x:Key="baseStyle">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource baseStyle}"/>
+        <!--#endregion-->
+
+        <!--#region Part params block-->
+        <Style TargetType="{x:Type Border}" x:Key="StackParamItem">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Margin" Value="5, 5, 0, 0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}" x:Key="StackParamText">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+
+
+        <!--#endregion-->
+    </UserControl.Resources>
+
+        <!--#region Property object-->
+        <Border Grid.Row="1" Style="{StaticResource StackParamItem}">
+            <Grid ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="23"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="30"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock 
+                    Name="PropName"
+                    Style="{StaticResource StackParamText}" 
+                    Text="{Binding UserName, FallbackValue=No Username}"
+                    Background="WhiteSmoke"/>
+                <TextBox 
+                    Grid.Row="1" 
+                    Name="PropValue"
+                    Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
+                    />
+            </Grid>
+        </Border>
+        <!--#endregion-->
+</UserControl>

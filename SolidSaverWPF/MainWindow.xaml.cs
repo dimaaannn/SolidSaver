@@ -23,42 +23,46 @@ namespace SolidSaverWPF
     {
         public swPart sw_part { get; set; }
         public List<swPart> SwPartList { get; set; }
-        public List<PropertyTemplate> PropList { get; set; }
+        public List<PropertyTemplate> PropList2 { get; set; }
         public PropertyTemplate PropObj { get; set; }
+
+        public MainModel MainModel { get; set; }
+        public IList<ISwProperty> PropList { get => MainModel.PropList; }
+        public List<SwComponent> SubComponents { get => MainModel.SubComponents; }
+        public SwComponent SelectedModel { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            MainModel = new MainModel();
+            this.DataContext = SelectedModel;
+            this.DataContext = PropList;
+            this.DataContext = SubComponents;
+            this.DataContext = MainModel;
+
+            SwAppControl.Connect();
+            MainModel.GetMainModel();
+
             SwPartList = TestClass.CreateTestPartList();
-            PartsList.ItemsSource = SwPartList;
+            //PartsList.ItemsSource = SwPartList;
+            MainModel.GetSubComponents(false);
+            PartsList.ItemsSource = SubComponents;
 
-            sw_part = new swPart
-            {
-                FileName = "TestName",
-                IsSelected = false,
-                TestProperty = "TestProp"
-            };
 
-            var propTemplate = new PropertyTemplate
-            {
-                PrpName = "TestPropertyName",
-                PrpValue = "TestPropertyValue"
-            };
 
-            PropList = new List<PropertyTemplate>() { propTemplate };
-
-            this.DataContext = sw_part;
-            this.DataContext = PropObj;
-
-            PropertyListBox.ItemsSource = PropList;
         }
 
 
         private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var index = PartsList.SelectedIndex;
-            PropertyListBox.ItemsSource = SwPartList[index].PropList;
+            var currentPropList = SubComponents[index].PropList;
+            foreach (ISwProperty prop in currentPropList)
+                prop.Update();
+            PropertyListBox.ItemsSource = currentPropList;
+            PropertyBox.ItemsSource = currentPropList;
         }
+
     }
 
     public class swPart : ISwPartData
