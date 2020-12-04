@@ -268,7 +268,7 @@ namespace SWAPIlib
             return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
         }
 
-        public IList<SwComponent> GetComponents(bool TopLevelOnly)
+        public IList<ISwComponent> GetComponents(bool TopLevelOnly)
         {
             var ret = new List<SwComponent>();
             var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
@@ -285,7 +285,7 @@ namespace SWAPIlib
 
                 //TODO Create component constructor without model
             }
-            return ret;
+            return (IList<ISwComponent>) ret;
         }
     }
 

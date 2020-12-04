@@ -46,7 +46,7 @@ namespace SWAPIlib
     public interface ISwAssembly : ISwModel
     {
         int ComponentCount(bool TopLevelOnly);
-        IList<SwComponent> GetComponents(bool TopLevelOnly);
+        IList<ISwComponent> GetComponents(bool TopLevelOnly);
         /// <summary>
         /// Имя конфигурации
         /// </summary>

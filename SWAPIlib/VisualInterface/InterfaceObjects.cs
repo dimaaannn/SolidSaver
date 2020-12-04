@@ -20,14 +20,23 @@ namespace SWAPIlib
                 }
             }
         }
-        public string Title => RootModel.Title; //TODO add override for types
-        public string Path => RootModel.Path;
-        public List<ISwProperty> PropList { get; }
-        public IFileModelProp GlobalModelProp { get; }
+        public string Title => RootModel?.Title; //TODO add override for types
+        public string Path => RootModel?.Path;
+        public IList<ISwProperty> PropList { get => RootModel?.PropList; }
+        public IFileModelProp GlobalModelProp { get => RootModel?.GlobalModelProp; }
 
-        public List<ISwModel> SubComponents { get; private set; }
+        public IList<ISwComponent> SubComponents 
+        {
+            get
+            {
+                if (_subComponents == null)
+                    GetSubComponents();
+                return _subComponents;
+            }
 
-        public bool GetRootModel(string pathToModel = null)
+        }
+        private IList<ISwComponent> _subComponents;
+        public bool GetMainModel(string pathToModel = null)
         {
             bool ret = false;
             if (String.IsNullOrEmpty(pathToModel))
@@ -38,7 +47,14 @@ namespace SWAPIlib
         }
         public bool GetSubComponents()
         {
-            throw new NotImplementedException();
+            bool ret = false;
+            if(RootModel is ISwAssembly swAssembly)
+            {
+                _subComponents = swAssembly.GetComponents(true);
+                if (_subComponents.Count > 0)
+                    ret = true;
+            }
+            return ret;
         }
 
         public event EventHandler<SwEventArgs> CloseRootModel;

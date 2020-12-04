@@ -12,12 +12,12 @@ namespace SWAPIlib.VisualInterface
         AppDocType DocType { get; }
         string Title { get; }
         string Path { get; }
-        List<ISwProperty> PropList { get; }
+        IList<ISwProperty> PropList { get; }
         IFileModelProp GlobalModelProp { get; }
 
-        List<ISwModel> SubComponents { get; }
+        IList<ISwComponent> SubComponents { get; }
 
-        bool GetRootModel(string pathToModel);
+        bool GetMainModel(string pathToModel);
         bool GetSubComponents();
 
         event EventHandler<SwEventArgs> CloseRootModel;
