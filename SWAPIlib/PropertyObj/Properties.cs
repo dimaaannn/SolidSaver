@@ -135,6 +135,8 @@ namespace SWAPIlib
             set => _tempPropertyValue = value;
         }
 
+        public virtual bool IsModifyed { get => _tempPropertyValue != null; }
+
         public virtual string ConfigName
         {
             get

@@ -56,6 +56,7 @@ namespace SWAPIlib
         /// <returns></returns>
         bool WriteValue();
 
+        bool IsModifyed { get;}
     }
 
     public interface ISwProperty<T> : ISwProperty
@@ -63,6 +64,7 @@ namespace SWAPIlib
         T RawPropertyValue { get; set; }
         T ReadRawValue();
     }
+
 
     /// <summary>
     /// Расширенные свойства модели
