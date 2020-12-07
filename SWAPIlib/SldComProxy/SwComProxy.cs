@@ -832,7 +832,7 @@ namespace SWAPIlib
 
             Component2 retComp = null;
 
-            if (!swComp.IsRoot())
+            if (!swComp.IsRoot() && !swComp.IsSuppressed())
             {
                 ModelDoc2 swModel = swComp.GetModelDoc2();
                 Configuration conf = swModel.ConfigurationManager
@@ -906,7 +906,7 @@ namespace SWAPIlib
         /// <returns></returns>
         public static string GetName(Component2 swComp)
         {
-            return swComp.Name2;
+            return swComp?.Name2;
         }
 
         /// <summary>
