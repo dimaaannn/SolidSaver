@@ -7,7 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
-        Title="MainWindow" Height="500" Width="530" MinWidth="350">
+        Title="MainWindow" Height="500" Width="674" MinWidth="350">
     <Window.Resources>
         <!--#region Button style-->
         <Style TargetType="{x:Type Control}" x:Key="baseStyle">
@@ -70,7 +70,8 @@
             VerticalAlignment="Stretch" Grid.Row="1"
             >
 
-            <Grid ShowGridLines="False">
+            <Grid ShowGridLines="True"
+                  HorizontalAlignment="Stretch">
                 <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
@@ -78,8 +79,8 @@
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200" MinWidth="300"/>
-                    <ColumnDefinition Width="Auto" MinWidth="200"/>
+                    <ColumnDefinition Width="350" MinWidth="300"/>
+                    <ColumnDefinition MinWidth="200"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -126,48 +127,22 @@
                 <!--#endregion-->
 
                 <!--#region Список параметров-->
-                <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" ShowGridLines="True">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="119*"/>
-                        <RowDefinition Height="150*"/>
-                        <RowDefinition Height="119*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Button 
-                            Visibility="Visible" 
-                            Background="Green"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Right"
-                            Margin="20, 5"
-                            Padding="0, 0, 30, 0"
-                            >
-                            TestButton
-                        </Button>
-                        <Button Content="Test2"/>
-                    </StackPanel>
+                <Grid
+                    Grid.Column="1" 
+                    Grid.Row="1" 
 
-                    <ListBox Grid.Row="2" x:Name="PropertyListBox">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <!--#region PartProperty template-->
-                                <Border Style="{StaticResource StackParamItem}">
-                                    <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="23"/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Style="{StaticResource StackParamText}" Text="{Binding UserName}"/>
-                                        <TextBox Grid.Row="1" Text="{Binding PropertyValue, Mode=TwoWay}"/>
-                                    </Grid>
-                                </Border>
-                                <!--#endregion-->
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    ShowGridLines="True">
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+
 
                     <!--#region Property object-->
                     <ListBox 
+                        HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
+                        ScrollViewer.CanContentScroll="False"
                         Name="PropertyBox">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

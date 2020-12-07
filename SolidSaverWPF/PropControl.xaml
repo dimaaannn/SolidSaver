@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF"
              mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="200">
+             d:DesignHeight="150" d:DesignWidth="200">
     <UserControl.Resources>
         <!--#region Button style-->
         <Style TargetType="{x:Type Control}" x:Key="baseStyle">
@@ -18,7 +18,7 @@
 
         <!--#region Part params block-->
         <Style TargetType="{x:Type Border}" x:Key="StackParamItem">
-            <Setter Property="Height" Value="50"/>
+            <Setter Property="Height" Value="70"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -36,28 +36,36 @@
         <!--#endregion-->
     </UserControl.Resources>
 
-        <!--#region Property object-->
-        <Border Grid.Row="1" Style="{StaticResource StackParamItem}">
-            <Grid ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="23"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock 
-                    Name="PropName"
-                    Style="{StaticResource StackParamText}" 
-                    Text="{Binding UserName, FallbackValue=No Username}"
-                    Background="WhiteSmoke"/>
-                <TextBox 
-                    Grid.Row="1" 
-                    Name="PropValue"
-                    Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
-                    />
-            </Grid>
-        </Border>
-        <!--#endregion-->
+    <!--#region Property object-->
+    <Border Style="{StaticResource StackParamItem}">
+        
+        <Grid ShowGridLines="False">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <!--#region Name-->
+            <TextBlock 
+                Name="PropName"
+                Style="{StaticResource StackParamText}" 
+                Text="{Binding UserName, FallbackValue=No name}"
+                Background="WhiteSmoke"/>
+            <!--#endregion-->
+            <Button Grid.Column="1" Grid.Row="0" Margin="2"/>
+
+            <!--#region Data -->
+            <TextBox 
+                Grid.Row="1" 
+                Name="PropValue"
+                Grid.ColumnSpan="2"
+                Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
+                />
+            <!--#endregion-->
+        </Grid>
+    </Border>
+    <!--#endregion-->
 </UserControl>
