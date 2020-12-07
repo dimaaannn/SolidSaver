@@ -201,6 +201,25 @@ namespace SWAPIlib
             CloseFile?.Invoke(this, evArg);
             return 0;
         }
+
+        /// <summary>
+        /// Список имён конфигураций
+        /// </summary>
+        public virtual List<string> ConfigList
+        {
+            get
+            {
+                if(_configList == null)
+                    _configList = new List<string>(SwModel.GetConfigurationNames());
+                return _configList;
+            }
+        }
+        private List<string> _configList;
+
+        public virtual AppCompVisibility VisibState
+        {
+            get => (AppCompVisibility)SwModel.Visible
+        }
     }
 
 
@@ -268,6 +287,8 @@ namespace SWAPIlib
             get => ModelConfigProxy.GetActiveConfName(SwModel);
             set => ModelConfigProxy.SetActiveConf(SwModel, value);
         }
+
+        
 
         public int ComponentCount(bool TopLevelOnly = true)
         {

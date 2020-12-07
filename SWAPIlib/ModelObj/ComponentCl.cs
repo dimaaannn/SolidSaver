@@ -35,6 +35,7 @@ namespace SWAPIlib
             get => SwCompModel.ReferencedConfiguration;
             set => SwCompModel.ReferencedConfiguration = value;
         }
+        public List<string> ConfigList { get => PartModel?.ConfigList;}
         public AppCompVisibility VisibState
         {
             get => ComponentProxy.GetVisibleStatus(SwCompModel);
@@ -51,26 +52,6 @@ namespace SWAPIlib
             remove { }
         }
 
-        public AppComponent(Component2 swComp2)
-        {
-            if(swComp2 != null)
-            {
-                _swCompModel = swComp2;
-                DocType = AppDocType.swNONE;
-
-                var swModel = ComponentProxy.GetModelDoc2(swComp2);
-                
-                
-                if (swModel != null)
-                {
-                    _appModel = ModelFactory.GetModel(swModel);
-                    DocType = _appModel.DocType;
-                }
-
-
-            }
-        }
-
         public List<AppComponent> GetComponents(bool TopLeverOnly)
         {
             var ret = new List<AppComponent>();
@@ -84,5 +65,41 @@ namespace SWAPIlib
 
             return ret;
         }
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="swComp2"></param>
+        public AppComponent(Component2 swComp2)
+        {
+            if(swComp2 != null)
+            {
+                _swCompModel = swComp2;
+                DocType = AppDocType.swNONE;
+
+                var swModel = ComponentProxy.GetModelDoc2(swComp2);
+                
+                //Если компонент не погашен
+                if (swModel != null)
+                {
+                    _appModel = ModelFactory.GetModel(swModel);
+                    IsExist = true;
+                    DocType = _appModel.DocType;
+                }
+            }
+        }
+
+        public AppComponent GetRootComponent()
+        {
+            return new AppComponent(ComponentProxy.GetRoot(SwCompModel));
+        }
+
+        public AppComponent GetParent()
+        {
+            return new AppComponent(ComponentProxy.GetParent(SwCompModel));
+        }
+
+        public int GetChildrenCount() => SwCompModel.IGetChildrenCount();
+
     }
 }

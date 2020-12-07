@@ -51,6 +51,7 @@ namespace SWAPIlib
         /// Имя конфигурации
         /// </summary>
         string ConfigName { get; set; }
+        List<string> ConfigList { get; }
     }
 
 
@@ -104,9 +105,32 @@ namespace SWAPIlib
         /// Статус отображения компонента
         /// </summary>
         AppCompVisibility VisibState { get; set; }
+        /// <summary>
+        /// Исключено из спецификации
+        /// </summary>
         bool ExcludeFromBOM { get; set; }
+        /// <summary>
+        /// Дочерние компоненты
+        /// </summary>
+        /// <param name="TopLeverOnly">Только верхнего уровня</param>
+        /// <returns></returns>
         List<AppComponent> GetComponents(bool TopLeverOnly);
-
+        /// <summary>
+        /// Коренной компонент
+        /// </summary>
+        /// <returns></returns>
+        T GetRootComponent();
+        /// <summary>
+        /// родительский компонент
+        /// </summary>
+        /// <returns></returns>
+        T GetParent();
+        /// <summary>
+        /// Количество дочерних компонентов
+        /// </summary>
+        /// <returns></returns>
+        int GetChildrenCount();
+        List<string> ConfigList { get; }
     }
 
     public interface ISwPart : ISwModel, IConfProperty
