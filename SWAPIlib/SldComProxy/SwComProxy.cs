@@ -949,6 +949,10 @@ namespace SWAPIlib
             return ret;
         }
 
+        public static string GetPathName(Component2 swComp)
+        {
+            return swComp.GetPathName();
+        }
 
         /// <summary>
         /// Габаритный размер
