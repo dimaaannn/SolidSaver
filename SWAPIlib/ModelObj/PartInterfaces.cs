@@ -78,6 +78,35 @@ namespace SWAPIlib
         /// <param name="TopLevelOnly"></param>
         /// <returns></returns>
         List<SwComponent> GetComponents(bool TopLevelOnly);
+        
+    }
+
+    public interface IAppComponent : ISwModel
+    {
+        /// <summary>
+        /// Класс детали
+        /// </summary>
+        AppModel PartModel { get; }
+        /// <summary>
+        /// Модель Component2
+        /// </summary>
+        Component2 SwCompModel { get; }
+        /// <summary>
+        /// Погашенность компонента
+        /// </summary>
+        AppSuppressionState SuppressionState { get; }
+        /// <summary>
+        /// Имя связанной конфигурации
+        /// </summary>
+        string RefConfigName { get; set; }
+        /// <summary>
+        /// Статус отображения компонента
+        /// </summary>
+        AppCompVisibility VisibState { get; set; }
+
+
+
+
     }
 
     public interface ISwPart : ISwModel, IConfProperty
