@@ -36,10 +36,11 @@ namespace SWAPIlib
             set => SwCompModel.ReferencedConfiguration = value;
         }
         public List<string> ConfigList { get => PartModel?.ConfigList;}
-        public AppCompVisibility VisibState
+        public bool VisibState
         {
-            get => ComponentProxy.GetVisibleStatus(SwCompModel);
-            set => ComponentProxy.SetVisibleStatus(SwCompModel, value);
+            get => (int)ComponentProxy.GetVisibleStatus(SwCompModel) == 1;
+            set => ComponentProxy.SetVisibleStatus(SwCompModel, 
+                value ? AppCompVisibility.Visible : AppCompVisibility.Hidden);
         }
         public bool ExcludeFromBOM
         {
@@ -74,6 +75,8 @@ namespace SWAPIlib
         {
             if(swComp2 != null)
             {
+                PropList.AddRange(PropSheetTemplate.Component(this));
+
                 _swCompModel = swComp2;
                 DocType = AppDocType.swNONE;
 

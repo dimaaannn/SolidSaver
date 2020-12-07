@@ -216,9 +216,10 @@ namespace SWAPIlib
         }
         private List<string> _configList;
 
-        public virtual AppCompVisibility VisibState
+        public virtual bool VisibState
         {
-            get => (AppCompVisibility)SwModel.Visible
+            get => SwModel.Visible;
+            set => SwModel.Visible = value;
         }
     }
 
@@ -312,7 +313,7 @@ namespace SWAPIlib
 
                 //TODO Create component constructor without model
             }
-            ret.Cast<ISwComponent>();
+            //ret.Cast<ISwComponent>();
             return  ret ;
         }
     }

@@ -45,6 +45,8 @@ namespace SWAPIlib
             {
                 ret = ModelConfigProxy.SetConfParam(AppModel.SwModel,
                     ConfigName, PropertyName, _tempPropertyValue);
+                if (ret)
+                    _tempPropertyValue = null;
             }
             return ret;
         }

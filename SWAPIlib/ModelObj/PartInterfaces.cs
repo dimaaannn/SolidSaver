@@ -36,7 +36,8 @@ namespace SWAPIlib
         /// Список свойств модели
         /// </summary>
         List<ISwProperty> PropList { get;}  //TODO create propList class
-        
+        bool VisibState { get; set; }
+        List<string> ConfigList { get; }
     }
 
     //TODO сделать интерфейс сборки
@@ -51,7 +52,7 @@ namespace SWAPIlib
         /// Имя конфигурации
         /// </summary>
         string ConfigName { get; set; }
-        List<string> ConfigList { get; }
+        
     }
 
 
@@ -104,7 +105,7 @@ namespace SWAPIlib
         /// <summary>
         /// Статус отображения компонента
         /// </summary>
-        AppCompVisibility VisibState { get; set; }
+        bool VisibState { get; set; }
         /// <summary>
         /// Исключено из спецификации
         /// </summary>

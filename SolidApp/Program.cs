@@ -25,46 +25,35 @@ namespace SolidApp
             SwAppControl.Connect();
             var swModel = SwAppControl.MainModel;
 
-            var appmodel = new AppAssembly(swModel);
 
+            var appmodel = new AppAssembly(swModel);
+            if(appmodel.SwModel is PartDoc swPart)
+            {
+            }
+
+            var Appcomp = new List<AppComponent>();
             if (appmodel is AppAssembly appAsm)
             {
-                var components = appAsm.GetComponents(false);
-                foreach (SwComponent scomp in components)
+                Console.WriteLine($"configList = {string.Join(",", appAsm.ConfigList)}");
+
+                var rawComponents = AsmDocProxy.GetComponents(appmodel.SwModel, false);
+                foreach(Component2 comp in rawComponents)
                 {
-                    Console.WriteLine($"Component name {scomp.Title}");
+                    Appcomp.Add(new AppComponent(comp));
                 }
+
+                //Appcomp.First().VisibState = AppCompVisibility.Hidden;
+                foreach(var a in Appcomp)
+                {
+                    string s = $"Comp {a.Title}: is {a.VisibState}, s.state: {a.SuppressionState}\n" +
+                        $"Conf: {a.RefConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
+                        $"Exist : {a.IsExist}";
+                    Console.WriteLine(s);
+                }
+
             }
 
             var builder = new StringBuilder("DATA:\n");
-
-            var nameProp = PropertyFactory.ModelProp.Nomination(appmodel);
-            nameProp.Update();
-            var denomProp = PropertyFactory.ModelProp.Denomination(appmodel);
-            denomProp.Update();
-
-            builder.Append($"Наименование :{nameProp.PropertyValue}\n");
-            builder.Append($"Обозначение :{denomProp.PropertyValue}\n");
-            builder.Append($"FileName :{appmodel.FileName}\n");
-            builder.Append($"Title :{appmodel.Title}\n");
-
-
-            var prop = new AppModelPropGetter(appmodel)
-            {
-                IsReadable = true,
-                IsWritable = true,
-                PropertyName = "Наименование"
-            };
-            prop.Update();
-
-            builder.Append($"Valid :{prop.IsValid}\n");
-            builder.Append($"PropName :{prop.PropertyName}\n");
-            builder.Append($"Readable :{prop.IsReadable}\n");
-            builder.Append($"Value :{prop.PropertyValue}\n");
-
-
-            var ModelProp = new FileModelProp(appmodel);
-            builder.Append($"Project (неправильная папка) {ModelProp.GetProjectData}");
 
             Console.WriteLine(builder);
 
