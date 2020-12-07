@@ -955,6 +955,25 @@ namespace SWAPIlib
         }
 
         /// <summary>
+        /// Отображение компонента сборки
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static AppCompVisibility GetVisibleStatus(Component2 swComp)
+        {
+            return PartTypeChecker.Visibility(swComp.Visible);
+        }
+        /// <summary>
+        /// Задать отображение компонента сборки
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <param name="visState"></param>
+        public static void SetVisibleStatus(Component2 swComp, AppCompVisibility visState)
+        {
+            swComp.Visible = (int)visState;
+        }
+
+        /// <summary>
         /// Габаритный размер
         /// </summary>
         /// <param name="swComp"></param>
