@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace SWAPIlib
 {
-    class AppComponent : IAppComponent
+    public class AppComponent : ISwModel, IAppComponent<AppComponent>
     {
         public virtual bool IsExist { get; private set; }
         public AppModel PartModel => _appModel;
@@ -39,6 +40,11 @@ namespace SWAPIlib
             get => ComponentProxy.GetVisibleStatus(SwCompModel);
             set => ComponentProxy.SetVisibleStatus(SwCompModel, value);
         }
+        public bool ExcludeFromBOM
+        {
+            get => SwCompModel.ExcludeFromBOM;
+            set => SwCompModel.ExcludeFromBOM = value;
+        }
         public event EventHandler<SwEventArgs> CloseFile
         {
             add => throw new NotImplementedException();
@@ -53,7 +59,7 @@ namespace SWAPIlib
                 DocType = AppDocType.swNONE;
 
                 var swModel = ComponentProxy.GetModelDoc2(swComp2);
-                //_swCompModel.GetVisibility
+                
                 
                 if (swModel != null)
                 {
@@ -63,6 +69,20 @@ namespace SWAPIlib
 
 
             }
+        }
+
+        public List<AppComponent> GetComponents(bool TopLeverOnly)
+        {
+            var ret = new List<AppComponent>();
+            var components = ComponentProxy.GetChildren(SwCompModel);
+            Debug.WriteLine($"GetComponents from {this.FileName} begin");
+            foreach (Component2 comp in components)
+            {
+                ret.Add(new AppComponent(comp));
+            }
+            Debug.WriteLine(ret.Count > 0 ? "Success" : "No components");
+
+            return ret;
         }
     }
 }

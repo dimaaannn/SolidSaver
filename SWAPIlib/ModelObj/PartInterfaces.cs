@@ -81,7 +81,8 @@ namespace SWAPIlib
         
     }
 
-    public interface IAppComponent : ISwModel
+    public interface IAppComponent<out T> where T : ISwModel
+         
     {
         /// <summary>
         /// Класс детали
@@ -103,9 +104,8 @@ namespace SWAPIlib
         /// Статус отображения компонента
         /// </summary>
         AppCompVisibility VisibState { get; set; }
-
-
-
+        bool ExcludeFromBOM { get; set; }
+        List<AppComponent> GetComponents(bool TopLeverOnly);
 
     }
 

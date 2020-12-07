@@ -53,27 +53,52 @@ namespace SWAPIlib
             if(component != null)
             {
                 var compType = ComponentProxy.GetSuppressionState(component);
-                switch (compType)
-                {
-                    case swComponentSuppressionState_e.swComponentSuppressed:
-                        ret = AppSuppressionState.Suppressed;
-                        break;
-                    case swComponentSuppressionState_e.swComponentLightweight:
-                        ret = AppSuppressionState.FullyLightweight;
-                        break;
-                    case swComponentSuppressionState_e.swComponentFullyResolved:
-                        ret = AppSuppressionState.FullyResolved;
-                        break;
-                    case swComponentSuppressionState_e.swComponentResolved:
-                        ret = AppSuppressionState.Resolved;
-                        break;
-                    case swComponentSuppressionState_e.swComponentFullyLightweight:
-                        ret = AppSuppressionState.FullyLightweight;
-                        break;
-                }
+                ret = ConvertSuppressionState(compType);
             }
             return ret;
 
+        }
+
+        public static AppSuppressionState ConvertSuppressionState(swComponentSuppressionState_e compType)
+        {
+            AppSuppressionState ret = AppSuppressionState.None;
+            switch (compType)
+            {
+                case swComponentSuppressionState_e.swComponentSuppressed:
+                    ret = AppSuppressionState.Suppressed;
+                    break;
+                case swComponentSuppressionState_e.swComponentLightweight:
+                    ret = AppSuppressionState.FullyLightweight;
+                    break;
+                case swComponentSuppressionState_e.swComponentFullyResolved:
+                    ret = AppSuppressionState.FullyResolved;
+                    break;
+                case swComponentSuppressionState_e.swComponentResolved:
+                    ret = AppSuppressionState.Resolved;
+                    break;
+                case swComponentSuppressionState_e.swComponentFullyLightweight:
+                    ret = AppSuppressionState.FullyLightweight;
+                    break;
+            }
+            return ret;
+        }
+
+        public static AppCompVisibility Visibility(int visState)
+        {
+            AppCompVisibility ret;
+            switch (visState)
+            {
+                case 0:
+                    ret = AppCompVisibility.Hidden;
+                    break;
+                case 1:
+                    ret = AppCompVisibility.Visible;
+                    break;
+                default:
+                    ret = AppCompVisibility.Visible;
+                    break;
+            }
+            return ret;
         }
 
         /// <summary>

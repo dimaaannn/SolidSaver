@@ -37,11 +37,10 @@ namespace SWAPIlib
         FullyLightweight = 4,
         None = 5
     }
-
+    
     public enum AppCompVisibility
     {
-        Hidden = 1,
-        Shown = 2,
-        Unknown = 3
+        Hidden = 0,
+        Visible = 1,
     }
 }
