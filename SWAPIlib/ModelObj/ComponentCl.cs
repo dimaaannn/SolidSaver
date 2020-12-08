@@ -28,7 +28,7 @@ namespace SWAPIlib
         public string Title => ComponentProxy.GetName(_swCompModel);
 
         public IFileModelProp GlobalModelProp { get; set; }
-        public List<ISwProperty> PropList { get; set; }
+        public List<ISwProperty> PropList { get; private set; }
 
         public string RefConfigName
         {
@@ -75,6 +75,7 @@ namespace SWAPIlib
         {
             if(swComp2 != null)
             {
+                PropList = new List<ISwProperty>();
                 PropList.AddRange(PropSheetTemplate.Component(this));
 
                 _swCompModel = swComp2;
@@ -88,6 +89,7 @@ namespace SWAPIlib
                     _appModel = ModelFactory.GetModel(swModel);
                     IsExist = true;
                     DocType = _appModel.DocType;
+                    PropList.AddRange(_appModel.PropList);
                 }
             }
         }
