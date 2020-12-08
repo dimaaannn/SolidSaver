@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.PropertyObj
 {
-    public delegate string CompPropGetter(IAppComponent<AppComponent> appComponent);
-    public delegate bool CompPropSetter(IAppComponent<AppComponent> appComponent, string val);
+    public delegate string CompPropGetter(IAppComponent appComponent);
+    public delegate bool CompPropSetter(IAppComponent appComponent, string val);
 
     public class ComponentBaseInfo : ComponentProperty
     {
 
-        public ComponentBaseInfo(IAppComponent<AppComponent> appComponent)
+        public ComponentBaseInfo(IAppComponent appComponent)
         {
             AppComponent = appComponent;
             Validator = CompValidator.IsAppComp;
@@ -67,7 +67,7 @@ namespace SWAPIlib.PropertyObj
     public static class CompPropertyFactory
     {
         public static List<ComponentBaseInfo> ComponentMainProp(
-            IAppComponent<AppComponent> appComponent)
+            IAppComponent appComponent)
         {
             var ret = new List<ComponentBaseInfo>();
             ret.Add(Title(appComponent));
@@ -77,7 +77,7 @@ namespace SWAPIlib.PropertyObj
             return ret;
         }
 
-        public static ComponentBaseInfo Title(IAppComponent<AppComponent> appComponent)
+        public static ComponentBaseInfo Title(IAppComponent appComponent)
         {
             return new ComponentBaseInfo(appComponent)
             {
@@ -90,7 +90,7 @@ namespace SWAPIlib.PropertyObj
             };
         }
 
-        public static ComponentBaseInfo FileName(IAppComponent<AppComponent> appComponent)
+        public static ComponentBaseInfo FileName(IAppComponent appComponent)
         {
             return new ComponentBaseInfo(appComponent)
             {
@@ -102,7 +102,7 @@ namespace SWAPIlib.PropertyObj
             };
         }
 
-        public static ComponentBaseInfo RefConfig(IAppComponent<AppComponent> appComponent)
+        public static ComponentBaseInfo RefConfig(IAppComponent appComponent)
         {
             return new ComponentBaseInfo(appComponent)
             {
@@ -122,13 +122,13 @@ namespace SWAPIlib.PropertyObj
         /// </summary>
         /// <param name="swModel"></param>
         /// <returns></returns>
-        public static string GetTitle(IAppComponent<AppComponent> swModel)
+        public static string GetTitle(IAppComponent swModel)
             => (swModel as AppComponent).Title;
 
-        public static string GetFileName(IAppComponent<AppComponent> swModel)
+        public static string GetFileName(IAppComponent swModel)
             => (swModel as AppComponent).FileName;
 
-        public static string GetRefConfig(IAppComponent<AppComponent> swModel)
+        public static string GetRefConfig(IAppComponent swModel)
             => (swModel as AppComponent).RefConfigName;
     }
 

@@ -83,8 +83,7 @@ namespace SWAPIlib
         
     }
 
-    public interface IAppComponent<out T> where T : ISwModel
-         
+    public interface IAppComponent         
     {
         /// <summary>
         /// Класс детали
@@ -120,12 +119,12 @@ namespace SWAPIlib
         /// Коренной компонент
         /// </summary>
         /// <returns></returns>
-        T GetRootComponent();
+        IAppComponent GetRootComponent();
         /// <summary>
         /// родительский компонент
         /// </summary>
         /// <returns></returns>
-        T GetParent();
+        IAppComponent GetParent();
         /// <summary>
         /// Количество дочерних компонентов
         /// </summary>

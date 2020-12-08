@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace SWAPIlib
 {
-    public class AppComponent : ISwModel, IAppComponent<AppComponent>
+    public class AppComponent : ISwModel, IAppComponent
     {
         public virtual bool IsExist { get; private set; }
         public AppModel PartModel => _appModel;
@@ -95,12 +95,12 @@ namespace SWAPIlib
             }
         }
 
-        public AppComponent GetRootComponent()
+        public IAppComponent GetRootComponent()
         {
             return new AppComponent(ComponentProxy.GetRoot(SwCompModel));
         }
 
-        public AppComponent GetParent()
+        public IAppComponent GetParent()
         {
             return new AppComponent(ComponentProxy.GetParent(SwCompModel));
         }

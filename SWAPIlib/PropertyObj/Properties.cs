@@ -182,7 +182,7 @@ namespace SWAPIlib
 
     public abstract class ComponentProperty : AppPropertyBase
     {
-        public IAppComponent<AppComponent> AppComponent { get; set; }
+        public IAppComponent AppComponent { get; set; }
         public override AppModel AppModel 
         { 
             get => AppComponent.PartModel;
