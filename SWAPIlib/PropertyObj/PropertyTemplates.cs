@@ -30,11 +30,13 @@ namespace SWAPIlib
 
         public override void Update()
         {
-            if (IsValid && IsReadable)
+            if (IsReadable)
             {
-                _propertyValue = ReadValue();
-                if (_tempPropertyValue == null)
-                    _tempPropertyValue = _propertyValue;
+                if (Validator(_appModel))
+                {
+                    _propertyValue = ReadValue();
+                }
+                //_tempPropertyValue = null;
             }
         }
 
@@ -60,7 +62,6 @@ namespace SWAPIlib
             bool ret = false;
             if (
                 IsWritable &&
-                !String.IsNullOrEmpty(_tempPropertyValue) &&
                 _tempPropertyValue != PropertyValue)
             {
                 ret = true;
@@ -106,8 +107,15 @@ namespace SWAPIlib
 
     public static class PropertyFactory
     {
-        public static class ModelProp
+        public static class ModelProperty
         {
+            public static List<ISwProperty> DefaultModelProp(AppModel app)
+            {
+                var ret = new List<ISwProperty>();
+                ret.Add(Denomination(app));
+                ret.Add(Nomination(app));
+                return ret;
+            }
             private static AppModelPropGetter CreateDefault(
                 AppModel appModel, string userName, string propertyName)
             {
@@ -132,15 +140,15 @@ namespace SWAPIlib
         }
     }
 
-    public static class PropSheetTemplate
-    {
-        public static IList<ISwProperty> Component(AppComponent swComponent)
-        {
-            var ret = new List<ISwProperty>();
+    //public static class PropSheetTemplate
+    //{
+    //    public static IList<ISwProperty> Component(AppComponent swComponent)
+    //    {
+    //        var ret = new List<ISwProperty>();
             
-            return ret;
-        }
-    }
+    //        return ret;
+    //    }
+    //}
 
 
     

@@ -142,7 +142,7 @@ namespace SWAPIlib
         public string FileName { get => System.IO.Path.GetFileName(Path); }
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
-        public List<ISwProperty> PropList { get; }
+        public List<ISwProperty> PropList { get; protected set; }
         public IFileModelProp GlobalModelProp { get; }
 
         public event EventHandler<SwEventArgs> CloseFile;
@@ -224,6 +224,64 @@ namespace SWAPIlib
     }
 
 
+    public class AppAssembly: AppModel, ISwAssembly
+    {
+        public AppAssembly(ModelDoc2 swModel) : base(swModel) 
+        {
+            _swAsm = swModel as AssemblyDoc;
+            PropList = new List<ISwProperty>();
+            PropList.AddRange(PropertyFactory.ModelProperty.DefaultModelProp(this));
+        }
+        private AssemblyDoc _swAsm;
+        public string ConfigName 
+        { 
+            get => ModelConfigProxy.GetActiveConfName(SwModel);
+            set => ModelConfigProxy.SetActiveConf(SwModel, value);
+        }
+
+        
+
+        public int ComponentCount(bool TopLevelOnly = true)
+        {
+            return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
+        }
+
+        public List<IAppComponent> GetComponents(bool TopLevelOnly)
+        {
+            var ret = new List<IAppComponent>();
+            var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
+            foreach(Component2 comp in swComponents)
+            {
+                    ret.Add(new AppComponent(comp));
+            }
+            return  ret ;
+        }
+    }
+
+    /// <summary>
+    /// Фабрика типов модели
+    /// </summary>
+    public static class ModelFactory
+    {
+        public static AppModel GetModel(ModelDoc2 swModel)
+        {
+            AppDocType docType = PartTypeChecker.GetSWType(swModel);
+            AppModel ret = null;
+            switch (docType)
+            {
+                case AppDocType.swNONE:
+                    break;
+                case AppDocType.swASM:
+                    ret = new AppAssembly(swModel);
+                    break;
+                default:
+                    ret = new AppModel(swModel);
+                    break;
+            }
+            return ret;
+        }
+    }
+
 
     /// <summary>
     /// Класс компонента
@@ -275,60 +333,6 @@ namespace SWAPIlib
             //PropList.AddRange( PropSheetTemplate.Component(this));
         }
     }
-
-    public class AppAssembly: AppModel, ISwAssembly
-    {
-        public AppAssembly(ModelDoc2 swModel) : base(swModel) 
-        {
-            _swAsm = swModel as AssemblyDoc;
-        }
-        private AssemblyDoc _swAsm;
-        public string ConfigName 
-        { 
-            get => ModelConfigProxy.GetActiveConfName(SwModel);
-            set => ModelConfigProxy.SetActiveConf(SwModel, value);
-        }
-
-        
-
-        public int ComponentCount(bool TopLevelOnly = true)
-        {
-            return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
-        }
-
-        public List<IAppComponent> GetComponents(bool TopLevelOnly)
-        {
-            var ret = new List<IAppComponent>();
-            var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
-            foreach(Component2 comp in swComponents)
-            {
-                    ret.Add(new AppComponent(comp));
-            }
-            return  ret ;
-        }
-    }
-
-    public static class ModelFactory
-    {
-        public static AppModel GetModel(ModelDoc2 swModel)
-        {
-            AppDocType docType = PartTypeChecker.GetSWType(swModel);
-            AppModel ret = null;
-            switch (docType)
-            {
-                case AppDocType.swNONE:
-                    break;
-                case AppDocType.swASM:
-                    ret = new AppAssembly(swModel);
-                    break;
-                default:
-                    ret = new AppModel(swModel);
-                    break;
-            }
-            return ret;
-        }
-    }
-
 
     //TODO add ConfigName
     //public class AppPart  : ISwPart

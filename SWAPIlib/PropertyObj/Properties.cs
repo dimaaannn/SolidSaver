@@ -172,7 +172,7 @@ namespace SWAPIlib
                 {
                     _propertyValue = ReadValue();
                 }
-                _tempPropertyValue = null;
+                //_tempPropertyValue = null;
             }
         }
 
