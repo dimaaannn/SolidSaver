@@ -157,7 +157,16 @@ namespace SWAPIlib
         }
 
         public virtual PropValidator Validator { get; set; }
-        public abstract string ReadValue();
+        public virtual string ReadValue()
+        {
+            if (IsReadable)
+            {
+                if (Validator(_appModel))
+                {
+                    _propertyValue = ReadValue();
+                }
+            }
+        }
 
         protected AppModel _appModel;
         protected string _propertyValue;
@@ -172,7 +181,7 @@ namespace SWAPIlib
                 {
                     _propertyValue = ReadValue();
                 }
-                //_tempPropertyValue = null;
+                _tempPropertyValue = null;
             }
         }
 

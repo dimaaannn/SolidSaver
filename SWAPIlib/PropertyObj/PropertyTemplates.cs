@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SWAPIlib
 {
 
+
     //var prop = new AppModelPropGetter(appmodel)
     //{
     //    IsReadable = true,

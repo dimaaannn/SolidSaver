@@ -39,7 +39,11 @@ namespace SolidApp
                 var rawComponents = AsmDocProxy.GetComponents(appmodel.SwModel, false);
                 foreach(Component2 comp in rawComponents)
                 {
-                    Appcomp.Add(new AppComponent(comp));
+                    var newComp = new AppComponent(comp);
+                    foreach (var pr in newComp.PropList)
+                        pr.Update();
+                    Appcomp.Add(newComp);
+
                 }
 
                 //Appcomp.First().VisibState = AppCompVisibility.Hidden;
@@ -49,6 +53,8 @@ namespace SolidApp
                         $"Conf: {a.RefConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
                         $"Exist : {a.IsExist}";
                     Console.WriteLine(s);
+                    foreach(var pr in a.PropList)
+                         Console.WriteLine(pr.PropertyValue);
                 }
 
             }
