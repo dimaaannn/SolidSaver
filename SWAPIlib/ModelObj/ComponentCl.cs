@@ -53,9 +53,9 @@ namespace SWAPIlib
             remove { }
         }
 
-        public List<AppComponent> GetComponents(bool TopLeverOnly)
+        public List<IAppComponent> GetComponents(bool TopLeverOnly)
         {
-            var ret = new List<AppComponent>();
+            var ret = new List<IAppComponent>();
             var components = ComponentProxy.GetChildren(SwCompModel);
             Debug.WriteLine($"GetComponents from {this.FileName} begin");
             foreach (Component2 comp in components)

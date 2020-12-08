@@ -108,7 +108,7 @@ namespace SWAPIlib.PropertyObj
             {
                 IsReadable = true,
                 Validator = CompValidator.IsAppComp,
-                UserName = "Имя компонента",
+                UserName = "Активная конфигурация",
                 PropGetter = CompGetter.GetRefConfig,
                 IsWritable = false
             };

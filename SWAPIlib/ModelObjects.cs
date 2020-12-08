@@ -296,24 +296,14 @@ namespace SWAPIlib
             return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
         }
 
-        public List<SwComponent> GetComponents(bool TopLevelOnly)
+        public List<IAppComponent> GetComponents(bool TopLevelOnly)
         {
-            var ret = new List<SwComponent>();
+            var ret = new List<IAppComponent>();
             var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
             foreach(Component2 comp in swComponents)
             {
-                //swComponentSuppressionState_e state_E = ComponentProxy.GetSuppressionState(comp);
-                //if(
-                //    state_E != swComponentSuppressionState_e.swComponentSuppressed &&
-                //    state_E != swComponentSuppressionState_e.swComponentLightweight
-                //    )
-                //{
-                //}
-                    ret.Add(new SwComponent(comp));
-
-                //TODO Create component constructor without model
+                    ret.Add(new AppComponent(comp));
             }
-            //ret.Cast<ISwComponent>();
             return  ret ;
         }
     }

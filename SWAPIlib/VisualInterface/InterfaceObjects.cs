@@ -25,8 +25,8 @@ namespace SWAPIlib
         public IList<ISwProperty> PropList { get => RootModel?.PropList; }
         public IFileModelProp GlobalModelProp { get => RootModel?.GlobalModelProp; }
 
-        public List<SwComponent> SubComponents { get => _subComponents; }
-        private List<SwComponent> _subComponents;
+        public List<IAppComponent> SubComponents { get => _subComponents; }
+        private List<IAppComponent> _subComponents;
 
         public ISwProperty MainInfoProp { get; set; }
 

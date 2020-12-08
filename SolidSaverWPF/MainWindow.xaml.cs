@@ -28,8 +28,8 @@ namespace SolidSaverWPF
 
         public MainModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get => MainModel.PropList; }
-        public List<SwComponent> SubComponents { get => MainModel.SubComponents; }
-        public SwComponent SelectedModel { get; set; }
+        public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
+        public AppComponent SelectedModel { get; set; }
 
         public MainWindow()
         {

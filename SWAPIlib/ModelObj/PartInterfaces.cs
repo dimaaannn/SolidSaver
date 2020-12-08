@@ -47,7 +47,7 @@ namespace SWAPIlib
     public interface ISwAssembly : ISwModel
     {
         int ComponentCount(bool TopLevelOnly);
-        List<SwComponent> GetComponents(bool TopLevelOnly);
+        List<IAppComponent> GetComponents(bool TopLevelOnly);
         /// <summary>
         /// Имя конфигурации
         /// </summary>
@@ -114,7 +114,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="TopLeverOnly">Только верхнего уровня</param>
         /// <returns></returns>
-        List<AppComponent> GetComponents(bool TopLeverOnly);
+        List<IAppComponent> GetComponents(bool TopLeverOnly);
         /// <summary>
         /// Коренной компонент
         /// </summary>
@@ -130,7 +130,42 @@ namespace SWAPIlib
         /// </summary>
         /// <returns></returns>
         int GetChildrenCount();
+        /// <summary>
+        /// Список конфигураций
+        /// </summary>
         List<string> ConfigList { get; }
+        /// <summary>
+        /// Набор свойств
+        /// </summary>
+        List<ISwProperty> PropList { get; }
+        /// <summary>
+        /// Набор глобальных свойств
+        /// </summary>
+        IFileModelProp GlobalModelProp { get; set; }
+        /// <summary>
+        /// наименование
+        /// </summary>
+        string Title { get; }
+        /// <summary>
+        /// Имя файла
+        /// </summary>
+        string FileName { get; }
+        /// <summary>
+        /// Папка с файлом
+        /// </summary>
+        string Path { get; }
+        /// <summary>
+        /// Тип детали
+        /// </summary>
+        AppDocType DocType { get; }
+        /// <summary>
+        /// Модель
+        /// </summary>
+        ModelDoc2 SwModel { get; }
+        /// <summary>
+        /// Существование модели
+        /// </summary>
+        bool IsExist { get; }
     }
 
     public interface ISwPart : ISwModel, IConfProperty
