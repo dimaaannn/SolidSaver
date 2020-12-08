@@ -14,7 +14,7 @@ namespace SWAPIlib
     /// </summary>
     /// <param name="appModel"></param>
     /// <returns></returns>
-    public delegate bool PropValidator(AppModel appModel);
+    public delegate bool PropValidator (ISwModel appModel);
 
     /// <summary>
     /// Конвертер свойств в нужный формат
@@ -34,7 +34,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsExist(AppModel appModel)
+        public static bool IsExist(ISwModel appModel)
         {
             if (appModel != null) return true;
             else return false;
@@ -59,7 +59,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsPartOrAsmOrComp(AppModel appModel)
+        public static bool IsPartOrAsmOrComp(ISwModel appModel)
         {
             AppDocType type = appModel.DocType;
             if (type == AppDocType.swASM ||
@@ -128,7 +128,7 @@ namespace SWAPIlib
 
         public virtual string UserName { get; set; }
         public virtual string PropertyName { get; set; }
-        public virtual bool IsValid { get; private set; }
+        public virtual bool IsValid { get; protected set; }
         public virtual string PropertyValue
         {
             get => _tempPropertyValue ?? _propertyValue;
@@ -156,7 +156,7 @@ namespace SWAPIlib
             set => _configName = value;
         }
 
-        public abstract PropValidator Validator { get; set; }
+        public virtual PropValidator Validator { get; set; }
         public abstract string ReadValue();
 
         protected AppModel _appModel;
@@ -166,9 +166,14 @@ namespace SWAPIlib
 
         public virtual void Update()
         {
-            _propertyValue = ReadValue();
-            if (_tempPropertyValue == null)
-                _tempPropertyValue = _propertyValue;
+            if (IsReadable)
+            {
+                if (Validator(_appModel))
+                {
+                    _propertyValue = ReadValue();
+                }
+                _tempPropertyValue = null;
+            }
         }
 
         public abstract bool WriteValue();
@@ -177,8 +182,16 @@ namespace SWAPIlib
 
     public abstract class ComponentProperty : AppPropertyBase
     {
-        public IAppComponent<AppModel> AppComponent { get; }
-        public override AppModel AppModel { get => AppComponent.PartModel; }
+        public IAppComponent<AppComponent> AppComponent { get; set; }
+        public override AppModel AppModel 
+        { 
+            get => AppComponent.PartModel;
+            set
+            {
+                _appModel = value;
+                IsValid = true;
+            }
+        }
         public override string ConfigName
         {
             get => _configName ?? AppComponent.RefConfigName;

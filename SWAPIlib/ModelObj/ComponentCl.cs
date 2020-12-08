@@ -76,13 +76,14 @@ namespace SWAPIlib
             if(swComp2 != null)
             {
                 PropList = new List<ISwProperty>();
-                PropList.AddRange(PropSheetTemplate.Component(this));
+                PropList.AddRange(PropertyObj.CompPropertyFactory.
+                    ComponentMainProp(this));
 
                 _swCompModel = swComp2;
                 DocType = AppDocType.swNONE;
 
                 var swModel = ComponentProxy.GetModelDoc2(swComp2);
-                
+
                 //Если компонент не погашен
                 if (swModel != null)
                 {

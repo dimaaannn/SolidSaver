@@ -25,6 +25,7 @@ namespace SWAPIlib
         public AppModelPropGetter(AppModel appModel) 
         {
             _appModel = appModel;
+            Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
         }
 
         public override void Update()
@@ -67,8 +68,6 @@ namespace SWAPIlib
 
             return ret;
         }
-        private PropValidator _validator = PropValidatorTemplate.IsPartOrAsmOrComp;
-        public override PropValidator Validator { get => _validator; set => _validator = value; }
 
         public override string ReadValue()
         {
@@ -89,13 +88,9 @@ namespace SWAPIlib
         {
             _appModel = appModel;
             IsReadable = true;
+            Validator = PropValidatorTemplate.IsExist;
         }
-        private PropValidator _validator = PropValidatorTemplate.IsExist;
-        public override PropValidator Validator
-        {
-            get => _validator;
-            set => _validator = value;
-        }
+
         public override string ReadValue() => _appModel.FileName;
         public override void Update()
         {
@@ -139,11 +134,10 @@ namespace SWAPIlib
 
     public static class PropSheetTemplate
     {
-        public static IList<ISwProperty> Component(SwComponent swComponent)
+        public static IList<ISwProperty> Component(AppComponent swComponent)
         {
             var ret = new List<ISwProperty>();
-            ret.Add(PropertyFactory.ModelProp.Nomination(swComponent));
-            ret.Add(PropertyFactory.ModelProp.Denomination(swComponent));
+            
             return ret;
         }
     }

@@ -272,7 +272,7 @@ namespace SWAPIlib
 
             var abc = new List<int>();
             
-            PropList.AddRange( PropSheetTemplate.Component(this));
+            //PropList.AddRange( PropSheetTemplate.Component(this));
         }
     }
 
