@@ -112,7 +112,7 @@ namespace SWAPIlib
     /// </summary>
     public abstract class AppPropertyBase : ISwProperty
     {
-        public AppModel AppModel
+        public virtual AppModel AppModel
         {
             get => _appModel;
             set
@@ -173,6 +173,17 @@ namespace SWAPIlib
 
         public abstract bool WriteValue();
 
+    }
+
+    public abstract class ComponentProperty : AppPropertyBase
+    {
+        public IAppComponent<AppModel> AppComponent { get; }
+        public override AppModel AppModel { get => AppComponent.PartModel; }
+        public override string ConfigName
+        {
+            get => _configName ?? AppComponent.RefConfigName;
+            set => _configName = value;
+        }
     }
 
     /// <summary>

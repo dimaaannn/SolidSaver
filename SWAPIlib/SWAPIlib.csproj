@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ModelObj\ComponentCl.cs" />
+    <Compile Include="PropertyObj\ComponentProp.cs" />
     <Compile Include="PropertyObj\PropertyTemplates.cs" />
     <Compile Include="VisualInterface\InterfaceObjects.cs" />
     <Compile Include="ModelObjects.cs" />
