@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,21 +30,11 @@ namespace SWAPIlib
             Validator = PropValidatorTemplate.IsPartOrAsmOrComp;
         }
 
-        public override void Update()
-        {
-            if (IsReadable)
-            {
-                if (Validator(_appModel))
-                {
-                    _propertyValue = ReadValue();
-                }
-                _tempPropertyValue = null;
-            }
-        }
 
         public override bool IsValid => true; //TODO add is valid func to property
         public override bool WriteValue()
         {
+            Debug.WriteLine($"Write val AppModelPropGetter {AppModel.Title} - {_tempPropertyValue}");
             bool ret = false;
             if (CheckWrite())
             {
@@ -63,7 +54,7 @@ namespace SWAPIlib
             bool ret = false;
             if (
                 IsWritable &&
-                _tempPropertyValue != PropertyValue)
+                _tempPropertyValue != _propertyValue && _tempPropertyValue != null)
             {
                 ret = true;
             }
@@ -73,6 +64,7 @@ namespace SWAPIlib
 
         public override string ReadValue()
         {
+            Debug.WriteLine($"ReadValue AppModelPropGetter {AppModel.Title} - {UserName}");
             if (AppModel.DocType == AppDocType.swPART || AppModel.DocType == AppDocType.swASM)
             {
                 return ModelConfigProxy.GetConfParam(
@@ -94,10 +86,6 @@ namespace SWAPIlib
         }
 
         public override string ReadValue() => _appModel.FileName;
-        public override void Update()
-        {
-            PropertyValue = ReadValue();
-        }
 
         public override bool WriteValue()
         {

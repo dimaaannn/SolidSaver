@@ -74,8 +74,8 @@
                   HorizontalAlignment="Stretch">
                 <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="39"/>
+                    <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -88,7 +88,7 @@
                     Width="5"
                     Grid.Column="0"
                     Grid.Row="1"
-                    Grid.RowSpan="3"
+                    Grid.RowSpan="2"
                     ShowsPreview="True"
                     VerticalAlignment="Stretch"
                     ResizeDirection="Auto"
@@ -126,6 +126,16 @@
                 </ListView>
                 <!--#endregion-->
 
+
+                <StackPanel 
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Stretch"
+                    Grid.Column="1">
+                    <Button Content="Update" Margin="2" Click="ButtonUpdate_Click"/>
+                    <Button Content="Write" Margin="2, 3" Click="ButtonWrite_Click"/>
+                    <Button Content="WriteAll" Margin="2, 3" Click="ButtonWriteAll_Click"/>
+                </StackPanel>
                 <!--#region Список параметров-->
                 <Grid
                     Grid.Column="1" 
@@ -143,6 +153,8 @@
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Stretch"
                         ScrollViewer.CanContentScroll="False"
+                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Name="PropertyBox">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

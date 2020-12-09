@@ -28,13 +28,19 @@ namespace SolidSaverWPF.Prop
             InitializeComponent();
             //PropValue.TextChanged += PropValue_TextChanged;
             //BindingColor();
+            PropValue.SourceUpdated += PropValue_SourceUpdated;
+        }
 
+        private void PropValue_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            PropValue.UpdateLayout();
         }
 
         private void BindingColor()
         {
             ColorBinding = new Binding("_tempPropertyValue");
         }
+
 
         //private void PropValue_TextChanged(object sender, TextChangedEventArgs e)
         //{

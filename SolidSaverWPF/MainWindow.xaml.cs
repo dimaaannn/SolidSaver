@@ -27,7 +27,7 @@ namespace SolidSaverWPF
         public PropertyTemplate PropObj { get; set; }
 
         public MainModel MainModel { get; set; }
-        public IList<ISwProperty> PropList { get => MainModel.PropList; }
+        public IList<ISwProperty> PropList { get; set; }
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
 
@@ -57,11 +57,30 @@ namespace SolidSaverWPF
         {
             var index = PartsList.SelectedIndex;
             var currentPropList = SubComponents[index].PropList;
-            //foreach (ISwProperty prop in currentPropList)
-            //    prop.Update();
+            PropList = currentPropList;
             PropertyBox.ItemsSource = currentPropList;
         }
 
+        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            foreach(var prop in PropList)
+                prop.Update();
+        }
+
+        private void ButtonWrite_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var prop in PropList)
+                prop.WriteValue();
+        }
+
+        private void ButtonWriteAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var comp in SubComponents)
+            {
+                foreach (var prop in comp.PropList)
+                    prop.WriteValue();
+            }
+        }
     }
 
     public class swPart : ISwPartData

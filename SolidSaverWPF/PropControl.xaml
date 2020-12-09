@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SolidSaverWPF"
+             xmlns:local="clr-namespace:SolidSaverWPF"  
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="200">
     <UserControl.Resources>
@@ -18,7 +18,7 @@
 
         <!--#region Part params block-->
         <Style TargetType="{x:Type Border}" x:Key="StackParamItem">
-            <Setter Property="Height" Value="70"/>
+            <Setter Property="Height" Value="50"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -31,15 +31,13 @@
             <Setter Property="Foreground" Value="Gray"/>
             <Setter Property="Margin" Value="3"/>
         </Style>
-
-
         <!--#endregion-->
     </UserControl.Resources>
 
     <!--#region Property object-->
-    <Border Style="{StaticResource StackParamItem}">
+    <Border Style="{StaticResource StackParamItem}" Name="Border">
         
-        <Grid ShowGridLines="False">
+        <Grid ShowGridLines="False" Name="BaseGrid">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -55,13 +53,19 @@
                 Text="{Binding UserName, FallbackValue=No name}"
                 Background="WhiteSmoke"/>
             <!--#endregion-->
-            <Button Grid.Column="1" Grid.Row="0" Margin="2"/>
+            <Button 
+                Name="UpdateBtn"
+                Grid.Column="1" 
+                Grid.Row="0" 
+                Margin="2,2,2,2" 
+                Height="Auto"/>
 
             <!--#region Data -->
-            <TextBox 
+            <TextBox
                 Grid.Row="1" 
                 Name="PropValue"
                 Grid.ColumnSpan="2"
+
                 Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
                 />
             <!--#endregion-->

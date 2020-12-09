@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using System.Diagnostics;
 
 namespace SWAPIlib
 {
@@ -133,16 +133,21 @@ namespace SWAPIlib
         {
             get
             {
-
+                
                 if (_propertyValue != null)
                     return _tempPropertyValue ?? _propertyValue;
                 else
                     return _propertyValue = ReadValue();
             }
-            set => _tempPropertyValue = value;
+            set 
+            {
+                _tempPropertyValue = value;
+                Debug.WriteLine($"AppPropertyBase - value changed {_tempPropertyValue}");
+            }
+
         }
 
-        public virtual bool IsModifyed { get => _tempPropertyValue != null; }
+        public virtual bool IsModifyed { get => (_tempPropertyValue != null); }
 
         public virtual string ConfigName
         {
@@ -168,8 +173,8 @@ namespace SWAPIlib
 
         protected AppModel _appModel;
         protected string _propertyValue;
-        protected string _tempPropertyValue = null;
-        protected string _configName = null;
+        protected string _tempPropertyValue;
+        protected string _configName;
 
         public virtual void Update()
         {
