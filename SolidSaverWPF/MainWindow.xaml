@@ -105,7 +105,7 @@
                         <GridView>
                             <GridViewColumn 
                                 Header="File" Width="200"
-                                DisplayMemberBinding="{Binding FileName}"/>
+                                DisplayMemberBinding="{Binding Title}"/>
                             <GridViewColumn 
                                 Header="Type" Width="40"
                                 DisplayMemberBinding="{Binding DocType}"/>

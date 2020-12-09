@@ -57,8 +57,8 @@ namespace SolidSaverWPF
         {
             var index = PartsList.SelectedIndex;
             var currentPropList = SubComponents[index].PropList;
-            foreach (ISwProperty prop in currentPropList)
-                prop.Update();
+            //foreach (ISwProperty prop in currentPropList)
+            //    prop.Update();
             PropertyBox.ItemsSource = currentPropList;
         }
 

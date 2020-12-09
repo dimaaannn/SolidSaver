@@ -131,7 +131,14 @@ namespace SWAPIlib
         public virtual bool IsValid { get; protected set; }
         public virtual string PropertyValue
         {
-            get => _tempPropertyValue ?? _propertyValue;
+            get
+            {
+
+                if (_propertyValue != null)
+                    return _tempPropertyValue ?? _propertyValue;
+                else
+                    return _propertyValue = ReadValue();
+            }
             set => _tempPropertyValue = value;
         }
 
@@ -157,16 +164,7 @@ namespace SWAPIlib
         }
 
         public virtual PropValidator Validator { get; set; }
-        public virtual string ReadValue()
-        {
-            if (IsReadable)
-            {
-                if (Validator(_appModel))
-                {
-                    _propertyValue = ReadValue();
-                }
-            }
-        }
+        public abstract string ReadValue();
 
         protected AppModel _appModel;
         protected string _propertyValue;
