@@ -23,20 +23,14 @@ namespace SolidSaverWPF.Prop
     public partial class PropControl : UserControl
     {
         public Binding PropValueBinding;
-        Binding ColorBinding { get; set; }
-        Brush YellowBrush;
 
         public PropControl()
         {
             InitializeComponent();
 
-            ColorBinding = new Binding("IsModifyed");
-
             //PropValueBinding = BindingOperations.GetBinding(PropValue, TextBox.TextProperty);
 
             UpdateBtn.Click += UpdateBtn_Click;
-            //((SWAPIlib.ISwProperty)this.DataContext).PropertyChanged += (sender, args) => this.OnPropertyChanged(args.PropertyName)
-            
         }
 
         private void UpdateBtn_Click(object sender, RoutedEventArgs e)
@@ -45,12 +39,6 @@ namespace SolidSaverWPF.Prop
             var prop = ((SWAPIlib.ISwProperty)this.DataContext);
             prop.WriteValue();
         }
-
-        //private void PropValue_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    if(ColorBinding.StringFormat != PropValue.Text)
-        //        PropValue.Background 
-        //}
     }
 
     public class BoolToColorConverter : IValueConverter

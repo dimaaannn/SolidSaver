@@ -59,6 +59,7 @@
             <!--#endregion-->
             <Button 
                 Name="UpdateBtn"
+                Content="S"
                 Grid.Column="1" 
                 Grid.Row="0" 
                 Margin="2,2,2,2" 

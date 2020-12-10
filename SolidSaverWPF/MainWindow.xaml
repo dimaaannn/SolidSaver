@@ -156,6 +156,15 @@
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Name="PropertyBox">
+                        
+                        <!--#region Disable selection-->
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <!--#endregion-->
+                        
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <propert:PropControl/>
