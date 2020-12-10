@@ -144,7 +144,7 @@
                     ShowGridLines="True">
                     <Grid.RowDefinitions>
                         <RowDefinition />
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="200"/>
                     </Grid.RowDefinitions>
 
 
@@ -171,8 +171,30 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
                     <!--#endregion-->
+                    
+                    <!--#region TAB-->
+                    <TabControl 
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch">
+                        
+                        <TabItem Header="TabItem">
+                            <StackPanel Background="#FFE5E5E5">
+                                <Button Content="B1"/>
+                                <Button Content="B1"/>
+                                <Button Content="B1"/>
+                            </StackPanel>
+                        </TabItem>
+                        <TabItem Header="TabItem">
+                            <Grid Background="#FFE5E5E5">
+
+
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                    <!--#endregion-->
+                    
 
 
                 </Grid>
