@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,12 +29,10 @@ namespace SolidSaverWPF.Prop
         public PropControl()
         {
             InitializeComponent();
-            //PropValue.TextChanged += PropValue_TextChanged;
-            //BindingColor();
 
-            //BindingExpression propValBindExpr = PropValue.GetBindingExpression(TextBox.TextProperty);
-            //PropValueBinding = propValBindExpr.ParentBinding;
-            PropValueBinding = BindingOperations.GetBinding(PropValue, TextBox.TextProperty);
+            ColorBinding = new Binding("IsModifyed");
+
+            //PropValueBinding = BindingOperations.GetBinding(PropValue, TextBox.TextProperty);
 
             UpdateBtn.Click += UpdateBtn_Click;
             //((SWAPIlib.ISwProperty)this.DataContext).PropertyChanged += (sender, args) => this.OnPropertyChanged(args.PropertyName)
@@ -43,21 +42,32 @@ namespace SolidSaverWPF.Prop
         private void UpdateBtn_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Save property button click");
-            ((SWAPIlib.ISwProperty)this.DataContext).WriteValue();
+            var prop = ((SWAPIlib.ISwProperty)this.DataContext);
+            prop.WriteValue();
         }
-
-        private void BindingColor()
-        {
-            ColorBinding = new Binding("_tempPropertyValue");
-        }
-
-
-
 
         //private void PropValue_TextChanged(object sender, TextChangedEventArgs e)
         //{
         //    if(ColorBinding.StringFormat != PropValue.Text)
         //        PropValue.Background 
         //}
+    }
+
+    public class BoolToColorConverter : IValueConverter
+    {
+        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool status = (bool)value;
+            if (status)
+            {
+                return new SolidColorBrush(Colors.OrangeRed);
+            }
+            else return new SolidColorBrush(Colors.White);
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -21,10 +21,6 @@ namespace SolidSaverWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public swPart sw_part { get; set; }
-        public List<swPart> SwPartList { get; set; }
-        public List<PropertyTemplate> PropList2 { get; set; }
-        public PropertyTemplate PropObj { get; set; }
 
         public MainModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get; set; }
@@ -43,7 +39,6 @@ namespace SolidSaverWPF
             SwAppControl.Connect();
             MainModel.GetMainModel();
 
-            SwPartList = TestClass.CreateTestPartList();
             //PartsList.ItemsSource = SwPartList;
             MainModel.GetSubComponents(false);
             PartsList.ItemsSource = SubComponents;
@@ -87,63 +82,6 @@ namespace SolidSaverWPF
         }
     }
 
-    public class swPart : ISwPartData
-    {
-        public List<PropertyTemplate> PropList { get; set; }
-        public bool IsSelected { get; set; }
-        public string PartType { get; set; }
-        public string FileName { get; set; }
 
-        public string TestProperty { get; set; }
-        public string TestProperty2 { get; set; }
 
-        
-    }
-
-    public static class TestClass
-    {
-        public static List<swPart> CreateTestPartList()
-        {
-            var partsList = new List<swPart>();
-            partsList.Add(new swPart()
-            {
-
-                FileName = "TestFileName.sldprt",
-                IsSelected = true, PartType = "Assembly",
-                TestProperty = "Сборка 12345",
-                PropList = new List<PropertyTemplate>()
-                {
-                    new PropertyTemplate
-                    {
-                        PrpName = "TestPropertyName",
-                        PrpValue = "TestPropertyValue"
-                    }
-                }
-            });
-
-            partsList.Add(new swPart()
-            {
-                FileName = "TestFileName2.sldprt",
-                IsSelected = false, PartType = "part",
-                TestProperty = "Деталь 12345",
-                TestProperty2 = "Второе свойство",
-                PropList = new List<PropertyTemplate>()
-                {
-                    new PropertyTemplate
-                    {
-                        PrpName = "TestAaaaaName2",
-                        PrpValue = "TestPropertyValue2"
-                    }
-                }
-            });
-
-            return partsList;
-        }
-    }
-
-    public class PropertyTemplate
-    {
-        public string PrpName { get; set; }
-        public string PrpValue { get; set; }
-    }
 }

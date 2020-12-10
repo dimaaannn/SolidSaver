@@ -45,6 +45,9 @@ namespace SWAPIlib
             }
             string WriteStatus = ret ? "written" : "Not written";
             Debug.Write($"Value was {WriteStatus}");
+            //NotifyChanged
+            RaisePropertyChanged("PropertyValue");
+            RaisePropertyChanged("IsModifyed");
             return ret;
         }
         /// <summary>
