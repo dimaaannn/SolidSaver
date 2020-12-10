@@ -179,12 +179,12 @@ namespace SWAPIlib
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void RaisePropertyChanged()
+        protected void RaisePropertyChanged(string s)
         {
             var e = PropertyChanged;
             if(e != null)
             {
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("PropertyValue"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
             }
         }
 
@@ -196,10 +196,10 @@ namespace SWAPIlib
                 {
                     _propertyValue = ReadValue();
                     Debug.WriteLine("AppPropertyBase - update");
-                    //Событие обновляющее текстовое поле
-                    RaisePropertyChanged();
                 }
                 _tempPropertyValue = null;
+                //Событие обновляющее текстовое поле
+                RaisePropertyChanged("PropertyValue");
             }
         }
 
