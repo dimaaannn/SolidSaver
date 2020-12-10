@@ -144,6 +144,7 @@ namespace SWAPIlib
             {
                 _tempPropertyValue = value;
                 Debug.WriteLine($"AppPropertyBase - value changed {_tempPropertyValue}");
+                RaisePropertyChanged("IsModifyed");
             }
 
         }
@@ -200,6 +201,7 @@ namespace SWAPIlib
                 _tempPropertyValue = null;
                 //Событие обновляющее текстовое поле
                 RaisePropertyChanged("PropertyValue");
+                RaisePropertyChanged("IsModifyed");
             }
         }
 
