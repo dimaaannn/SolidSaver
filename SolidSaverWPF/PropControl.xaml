@@ -65,7 +65,6 @@
                 Grid.Row="1" 
                 Name="PropValue"
                 Grid.ColumnSpan="2"
-
                 Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
                 />
             <!--#endregion-->

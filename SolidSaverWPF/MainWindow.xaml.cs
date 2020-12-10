@@ -64,7 +64,11 @@ namespace SolidSaverWPF
         private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
         {
             foreach(var prop in PropList)
+            {
                 prop.Update();
+                
+            }
+
         }
 
         private void ButtonWrite_Click(object sender, RoutedEventArgs e)

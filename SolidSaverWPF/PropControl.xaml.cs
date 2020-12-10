@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace SolidSaverWPF.Prop
     /// </summary>
     public partial class PropControl : UserControl
     {
+        public Binding PropValueBinding;
         Binding ColorBinding { get; set; }
         Brush YellowBrush;
 
@@ -28,18 +30,28 @@ namespace SolidSaverWPF.Prop
             InitializeComponent();
             //PropValue.TextChanged += PropValue_TextChanged;
             //BindingColor();
-            PropValue.SourceUpdated += PropValue_SourceUpdated;
+
+            //BindingExpression propValBindExpr = PropValue.GetBindingExpression(TextBox.TextProperty);
+            //PropValueBinding = propValBindExpr.ParentBinding;
+            PropValueBinding = BindingOperations.GetBinding(PropValue, TextBox.TextProperty);
+
+            UpdateBtn.Click += UpdateBtn_Click;
+            //((SWAPIlib.ISwProperty)this.DataContext).PropertyChanged += (sender, args) => this.OnPropertyChanged(args.PropertyName)
+            
         }
 
-        private void PropValue_SourceUpdated(object sender, DataTransferEventArgs e)
+        private void UpdateBtn_Click(object sender, RoutedEventArgs e)
         {
-            PropValue.UpdateLayout();
+            Debug.WriteLine("Save property button click");
+            ((SWAPIlib.ISwProperty)this.DataContext).WriteValue();
         }
 
         private void BindingColor()
         {
             ColorBinding = new Binding("_tempPropertyValue");
         }
+
+
 
 
         //private void PropValue_TextChanged(object sender, TextChangedEventArgs e)

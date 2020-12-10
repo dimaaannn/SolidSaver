@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace SWAPIlib
 {
@@ -176,6 +177,17 @@ namespace SWAPIlib
         protected string _tempPropertyValue;
         protected string _configName;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged()
+        {
+            var e = PropertyChanged;
+            if(e != null)
+            {
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("PropertyValue"));
+            }
+        }
+
         public virtual void Update()
         {
             if (IsReadable)
@@ -183,6 +195,9 @@ namespace SWAPIlib
                 if (Validator(_appModel))
                 {
                     _propertyValue = ReadValue();
+                    Debug.WriteLine("AppPropertyBase - update");
+                    //Событие обновляющее текстовое поле
+                    RaisePropertyChanged();
                 }
                 _tempPropertyValue = null;
             }

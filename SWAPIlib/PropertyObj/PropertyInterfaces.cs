@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace SWAPIlib
     /// <summary>
     /// Объект свойства
     /// </summary>
-    public interface ISwProperty
+    public interface ISwProperty: INotifyPropertyChanged
     {
         /// <summary>
         /// Ссылка на активную модель

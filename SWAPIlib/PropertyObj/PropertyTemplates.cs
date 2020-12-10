@@ -43,6 +43,8 @@ namespace SWAPIlib
                 if (ret)
                     _tempPropertyValue = null;
             }
+            string WriteStatus = ret ? "written" : "Not written";
+            Debug.Write($"Value was {WriteStatus}");
             return ret;
         }
         /// <summary>
