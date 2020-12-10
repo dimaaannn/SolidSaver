@@ -10,11 +10,16 @@
     <TabControl 
         HorizontalAlignment="Stretch" 
         VerticalAlignment="Stretch" >
-        <TabItem Header="TabItem">
+        <TabItem Header="Свойства">
+            <Grid Background="#FFE5E5E5">
+                
+            </Grid>
+        </TabItem>
+        <TabItem Header="Экспорт">
             <Grid Background="#FFE5E5E5"/>
         </TabItem>
-        <TabItem Header="TabItem">
-            <Grid Background="#FFE5E5E5"/>
+        <TabItem Header="Переименование">
+            <Grid Background="#ffe5e5e5"/>
         </TabItem>
     </TabControl>
 
