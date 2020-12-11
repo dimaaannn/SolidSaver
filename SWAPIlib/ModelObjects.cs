@@ -54,6 +54,23 @@ namespace SWAPIlib
         }
 
         /// <summary>
+        /// Загрузить активную модель
+        /// </summary>
+        public static ModelDoc2 ActiveModel
+        {
+            get
+            {
+                ModelDoc2 ret = null;
+                if (ComConnected)
+                {
+                    ret = SwAPI.swApp.ActiveDoc;
+                    string evT = $"Модель {ret?.GetTitle() ?? "не"} получена";
+                }
+                return ret;
+            }
+        }
+
+        /// <summary>
         /// Обнаружение процесса SW
         /// </summary>
         public static event System.EventHandler SwProcessRunning
@@ -279,6 +296,14 @@ namespace SWAPIlib
                     break;
             }
             return ret;
+        }
+
+        public static AppModel ActiveDoc
+        {
+            get
+            {
+
+            }
         }
     }
 
