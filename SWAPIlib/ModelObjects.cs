@@ -300,10 +300,7 @@ namespace SWAPIlib
 
         public static AppModel ActiveDoc
         {
-            get
-            {
-
-            }
+            get => GetModel(SwAppControl.ActiveModel);
         }
     }
 
