@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SolidSaverWPF.PropList
+namespace SolidSaverWPF.PropTab
 {
     /// <summary>
     /// Interaction logic for PropListControl.xaml
     /// </summary>
-    public partial class PropListControl : UserControl
+    public partial class PropTabControl : UserControl
     {
-        public PropListControl()
+        public PropTabControl()
         {
             InitializeComponent();
         }

@@ -7,6 +7,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
+        xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
         Title="MainWindow" Height="500" Width="674" MinWidth="350">
     <Window.Resources>
         <!--#region Button style-->
