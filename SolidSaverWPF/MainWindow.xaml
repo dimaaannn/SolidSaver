@@ -53,10 +53,22 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Content="Подключиться">
+            <!--#region Load button-->
+            <Grid Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="115*"/>
+                    <ColumnDefinition Width="107*"/>
 
-            </Button>
-            <Button Grid.Column="1" Content="Загрузить"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" Content="Загрузить модель" Margin="5" Name="Load" Click="Load_Click"/>
+                <StackPanel Grid.Column="1" Margin="4">
+                    <CheckBox Grid.Column="1" Content="Верх.уровня" IsChecked="{Binding TopLevelOnly}"/>
+                    <CheckBox Grid.Column="1" Content="Из файла"/>
+                </StackPanel>
+            </Grid>
+            <!--#endregion-->
+
             <Button Grid.Column="3" Content="Закрыть"/>
 
         </Grid>
@@ -157,7 +169,7 @@
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Name="PropertyBox">
-                        
+
                         <!--#region Disable selection-->
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
@@ -165,7 +177,7 @@
                             </Style>
                         </ListBox.ItemContainerStyle>
                         <!--#endregion-->
-                        
+
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <propert:PropControl/>
@@ -173,13 +185,13 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <!--#endregion-->
-                    
+
                     <!--#region TAB-->
                     <TabControl 
                         Grid.Row="1"
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch">
-                        
+
                         <TabItem Header="TabItem">
                             <StackPanel Background="#FFE5E5E5">
                                 <Button Content="B1"/>
@@ -195,7 +207,7 @@
                         </TabItem>
                     </TabControl>
                     <!--#endregion-->
-                    
+
 
 
                 </Grid>

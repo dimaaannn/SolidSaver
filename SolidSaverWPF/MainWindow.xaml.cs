@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SWAPIlib;
+using System.Collections.ObjectModel;
 
 namespace SolidSaverWPF
 {
@@ -24,26 +25,23 @@ namespace SolidSaverWPF
 
         public MainModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get; set; }
-        public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
+        public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
         public AppComponent SelectedModel { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
             MainModel = new MainModel();
-            this.DataContext = SelectedModel;
-            this.DataContext = PropList;
-            this.DataContext = SubComponents;
             this.DataContext = MainModel;
 
             SwAppControl.Connect();
             MainModel.GetMainModel();
 
             //PartsList.ItemsSource = SwPartList;
-            MainModel.GetSubComponents(false);
+            MainModel.GetSubComponents();
             PartsList.ItemsSource = SubComponents;
 
-
+            MainModel.TopLevelOnly = true;
 
         }
 
@@ -51,27 +49,44 @@ namespace SolidSaverWPF
         private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var index = PartsList.SelectedIndex;
-            var currentPropList = SubComponents[index].PropList;
-            PropList = currentPropList;
-            PropertyBox.ItemsSource = currentPropList;
+            if(index >= 0)
+            {
+                var currentPropList = SubComponents[index].PropList;
+                PropList = currentPropList;
+                PropertyBox.ItemsSource = currentPropList;
+            }
         }
 
+        /// <summary>
+        /// Обновить свойства активной детали
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
         {
             foreach(var prop in PropList)
             {
                 prop.Update();
-                
             }
 
         }
 
+        /// <summary>
+        /// Записать значения свойств активной детали
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonWrite_Click(object sender, RoutedEventArgs e)
         {
             foreach (var prop in PropList)
                 prop.WriteValue();
         }
 
+        /// <summary>
+        /// Записать значения свойств всех деталей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonWriteAll_Click(object sender, RoutedEventArgs e)
         {
             foreach (var comp in SubComponents)
@@ -79,6 +94,12 @@ namespace SolidSaverWPF
                 foreach (var prop in comp.PropList)
                     prop.WriteValue();
             }
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+            MainModel.LoadActiveModel();
+            MainModel.GetSubComponents();
         }
     }
 
