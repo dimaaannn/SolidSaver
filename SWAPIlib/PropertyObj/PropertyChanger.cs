@@ -8,7 +8,7 @@ using SWAPIlib;
 
 namespace SWAPIlib.PropertyObj
 {
-    public delegate ISwProperty PropConstructor(AppModel appModel);
+    public delegate ISwProperty PropConstructor(AppModel appModel, string ConfigName);
     public delegate string ValueConverter(string Value);
 
     public interface IPropertyChanger
@@ -17,12 +17,53 @@ namespace SWAPIlib.PropertyObj
         string NewValue { get; set; }
         void ProceedValues();
         void WriteValues();
-        void RevertValues();
+        void RestoreValues();
         PropConstructor Propconstructor { get; set; }
         ValueConverter Valueconverter { get; set; }
         ObservableCollection<AppModel> Models { get; }
         ObservableCollection<ISwProperty> Properties { get; }
         bool AllConfigurations { get; set; }
+    }
+
+    public interface IPropModifier
+    {
+        /// <summary>
+        /// Имя детали
+        /// </summary>
+        string PartName { get; }
+        /// <summary>
+        /// Модель детали
+        /// </summary>
+        AppModel Model { get; set; }
+        /// <summary>
+        /// Список конфигураций
+        /// </summary>
+        ObservableCollection<string> ConfigNames { get; set; }
+        /// <summary>
+        /// Словарь старых значений
+        /// </summary>
+        Dictionary<string, string> OldValues { get; }
+        /// <summary>
+        /// Словарь объектов свойств
+        /// </summary>
+        Dictionary<string, ISwProperty> SwPropList { get; set; }
+        /// <summary>
+        /// Конструктор свойств
+        /// </summary>
+        PropConstructor propConstructor { get; set; }
+        /// <summary>
+        /// Записать новые значения
+        /// </summary>
+        void WriteValues();
+        /// <summary>
+        /// Восстановить значения
+        /// </summary>
+        void RestoreValues();
+        /// <summary>
+        /// Показать все конфигурации
+        /// </summary>
+        bool AllConfiguration { get; set; }
+
     }
 
     class PropertyChangerBase : IPropertyChanger
@@ -50,7 +91,7 @@ namespace SWAPIlib.PropertyObj
             {
                 foreach (AppModel item in e.NewItems)
                 {
-                    Properties.Add(Propconstructor(item));
+                    //Properties.Add(Propconstructor(item));
                 }
             }
         }
@@ -66,7 +107,7 @@ namespace SWAPIlib.PropertyObj
             }
         }
 
-        public void RevertValues()
+        public void RestoreValues()
         {
             throw new NotImplementedException();
         }

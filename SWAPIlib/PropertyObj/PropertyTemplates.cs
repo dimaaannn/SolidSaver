@@ -9,16 +9,6 @@ namespace SWAPIlib
 {
 
 
-    //var prop = new AppModelPropGetter(appmodel)
-    //{
-    //    IsReadable = true,
-    //    IsWritable = true,
-    //    PropertyName = "Наименование"
-    //}
-    //prop.Update();
-
-
-    //TODO Переделать базовый
     /// <summary>
     /// Именованные свойства модели
     /// </summary>
@@ -111,7 +101,7 @@ namespace SWAPIlib
                 return ret;
             }
             private static AppModelPropGetter CreateDefault(
-                AppModel appModel, string userName, string propertyName)
+                AppModel appModel, string userName, string propertyName, string confName = null)
             {
                 return new AppModelPropGetter(appModel)
                 {
@@ -134,15 +124,7 @@ namespace SWAPIlib
         }
     }
 
-    //public static class PropSheetTemplate
-    //{
-    //    public static IList<ISwProperty> Component(AppComponent swComponent)
-    //    {
-    //        var ret = new List<ISwProperty>();
-            
-    //        return ret;
-    //    }
-    //}
+
 
 
     

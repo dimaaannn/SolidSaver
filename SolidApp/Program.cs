@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Security.Policy;
 using SWAPIlib;
+using SWAPIlib.PropertyObj;
 
 namespace SolidApp
 {
@@ -23,39 +24,39 @@ namespace SolidApp
         {
             //var swModel = AppConsole.LoadActiveDoc();
             SwAppControl.Connect();
-            var swModel = SwAppControl.MainModel;
+            var appmodel = ModelFactory.ActiveDoc;
 
 
-            var appmodel = new AppAssembly(swModel);
+
             if(appmodel.SwModel is PartDoc swPart)
             {
             }
 
+
             var Appcomp = new List<AppComponent>();
             if (appmodel is AppAssembly appAsm)
             {
-                Console.WriteLine($"configList = {string.Join(",", appAsm.ConfigList)}");
+                var confList = appAsm.ConfigList;
+                Console.WriteLine($"configList = {string.Join(",", confList)}");
 
-                var rawComponents = AsmDocProxy.GetComponents(appmodel.SwModel, false);
-                foreach(Component2 comp in rawComponents)
-                {
-                    var newComp = new AppComponent(comp);
-                    foreach (var pr in newComp.PropList)
-                        pr.Update();
-                    Appcomp.Add(newComp);
+                var propMod = new SWAPIlib.PropertyObj.PropModifier(
+                    appAsm,
+                    SWAPIlib.PropertyObj.PropFactory.Nomination
+                    );
 
-                }
 
-                //Appcomp.First().VisibState = AppCompVisibility.Hidden;
-                foreach(var a in Appcomp)
-                {
-                    string s = $"Comp {a.Title}: is {a.VisibState}, s.state: {a.SuppressionState}\n" +
-                        $"Conf: {a.RefConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
-                        $"Exist : {a.IsExist}";
-                    Console.WriteLine(s);
-                    foreach(var pr in a.PropList)
-                         Console.WriteLine(pr.PropertyValue);
-                }
+                propMod.ConfigNames.Add(confList.First());
+                propMod.ConfigNames.Add(confList[1]);
+
+
+                Console.WriteLine($"PropVal = {String.Join(",", propMod.SwPropList.Select(x => x.Value.PropertyValue))}");
+
+                propMod.ConfigNames.Remove(confList.First());
+
+                propMod.AllConfiguration = true;
+
+
+                propMod.AllConfiguration = false;
 
             }
 
@@ -65,6 +66,20 @@ namespace SolidApp
 
             Console.ReadKey();
         }
+
+        public static void PrintAsmInfo(List<AppComponent> Appcomp)
+        {
+            foreach (var a in Appcomp)
+            {
+                string s = $"Comp {a.Title}: is {a.VisibState}, s.state: {a.SuppressionState}\n" +
+                    $"Conf: {a.RefConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
+                    $"Exist : {a.IsExist}";
+                Console.WriteLine(s);
+                foreach (var pr in a.PropList)
+                    Console.WriteLine(pr.PropertyValue);
+            }
+        }
+
     }
 
     //    static void PrevMain(string[] args)

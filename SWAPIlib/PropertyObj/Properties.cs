@@ -46,7 +46,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsPartOrAsm(AppModel appModel)
+        public static bool IsPartOrAsm(ISwModel appModel)
         {
             AppDocType type = appModel.DocType;
             if (type == AppDocType.swASM || type == AppDocType.swPART)
