@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -36,7 +37,7 @@ namespace SWAPIlib.PropertyObj
         }
     }
 
-    public class PropModifier : IPropModifier
+    public class PropModifier : IPropModifier, IEnumerable
     {
         /// <summary>
         /// ExtendedConstructor
@@ -144,6 +145,11 @@ namespace SWAPIlib.PropertyObj
                 SwPropList.Remove(e.OldItems[0] as string);
                 OldValues.Remove(e.OldItems[0] as string);
             }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return SwPropList.Values.GetEnumerator();
         }
     }
 

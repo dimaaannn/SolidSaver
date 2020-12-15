@@ -27,6 +27,14 @@ namespace SolidApp
             var appmodel = ModelFactory.ActiveDoc;
 
 
+            var replacer = new SWAPIlib.PropertyObj.TextReplacer() 
+            { SearchText = "test", ReplaceText = "aaa" };
+
+            var teststring = "just test text";
+
+            replacer.Replace(teststring);
+            Console.WriteLine(replacer.ReplaceResult);
+
 
             if(appmodel.SwModel is PartDoc swPart)
             {
