@@ -13,6 +13,7 @@ using System.Threading;
 using System.Security.Policy;
 using SWAPIlib;
 using SWAPIlib.PropertyObj;
+using System.Collections;
 
 namespace SolidApp
 {
@@ -27,19 +28,19 @@ namespace SolidApp
             var appmodel = ModelFactory.ActiveDoc;
 
 
-            var replacer = new SWAPIlib.PropertyObj.TextReplacer() 
-            { SearchText = "test", ReplaceText = "aaa" };
-
-            var teststring = "just test text";
-
-            replacer.Replace(teststring);
-            Console.WriteLine(replacer.ReplaceResult);
-
-
             if(appmodel.SwModel is PartDoc swPart)
             {
             }
 
+            var cont = new ContainerContaiter(10);
+            var en = cont.GetEnumerator();
+
+            foreach(var item in cont)
+            {
+                Console.Write(item);
+            }
+
+            //Console.WriteLine($"Vars = {String.Join(",", cont.GetEnumerator().ToString())}");
 
             var Appcomp = new List<AppComponent>();
             if (appmodel is AppAssembly appAsm)
@@ -88,6 +89,45 @@ namespace SolidApp
             }
         }
 
+    }
+
+    public class RangeContaiter :IEnumerable
+    {
+        public RangeContaiter()
+        {
+            RangeList = System.Linq.Enumerable.Range(1, 4).ToList();
+        }
+        List<int> RangeList;
+
+        public IEnumerator GetEnumerator()
+        {
+            return RangeList.GetEnumerator();
+        }
+    }
+
+    public class ContainerContaiter :IEnumerable
+    {
+        public ContainerContaiter(int count)
+        {
+            containers = new List<RangeContaiter>(50);
+
+            for(int i = 0; i < count; i++)
+            {
+                containers.Add(new RangeContaiter());
+            }
+        }
+        public List<RangeContaiter> containers;
+
+        public IEnumerator GetEnumerator()
+        {
+            foreach(var item in containers)
+            {
+                foreach(var subitem in item)
+                {
+                    yield return subitem;
+                }
+            }
+        }
     }
 
     //    static void PrevMain(string[] args)
