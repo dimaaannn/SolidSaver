@@ -46,6 +46,9 @@ namespace SWAPIlib.PropertyObj
         /// <param name="propConstructor"></param>
         public PropModifier(AppModel appModel, PropConstructor propConstructor) : this()
         {
+            if (appModel.DocType == AppDocType.swDRAWING || appModel.DocType == AppDocType.swNONE)
+                throw new ArgumentException($"PropModifier - wrong docType {appModel.DocType}");
+
             Model = appModel;
             this.propConstructor = propConstructor;
         }
