@@ -109,14 +109,14 @@ namespace SWAPIlib.PropertyObj
 
         public void RestoreValues()
         {
-            foreach (var prop in SwPropList.Values)
+            foreach (var prop in SwPropList.Values.Where(prop => prop.IsModifyed))
             {
                 prop.Update();
             }
         }
         public void WriteValues()
         {
-            foreach (var prop in SwPropList.Values)
+            foreach (var prop in SwPropList.Values.Where(prop => prop.IsModifyed))
             {
                 prop.WriteValue();
             }
