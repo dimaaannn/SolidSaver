@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace SWAPIlib.PropertyObj
 {
@@ -23,13 +24,24 @@ namespace SWAPIlib.PropertyObj
 
     public class TextReplacer : ITextReplacer
     {
-        public string SearchText { get; set; }
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                //Remove regex pattern
+                regex = null;
+            }
+        }
+        string _searchText;
         public string ReplaceText { get; set; }
         TextReplacerDel textReplacer { get; set; } = ReplaceString;
         public bool IsReplaced { get; set; } = false;
 
         public string ReplaceResult { get => _result; }
         string _result;
+        Regex regex;
 
         public bool UseRegExp
         {
@@ -44,7 +56,6 @@ namespace SWAPIlib.PropertyObj
             }
         }
         private bool _useRegExp;
-
 
         public bool Replace(string input)
         {
@@ -71,11 +82,22 @@ namespace SWAPIlib.PropertyObj
             return ret;
         }
 
-        public static bool ReplaceRegExp(
+        public bool ReplaceRegExp(
             string input, string searchStr,
             string replaceStr, out string output)
         {
-            throw new NotImplementedException();
+            bool ret = false;
+            //Create pattern if not exist
+            if(regex == null)
+                regex = new Regex(searchStr, RegexOptions.Compiled);
+
+            ret = regex.IsMatch(input);
+
+            if (ret)
+                output = regex.Replace(input, replaceStr);
+            else output = null;
+
+            return ret;
         }
     }
 }
