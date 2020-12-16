@@ -48,7 +48,6 @@ namespace SWAPIlib.PropertyObj
         {
             if (appModel.DocType == AppDocType.swDRAWING || appModel.DocType == AppDocType.swNONE)
                 throw new ArgumentException($"PropModifier - wrong docType {appModel.DocType}");
-
             Model = appModel;
             this.propConstructor = propConstructor;
         }
@@ -135,6 +134,8 @@ namespace SWAPIlib.PropertyObj
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 var confName = e.NewItems[0] as string;
+                if (SwPropList.ContainsKey(confName))
+                    return;
                 ISwProperty newProp = propConstructor(Model, confName);
                 SwPropList.Add(confName, newProp);
 

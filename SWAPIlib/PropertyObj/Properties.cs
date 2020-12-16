@@ -113,7 +113,7 @@ namespace SWAPIlib
     /// </summary>
     public abstract class AppPropertyBase : ISwProperty
     {
-        public virtual AppModel AppModel
+        public virtual AppModel appModel
         {
             get => _appModel;
             set
@@ -153,17 +153,20 @@ namespace SWAPIlib
 
         public virtual string ConfigName
         {
-            get
+            get //TODO fix algoritm to swPart and simplify
             {
                 string ret = null;
-                if (AppModel is ISwComponent swComp)
-                    ret = _configName ?? swComp.ConfigName;
 
-                if (AppModel is ISwPart swPart)
+                if (appModel is IAppComponent swComp)
+                    ret = _configName ?? swComp.RefConfigName;
+
+                else if (appModel is ISwPart swPart)
                     ret = _configName ?? swPart.ConfigName;
 
-                if (AppModel is ISwAssembly swAsm)
+                else if (appModel is ISwAssembly swAsm)
                     ret = _configName ?? swAsm.ConfigName;
+
+                else ret = _configName;
 
                 return ret;
             }
@@ -212,7 +215,7 @@ namespace SWAPIlib
     public abstract class ComponentProperty : AppPropertyBase
     {
         public IAppComponent AppComponent { get; set; }
-        public override AppModel AppModel 
+        public override AppModel appModel 
         { 
             get => AppComponent.PartModel;
             set

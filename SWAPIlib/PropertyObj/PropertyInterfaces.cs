@@ -15,7 +15,7 @@ namespace SWAPIlib
         /// <summary>
         /// Ссылка на активную модель
         /// </summary>
-        AppModel AppModel { get; set; }
+        AppModel appModel { get; set; }
         /// <summary>
         /// Доступ для чтения
         /// </summary>

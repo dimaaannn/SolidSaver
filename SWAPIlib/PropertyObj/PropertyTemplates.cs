@@ -24,11 +24,11 @@ namespace SWAPIlib
         public override bool IsValid => true; //TODO add is valid func to property
         public override bool WriteValue()
         {
-            Debug.WriteLine($"Write val AppModelPropGetter {AppModel.Title} - {_tempPropertyValue}");
+            Debug.WriteLine($"Write val AppModelPropGetter {appModel.Title} - {_tempPropertyValue}");
             bool ret = false;
             if (CheckWrite())
             {
-                ret = ModelConfigProxy.SetConfParam(AppModel.SwModel,
+                ret = ModelConfigProxy.SetConfParam(appModel.SwModel,
                     ConfigName, PropertyName, _tempPropertyValue);
                 if (ret)
                     _tempPropertyValue = null;
@@ -59,14 +59,14 @@ namespace SWAPIlib
 
         public override string ReadValue()
         {
-            Debug.WriteLine($"ReadValue AppModelPropGetter {AppModel.Title} - {UserName}");
-            if (AppModel.DocType == AppDocType.swPART || AppModel.DocType == AppDocType.swASM)
+            Debug.WriteLine($"ReadValue AppModelPropGetter {appModel.Title} - {UserName}");
+            if (appModel.DocType == AppDocType.swPART || appModel.DocType == AppDocType.swASM)
             {
                 return ModelConfigProxy.GetConfParam(
-                    AppModel.SwModel, ConfigName, PropertyName);
+                    appModel.SwModel, ConfigName, PropertyName);
             }
             else
-                return (AppModel as SwComponent).ConfigName;
+                return (appModel as SwComponent).ConfigName;
         }
 
     }

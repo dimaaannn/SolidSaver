@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,7 +70,7 @@ namespace SWAPIlib.PropertyObj
 
     }
 
-    class PropertyChanger : IPropertyChanger
+    public class PropertyChanger : IPropertyChanger
     {
         public PropertyChanger()
         {
@@ -148,12 +149,19 @@ namespace SWAPIlib.PropertyObj
 
         protected void AddComponent(AppComponent component)
         {
-            var newProp = new PropModifier(component.PartModel, propConstructor)
-            { AllConfiguration = this.AllConfigurations };
+            //Null part referece check
+            if (component.IsExist)
+            {
 
-            //Add current active configuration
-            newProp.ConfigNames.Add(component.RefConfigName);
-            Properties.Add(newProp);
+                var newProp = new PropModifier(component.PartModel, propConstructor)
+                { AllConfiguration = this.AllConfigurations };
+
+                //Add current active configuration
+                newProp.ConfigNames.Add(component.RefConfigName);
+                Properties.Add(newProp);
+            }
+            //TODO Создать действие на погашенный компонент
+            Debug.WriteLine($"Null reference model in component{component.Title}");
         }
         protected void RemoveComponent(AppComponent component)
         {
