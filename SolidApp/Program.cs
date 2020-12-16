@@ -47,25 +47,38 @@ namespace SolidApp
             {
                 var confList = appAsm.ConfigList;
                 Console.WriteLine($"configList = {string.Join(",", confList)}");
+                var compList = appAsm.GetComponents(false);
 
-                var propMod = new SWAPIlib.PropertyObj.PropModifier(
-                    appAsm,
-                    SWAPIlib.PropertyObj.PropFactory.Nomination
-                    );
+                PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
+
+                var propChanger = new SWAPIlib.PropertyObj.PropertyChanger()
+                {
+                    propConstructor = constructor,
+                    SearchValue = "test",
+                    NewValue = "Tost1",
+                    AllConfigurations = true
+                };
+
+                foreach (var comp in compList)
+                {
+                    propChanger.Components.Add(comp);
+                }
+                //propChanger.Components.Add(compList[0]);
+                propChanger.ProceedValues();
 
 
-                propMod.ConfigNames.Add(confList.First());
-                propMod.ConfigNames.Add(confList[1]);
+                //var propvalues = propChanger.Properties.
+                //    SelectMany(prop => prop.SwPropList.Values.
+                //    Select(pr => pr.PropertyValue));                
+                var propvalues = from propMod in propChanger.Properties
+                                 from prop in propMod.SwPropList.Values
+                                 select prop.PropertyValue;
 
 
-                Console.WriteLine($"PropVal = {String.Join(",", propMod.SwPropList.Select(x => x.Value.PropertyValue))}");
-
-                propMod.ConfigNames.Remove(confList.First());
-
-                propMod.AllConfiguration = true;
+                var propObj = propvalues.ToArray();
 
 
-                propMod.AllConfiguration = false;
+                Console.WriteLine($"Value list\n{String.Join(", ", propvalues.ToList())}");
 
             }
 
