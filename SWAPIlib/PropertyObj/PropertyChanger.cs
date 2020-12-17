@@ -160,8 +160,11 @@ namespace SWAPIlib.PropertyObj
                 newProp.ConfigNames.Add(component.RefConfigName);
                 Properties.Add(newProp);
             }
-            //TODO Создать действие на погашенный компонент
-            Debug.WriteLine($"Null reference model in component{component.Title}");
+            else
+            {
+                Debug.WriteLine($"Null reference model in component{component.Title}");
+                //TODO Создать действие на погашенный компонент
+            }
         }
         protected void RemoveComponent(AppComponent component)
         {
@@ -176,7 +179,11 @@ namespace SWAPIlib.PropertyObj
             if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 var newComp = e.NewItems[0] as AppComponent;
-                AddComponent(newComp);
+                var EqualsCounter = Components.Where(comp => comp.Equals(newComp)).Count();
+                if (EqualsCounter <= 1)
+                    AddComponent(newComp);
+                else
+                    Debug.WriteLine($"Comp {newComp} alredy in list");
             }
             else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
