@@ -37,6 +37,7 @@
 
 
         <!--#endregion-->
+        
     </Window.Resources>
 
     <Grid ShowGridLines="False">
@@ -192,14 +193,23 @@
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch">
 
-                        <TabItem Header="TabItem">
-                            <StackPanel Background="#FFE5E5E5">
-                                <Button Content="B1"/>
-                                <Button Content="B1"/>
-                                <Button Content="B1"/>
+                        <TabItem Header="TabItem1">
+                            <StackPanel Background="LightGray">
+                                <Grid ShowGridLines="True" Height="20" Background="White">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
+                                    <TextBlock 
+                                        Text="{Binding TestText}"
+                                        Grid.Column="0"/>
+                                </Grid>
                             </StackPanel>
                         </TabItem>
-                        <TabItem Header="TabItem">
+                        
+                        <TabItem Header="TabItem2">
                             <Grid Background="#FFE5E5E5">
 
 

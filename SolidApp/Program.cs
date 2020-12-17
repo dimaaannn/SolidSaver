@@ -54,9 +54,10 @@ namespace SolidApp
                 var propChanger = new SWAPIlib.PropertyObj.PropertyChanger()
                 {
                     propConstructor = constructor,
-                    SearchValue = "test",
-                    NewValue = "Tost1",
-                    AllConfigurations = true
+                    SearchValue = "test3",
+                    NewValue = "test4",
+                    AllConfigurations = true,
+                    UseRegExp = true
                 };
 
                 foreach (var comp in compList)
@@ -72,19 +73,24 @@ namespace SolidApp
                 //    Select(pr => pr.PropertyValue));                
                 var propvalues = from propMod in propChanger.Properties
                                  from prop in propMod.SwPropList.Values
-                                 select prop.PropertyValue;
+                                 select prop;
 
 
                 var propObj = propvalues.ToArray();
 
+                foreach (var prop in propvalues)
+                {
+                    Console.WriteLine($"cn:{prop.ConfigName, -15}, val:{prop.PropertyValue}");
+                }
 
-                Console.WriteLine($"Value list\n{String.Join(", ", propvalues.ToList())}");
+                propChanger.WriteValues();
+                
 
             }
 
             var builder = new StringBuilder("DATA:\n");
 
-            Console.WriteLine(builder);
+            //Console.WriteLine(builder);
 
             Console.ReadKey();
         }

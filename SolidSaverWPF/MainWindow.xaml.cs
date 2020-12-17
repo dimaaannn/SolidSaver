@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SWAPIlib;
 using System.Collections.ObjectModel;
+using SWAPIlib.PropertyObj;
 
 namespace SolidSaverWPF
 {
@@ -28,6 +29,10 @@ namespace SolidSaverWPF
         public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
         public AppComponent SelectedModel { get; set; }
 
+        public string TestText { get; set; } = "teeeeeest";
+
+        public PropModifier TestProperty { get; set; }
+        public ISwProperty testSwProp { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -43,6 +48,20 @@ namespace SolidSaverWPF
 
             MainModel.TopLevelOnly = true;
 
+            //Component property tests
+
+            var testcomponent = SubComponents[1];
+
+            TestProperty = new PropModifier(
+                testcomponent.PartModel,
+                SWAPIlib.PropertyObj.PropFactory.Nomination
+                );
+            TestProperty.AllConfiguration = true;
+
+            testSwProp = TestProperty.SwPropList.Values.ToArray()[0];
+            TestText = testSwProp.PropertyValue;
+
+            //testSwProp.PropertyValue
         }
 
 
@@ -103,6 +122,6 @@ namespace SolidSaverWPF
         }
     }
 
-
+    
 
 }
