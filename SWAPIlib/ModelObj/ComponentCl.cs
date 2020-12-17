@@ -107,5 +107,29 @@ namespace SWAPIlib
 
         public int GetChildrenCount() => SwCompModel.IGetChildrenCount();
 
+        public override string ToString()
+        {
+            return $"{Title} - {RefConfigName}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this.GetType() != obj.GetType())
+                return false;
+            else
+            {
+                return this.Equals(obj as AppComponent);
+            }
+        }
+
+        public bool Equals(AppComponent comp)
+        {
+            if (comp.FileName == this.FileName &&
+                comp.RefConfigName == this.RefConfigName)
+                return true;
+            else
+                return false;
+        }
+        
     }
 }
