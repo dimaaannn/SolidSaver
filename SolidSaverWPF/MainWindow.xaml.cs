@@ -29,10 +29,7 @@ namespace SolidSaverWPF
         public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
         public AppComponent SelectedModel { get; set; }
 
-        public string TestText { get; set; } = "teeeeeest";
-
         public PropModifier TestProperty { get; set; }
-        public ISwProperty testSwProp { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -51,15 +48,20 @@ namespace SolidSaverWPF
             //Component property tests
 
             var testcomponent = SubComponents[1];
-
             TestProperty = new PropModifier(
                 testcomponent.PartModel,
                 SWAPIlib.PropertyObj.PropFactory.Nomination
                 );
             TestProperty.AllConfiguration = true;
 
-            testSwProp = TestProperty.SwPropList.Values.ToArray()[0];
-            TestText = testSwProp.PropertyValue;
+            var TestPropPair = TestProperty.SwPropList.First();
+            PropConfigName.Text = TestPropPair.Key;
+
+            var bind = new Binding("Value.PropertyValue");
+            //TestPropPair.Value.PropertyValue
+            bind.Source = TestPropPair;
+
+            PropConfigvalue.SetBinding(TextBox.TextProperty, bind);
 
             //testSwProp.PropertyValue
         }

@@ -203,8 +203,11 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
                                     <TextBlock 
-                                        Text="{Binding TestText}"
+                                        x:Name="PropConfigName"
                                         Grid.Column="0"/>
+                                    <TextBox 
+                                        x:Name="PropConfigvalue"
+                                        Grid.Column="2"/>
                                 </Grid>
                             </StackPanel>
                         </TabItem>
