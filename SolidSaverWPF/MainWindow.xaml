@@ -38,6 +38,7 @@
 
         <!--#endregion-->
         
+        
     </Window.Resources>
 
     <Grid ShowGridLines="False">
@@ -204,6 +205,7 @@
                                     <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
                                     <TextBlock 
                                         x:Name="PropConfigName"
+                                        Text="{Binding Key}"
                                         Grid.Column="0"/>
                                     <TextBox 
                                         x:Name="PropConfigvalue"

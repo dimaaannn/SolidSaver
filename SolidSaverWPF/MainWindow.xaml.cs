@@ -29,6 +29,8 @@ namespace SolidSaverWPF
         public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
         public AppComponent SelectedModel { get; set; }
 
+        public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
+
         public PropModifier TestProperty { get; set; }
         public MainWindow()
         {
@@ -54,16 +56,18 @@ namespace SolidSaverWPF
                 );
             TestProperty.AllConfiguration = true;
 
-            var TestPropPair = TestProperty.SwPropList.First();
-            PropConfigName.Text = TestPropPair.Key;
+            TestPropPair = TestProperty.SwPropList.First();
+            //PropConfigName.Text = TestPropPair.Key;
 
             var bind = new Binding("Value.PropertyValue");
-            //TestPropPair.Value.PropertyValue
+            //TestPropPair.Key
             bind.Source = TestPropPair;
 
             PropConfigvalue.SetBinding(TextBox.TextProperty, bind);
 
             //testSwProp.PropertyValue
+
+            PropConfigName.DataContext = TestPropPair;
         }
 
 
