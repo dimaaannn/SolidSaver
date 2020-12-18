@@ -203,6 +203,12 @@
                                     ScrollViewer.CanContentScroll="False"
                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListBoxItem}">
+                                            <Setter Property="Focusable" Value="False"/>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
                                     
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
