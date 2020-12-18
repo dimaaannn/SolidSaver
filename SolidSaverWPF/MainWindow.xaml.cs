@@ -36,8 +36,8 @@ namespace SolidSaverWPF
         {
             InitializeComponent();
             MainModel = new MainModel();
-            this.DataContext = MainModel;
-            //this.DataContext = this;
+            //this.DataContext = MainModel;
+            this.DataContext = this;
 
             SwAppControl.Connect();
             MainModel.GetMainModel();

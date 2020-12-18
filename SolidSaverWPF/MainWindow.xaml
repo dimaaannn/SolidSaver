@@ -197,18 +197,26 @@
                             <StackPanel Background="LightGray">
                                 <Grid ShowGridLines="True" Height="20" Background="White">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="2*"/>
                                     </Grid.ColumnDefinitions>
-                                    <!--<TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>-->
-                                    <TextBlock Grid.Column="1" Text="{Binding TestPropPair.Key}" HorizontalAlignment="Center"/>
+
+                                    <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
                                     <TextBlock 
                                         x:Name="PropConfigName"
                                         Text="{Binding Key}"
                                         Grid.Column="0"/>
+                                    <TextBox
+                                        x:Name="PropOldvalue"
+                                        Text="TestText"
+                                        IsReadOnly="True"
+                                        Foreground="Gray"
+                                        Grid.Column="2"/>
+                                    
                                     <TextBox 
                                         x:Name="PropConfigvalue"
+                                        Background="Transparent"
                                         Grid.Column="2"/>
                                     
                                 </Grid>
