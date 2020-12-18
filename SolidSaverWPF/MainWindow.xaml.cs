@@ -37,6 +37,7 @@ namespace SolidSaverWPF
             InitializeComponent();
             MainModel = new MainModel();
             this.DataContext = MainModel;
+            //this.DataContext = this;
 
             SwAppControl.Connect();
             MainModel.GetMainModel();
@@ -57,6 +58,7 @@ namespace SolidSaverWPF
             TestProperty.AllConfiguration = true;
 
             TestPropPair = TestProperty.SwPropList.First();
+            //TestProperty.PartName
             //PropConfigName.Text = TestPropPair.Key;
 
             var bind = new Binding("Value.PropertyValue");
@@ -68,6 +70,7 @@ namespace SolidSaverWPF
             //testSwProp.PropertyValue
 
             PropConfigName.DataContext = TestPropPair;
+            //TestPropPair.Key
         }
 
 

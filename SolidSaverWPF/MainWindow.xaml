@@ -38,7 +38,6 @@
 
         <!--#endregion-->
         
-        
     </Window.Resources>
 
     <Grid ShowGridLines="False">
@@ -199,10 +198,11 @@
                                 <Grid ShowGridLines="True" Height="20" Background="White">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="50"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
+                                    <!--<TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>-->
+                                    <TextBlock Grid.Column="1" Text="{Binding TestPropPair.Key}" HorizontalAlignment="Center"/>
                                     <TextBlock 
                                         x:Name="PropConfigName"
                                         Text="{Binding Key}"
@@ -210,6 +210,7 @@
                                     <TextBox 
                                         x:Name="PropConfigvalue"
                                         Grid.Column="2"/>
+                                    
                                 </Grid>
                             </StackPanel>
                         </TabItem>
