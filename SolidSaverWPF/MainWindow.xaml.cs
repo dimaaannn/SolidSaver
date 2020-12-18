@@ -58,19 +58,16 @@ namespace SolidSaverWPF
             TestProperty.AllConfiguration = true;
 
             TestPropPair = TestProperty.SwPropList.First();
-            //TestProperty.PartName
-            //PropConfigName.Text = TestPropPair.Key;
 
-            var bind = new Binding("Value.PropertyValue");
-            //TestPropPair.Key
-            bind.Source = TestPropPair;
+            PartProps.ItemsSource = TestProperty.SwPropList.Values;
 
-            PropConfigvalue.SetBinding(TextBox.TextProperty, bind);
+            //var bind = new Binding("Value.PropertyValue");
+            ////TestPropPair.Key
+            //bind.Source = TestPropPair;
 
-            //testSwProp.PropertyValue
+            //PropConfigvalue.SetBinding(TextBox.TextProperty, bind);
+            //PropConfigName.DataContext = TestPropPair;
 
-            PropConfigName.DataContext = TestPropPair;
-            //TestPropPair.Key
         }
 
 

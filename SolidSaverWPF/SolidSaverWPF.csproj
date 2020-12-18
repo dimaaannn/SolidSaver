@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PropertyRename\ChangePropertyField.xaml.cs">
+      <DependentUpon>ChangePropertyField.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PropTabControl.xaml.cs">
       <DependentUpon>PropTabControl.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="PropControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertyRename\ChangePropertyField.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,8 +121,6 @@
       <Name>SWAPIlib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PropertyRename\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
