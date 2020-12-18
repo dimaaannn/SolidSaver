@@ -31,7 +31,10 @@ namespace SWAPIlib
                 ret = ModelConfigProxy.SetConfParam(appModel.SwModel,
                     ConfigName, PropertyName, _tempPropertyValue);
                 if (ret)
+                {
+                    _propertyValue = _tempPropertyValue;
                     _tempPropertyValue = null;
+                }
             }
             string WriteStatus = ret ? "written" : "Not written";
             Debug.Write($"Value was {WriteStatus}");
