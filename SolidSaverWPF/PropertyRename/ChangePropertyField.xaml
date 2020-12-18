@@ -6,18 +6,29 @@
              xmlns:local="clr-namespace:SolidSaverWPF.PropertyRename"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="300">
-    <Grid ShowGridLines="True" Height="25" Background="White">
+
+
+    <Grid ShowGridLines="False" Background="White" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition  Width="10"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="1" Text=">>" HorizontalAlignment="Center"/>
-        <TextBlock 
-            x:Name="PropConfigName"
-            Text="{Binding ConfigName}"
-            Grid.Column="0"/>
+        <Border
+            BorderThickness="0, 1" 
+            Grid.Column="1"
+            BorderBrush="Gray">
+            <TextBlock  Text=">" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <Border
+            BorderThickness="0, 1" 
+            BorderBrush="Gray">
+            <TextBlock 
+                x:Name="PropConfigName"
+                Text="{Binding ConfigName}"
+                Grid.Column="0"/>
+        </Border>
         <TextBox
             x:Name="PropOldvalue"
             IsReadOnly="True"
