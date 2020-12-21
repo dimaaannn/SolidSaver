@@ -145,10 +145,21 @@ namespace SWAPIlib
                 _tempPropertyValue = value;
                 Debug.WriteLine($"AppPropertyBase - value changed {_tempPropertyValue}");
                 RaisePropertyChanged("IsModifyed");
+                RaisePropertyChanged("OldPropertyValue");
             }
 
         }
 
+        public string OldPropertyValue
+        {
+            get
+            {
+                if (IsModifyed)
+                    return _propertyValue;
+                else
+                    return null;
+            }
+        }
         public virtual bool IsModifyed { get => (_tempPropertyValue != null); }
 
         public virtual string ConfigName
@@ -174,6 +185,8 @@ namespace SWAPIlib
         }
 
         public virtual PropValidator Validator { get; set; }
+
+
         public abstract string ReadValue();
 
         protected AppModel _appModel;

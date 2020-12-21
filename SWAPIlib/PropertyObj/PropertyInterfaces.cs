@@ -58,6 +58,7 @@ namespace SWAPIlib
         bool WriteValue();
 
         bool IsModifyed { get;}
+        string OldPropertyValue { get; }
     }
 
     public interface ISwProperty<T> : ISwProperty
