@@ -61,6 +61,9 @@
     <Compile Include="PropertyRename\ChangePropertyPart.xaml.cs">
       <DependentUpon>ChangePropertyPart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PropertyRename\PropertyChangerTab.xaml.cs">
+      <DependentUpon>PropertyChangerTab.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PropTabControl.xaml.cs">
       <DependentUpon>PropTabControl.xaml</DependentUpon>
     </Compile>
@@ -85,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PropertyRename\ChangePropertyPart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertyRename\PropertyChangerTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

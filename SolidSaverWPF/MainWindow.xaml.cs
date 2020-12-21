@@ -50,16 +50,39 @@ namespace SolidSaverWPF
 
             //Component property tests
 
-            var testcomponent = SubComponents[1];
-            TestProperty = new PropModifier(
-                testcomponent.PartModel,
-                SWAPIlib.PropertyObj.PropFactory.Nomination
-                );
-            TestProperty.AllConfiguration = true;
+            PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
+            var propChanger = new PropertyChanger()
+            {
+                propConstructor = constructor,
+                SearchValue = "test3",
+                NewValue = "test4",
+                AllConfigurations = true,
+                UseRegExp = true
+            };
 
-            TestPropPair = TestProperty.SwPropList.First();
+            foreach (var comp in SubComponents)
+            {
+                propChanger.Components.Add(comp);
+            }
 
-            PartProps.ItemsSource = TestProperty.SwPropList.Values;
+            PartProps.ItemsSource = propChanger.Properties;
+
+
+
+            //var testcomponent = SubComponents[1];
+            //TestProperty = new PropModifier(
+            //    testcomponent.PartModel,
+            //    SWAPIlib.PropertyObj.PropFactory.Nomination
+            //    );
+            //TestProperty.AllConfiguration = true;
+
+            //var PropModList = new List<PropModifier>();
+            //PropModList.Add(TestProperty);
+
+            
+            //TestPropPair = TestProperty.SwPropList.First();
+
+            //PartProps.ItemsSource = TestProperty.SwPropList;
             //TestProperty.PartName
 
             //var bind = new Binding("Value.PropertyValue");
