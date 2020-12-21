@@ -60,7 +60,7 @@ namespace SolidSaverWPF
             TestPropPair = TestProperty.SwPropList.First();
 
             PartProps.ItemsSource = TestProperty.SwPropList.Values;
-            TestProperty.PartName
+            //TestProperty.PartName
 
             //var bind = new Binding("Value.PropertyValue");
             ////TestPropPair.Key

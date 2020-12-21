@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,27 +21,32 @@ namespace SolidSaverWPF.PropertyRename
     /// </summary>
     public partial class ChangePropertyField : UserControl
     {
-        public string OldValue { get; set; }
-        private bool _valueWasChanged { get; set; }
+        //public string OldValue { get; set; }
+        //private bool _valueWasChanged { get; set; }
         public ChangePropertyField()
         {
             InitializeComponent();
 
-            PropCurrentValue.GotFocus += PropCurrentValue_GotFocus;
-            //ConfigName
-            //PropertyValue
-            //ConfigName
-            //IsModifyed
         }
 
-        private void PropCurrentValue_GotFocus(object sender, RoutedEventArgs e)
+    }
+
+    public class BoolToColorConverter : IValueConverter
+    {
+
+        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(_valueWasChanged == false)
+            bool status = (bool)value;
+            if (status)
             {
-                OldValue = PropCurrentValue.Text;
-                PropOldvalue.Text = OldValue;
-                _valueWasChanged = true;
+                return new SolidColorBrush(Colors.LightYellow);
             }
+            else return new SolidColorBrush(Colors.White);
+        }
+
+        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

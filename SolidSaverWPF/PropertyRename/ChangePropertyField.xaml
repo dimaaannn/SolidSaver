@@ -7,6 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <local:BoolToColorConverter x:Key="booltocolorconverter"/>
+
+    </UserControl.Resources>
+    
+
 
     <Grid ShowGridLines="False" Background="White" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -31,7 +37,10 @@
         </Border>
         <TextBox
             x:Name="PropOldvalue"
+            Text="{Binding OldPropertyValue, Mode=OneWay}"
             IsReadOnly="True"
+            Background="{Binding IsModifyed, 
+                    Converter={StaticResource booltocolorconverter }}"
             Foreground="LightGray"
             Grid.Column="2"/>
 
