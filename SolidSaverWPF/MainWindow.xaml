@@ -196,27 +196,7 @@
 
                         <TabItem Header="TabItem1">
                             
-                            <ListBox
-                                x:Name="PartProps"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                ScrollViewer.CanContentScroll="False"
-                                ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Focusable" Value="False"/>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                    
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <propertyfield:ChangePropertyPart/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                                    
-                            </ListBox>
+                            <propertyfield:PropertyChangerTab/>
 
                         </TabItem>
                         

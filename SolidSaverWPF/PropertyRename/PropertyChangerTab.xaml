@@ -12,24 +12,80 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            
-        </Grid>
+        <!--#region ControlPanel-->
+        <Border BorderThickness="2" BorderBrush="Gray" CornerRadius="3" Height="52" Background="White">
+            <Grid Grid.Row="0" ShowGridLines="False" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="TextColumn"  MinWidth="80"/>
+                    <ColumnDefinition x:Name="CheckboxColumn" Width="Auto"/>
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Row="0" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3, 0"
+                    Foreground="LightGray" Text="Найти"/>
+                <TextBox 
+                    Grid.Row="0" VerticalAlignment="Stretch"
+                    x:Name="SearchText"
+                    Background="Transparent"
+                    Text="{Binding SearchValue}"/>
+
+                <TextBlock
+                    Grid.Row="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3, 0"
+                    Foreground="LightGray" Text="Заменить на"/>
+                <TextBox
+                    Grid.Row="1" VerticalAlignment="Stretch" Background="Transparent"
+                    x:Name="ReplaceText"
+                    Text="{Binding NewValue}"/>
+
+                <CheckBox
+                    VerticalAlignment="Center" Margin="2"
+                    Grid.Column="1" Grid.Row="0"
+                    x:Name="CaseSensive">
+                    <TextBlock TextWrapping="WrapWithOverflow" Text="уч.регистр"/>
+                </CheckBox>
+
+                <CheckBox
+                    VerticalAlignment="Center" Margin="2"
+                    Grid.Column="1" Grid.Row="1"
+                    x:Name="AllConf">
+                    <TextBlock TextWrapping="WrapWithOverflow" Text="все конфиг"/>
+                </CheckBox>
+
+                <Button
+                    Margin="1" Height="Auto"
+                    Grid.Column="3" Grid.RowSpan="2" 
+                    Name="WriteValues">
+                    <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Сохран знач"/>
+                </Button>
+                
+                <Button
+                    Margin="1" Height="Auto"
+                    Grid.Column="2" Grid.Row="1"
+                    Name="ReplaceValues"
+                    Content="Сброс"/>
+                
+                <Button
+                    Margin="1" Height="Auto"
+                    Grid.Column="2" Grid.Row="0"
+                    Name="SearchValues"
+                    Content="Искать"/>
+
+            </Grid>
+        </Border>
+        <!--#endregion-->
+        
         <!--#region PartList-->
         <ListBox
+            Foreground="#FFF3F3F3"
             ItemsSource="{Binding Properties}"
             Grid.Row="1"
             x:Name="PartProps"

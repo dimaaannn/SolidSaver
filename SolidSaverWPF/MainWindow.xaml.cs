@@ -65,7 +65,7 @@ namespace SolidSaverWPF
                 propChanger.Components.Add(comp);
             }
 
-            PartProps.ItemsSource = propChanger.Properties;
+            //PartProps.ItemsSource = propChanger.Properties;
 
 
 
