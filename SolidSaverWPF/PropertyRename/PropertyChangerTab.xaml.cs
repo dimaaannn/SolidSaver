@@ -39,13 +39,25 @@ namespace SolidSaverWPF.PropertyRename
 
 
             SearchValues.Click += SearchValues_Click;
+            WriteValues.Click += WriteValues_Click;
+            RestoreValues.Click += RenewValues_Click;
+        }
+
+        private void RenewValues_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Renew values button click");
+            PropChanger.RestoreValues();
+        }
+
+        private void WriteValues_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Write button click");
+            PropChanger.WriteValues();
         }
 
         private void SearchValues_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Search button click");
-            //_propChanger = ((PropertyChanger)this.DataContext);
-            //_propChanger.ProceedValues();
             PropChanger.ProceedValues();
         }
     }
