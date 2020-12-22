@@ -7,43 +7,71 @@
              mc:Ignorable="d" 
              xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <UserControl.Resources>
+        <Style TargetType="Border" x:Key="borderColor">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush"  Value="#FF9B4B4B"/>
+            <Setter Property="Padding" Value="2"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid Margin="2">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="0"
+                Style="{StaticResource borderColor}"
+                
+                CornerRadius="3, 3, 0, 0" Background="#FFD2E4FF">
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Text="{Binding PartName, FallbackValue=No name}"/>
-        </Grid>
-        
-        <ListBox
-            ItemsSource="{Binding SwPropList.Values}"
-            Grid.Row="1"
-            x:Name="PartProps"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Stretch"
-            ScrollViewer.CanContentScroll="False"
-            ScrollViewer.VerticalScrollBarVisibility="Disabled"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <TextBlock 
+                    Grid.ColumnSpan="2"
+                    FontSize="14" Foreground="Black"
+                    Text="{Binding PartName, FallbackValue=No name}"/>
+            </Grid>
+        </Border>
 
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    <Setter Property="Focusable" Value="False"/>
-                </Style>
-            </ListBox.ItemContainerStyle>
+        <Border Grid.Row="1"
+                Style="{StaticResource borderColor}"
+                BorderThickness="2, 0, 2, 2" 
+                CornerRadius="0, 0, 3, 3">
+            <Border.BorderBrush>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF913D3D" Offset="0"/>
+                    <GradientStop Color="#4C913D3D" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.BorderBrush>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <propertyfield:ChangePropertyField/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
 
-        </ListBox>
+            <ListBox
+                ItemsSource="{Binding SwPropList.Values}"
+                
+                x:Name="PartProps"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                ScrollViewer.CanContentScroll="False"
+                ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Focusable" Value="False"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <propertyfield:ChangePropertyField/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </Border>
     </Grid>
 </UserControl>
