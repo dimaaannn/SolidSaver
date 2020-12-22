@@ -159,51 +159,48 @@
                     ShowGridLines="True">
                     <Grid.RowDefinitions>
                         <RowDefinition />
-                        <RowDefinition Height="200"/>
                     </Grid.RowDefinitions>
 
 
-                    <!--#region Property object-->
-                    <ListBox 
-                        HorizontalAlignment="Stretch"
-                        HorizontalContentAlignment="Stretch"
-                        ScrollViewer.CanContentScroll="False"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                        Name="PropertyBox">
-
-                        <!--#region Disable selection-->
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="Focusable" Value="False"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <!--#endregion-->
-
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <propert:PropControl/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <!--#endregion-->
+                    
 
                     <!--#region TAB-->
                     <TabControl 
-                        Grid.Row="1"
+                        Grid.Row="0"
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch">
 
                         <TabItem Header="TabItem1">
 
-                            <propertyfield:PropertyChangerTab x:Name="PropertyTab"/>
+                            <!--#region Property object-->
+                            <ListBox 
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                ScrollViewer.CanContentScroll="False"
+                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                Name="PropertyBox"> 
+
+                                <!--#region Disable selection-->
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="Focusable" Value="False"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <!--#endregion-->
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <propert:PropControl/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <!--#endregion-->
+
                         </TabItem>
                         
-                        <TabItem Header="TabItem2">
-                            <Grid Background="#FFE5E5E5">
-
-
-                            </Grid>
+                        <TabItem Header="Замена">
+                            <propertyfield:PropertyChangerTab x:Name="PropertyTab"/>
                         </TabItem>
                     </TabControl>
                     <!--#endregion-->
