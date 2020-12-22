@@ -20,6 +20,7 @@ namespace SWAPIlib.PropertyObj
         bool IsReplaced { get; }
         string ReplaceResult { get; }
         bool UseRegExp { get; set; }
+        bool RegisterSensitive { get; set; }
     }
 
     public class TextReplacer : ITextReplacer
@@ -56,6 +57,8 @@ namespace SWAPIlib.PropertyObj
             }
         }
         private bool _useRegExp;
+
+        public bool RegisterSensitive { get; set; } = false;
 
         public bool Replace(string input)
         {

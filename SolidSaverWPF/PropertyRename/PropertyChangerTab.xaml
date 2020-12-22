@@ -49,6 +49,7 @@
                 <CheckBox
                     VerticalAlignment="Center" Margin="2"
                     Grid.Column="1" Grid.Row="0"
+                    IsChecked="{Binding UseRegExp}"
                     x:Name="CaseSensive">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="уч.регистр"/>
                 </CheckBox>
@@ -56,6 +57,7 @@
                 <CheckBox
                     VerticalAlignment="Center" Margin="2"
                     Grid.Column="1" Grid.Row="1"
+                    IsChecked="{Binding AllConfigurations}"
                     x:Name="AllConf">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="все конфиг"/>
                 </CheckBox>

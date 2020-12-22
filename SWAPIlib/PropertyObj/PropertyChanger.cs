@@ -17,6 +17,7 @@ namespace SWAPIlib.PropertyObj
         string SearchValue { get; set; }
         string NewValue { get; set; }
         bool UseRegExp { get; set; }
+        bool CaseSensitive { get; set; }
         PropConstructor propConstructor {get;set;}
         void ProceedValues();
         void WriteValues();
@@ -95,6 +96,11 @@ namespace SWAPIlib.PropertyObj
         {
             get => textReplacer.UseRegExp;
             set => textReplacer.UseRegExp = value;
+        }
+        public bool CaseSensitive
+        {
+            get => textReplacer.RegisterSensitive;
+            set => textReplacer.RegisterSensitive = value;
         }
 
         public PropConstructor propConstructor { get; set; }
