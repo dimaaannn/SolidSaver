@@ -54,8 +54,8 @@ namespace SolidSaverWPF
             var propChanger = new PropertyChanger()
             {
                 propConstructor = constructor,
-                SearchValue = "test3",
-                NewValue = "test4",
+                SearchValue = "test4",
+                NewValue = "test5",
                 AllConfigurations = true,
                 UseRegExp = true
             };
@@ -64,6 +64,8 @@ namespace SolidSaverWPF
             {
                 propChanger.Components.Add(comp);
             }
+
+            PropertyTab.DataContext = propChanger;
 
             //PartProps.ItemsSource = propChanger.Properties;
 

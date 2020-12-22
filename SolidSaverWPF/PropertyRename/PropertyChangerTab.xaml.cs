@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SWAPIlib.PropertyObj;
 
 namespace SolidSaverWPF.PropertyRename
 {
@@ -20,9 +22,31 @@ namespace SolidSaverWPF.PropertyRename
     /// </summary>
     public partial class PropertyChangerTab : UserControl
     {
+        public PropertyChanger PropChanger
+        {
+            get
+            {
+                if (_propChanger == null)
+                    _propChanger = (PropertyChanger)this.DataContext;
+
+                return _propChanger;
+            }
+        }
+        protected PropertyChanger _propChanger;
         public PropertyChangerTab()
         {
             InitializeComponent();
+
+
+            SearchValues.Click += SearchValues_Click;
+        }
+
+        private void SearchValues_Click(object sender, RoutedEventArgs e)
+        {
+            Debug.WriteLine("Search button click");
+            //_propChanger = ((PropertyChanger)this.DataContext);
+            //_propChanger.ProceedValues();
+            PropChanger.ProceedValues();
         }
     }
 }
