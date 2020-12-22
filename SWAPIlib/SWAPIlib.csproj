@@ -50,6 +50,7 @@
     <Compile Include="PropertyObj\ComponentProp.cs" />
     <Compile Include="PropertyObj\PropertyTemplates.cs" />
     <Compile Include="PropertyObj\PropChangerUnit.cs" />
+    <Compile Include="PropertyObj\PropertyUI.cs" />
     <Compile Include="PropertyObj\TextReplacer.cs" />
     <Compile Include="VisualInterface\InterfaceObjects.cs" />
     <Compile Include="ModelObjects.cs" />
