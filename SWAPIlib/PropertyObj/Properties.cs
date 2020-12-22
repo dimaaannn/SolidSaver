@@ -146,6 +146,7 @@ namespace SWAPIlib
                 Debug.WriteLine($"AppPropertyBase - value changed {_tempPropertyValue}");
                 RaisePropertyChanged("IsModifyed");
                 RaisePropertyChanged("OldPropertyValue");
+                RaisePropertyChanged("PropertyValue");
             }
 
         }
