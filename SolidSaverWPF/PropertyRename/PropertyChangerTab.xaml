@@ -13,13 +13,49 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <!--#region ControlPanel-->
-        <Border BorderThickness="2" BorderBrush="Gray" CornerRadius="3" Height="52" Background="White">
-            <Grid Grid.Row="0" ShowGridLines="False" >
+        <!--#region PropertyUI-->
+        <Border x:Name="SetRegion" Grid.Row="0"
+                BorderThickness="2" BorderBrush="DarkRed" CornerRadius="3" Background="White">
+            <Grid ShowGridLines="True">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:Name="TextColumn"  MinWidth="80"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="3"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ListBox x:Name="PropName"
+                    ItemsSource="{Binding ConstructorDict.Keys, UpdateSourceTrigger=LostFocus}" 
+                          />
+                <Button
+                    Margin="1" Height="Auto"
+                    Grid.Column="3" Grid.RowSpan="2" 
+                    Name="ClearParts">
+                    <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Очистить"/>
+                </Button>
+                <Button
+                    Margin="1" Height="Auto"
+                    Grid.Column="2" Grid.RowSpan="2" 
+                    Name="LoadParts">
+                    <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Доб.детали"/>
+                </Button>
+
+            </Grid>
+        </Border>
+
+        <!--#endregion-->
+
+        <!--#region ControlPanel-->
+        <Border x:Name="ButtonBlock" DataContext="{Binding PropChanger}"
+            Grid.Row="1"
+            BorderThickness="2" BorderBrush="Gray" CornerRadius="3" Height="52" Background="White">
+            <Grid ShowGridLines="False" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="TextColumn"  MinWidth="80" Width="14*"/>
+                    <ColumnDefinition Width="43*"/>
                     <ColumnDefinition x:Name="CheckboxColumn" Width="Auto"/>
                     <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="50"/>
@@ -30,33 +66,33 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock
-                    Grid.Row="0" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3, 0"
-                    Foreground="LightGray" Text="Найти"/>
+                    Grid.Row="0" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3,4"
+                    Foreground="LightGray" Text="Найти" Grid.ColumnSpan="2"/>
                 <TextBox 
                     Grid.Row="0" VerticalAlignment="Stretch"
                     x:Name="SearchText"
                     Background="Transparent"
-                    Text="{Binding SearchValue}"/>
+                    Text="{Binding SearchValue}" Grid.ColumnSpan="2"/>
 
                 <TextBlock
-                    Grid.Row="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3, 0"
-                    Foreground="LightGray" Text="Заменить на"/>
+                    Grid.Row="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3,4"
+                    Foreground="LightGray" Text="Заменить на" Grid.ColumnSpan="2"/>
                 <TextBox
                     Grid.Row="1" VerticalAlignment="Stretch" Background="Transparent"
                     x:Name="ReplaceText"
-                    Text="{Binding NewValue}"/>
+                    Text="{Binding NewValue}" Grid.ColumnSpan="2"/>
 
                 <CheckBox
-                    VerticalAlignment="Center" Margin="2"
-                    Grid.Column="1" Grid.Row="0"
+                    VerticalAlignment="Center" Margin="2,4"
+                    Grid.Column="2" Grid.Row="0"
                     IsChecked="{Binding UseRegExp}"
                     x:Name="CaseSensive">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="уч.регистр"/>
                 </CheckBox>
 
                 <CheckBox
-                    VerticalAlignment="Center" Margin="2"
-                    Grid.Column="1" Grid.Row="1"
+                    VerticalAlignment="Center" Margin="2,4"
+                    Grid.Column="2" Grid.Row="1"
                     IsChecked="{Binding AllConfigurations}"
                     x:Name="AllConf">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="все конфиг"/>
@@ -64,32 +100,32 @@
 
                 <Button
                     Margin="1" Height="Auto"
-                    Grid.Column="3" Grid.RowSpan="2" 
+                    Grid.Column="4" Grid.RowSpan="2" 
                     Name="WriteValues">
                     <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Сохран знач"/>
                 </Button>
-                
+
                 <Button
                     Margin="1" Height="Auto"
-                    Grid.Column="2" Grid.Row="1"
+                    Grid.Column="3" Grid.Row="1"
                     Name="RestoreValues"
                     Content="Сброс"/>
-                
+
                 <Button
                     Margin="1" Height="Auto"
-                    Grid.Column="2" Grid.Row="0"
+                    Grid.Column="3" Grid.Row="0"
                     Name="SearchValues"
                     Content="Искать"/>
 
             </Grid>
         </Border>
         <!--#endregion-->
-        
+
         <!--#region PartList-->
-        <ListBox
+        <ListBox DataContext="{Binding PropChanger}"
             Foreground="#FFF3F3F3"
-            ItemsSource="{Binding Properties}"
-            Grid.Row="1"
+            ItemsSource="{Binding Properties, UpdateSourceTrigger=PropertyChanged}"
+            Grid.Row="2"
             x:Name="PartProps"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"

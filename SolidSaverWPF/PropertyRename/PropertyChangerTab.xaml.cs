@@ -22,25 +22,55 @@ namespace SolidSaverWPF.PropertyRename
     /// </summary>
     public partial class PropertyChangerTab : UserControl
     {
+
         public PropertyChanger PropChanger
         {
             get
             {
                 if (_propChanger == null)
-                    _propChanger = (PropertyChanger)this.DataContext;
+                    _propChanger = (PropertyChanger)ButtonBlock.DataContext;
 
                 return _propChanger;
             }
         }
         protected PropertyChanger _propChanger;
+
+        public IPropertyUI PropUi
+        {
+            get
+            {
+                if (_propUi == null)
+                    _propUi = (IPropertyUI)this.DataContext;
+
+                return _propUi;
+            }
+        }
+        protected IPropertyUI _propUi;
         public PropertyChangerTab()
         {
             InitializeComponent();
 
+            //PropUI buttons
+            LoadParts.Click += LoadParts_Click;
+            ClearParts.Click += ClearParts_Click;
 
+            //PropChanger buttons
             SearchValues.Click += SearchValues_Click;
             WriteValues.Click += WriteValues_Click;
             RestoreValues.Click += RenewValues_Click;
+
+            //tests
+            //PropUi.ConstructorName
+        }
+
+        private void ClearParts_Click(object sender, RoutedEventArgs e)
+        {
+            PropUi.ClearList();
+        }
+
+        private void LoadParts_Click(object sender, RoutedEventArgs e)
+        {
+            PropUi.LoadList();
         }
 
         private void RenewValues_Click(object sender, RoutedEventArgs e)

@@ -7,18 +7,19 @@ using System.Collections.ObjectModel;
 
 namespace SWAPIlib.PropertyObj
 {
-    interface IPropertyUI
+    public interface IPropertyUI
     {
         IEnumerable<IAppComponent> ComponentList { get; set; }
         string ConstructorName { get; set; }
         PropConstructor GetConstructor { get; }
-        PropertyChanger PropChanger { get; set; }
+        IPropertyChanger PropChanger { get; set; }
+        Dictionary<string, PropConstructor> ConstructorDict { get; set; }
 
         void ClearList();
         void LoadList();
     }
 
-    class PropertyUI : IPropertyUI
+    public class PropertyUI : IPropertyUI
     {
         public PropertyUI()
         {
@@ -34,7 +35,7 @@ namespace SWAPIlib.PropertyObj
         /// <summary>
         /// PropertyChanger object
         /// </summary>
-        public PropertyChanger PropChanger
+        public IPropertyChanger PropChanger
         {
             get
             {
@@ -50,7 +51,7 @@ namespace SWAPIlib.PropertyObj
             }
             set => _prorChanger = value;
         }
-        private PropertyChanger _prorChanger;
+        private IPropertyChanger _prorChanger;
 
         /// <summary>
         /// Заданное имя конструктора
@@ -74,7 +75,7 @@ namespace SWAPIlib.PropertyObj
         /// <summary>
         /// Словарь конструкторов свойств
         /// </summary>
-        private Dictionary<string, PropConstructor> ConstructorDict { get; set; }
+        public Dictionary<string, PropConstructor> ConstructorDict { get; set; }
         /// <summary>
         /// Список компонентов для генерации свойств
         /// </summary>
@@ -86,6 +87,7 @@ namespace SWAPIlib.PropertyObj
         public void ClearList()
         {
             PropChanger.Components.Clear();
+
         }
         public void LoadList()
         {

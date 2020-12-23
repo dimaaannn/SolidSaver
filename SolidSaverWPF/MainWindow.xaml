@@ -114,6 +114,7 @@
                 <ListView Name="PartsList"
                     Grid.Row="1"
                     Margin="5"
+                          MouseDoubleClick="PartsList_MouseDoubleClick"
                     SelectionMode="Extended" SelectionChanged="PartsList_SelectionChanged">
 
                     <ListView.View>

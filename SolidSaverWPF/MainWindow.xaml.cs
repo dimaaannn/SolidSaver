@@ -28,10 +28,17 @@ namespace SolidSaverWPF
         public IList<ISwProperty> PropList { get; set; }
         public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
         public AppComponent SelectedModel { get; set; }
+        public IPropertyUI PropUI { get; set; }
 
+        //Tests
+        /// <summary>
+        /// Выбранные компоненты для загрузки в список свойств
+        /// </summary>
+        public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
 
         public PropModifier TestProperty { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -42,13 +49,22 @@ namespace SolidSaverWPF
             SwAppControl.Connect();
             MainModel.GetMainModel();
 
-            //PartsList.ItemsSource = SwPartList;
             MainModel.GetSubComponents();
+
+            PropUI = new PropertyUI();
+            PropertyTab.DataContext = PropUI;
+
+
+            //Tests
+            PropUI.ComponentList = SelectedComp;
+            //PropUI.ConstructorDict.Keys
+            //PartsList.ItemsSource = SwPartList;
             PartsList.ItemsSource = SubComponents;
 
             MainModel.TopLevelOnly = true;
 
             //Component property tests
+            
 
             PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
             var propChanger = new PropertyChanger()
@@ -65,7 +81,7 @@ namespace SolidSaverWPF
                 propChanger.Components.Add(comp);
             }
 
-            PropertyTab.DataContext = propChanger;
+            //PropertyTab.DataContext = propChanger;
 
             //PartProps.ItemsSource = propChanger.Properties;
 
@@ -151,6 +167,16 @@ namespace SolidSaverWPF
         {
             MainModel.LoadActiveModel();
             MainModel.GetSubComponents();
+        }
+
+        private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var index = PartsList.SelectedIndex;
+            if (index >= 0)
+            {
+                var currentComp = SubComponents[index];
+                SelectedComp.Add(currentComp);
+            }
         }
     }
 
