@@ -97,7 +97,7 @@ namespace SWAPIlib.PropertyObj
             ret = regex.IsMatch(input);
 
             if (ret)
-                output = regex.Replace(input, replaceStr);
+                output = regex.Replace(input, replaceStr + "");
             else output = null;
 
             return ret;
