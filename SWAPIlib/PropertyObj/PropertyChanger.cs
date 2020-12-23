@@ -195,6 +195,11 @@ namespace SWAPIlib.PropertyObj
             {
                 RemoveComponent(e.OldItems[0] as AppComponent);
             }
+            else if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                Debug.WriteLine($"PropertyChanger Collection cleared");
+                Properties.Clear();
+            }
         }
 
     }
