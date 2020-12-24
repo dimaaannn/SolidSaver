@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
 
 namespace SWAPIlib.VisualInterface
 {
-    public interface IMainModel
+    public interface IMainModel : System.ComponentModel.INotifyPropertyChanged
     {
         /// <summary>
         /// Коренная модель
@@ -47,7 +48,7 @@ namespace SWAPIlib.VisualInterface
         /// </summary>
         /// <param name="pathToModel"></param>
         /// <returns></returns>
-        bool GetMainModel(string pathToModel);
+        bool GetMainModel(string pathToModel = null);
         /// <summary>
         /// Загружать компоненты только верхнего уровня
         /// </summary>

@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using SWAPIlib;
 using System.Collections.ObjectModel;
 using SWAPIlib.PropertyObj;
+using SWAPIlib.VisualInterface;
 
 namespace SolidSaverWPF
 {
@@ -24,9 +25,9 @@ namespace SolidSaverWPF
     public partial class MainWindow : Window
     {
 
-        public MainModel MainModel { get; set; }
+        public IMainModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get; set; }
-        public ObservableCollection<IAppComponent> SubComponents { get => MainModel.SubComponents2; }
+        public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
         public IPropertyUI PropUI { get; set; }
 
@@ -66,20 +67,20 @@ namespace SolidSaverWPF
             //Component property tests
             
 
-            PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
-            var propChanger = new PropertyChanger()
-            {
-                propConstructor = constructor,
-                SearchValue = "test4",
-                NewValue = "test5",
-                AllConfigurations = true,
-                UseRegExp = true
-            };
+            //PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
+            //var propChanger = new PropertyChanger()
+            //{
+            //    propConstructor = constructor,
+            //    SearchValue = "test4",
+            //    NewValue = "test5",
+            //    AllConfigurations = true,
+            //    UseRegExp = true
+            //};
 
-            foreach (var comp in SubComponents)
-            {
-                propChanger.Components.Add(comp);
-            }
+            //foreach (var comp in SubComponents)
+            //{
+            //    propChanger.Components.Add(comp);
+            //}
 
             //PropertyTab.DataContext = propChanger;
 
