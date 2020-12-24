@@ -61,6 +61,10 @@ namespace SolidSaverWPF.PropertyRename
 
             //tests
             //PropUi.ConstructorName
+            string test = "";
+            PropName.SelectedItem = test;
+            //PropName.ItemsSource = testList;
+
         }
 
         private void ClearParts_Click(object sender, RoutedEventArgs e)

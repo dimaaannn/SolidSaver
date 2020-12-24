@@ -26,10 +26,11 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <ListBox x:Name="PropName"
-                    ItemsSource="{Binding ConstructorDict.Keys, UpdateSourceTrigger=LostFocus}" 
-                          />
+                
+                <ComboBox Grid.Column="0" Name="PropName" 
+                    Height="25" IsReadOnly="True"
+                    ItemsSource="{Binding ConstructorDict.Keys, Mode=OneTime}"/>
+                
                 <Button
                     Margin="1" Height="Auto"
                     Grid.Column="3" Grid.RowSpan="2" 
@@ -42,6 +43,8 @@
                     Name="LoadParts">
                     <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Доб.детали"/>
                 </Button>
+
+                
 
             </Grid>
         </Border>
