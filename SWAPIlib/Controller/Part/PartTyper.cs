@@ -51,7 +51,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Находится в подпапке основной сборки
         /// </summary>
-        bool InAssemblyFolder { get; }
+        bool InRootFolder { get; }
 
     }
 
@@ -78,7 +78,7 @@ namespace SWAPIlib.Controller
         public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
         public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
         public bool IsHaveDrawing => CheckDrawing(Appmodel.Path);
-        public bool InAssemblyFolder => throw new NotImplementedException();
+        public bool InRootFolder => throw new NotImplementedException();
 
         /// <summary>
         /// Проверить существование чертежа с тем же именем в папке
