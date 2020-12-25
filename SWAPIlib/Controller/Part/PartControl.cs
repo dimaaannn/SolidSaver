@@ -16,7 +16,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Объект выделения
         /// </summary>
-        object Selector { get; }
+        object Typer { get; }
         /// <summary>
         /// Тип детали
         /// </summary>
@@ -29,6 +29,7 @@ namespace SWAPIlib.Controller
 
     public interface IComponentControl : IPartControl<IAppComponent>
     {
+        int SubComponentCount { get; }
         /// <summary>
         /// Дочерние компоненты
         /// </summary>
@@ -39,6 +40,10 @@ namespace SWAPIlib.Controller
         string RefConfig { get; }
     }
 
+    /// <summary>
+    /// Контроллер моделей
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PartControl<T> : IPartControl<T>
         where T : ISwModel
     {
@@ -49,10 +54,11 @@ namespace SWAPIlib.Controller
         public PartControl(T part)
         {
             Appmodel = part;
+            Typer = new Object();
         }
         public bool IsSelected { get; set; } = false;
         public T Appmodel { get; set; }
-        public object Selector { get; }
+        public object Typer { get; }
         public AppDocType PartType => Appmodel.DocType;
         public string Title => Appmodel.Title;
         public override string ToString()
@@ -62,6 +68,9 @@ namespace SWAPIlib.Controller
         
     }
 
+    /// <summary>
+    /// Контроллер компонентов сборки
+    /// </summary>
     public class ComponentControl : PartControl<IAppComponent>, IComponentControl
     {
         public ComponentControl(IAppComponent component) : base(component) { }
@@ -70,28 +79,24 @@ namespace SWAPIlib.Controller
         {
             get
             {
-                if (_subComponents != null)
-                    return _subComponents;
-
-                _subComponents = new List<IComponentControl>();
-
-                if (Appmodel is IAppComponent mainComponent)
+                if (_subComponents == null)
                 {
-                    if (mainComponent.GetChildrenCount() <= 0)
-                        return _subComponents;
-                    else
+                    _subComponents = new List<IComponentControl>();
+                    if(SubComponentCount > 0)
                     {
-                        foreach (var component in mainComponent.GetComponents(true))
+                        foreach (var component in Appmodel.GetComponents(true))
                         {
                             _subComponents.Add(new ComponentControl(component));
                         }
                     }
-
                 }
                 return _subComponents;
             }
         }
         public string RefConfig => Appmodel.RefConfigName;
+
+        public int SubComponentCount => PartType == AppDocType.swASM ?
+            Appmodel.GetChildrenCount() : 0;
 
         public override string ToString()
         {
