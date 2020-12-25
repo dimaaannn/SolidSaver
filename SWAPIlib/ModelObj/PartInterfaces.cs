@@ -31,12 +31,18 @@ namespace SWAPIlib
         /// Close file event
         /// </summary>
         event EventHandler<SwEventArgs> CloseFile;
+        /// <summary>
+        /// Набор глобальных свойств
+        /// </summary>
         IFileModelProp GlobalModelProp { get; }
         /// <summary>
         /// Список свойств модели
         /// </summary>
         List<ISwProperty> PropList { get;}  //TODO create propList class
         bool VisibState { get; set; }
+        /// <summary>
+        /// Список конфигураций
+        /// </summary>
         List<string> ConfigList { get; }
     }
 
@@ -83,7 +89,7 @@ namespace SWAPIlib
         
     }
 
-    public interface IAppComponent         
+    public interface IAppComponent :ISwModel
     {
         /// <summary>
         /// Класс детали
@@ -101,10 +107,6 @@ namespace SWAPIlib
         /// Имя связанной конфигурации
         /// </summary>
         string RefConfigName { get; set; }
-        /// <summary>
-        /// Статус отображения компонента
-        /// </summary>
-        bool VisibState { get; set; }
         /// <summary>
         /// Исключено из спецификации
         /// </summary>
@@ -130,42 +132,7 @@ namespace SWAPIlib
         /// </summary>
         /// <returns></returns>
         int GetChildrenCount();
-        /// <summary>
-        /// Список конфигураций
-        /// </summary>
-        List<string> ConfigList { get; }
-        /// <summary>
-        /// Набор свойств
-        /// </summary>
-        List<ISwProperty> PropList { get; }
-        /// <summary>
-        /// Набор глобальных свойств
-        /// </summary>
-        IFileModelProp GlobalModelProp { get; set; }
-        /// <summary>
-        /// наименование
-        /// </summary>
-        string Title { get; }
-        /// <summary>
-        /// Имя файла
-        /// </summary>
-        string FileName { get; }
-        /// <summary>
-        /// Папка с файлом
-        /// </summary>
-        string Path { get; }
-        /// <summary>
-        /// Тип детали
-        /// </summary>
-        AppDocType DocType { get; }
-        /// <summary>
-        /// Модель
-        /// </summary>
-        ModelDoc2 SwModel { get; }
-        /// <summary>
-        /// Существование модели
-        /// </summary>
-        bool IsExist { get; }
+
     }
 
     public interface ISwPart : ISwModel, IConfProperty

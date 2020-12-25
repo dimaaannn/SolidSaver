@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace SWAPIlib
 {
-    public class AppComponent : ISwModel, IAppComponent
+    public class AppComponent : IAppComponent
     {
         public virtual bool IsExist { get; private set; }
         public AppModel PartModel => _appModel;
