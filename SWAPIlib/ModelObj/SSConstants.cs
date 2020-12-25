@@ -15,15 +15,6 @@ namespace SWAPIlib
         swCOMPONENT = 5
     }
 
-    public enum AppPartType
-    {
-        NOTPART,
-        ASMPART,
-        LIBPART,
-        IMPORTPART,
-        PROJECTPART,
-        SHEETPART
-    }
     
     /// <summary>
     /// Статус отображения компонента
