@@ -65,13 +65,7 @@ namespace SWAPIlib.VisualInterface
 
     }
 
-    public interface IComponentSelector<T> where T:ISwModel
-    {
-        T Appmodel { get; set; }
-        bool IsSelected { get; set; }
-        string Title { get; }
-        AppPartType PartType { get; }
-        
+ 
 
-    }
+
 }

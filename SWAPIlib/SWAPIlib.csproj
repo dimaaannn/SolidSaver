@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Part\PartControl.cs" />
     <Compile Include="ModelObj\ComponentCl.cs" />
     <Compile Include="PropertyObj\PropertyChanger.cs" />
     <Compile Include="PropertyObj\ComponentProp.cs" />
