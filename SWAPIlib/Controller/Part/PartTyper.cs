@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SWAPIlib.Controller
 {
@@ -49,9 +50,9 @@ namespace SWAPIlib.Controller
         /// </summary>
         bool IsHaveDrawing { get; }
         /// <summary>
-        /// Находится в подпапке основной сборки
+        /// Имя внутренней папки проекта относительно главной сборки
         /// </summary>
-        bool InRootFolder { get; }
+        string RootSubFolder { get; }
 
     }
 
@@ -78,7 +79,19 @@ namespace SWAPIlib.Controller
         public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
         public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
         public bool IsHaveDrawing => CheckDrawing(Appmodel.Path);
-        public bool InRootFolder => throw new NotImplementedException();
+        public string RootSubFolder
+        {
+            get
+            {
+                string rootModelFolder = SWAPIlib.GlobalOptions.ModelRootFolder;
+                if (Appmodel.Path.ToLowerInvariant().
+                    Contains(rootModelFolder.ToLowerInvariant()))
+                {
+                    return Appmodel.Path.Replace(rootModelFolder + "\\", "");
+                }
+                else return null;
+            }
+        }
 
         /// <summary>
         /// Проверить существование чертежа с тем же именем в папке
