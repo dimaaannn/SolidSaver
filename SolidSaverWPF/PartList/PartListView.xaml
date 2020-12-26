@@ -7,6 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="250">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ListView x:Name="PartListView"
+            Grid.Row="1">
+            <ListItem/>
+            <ListItem/>
+            <ListItem/>
+            <ListItem/>
+        </ListView>
     </Grid>
 </UserControl>
