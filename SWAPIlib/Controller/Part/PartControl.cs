@@ -16,7 +16,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Объект выделения
         /// </summary>
-        object Typer { get; }
+        IPartTyper Parttyper { get; }
         /// <summary>
         /// Тип детали
         /// </summary>
@@ -54,11 +54,13 @@ namespace SWAPIlib.Controller
         public PartControl(T part)
         {
             Appmodel = part;
-            Typer = new Object();
+
+            if(part.SwModel != null)
+                Parttyper = new PartTyper(part);
         }
         public bool IsSelected { get; set; } = false;
         public T Appmodel { get; set; }
-        public object Typer { get; }
+        public IPartTyper Parttyper { get; }
         public AppDocType PartType => Appmodel.DocType;
         public string Title => Appmodel.Title;
         public override string ToString()

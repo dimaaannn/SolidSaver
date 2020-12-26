@@ -8,15 +8,15 @@ using System.Text.RegularExpressions;
 
 namespace SWAPIlib.Controller
 {
-    public enum AppPartType
-    {
-        NOTPART,
-        ASMPART,
-        LIBPART,
-        IMPORTPART,
-        PROJECTPART,
-        SHEETPART
-    }
+    //public enum AppPartType
+    //{
+    //    NOTPART,
+    //    ASMPART,
+    //    LIBPART,
+    //    IMPORTPART,
+    //    PROJECTPART,
+    //    SHEETPART
+    //}
 
     public interface IPartTyper
     {
@@ -56,15 +56,30 @@ namespace SWAPIlib.Controller
 
     }
 
+    //TODO add fix to partTyper with virtual or hidden part
     public class PartTyper : IPartTyper
     {
-        public ISwModel Appmodel => throw new NotImplementedException();
+        /// <summary>
+        /// Main constructor
+        /// </summary>
+        /// <param name="imodel"></param>
+        public PartTyper(ISwModel imodel)
+        {
+            Appmodel = imodel;
+
+        }
+        public PartTyper(IPartControl<ISwModel> partcontrol) : this(partcontrol.Appmodel) { }
+
+        public ISwModel Appmodel { get; set; }
 
         /// <summary>
-        /// Группы выделения
+        /// Выделение объекта
         /// </summary>
+        #region свойства выделения объекта
+        ///Количество групп выделений
+        public static int SelectionArrayLength = 10;
         System.Collections.BitArray _selectionInGroup =
-            new System.Collections.BitArray(10);
+            new System.Collections.BitArray(SelectionArrayLength);
         public bool IsSelected { 
             get => _selectionInGroup[GroupNumber]; 
             set => _selectionInGroup[GroupNumber] = value; }
@@ -74,7 +89,8 @@ namespace SWAPIlib.Controller
             get => Math.Min(_groupNumber, _selectionInGroup.Length - 1);
             set => _groupNumber = Math.Min(value, _selectionInGroup.Length - 1);
         }
-
+        #endregion
+        
         public bool IsPart => Appmodel.DocType == AppDocType.swPART;
         public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
         public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
