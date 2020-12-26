@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\ComponentList\MainPartList.cs" />
+    <Compile Include="Controller\MainModel\MainControl.cs" />
     <Compile Include="Controller\Part\PartControl.cs" />
     <Compile Include="Controller\Part\PartTyper.cs" />
     <Compile Include="ModelObj\ComponentCl.cs" />

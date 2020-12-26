@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Controller
 {
-    public interface IPartControl<T> where T : ISwModel
+    public interface IPartControl<out T> where T: ISwModel
     {
         bool IsSelected { get; set; }
         /// <summary>
         /// Модель детали
         /// </summary>
-        T Appmodel { get; set; }
+        T Appmodel { get; }
         /// <summary>
         /// Объект выделения
         /// </summary>
@@ -44,8 +44,7 @@ namespace SWAPIlib.Controller
     /// Контроллер моделей
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PartControl<T> : IPartControl<T>
-        where T : ISwModel
+    public class PartControl<T> : IPartControl<T> where T:ISwModel
     {
         /// <summary>
         /// PartControl constructor
@@ -58,9 +57,11 @@ namespace SWAPIlib.Controller
             if(part.SwModel != null)
                 Parttyper = new PartTyper(part);
         }
+
+        public PartControl() { }
         public bool IsSelected { get; set; } = false;
-        public T Appmodel { get; set; }
-        public IPartTyper Parttyper { get; }
+        public  virtual T Appmodel { get; set; }
+        public IPartTyper Parttyper { get; protected set; }
         public AppDocType PartType => Appmodel.DocType;
         public string Title => Appmodel.Title;
         public override string ToString()

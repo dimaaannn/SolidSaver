@@ -167,9 +167,10 @@
 
                     <!--#region TAB-->
                     <TabControl 
+                        x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch">
+                        VerticalAlignment="Stretch" SelectedIndex="2">
 
                         <TabItem Header="TabItem1">
 
@@ -202,6 +203,16 @@
                         
                         <TabItem Header="Замена">
                             <propertyfield:PropertyChangerTab x:Name="PropertyTab"/>
+                        </TabItem>
+                        <TabItem Header="PartList">
+                            <!--#region Property object-->
+
+                            <ListView 
+                                SelectedIndex="{Binding TestPartList.SelectionNum}"
+                                Name="PartSelectionList">
+                                
+                            </ListView>
+                            <!--#endregion-->
                         </TabItem>
                     </TabControl>
                     <!--#endregion-->

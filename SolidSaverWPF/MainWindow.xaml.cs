@@ -16,6 +16,8 @@ using SWAPIlib;
 using System.Collections.ObjectModel;
 using SWAPIlib.PropertyObj;
 using SWAPIlib.VisualInterface;
+using SWAPIlib.Controller;
+
 
 namespace SolidSaverWPF
 {
@@ -38,7 +40,8 @@ namespace SolidSaverWPF
         public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
 
-        public PropModifier TestProperty { get; set; }
+        public PartList<IAppComponent> 
+            TestPartList { get; set; }
 
         public MainWindow()
         {
@@ -54,18 +57,23 @@ namespace SolidSaverWPF
 
             PropUI = new PropertyUI();
             PropertyTab.DataContext = PropUI;
+            PartsList.ItemsSource = SubComponents;
 
 
             //Tests
-            PropUI.ComponentList = SelectedComp;
             //PropUI.ConstructorDict.Keys
             //PartsList.ItemsSource = SwPartList;
-            PartsList.ItemsSource = SubComponents;
 
-            
+            TestPartList = new PartList<IAppComponent>();
+            foreach (var appcomp in SubComponents)
+            {
+                var temp = new ComponentControl(appcomp);
+                TestPartList.PartCollection.Add(temp);
+                //TestPartList.SelectionNum
+            }
+            PartSelectionList.ItemsSource = TestPartList.PartCollection;
 
-            
-
+            System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
         }
 
 
