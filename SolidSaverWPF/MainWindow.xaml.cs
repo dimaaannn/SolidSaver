@@ -39,6 +39,7 @@ namespace SolidSaverWPF
         /// </summary>
         public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
+        public ThreePartList ThreePart { get; set; }
 
         public PartList<IAppComponent> 
             TestPartList { get; set; }
@@ -52,13 +53,21 @@ namespace SolidSaverWPF
 
             SwAppControl.Connect();
             MainModel.GetMainModel();
-
+            MainModel.TopLevelOnly = true;
             MainModel.GetSubComponents();
 
             PropUI = new PropertyUI();
             PropertyTab.DataContext = PropUI;
             PartsList.ItemsSource = SubComponents;
 
+            ThreePart = new ThreePartList();
+            foreach (var comp in SubComponents)
+            {
+                ThreePart.SubComponentsPartList.Add(new ThreePartList(comp));
+            }
+
+            TestThreeview.ItemsSource = ThreePart.SubComponentsPartList;
+            //threPL.DataContext = ThreePart;
 
             //Tests
             //PropUI.ConstructorDict.Keys
@@ -71,6 +80,9 @@ namespace SolidSaverWPF
                 TestPartList.PartCollection.Add(temp);
                 //TestPartList.SelectionNum
             }
+
+            
+
             PartSelectionList.ItemsSource = TestPartList.PartCollection;
 
             System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);

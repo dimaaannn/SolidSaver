@@ -12,12 +12,14 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <ListView x:Name="PartListView"
+        <TreeView x:Name="TreePartView"
             Grid.Row="1">
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-            <ListItem/>
-        </ListView>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding SubComponentsPartList}">
+                    <TextBlock Text="{Binding Title}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            
+        </TreeView>
     </Grid>
 </UserControl>

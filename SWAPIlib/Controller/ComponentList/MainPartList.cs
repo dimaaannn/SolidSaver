@@ -39,6 +39,10 @@ namespace SWAPIlib.Controller
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        /// <summary>
+        /// Test thread selection
+        /// </summary>
+        /// <param name="state"></param>
         public void ChangeSelection(object state)
         {
             for (int i = 0; i < 50; i++)
@@ -46,6 +50,43 @@ namespace SWAPIlib.Controller
                 SelectionNum = i % 10;
                 System.Threading.Thread.Sleep(1000);
             }
+        }
+    }
+
+    public class ThreePartList : INotifyPropertyChanged
+    {
+        public ThreePartList()
+        {
+            _subComponentsPartList = new ObservableCollection<ThreePartList>();
+        }
+        public ThreePartList(IAppComponent component) : this()
+        {
+            Component = component;
+        }
+        public IAppComponent Component { get; }
+        public int? ChildrenCount { get => Component?.GetChildrenCount(); }
+        private ObservableCollection<ThreePartList> _subComponentsPartList;
+        public ObservableCollection<ThreePartList> SubComponentsPartList
+        {
+            get
+            {
+                if(_subComponentsPartList.Count == 0 && ChildrenCount > 0)
+                {
+                    foreach (var comp in Component.GetComponents(true))
+                    {
+                        _subComponentsPartList.Add(new ThreePartList(comp));
+                    }
+                }
+                return _subComponentsPartList;
+            }
+        }
+        public string Title => Component.Title;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

@@ -9,6 +9,7 @@
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
+        xmlns:partlist="clr-namespace:SolidSaverWPF.PartList"
         Title="MainWindow" Height="500" Width="674" MinWidth="350">
     <Window.Resources>
         <!--#region Button style-->
@@ -170,7 +171,7 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="2">
+                        VerticalAlignment="Stretch" SelectedIndex="3">
 
                         <TabItem Header="TabItem1">
 
@@ -210,10 +211,25 @@
                             <ListView 
                                 SelectedIndex="{Binding TestPartList.SelectionNum}"
                                 Name="PartSelectionList">
-                                
+
                             </ListView>
                             <!--#endregion-->
                         </TabItem>
+                        <TabItem Header="PartList2">
+                            <!--#region Property object-->
+                            <!--<partlist:PartListView x:Name="threPL" DataContext="{Binding ThreePart}"/>-->
+                            <TreeView x:Name="TestThreeview"
+                                    Grid.Row="1">
+                                <TreeView.ItemTemplate>
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SubComponentsPartList}">
+                                        <TextBlock Text="{Binding Title}"/>
+                                    </HierarchicalDataTemplate>
+                                </TreeView.ItemTemplate>
+
+                            </TreeView>
+                            <!--#endregion-->
+                        </TabItem>
+
                     </TabControl>
                     <!--#endregion-->
 
