@@ -4,21 +4,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.PartList"
+             
+             xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
+             
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="250">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="150"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
+        <TreeView Grid.Row="0">
+            <TreeViewItem >
+            <TreeViewItem Header="Jesper"/>
+                <TreeViewItem Header="Aaberg"/>
+                <TreeViewItem Header="12345"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Employee2">
+                <TreeViewItem Header="Dominik"/>
+                <TreeViewItem Header="Paiha"/>
+                <TreeViewItem Header="98765"/>
+            </TreeViewItem>
+        </TreeView>
+        
         <TreeView x:Name="TreePartView"
             Grid.Row="1">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding SubComponentsPartList}">
+                <HierarchicalDataTemplate DataType="{x:Type partcontroller:ThreePartList}" ItemsSource="{Binding SubComponentsPartList}">
                     <TextBlock Text="{Binding Title}"/>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+            
+            
             
         </TreeView>
     </Grid>
