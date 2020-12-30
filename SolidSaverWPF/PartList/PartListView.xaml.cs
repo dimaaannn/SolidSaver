@@ -23,6 +23,7 @@ namespace SolidSaverWPF.PartList
         public PartListView()
         {
             InitializeComponent();
+            
         }
     }
 }

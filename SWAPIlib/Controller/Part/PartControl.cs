@@ -47,9 +47,7 @@ namespace SWAPIlib.Controller
         public PartControl(T part)
         {
             Appmodel = part;
-
-            if (part.SwModel != null)
-                Parttyper = new PartTyper(part);
+            Parttyper = new PartTyper(part);
         }
 
         public PartControl() { }

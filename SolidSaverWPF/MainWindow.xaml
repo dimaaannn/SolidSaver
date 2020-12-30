@@ -10,6 +10,8 @@
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.PartList"
+
+        xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
         Title="MainWindow" Height="500" Width="674" MinWidth="350">
     <Window.Resources>
         <!--#region Button style-->
@@ -205,32 +207,10 @@
                         <TabItem Header="Замена">
                             <propertyfield:PropertyChangerTab x:Name="PropertyTab"/>
                         </TabItem>
-                        <TabItem Header="PartList">
+                        <TabItem Header="PartList" HorizontalContentAlignment="Stretch">
                             <!--#region Property object-->
-                            <Grid x:Name="TestComponent"
-                                
-                                ShowGridLines="True" Height="30" Background="Beige">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Title, FallbackValue=No data}"/>
-                                <CheckBox 
-                                    Grid.Column="1"
-                                    Margin="5, 0" 
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    IsChecked="{Binding IsSelected}"/>
-                                <TextBlock
-                                    Grid.Column="2" Margin="2, 0"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    Text="{Binding PartType, FallbackValue=SomeInfo}"/>
 
-                            </Grid>
+                            <partlist:PartListView x:Name="TestPartView"/>
 
                             <!--#endregion-->
                         </TabItem>

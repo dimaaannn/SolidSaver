@@ -6,38 +6,38 @@
              xmlns:local="clr-namespace:SolidSaverWPF.PartList"
              
              xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
-             
+             HorizontalContentAlignment="Stretch"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="250">
-    <Grid>
+    <Grid x:Name="testgrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <TreeView Grid.Row="0">
-            <TreeViewItem >
-            <TreeViewItem Header="Jesper"/>
-                <TreeViewItem Header="Aaberg"/>
-                <TreeViewItem Header="12345"/>
-            </TreeViewItem>
-            <TreeViewItem Header="Employee2">
-                <TreeViewItem Header="Dominik"/>
-                <TreeViewItem Header="Paiha"/>
-                <TreeViewItem Header="98765"/>
-            </TreeViewItem>
-        </TreeView>
-        
-        <TreeView x:Name="TreePartView"
-            Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" x:Name="firstRow"/>
+            <ColumnDefinition x:Name="secondRow"/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="{Binding ElementName=testgrid, Path=ActualWidth}" x:Name="wwwd"/>
+            <TextBlock Text="{Binding ElementName=TreePartView, Path=ActualWidth}"/>
+            
+        </StackPanel>
+
+        <TreeView x:Name="TreePartView" 
+            Grid.Row="1" Grid.ColumnSpan="2">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type partcontroller:ThreePartList}" ItemsSource="{Binding SubComponentsPartList}">
-                    <TextBlock Text="{Binding Title}"/>
+                <HierarchicalDataTemplate DataType="{x:Type partcontroller:ComponentControl}"  
+                        ItemsSource="{Binding SubComponents}">
+
+                    <local:ComponentRow/>
+
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            
-            
-            
         </TreeView>
     </Grid>
 </UserControl>

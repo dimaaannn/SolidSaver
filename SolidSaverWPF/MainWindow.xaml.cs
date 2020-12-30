@@ -68,10 +68,10 @@ namespace SolidSaverWPF
             {
                 CompControlList.Add(new ComponentControl(comp));
             }
+            TestPartView.TreePartView.ItemsSource = CompControlList;
+            //TestThreeview.ItemsSource = CompControlList;
 
-            TestThreeview.ItemsSource = CompControlList;
 
-            TestComponent.DataContext = CompControlList[0];
 
             //CompControlList[0].PartType
             //threPL.DataContext = ThreePart;
