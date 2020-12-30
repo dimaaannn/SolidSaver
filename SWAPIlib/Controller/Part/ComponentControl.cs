@@ -35,7 +35,7 @@ namespace SWAPIlib.Controller
     {
         public ComponentControl(IAppComponent component) : base(component) { }
 
-        public int SubComponentCount => PartType == AppDocType.swASM ?
+        public virtual int SubComponentCount => PartType == AppDocType.swASM ?
             Appmodel.GetChildrenCount() : 0;
         ObservableCollection<IComponentControl> _subComponents = null;
         public ObservableCollection<IComponentControl> SubComponents
@@ -67,5 +67,13 @@ namespace SWAPIlib.Controller
         {
             return $"{Title}:{PartType}";
         }
+    }
+
+    public class ComponentAssembly : ComponentControl
+    {
+        public ComponentAssembly(IAppComponent component) : base(component) { }
+        public new AppAssembly PartModel => Appmodel.PartModel as AppAssembly;
+        public override int SubComponentCount => PartModel.ComponentCount(true);
+        public string TestAssemblyProperty { get; set; } = "All fine";
     }
 }
