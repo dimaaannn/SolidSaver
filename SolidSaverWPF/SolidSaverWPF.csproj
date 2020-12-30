@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PartList\ComponentRow.xaml.cs">
+      <DependentUpon>ComponentRow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PartList\PartListView.xaml.cs">
       <DependentUpon>PartListView.xaml</DependentUpon>
     </Compile>
@@ -82,6 +85,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PartList\ComponentRow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PartList\PartListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

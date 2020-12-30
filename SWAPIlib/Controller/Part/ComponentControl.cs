@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
+
+
 namespace SWAPIlib.Controller
 {
 
@@ -62,11 +65,15 @@ namespace SWAPIlib.Controller
         public bool IsSuppressed =>
             Appmodel?.SuppressionState != AppSuppressionState.Resolved ||
             Appmodel?.SuppressionState != AppSuppressionState.FullyResolved;
+        public override string Title => TitleFilter.Replace(base.Title, "");
 
         public override string ToString()
         {
             return $"{Title}:{PartType}";
         }
+
+        protected static Regex TitleFilter =
+            new Regex(@"^.*[\/]", RegexOptions.Compiled);
     }
 
     public class ComponentAssembly : ComponentControl

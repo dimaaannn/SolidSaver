@@ -40,6 +40,7 @@ namespace SolidSaverWPF
         public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
         public ThreePartList ThreePart { get; set; }
+        public ObservableCollection<ComponentControl> CompControlList;
 
         public PartList<IAppComponent> 
             TestPartList { get; set; }
@@ -60,13 +61,19 @@ namespace SolidSaverWPF
             PropertyTab.DataContext = PropUI;
             PartsList.ItemsSource = SubComponents;
 
+            CompControlList = new ObservableCollection<ComponentControl>();
+
             ThreePart = new ThreePartList();
             foreach (var comp in SubComponents)
             {
-                ThreePart.SubComponentsPartList.Add(new ThreePartList(comp));
+                CompControlList.Add(new ComponentControl(comp));
             }
 
-            TestThreeview.ItemsSource = ThreePart.SubComponentsPartList;
+            TestThreeview.ItemsSource = CompControlList;
+
+            TestComponent.DataContext = CompControlList[0];
+
+            //CompControlList[0].PartType
             //threPL.DataContext = ThreePart;
 
             //Tests
@@ -83,9 +90,9 @@ namespace SolidSaverWPF
 
             
 
-            PartSelectionList.ItemsSource = TestPartList.PartCollection;
-
-            System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
+            
+            //Run new thread
+            //System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
         }
 
 

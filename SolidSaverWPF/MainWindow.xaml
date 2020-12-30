@@ -171,7 +171,7 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="3">
+                        VerticalAlignment="Stretch" SelectedIndex="2">
 
                         <TabItem Header="TabItem1">
 
@@ -207,12 +207,31 @@
                         </TabItem>
                         <TabItem Header="PartList">
                             <!--#region Property object-->
+                            <Grid x:Name="TestComponent"
+                                
+                                ShowGridLines="True" Height="30" Background="Beige">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Title, FallbackValue=No data}"/>
+                                <CheckBox 
+                                    Grid.Column="1"
+                                    Margin="5, 0" 
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    IsChecked="{Binding IsSelected}"/>
+                                <TextBlock
+                                    Grid.Column="2" Margin="2, 0"
+                                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                                    Text="{Binding PartType, FallbackValue=SomeInfo}"/>
 
-                            <ListView 
-                                SelectedIndex="{Binding TestPartList.SelectionNum}"
-                                Name="PartSelectionList">
+                            </Grid>
 
-                            </ListView>
                             <!--#endregion-->
                         </TabItem>
                         <TabItem Header="PartList2">
@@ -221,7 +240,7 @@
                             <TreeView x:Name="TestThreeview"
                                     Grid.Row="1">
                                 <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding SubComponentsPartList}">
+                                    <HierarchicalDataTemplate ItemsSource="{Binding SubComponents}">
                                         <TextBlock Text="{Binding Title}"/>
                                     </HierarchicalDataTemplate>
                                 </TreeView.ItemTemplate>
