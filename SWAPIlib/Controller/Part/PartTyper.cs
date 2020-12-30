@@ -69,6 +69,10 @@ namespace SWAPIlib.Controller
 
         }
         public PartTyper(IPartControl<ISwModel> partcontrol) : this(partcontrol.Appmodel) { }
+        public PartTyper(IAppComponent component)
+        {
+            Appmodel = component.PartModel ?? component as ISwModel;
+        }
 
         public ISwModel Appmodel { get; set; }
 
