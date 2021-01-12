@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib
+namespace SWAPIlib.ComConn
 {
     /// <summary>
     /// Abstract point structure
@@ -24,7 +24,7 @@ namespace SWAPIlib
         }
         public Point(IEnumerable<double> coord)
         {
-            if(coord.Count() > 3)
+            if (coord.Count() > 3)
             {
                 throw new ArrayTypeMismatchException(
                     "Point: array must contain less than 3 elements");
@@ -54,9 +54,9 @@ namespace SWAPIlib
         public Point p2;
         public static readonly int unitCorrect = 1000;
 
-        public double dimX { get => System.Math.Abs(p1.x - p2.x) * unitCorrect; }
-        public double dimY { get => System.Math.Abs(p1.y - p2.y) * unitCorrect; }
-        public double dimZ { get => System.Math.Abs(p1.z - p2.z) * unitCorrect; }
+        public double dimX { get => Math.Abs(p1.x - p2.x) * unitCorrect; }
+        public double dimY { get => Math.Abs(p1.y - p2.y) * unitCorrect; }
+        public double dimZ { get => Math.Abs(p1.z - p2.z) * unitCorrect; }
 
         public double[] dim { get => new double[3] { dimX, dimY, dimZ }; }
 
@@ -69,8 +69,8 @@ namespace SWAPIlib
         {
             if (coord.Count() != 6)
                 throw new ArrayTypeMismatchException("Box: array must contains 6 elements");
-            this.p1 = new Point(coord.Take(3));
-            this.p2 = new Point(coord.Skip(3));
+            p1 = new Point(coord.Take(3));
+            p2 = new Point(coord.Skip(3));
         }
 
         public override string ToString()

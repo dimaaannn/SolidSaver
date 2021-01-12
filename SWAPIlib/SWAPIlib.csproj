@@ -71,7 +71,7 @@
     <Compile Include="ModelObj\PartTyper.cs" />
     <Compile Include="PropertyObj\Properties.cs" />
     <Compile Include="BaseTypes\SwDocTypes.cs" />
-    <Compile Include="Extensions\SupportClass.cs" />
+    <Compile Include="ComConn\SupportClass.cs" />
     <Compile Include="Exporting.cs" />
     <Compile Include="PropertyObj\PropertyInterfaces.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
@@ -89,6 +89,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
