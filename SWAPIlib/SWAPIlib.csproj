@@ -45,7 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsmComponent\AsmComponent.cs" />
     <Compile Include="BaseTypes\Assembly.cs" />
     <Compile Include="BaseTypes\BaseTypeFactory.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComComponent.cs" />
@@ -89,8 +88,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
