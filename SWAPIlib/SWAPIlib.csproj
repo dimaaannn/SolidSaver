@@ -54,7 +54,7 @@
     <Compile Include="ComConn\SwComConnect.cs" />
     <Compile Include="Controller\ComponentList\MainPartList.cs" />
     <Compile Include="Controller\Part\ComponentControl.cs" />
-    <Compile Include="Controller\Part\PartControl.cs" />
+    <Compile Include="Controller\Part\ModelControl.cs" />
     <Compile Include="Controller\Part\PartTyper.cs" />
     <Compile Include="BaseTypes\ComponentCl.cs" />
     <Compile Include="Global\RootModel.cs" />

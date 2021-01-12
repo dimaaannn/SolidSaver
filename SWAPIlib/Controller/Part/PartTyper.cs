@@ -70,7 +70,7 @@ namespace SWAPIlib.Controller
             Appmodel = imodel;
 
         }
-        public PartTyper(IPartControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
+        public PartTyper(IModelControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
         public PartTyper(IAppComponent component)
         {
             Appmodel = component.PartModel ?? component as IAppModel;

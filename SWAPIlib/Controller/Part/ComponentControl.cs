@@ -40,7 +40,7 @@ namespace SWAPIlib.Controller
     }
 
 
-    public interface IComponentControl : IPartControl<IAppComponent>
+    public interface IComponentControl : IModelControl<IAppComponent>
     {
         AppModel PartModel { get; }
         int SubComponentCount { get; }
@@ -60,7 +60,7 @@ namespace SWAPIlib.Controller
     /// <summary>
     /// Контроллер компонентов сборки
     /// </summary>
-    public class ComponentControl : PartControl<IAppComponent>, IComponentControl
+    public class ComponentControl : ModelControl<IAppComponent>, IComponentControl
     {
         public ComponentControl(IAppComponent component) : base(component) { }
 

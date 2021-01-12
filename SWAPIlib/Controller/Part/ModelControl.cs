@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 namespace SWAPIlib.Controller
 {
 
-    public interface IPartControl<out T> :INotifyPropertyChanged where T : IAppModel
+    public interface IModelControl<out T> :INotifyPropertyChanged where T : IAppModel
     {
         bool IsSelected { get; set; }
         /// <summary>
@@ -38,19 +38,19 @@ namespace SWAPIlib.Controller
     /// Контроллер моделей
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PartControl<T> : IPartControl<T> where T : IAppModel
+    public class ModelControl<T> : IModelControl<T> where T : IAppModel
     {
         /// <summary>
         /// PartControl constructor
         /// </summary>
         /// <param name="part"></param>
-        public PartControl(T part)
+        public ModelControl(T part)
         {
             Appmodel = part;
             Parttyper = new PartTyper(part);
         }
 
-        public PartControl() { }
+        public ModelControl() { }
         public bool IsSelected
         {
             get => Parttyper.IsSelected;

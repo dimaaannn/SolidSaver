@@ -11,8 +11,8 @@ namespace SWAPIlib.Controller
 {
     public interface IPartListTest<T1> where T1 : IAppModel
     {
-        IPartControl<T1> GetSelectedPart { get; }
-        ObservableCollection<IPartControl<T1>> PartCollection { get; set; }
+        IModelControl<T1> GetSelectedPart { get; }
+        ObservableCollection<IModelControl<T1>> PartCollection { get; set; }
         int SelectionNum { get; set; }
 
         event PropertyChangedEventHandler PropertyChanged;
@@ -25,9 +25,9 @@ namespace SWAPIlib.Controller
     {
         public PartList()
         {
-            PartCollection = new ObservableCollection<IPartControl<T1>>();
+            PartCollection = new ObservableCollection<IModelControl<T1>>();
         }
-        public ObservableCollection<IPartControl<T1>> PartCollection { get; set; }
+        public ObservableCollection<IModelControl<T1>> PartCollection { get; set; }
         private int _selectionNum = -1;
         public virtual int SelectionNum
         {
@@ -38,7 +38,7 @@ namespace SWAPIlib.Controller
                 OnPropertyChanged("SelectionNum");
             }
         }
-        public IPartControl<T1> GetSelectedPart { get; }
+        public IModelControl<T1> GetSelectedPart { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
