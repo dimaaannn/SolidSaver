@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib
 {
+    [Flags]
     public enum AppDocType
     {
         swNONE = 0,
-        swPART = 1,
-        swASM = 2,
-        swDRAWING = 3,
-        swCOMPONENT = 5
+        swPART = 1 << 1,
+        swASM = 1 << 2,
+        swDRAWING = 1 << 3,
+        swCOMPONENT = 1 << 5
     }
 
     
