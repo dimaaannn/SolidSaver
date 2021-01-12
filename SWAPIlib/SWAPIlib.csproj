@@ -46,36 +46,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTypes\Assembly.cs" />
-    <Compile Include="BaseTypes\BaseTypeFactory.cs" />
+    <Compile Include="BaseTypes\AppTypeFactory.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComComponent.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComDrawing.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComModel.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComPart.cs" />
     <Compile Include="ComConn\SwComConnect.cs" />
     <Compile Include="Controller\ComponentList\MainPartList.cs" />
-    <Compile Include="Controller\MainModel\MainControl.cs" />
     <Compile Include="Controller\Part\ComponentControl.cs" />
     <Compile Include="Controller\Part\PartControl.cs" />
     <Compile Include="Controller\Part\PartTyper.cs" />
     <Compile Include="BaseTypes\ComponentCl.cs" />
+    <Compile Include="Global\RootModel.cs" />
     <Compile Include="PropertyObj\PropertyChanger.cs" />
     <Compile Include="PropertyObj\ComponentProp.cs" />
     <Compile Include="PropertyObj\PropertyTemplates.cs" />
     <Compile Include="PropertyObj\PropChangerUnit.cs" />
     <Compile Include="PropertyObj\PropertyUI.cs" />
     <Compile Include="PropertyObj\TextReplacer.cs" />
-    <Compile Include="VisualInterface\InterfaceObjects.cs" />
+    <Compile Include="Global\WorkFolder.cs" />
     <Compile Include="BaseTypes\ModelBase.cs" />
-    <Compile Include="ModelObj\PartInterfaces.cs" />
-    <Compile Include="ModelObj\PartTyper.cs" />
+    <Compile Include="BaseTypes\ModelInterfaces.cs" />
+    <Compile Include="BaseTypes\CheckModelType.cs" />
     <Compile Include="PropertyObj\Properties.cs" />
-    <Compile Include="BaseTypes\SwDocTypes.cs" />
+    <Compile Include="BaseTypes\ModelDocTypes.cs" />
     <Compile Include="ComConn\SupportClass.cs" />
-    <Compile Include="Exporting.cs" />
     <Compile Include="PropertyObj\PropertyInterfaces.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VisualInterface\InterfInterfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">

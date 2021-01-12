@@ -15,9 +15,9 @@ using System.Windows.Shapes;
 using SWAPIlib;
 using System.Collections.ObjectModel;
 using SWAPIlib.PropertyObj;
-using SWAPIlib.VisualInterface;
 using SWAPIlib.Controller;
 using SWAPIlib.ComConn;
+using SWAPIlib.Global;
 
 namespace SolidSaverWPF
 {
@@ -27,7 +27,7 @@ namespace SolidSaverWPF
     public partial class MainWindow : Window
     {
 
-        public IMainModel MainModel { get; set; }
+        public IRootModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get; set; }
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
@@ -48,7 +48,7 @@ namespace SolidSaverWPF
         public MainWindow()
         {
             InitializeComponent();
-            MainModel = new MainModel();
+            MainModel = new RootModel();
             //this.DataContext = MainModel;
             this.DataContext = this;
 

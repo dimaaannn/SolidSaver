@@ -4,6 +4,7 @@ using System.Linq;
 using System.Diagnostics;
 using SolidWorks.Interop.sldworks;
 using SwConst;
+using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib.ComConn.Proxy
 {

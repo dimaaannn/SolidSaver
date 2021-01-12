@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Text.RegularExpressions;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.Global;
 
 namespace SWAPIlib.Controller
 {
@@ -104,7 +105,7 @@ namespace SWAPIlib.Controller
         {
             get
             {
-                string rootModelFolder = SWAPIlib.GlobalOptions.ModelRootFolder;
+                string rootModelFolder = GlobalOptions.ModelRootFolder;
                 if (Appmodel.Path.ToLowerInvariant().
                     Contains(rootModelFolder.ToLowerInvariant()))
                 {

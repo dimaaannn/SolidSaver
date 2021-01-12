@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
-using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SwConst;
 
-namespace SWAPIlib
+namespace SWAPIlib.BaseTypes
 {
 
     public static class PartTypeChecker
     {
-
         /// <summary>
         /// Определить тип модели
         /// </summary>
@@ -43,7 +41,6 @@ namespace SWAPIlib
             return ret;
         }
 
-
         /// <summary>
         /// Получить статус отображения компонента
         /// </summary>
@@ -52,7 +49,7 @@ namespace SWAPIlib
         public static AppSuppressionState GetAppSuppressionState(Component2 component)
         {
             AppSuppressionState ret = AppSuppressionState.None;
-            if(component != null)
+            if (component != null)
             {
                 var compType = ComponentProxy.GetSuppressionState(component);
                 ret = ConvertSuppressionState(compType);
@@ -154,9 +151,5 @@ namespace SWAPIlib
 
             return System.IO.File.Exists(DrawPath);
         }
-
-
     }
-
-
 }
