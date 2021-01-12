@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
-
+using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib.Controller
 {
 
 
     //Template for AsmComponent
-    
+
 
     public interface IComponentControl : IPartControl<IAppComponent>
     {

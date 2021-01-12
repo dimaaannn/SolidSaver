@@ -15,6 +15,7 @@ using SWAPIlib;
 using SWAPIlib.PropertyObj;
 using System.Collections;
 using SWAPIlib.ComConn;
+using SWAPIlib.BaseTypes;
 
 namespace SolidApp
 {

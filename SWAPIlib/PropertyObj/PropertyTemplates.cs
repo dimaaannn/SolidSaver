@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWAPIlib.BaseTypes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -69,7 +70,7 @@ namespace SWAPIlib
                     appModel.SwModel, ConfigName, PropertyName);
             }
             else
-                return (appModel as SwComponent).ConfigName;
+                throw new NotSupportedException("AppmodelPropGetter = not implemented type"); //TODO fix DrawingDoc type
         }
 
     }

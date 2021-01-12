@@ -9,27 +9,10 @@ using System.Diagnostics;
 using SWAPIlib.ComConn;
 
 
-namespace SWAPIlib
+namespace SWAPIlib.BaseTypes
 {
-    public interface ISwPartData
-    {
-        string PartType { get; }
-        string FileName { get; }
-        bool IsSelected { get; }
 
-    }
 
-    public class PartParamGetter
-    {
-        public ModelDoc2 SwModel { get; set; }
-        Dictionary<string, string> paramsDict;
-        public Dictionary<string, string> ParamsDict
-        {
-            get => paramsDict;
-            set => paramsDict = value;
-        }
-
-    }
 
     /// <summary>
     /// Базовый класс модели
@@ -126,39 +109,6 @@ namespace SWAPIlib
     }
 
 
-    public class AppAssembly : AppModel, ISwAssembly
-    {
-        public AppAssembly(ModelDoc2 swModel) : base(swModel)
-        {
-            _swAsm = swModel as AssemblyDoc;
-            PropList = new List<ISwProperty>();
-            PropList.AddRange(PropertyFactory.ModelProperty.DefaultModelProp(this));
-        }
-        private AssemblyDoc _swAsm;
-        public string ConfigName
-        {
-            get => ModelConfigProxy.GetActiveConfName(SwModel);
-            set => ModelConfigProxy.SetActiveConf(SwModel, value);
-        }
-
-
-
-        public int ComponentCount(bool TopLevelOnly = true)
-        {
-            return AsmDocProxy.GetComponentCount(SwModel, TopLevelOnly);
-        }
-
-        public List<IAppComponent> GetComponents(bool TopLevelOnly)
-        {
-            var ret = new List<IAppComponent>();
-            var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
-            foreach (Component2 comp in swComponents)
-            {
-                ret.Add(new AppComponent(comp));
-            }
-            return ret;
-        }
-    }
 
     /// <summary>
     /// Фабрика типов модели
@@ -190,56 +140,7 @@ namespace SWAPIlib
     }
 
 
-    /// <summary>
-    /// Класс компонента
-    /// </summary>
-    public class SwComponent : AppModel, ISwComponent
-    {
-        public Component2 SwComp { get; private set; }
-        public override AppDocType DocType { get => _docType; }
-        private AppDocType _docType;
-        public AppSuppressionState SuppressionStatus
-        { get => PartTypeChecker.GetAppSuppressionState(SwComp); }
-        public int ComponentCount { get => SwComp.IGetChildrenCount(); }
-        public List<SwComponent> GetComponents(bool TopLeverOnly)
-        {
-            var ret = new List<SwComponent>();
-            var components = ComponentProxy.GetChildren(SwComp);
-            Debug.WriteLine($"GetComponents from {FileName} begin");
-            foreach (object comp in components)
-            {
-                ret.Add(new SwComponent(comp as Component2));
-            }
-            Debug.WriteLine(ret.Count > 0 ? "Success" : "No components");
 
-            return ret;
-        }
-        public SwComponent GetRootComponent()
-        {
-            return new SwComponent(ComponentProxy.GetRoot(SwComp));
-        }
-        public override string Title => ComponentProxy.GetName(SwComp);
-        public string ConfigName
-        {
-            get => ComponentProxy.GetRefConfig(SwComp);
-            set => ComponentProxy.SetRefConfig(SwComp, value);
-        }
-        /// <summary>
-        /// Component Constructor
-        /// </summary>
-        /// <param name="component"></param>
-        public SwComponent(Component2 component) : base(ComponentProxy.GetModelDoc2(component))
-        {
-            SwComp = component;
-            if (SwModel != null)
-                _docType = PartTypeChecker.GetSWType(SwModel);
-            else _docType = AppDocType.swCOMPONENT;
-
-            var abc = new List<int>();
-
-            //PropList.AddRange( PropSheetTemplate.Component(this));
-        }
-    }
 
     //TODO add ConfigName
     //public class AppPart  : ISwPart

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWAPIlib.BaseTypes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;

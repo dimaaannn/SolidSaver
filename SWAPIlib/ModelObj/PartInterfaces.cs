@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
+using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib
 {
@@ -61,33 +62,6 @@ namespace SWAPIlib
         
     }
 
-
-    public interface ISwComponent :ISwModel
-    {
-        Component2 SwComp { get; }
-        /// <summary>
-        /// Статус отображения
-        /// </summary>
-        AppSuppressionState SuppressionStatus { get; }
-        /// <summary>
-        /// Количество подкомпонентов
-        /// </summary>
-        /// <param name="TopLevelOnly"></param>
-        /// <returns></returns>
-        int ComponentCount { get; }
-        /// <summary>
-        /// Связанная конфигурация
-        /// </summary>
-        string ConfigName { get; set; }
-        SwComponent GetRootComponent();
-        /// <summary>
-        /// Получить дочерние компоненты
-        /// </summary>
-        /// <param name="TopLevelOnly"></param>
-        /// <returns></returns>
-        List<SwComponent> GetComponents(bool TopLevelOnly);
-        
-    }
 
     public interface IAppComponent :ISwModel
     {

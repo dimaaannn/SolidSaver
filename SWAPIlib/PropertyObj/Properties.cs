@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.ComponentModel;
+using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib
 {

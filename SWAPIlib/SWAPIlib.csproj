@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsmComponent\AsmComponent.cs" />
+    <Compile Include="BaseTypes\Assembly.cs" />
     <Compile Include="ComConn\SwComConnect.cs" />
     <Compile Include="Controller\ComponentList\MainPartList.cs" />
     <Compile Include="Controller\MainModel\MainControl.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="PropertyObj\PropertyUI.cs" />
     <Compile Include="PropertyObj\TextReplacer.cs" />
     <Compile Include="VisualInterface\InterfaceObjects.cs" />
-    <Compile Include="ModelObjects.cs" />
+    <Compile Include="BaseTypes\ModelBase.cs" />
     <Compile Include="ModelObj\PartInterfaces.cs" />
     <Compile Include="ModelObj\PartTyper.cs" />
     <Compile Include="PropertyObj\Properties.cs" />
