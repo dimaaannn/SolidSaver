@@ -28,14 +28,14 @@ namespace SolidApp
             var appmodel = ModelFactory.ActiveDoc;
 
 
-            if(appmodel.SwModel is PartDoc swPart)
+            if (appmodel.SwModel is PartDoc swPart)
             {
             }
 
             var cont = new ContainerContaiter(10);
             var en = cont.GetEnumerator();
 
-            foreach(var item in cont)
+            foreach (var item in cont)
             {
                 Console.Write(item);
             }
@@ -51,46 +51,25 @@ namespace SolidApp
 
                 PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
 
-                var propChanger = new SWAPIlib.PropertyObj.PropertyChanger()
-                {
-                    propConstructor = constructor,
-                    SearchValue = "test3",
-                    NewValue = "test4",
-                    AllConfigurations = true,
-                    UseRegExp = true
-                };
-
-                foreach (var comp in compList)
-                {
-                    propChanger.Components.Add(comp);
-                }
-                //propChanger.Components.Add(compList[0]);
-                propChanger.ProceedValues();
-
-
-                //var propvalues = propChanger.Properties.
-                //    SelectMany(prop => prop.SwPropList.Values.
-                //    Select(pr => pr.PropertyValue));                
-                var propvalues = from propMod in propChanger.Properties
-                                 from prop in propMod.SwPropList.Values
-                                 select prop;
-
-
-                var propObj = propvalues.ToArray();
-
-                foreach (var prop in propvalues)
-                {
-                    Console.WriteLine($"cn:{prop.ConfigName, -15}, val:{prop.PropertyValue}");
-                }
-
-                propChanger.WriteValues();
-                
-
             }
 
-            var builder = new StringBuilder("DATA:\n");
+            var root = new TreeEnumNode() { Name = "Root" };
+            
+            for (int i = 0; i < 5; i++)
+            {
+                var lvl1 = new TreeEnumNode() { Name = $"lvl1-{i}" };
+                for (int j = 0; j < 5; j++)
+                {
+                    lvl1.SubNodes.Add(new TreeEnumNode() { Name = $"lvl2-{j}" });
+                }
+                root.SubNodes.Add(lvl1);
+            }
 
-            //Console.WriteLine(builder);
+            foreach(var node in root)
+            {
+                Console.WriteLine(node.Name);
+            }
+
 
             Console.ReadKey();
         }
@@ -109,6 +88,78 @@ namespace SolidApp
         }
 
     }
+
+
+    public class TreeEnumNode :IEnumerator<TreeEnumNode>, IEnumerable<TreeEnumNode>
+    {
+        public TreeEnumNode()
+        {
+            SubNodes = new List<TreeEnumNode>();
+        }
+        public string Name { get; set; }
+        public List<TreeEnumNode> SubNodes { get; set; }
+
+
+        private int position = -1;
+        private IEnumerator<TreeEnumNode> subEnum;
+        private TreeEnumNode _current;
+        public TreeEnumNode Current
+        {
+            get
+            {
+                return _current;
+            }
+        }
+        object IEnumerator.Current => throw new NotImplementedException();
+
+        public void Dispose()
+        {
+            
+        }
+
+        public bool MoveNext()
+        {
+            if (position < SubNodes.Count - 1)
+            {                
+                if (subEnum != null && subEnum.MoveNext())
+                {
+                    _current = subEnum.Current;
+                }
+                else
+                {
+                    position++;
+                    _current = SubNodes[position];
+                    subEnum = _current.GetEnumerator();
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        //Testing
+
+        public IEnumerator<TreeEnumNode> GetEnumerator()
+        {
+            return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
+        }
+    }
+
 
     public class RangeContaiter :IEnumerable
     {
