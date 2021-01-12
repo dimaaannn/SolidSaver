@@ -14,6 +14,7 @@ using System.Security.Policy;
 using SWAPIlib;
 using SWAPIlib.PropertyObj;
 using System.Collections;
+using SWAPIlib.ComConn;
 
 namespace SolidApp
 {

@@ -6,126 +6,11 @@ using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Diagnostics;
-
+using SWAPIlib.ComConn;
 
 
 namespace SWAPIlib
 {
-    public static class SwAppControl
-    {
-        public static bool Interface; //TODO создать интерфейс для подключения
-
-        private static bool _comStatus = false;
-        public static bool ComConnected { get => _comStatus; }
-        
-        public static ISldWorks swApp { get => SwAPI.swApp; }
-
-        private static ModelDoc2 _mainModel = null;
-        /// <summary>
-        /// Установить базовую модель
-        /// </summary>
-        public static ModelDoc2 MainModel
-        {
-            get
-            {
-                ModelDoc2 ret = null;
-                if (_mainModel == null && ComConnected)
-                {
-                    ret = SwAPI.swApp.ActiveDoc;
-
-                    if (ret != null)
-                    {
-                        string evT = $"Модель {ret?.GetTitle() ?? "не"} установлена";
-                        SwEventArgs eventArgs = new SwEventArgs(evT);
-                        _mainModel = ret;
-                        MainModelChanged?.Invoke(_mainModel, eventArgs);
-                        //TODO обработать событие DestroyNotify2 при закрытии
-                    }
-                }
-                return ret;
-            }
-            set
-            {
-                _mainModel = value;
-                string evT = $"Модель {_mainModel?.GetTitle() ?? "не"} установлена";
-                SwEventArgs eventArgs = new SwEventArgs(evT);
-                MainModelChanged?.Invoke(_mainModel, eventArgs);
-            }
-        }
-
-        /// <summary>
-        /// Загрузить активную модель
-        /// </summary>
-        public static ModelDoc2 ActiveModel
-        {
-            get
-            {
-                ModelDoc2 ret = null;
-                if (ComConnected)
-                {
-                    ret = SwAPI.swApp.ActiveDoc;
-                    string evT = $"Модель {ret?.GetTitle() ?? "не"} получена";
-                }
-                return ret;
-            }
-        }
-
-        /// <summary>
-        /// Обнаружение процесса SW
-        /// </summary>
-        public static event System.EventHandler SwProcessRunning
-        {
-            add { SwAPI.SwIsRunning += value; }
-            remove { SwAPI.SwIsRunning -= value; }
-        }
-
-        /// <summary>
-        /// Изменение базовой модели
-        /// </summary>
-        public static event System.EventHandler MainModelChanged;
-
-        /// <summary>
-        /// Подключиться к COM
-        /// </summary>
-        /// <returns></returns>
-        public static void Connect()
-        {
-            SwAPI.ComConnected += SwAPI_ComConnected;
-            SwAPI.SwIsDisposed += SwAPI_SwIsDisposed;
-
-            var swApp = SwAPI.swApp;
-            while(swApp == null)
-            {
-                System.Threading.Thread.Sleep(500);
-                swApp = SwAPI.swApp;
-            }
-        }
-
-        /// <summary>
-        /// Событие при закрытии SW
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void SwAPI_SwIsDisposed(object sender, EventArgs e)
-        {
-            _comStatus = false;
-            _mainModel = null;
-        }
-
-        /// <summary>
-        /// Событие при подключении к com
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void SwAPI_ComConnected(object sender, EventArgs e)
-        {
-            _comStatus = true;
-        }
-
-    }
-
-
-    
     public interface ISwPartData
     {
         string PartType { get; }
@@ -138,10 +23,10 @@ namespace SWAPIlib
     {
         public ModelDoc2 SwModel { get; set; }
         Dictionary<string, string> paramsDict;
-        public Dictionary<string, string> ParamsDict 
-        { 
-            get => paramsDict; 
-            set => paramsDict = value; 
+        public Dictionary<string, string> ParamsDict
+        {
+            get => paramsDict;
+            set => paramsDict = value;
         }
 
     }
@@ -170,18 +55,18 @@ namespace SWAPIlib
         /// <param name="swModel"></param>
         public AppModel(ModelDoc2 swModel)
         {
-                PropList = new List<ISwProperty>();
-                GlobalModelProp = new FileModelProp(this)
-                { 
-                    IsRoot = false,
-                };
-                IsExist = true;
-                DocType = PartTypeChecker.GetSWType(swModel);
+            PropList = new List<ISwProperty>();
+            GlobalModelProp = new FileModelProp(this)
+            {
+                IsRoot = false,
+            };
+            IsExist = true;
+            DocType = PartTypeChecker.GetSWType(swModel);
 
             if (swModel != null)
             {
                 //TODO Add default properties to list
-                this._swModel = swModel;
+                _swModel = swModel;
                 Path = ModelProxy.GetPathName(SwModel);
 
 
@@ -190,7 +75,7 @@ namespace SWAPIlib
                 {
                     (swModel as AssemblyDoc).DestroyNotify += CloseFileHandler;
                 }
-                else if(DocType == AppDocType.swPART)
+                else if (DocType == AppDocType.swPART)
                 {
                     (swModel as PartDoc).DestroyNotify += CloseFileHandler;
                 }
@@ -226,7 +111,7 @@ namespace SWAPIlib
         {
             get
             {
-                if(_configList == null)
+                if (_configList == null)
                     _configList = new List<string>(SwModel.GetConfigurationNames());
                 return _configList;
             }
@@ -241,22 +126,22 @@ namespace SWAPIlib
     }
 
 
-    public class AppAssembly: AppModel, ISwAssembly
+    public class AppAssembly : AppModel, ISwAssembly
     {
-        public AppAssembly(ModelDoc2 swModel) : base(swModel) 
+        public AppAssembly(ModelDoc2 swModel) : base(swModel)
         {
             _swAsm = swModel as AssemblyDoc;
             PropList = new List<ISwProperty>();
             PropList.AddRange(PropertyFactory.ModelProperty.DefaultModelProp(this));
         }
         private AssemblyDoc _swAsm;
-        public string ConfigName 
-        { 
+        public string ConfigName
+        {
             get => ModelConfigProxy.GetActiveConfName(SwModel);
             set => ModelConfigProxy.SetActiveConf(SwModel, value);
         }
 
-        
+
 
         public int ComponentCount(bool TopLevelOnly = true)
         {
@@ -267,11 +152,11 @@ namespace SWAPIlib
         {
             var ret = new List<IAppComponent>();
             var swComponents = AsmDocProxy.GetComponents(SwModel, TopLevelOnly);
-            foreach(Component2 comp in swComponents)
+            foreach (Component2 comp in swComponents)
             {
-                    ret.Add(new AppComponent(comp));
+                ret.Add(new AppComponent(comp));
             }
-            return  ret ;
+            return ret;
         }
     }
 
@@ -313,20 +198,20 @@ namespace SWAPIlib
         public Component2 SwComp { get; private set; }
         public override AppDocType DocType { get => _docType; }
         private AppDocType _docType;
-        public AppSuppressionState SuppressionStatus 
-            { get => PartTypeChecker.GetAppSuppressionState(SwComp); }
+        public AppSuppressionState SuppressionStatus
+        { get => PartTypeChecker.GetAppSuppressionState(SwComp); }
         public int ComponentCount { get => SwComp.IGetChildrenCount(); }
         public List<SwComponent> GetComponents(bool TopLeverOnly)
         {
             var ret = new List<SwComponent>();
             var components = ComponentProxy.GetChildren(SwComp);
-            Debug.WriteLine($"GetComponents from {this.FileName} begin");
-            foreach(object comp in components)
+            Debug.WriteLine($"GetComponents from {FileName} begin");
+            foreach (object comp in components)
             {
                 ret.Add(new SwComponent(comp as Component2));
             }
             Debug.WriteLine(ret.Count > 0 ? "Success" : "No components");
-            
+
             return ret;
         }
         public SwComponent GetRootComponent()
@@ -343,7 +228,7 @@ namespace SWAPIlib
         /// Component Constructor
         /// </summary>
         /// <param name="component"></param>
-        public SwComponent(Component2 component): base(ComponentProxy.GetModelDoc2(component))
+        public SwComponent(Component2 component) : base(ComponentProxy.GetModelDoc2(component))
         {
             SwComp = component;
             if (SwModel != null)
@@ -351,7 +236,7 @@ namespace SWAPIlib
             else _docType = AppDocType.swCOMPONENT;
 
             var abc = new List<int>();
-            
+
             //PropList.AddRange( PropSheetTemplate.Component(this));
         }
     }

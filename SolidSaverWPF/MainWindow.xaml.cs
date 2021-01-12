@@ -17,7 +17,7 @@ using System.Collections.ObjectModel;
 using SWAPIlib.PropertyObj;
 using SWAPIlib.VisualInterface;
 using SWAPIlib.Controller;
-
+using SWAPIlib.ComConn;
 
 namespace SolidSaverWPF
 {
