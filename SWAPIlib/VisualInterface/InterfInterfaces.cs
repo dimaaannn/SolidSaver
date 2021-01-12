@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib.VisualInterface
 {

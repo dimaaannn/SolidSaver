@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib
 {

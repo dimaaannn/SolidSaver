@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib
 {

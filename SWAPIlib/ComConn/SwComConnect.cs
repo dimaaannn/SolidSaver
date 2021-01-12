@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
-using SwConst;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib.ComConn
 {
@@ -119,5 +117,116 @@ namespace SWAPIlib.ComConn
             _comStatus = true;
         }
 
+    }
+
+}
+namespace SWAPIlib.ComConn.Proxy
+{
+    /// <summary>
+    /// Основные операции с API
+    /// </summary>
+    public static class SwAPI
+    {
+        private static Process _swProcess;
+        private static ISldWorks _swApp;
+
+        /// <summary>
+        /// Процесс SolidWorks найден
+        /// </summary>
+        public static event EventHandler SwIsRunning;
+        public static event EventHandler SwIsDisposed
+        {
+            add => swProcess.Disposed += value;
+            remove => swProcess.Disposed -= value;
+        }
+        public static event EventHandler ComConnected;
+
+
+        /// <summary>
+        /// GetSolidWorks process
+        /// </summary>
+        public static Process swProcess
+        {
+            get
+            {
+                if (_swProcess is null)
+                {
+                    Process[] ProcessList;
+                    ProcessList = Process.GetProcessesByName("SLDWORKS");
+                    if (ProcessList.Count() > 0)
+                    {
+                        _swProcess = ProcessList.First();
+                        _swProcess.EnableRaisingEvents = true;
+                        string evText = "SolidWorks process is running";
+                        SwIsRunning?.Invoke(_swProcess, new SwEventArgs(evText));
+                        Debug.WriteLine(evText);
+                    }
+                }
+                return _swProcess;
+            }
+        }
+
+        /// <summary>
+        /// Check SolidWorks is running
+        /// </summary>
+        public static bool IsRunning
+        {
+            get
+            {
+                bool ret = false;
+                if (_swProcess != null)
+                    ret = true;
+                return ret;
+            }
+
+        }
+
+        /// <summary>
+        /// Подключение к com API
+        /// </summary>
+        /// <returns></returns>
+        private static ISldWorks GetSWApp()
+        {
+            string progId = "SldWorks.Application";
+            var progType = Type.GetTypeFromProgID(progId);
+            ISldWorks swApp = null;
+
+            Debug.Print("geting SWapp");
+            string evText = "Sw API connected";
+            swApp = Activator.CreateInstance(progType) as ISldWorks;
+
+            if (swApp != null)
+            {
+                Debug.WriteLine(evText);
+                ComConnected?.Invoke(swApp, new SwEventArgs(evText));
+            }
+            return swApp;
+        }
+
+        /// <summary>
+        /// Получить экземпляр АПИ
+        /// </summary>
+        public static ISldWorks swApp
+        {
+            get
+            {
+                if (_swApp is null)
+                    _swApp = GetSWApp();
+                return _swApp;
+            }
+
+        }
+    }
+
+    /// <summary>
+    /// Аргументы события
+    /// </summary>
+    public class SwEventArgs : EventArgs
+    {
+        public string Text;
+
+        public SwEventArgs(string EventText) =>
+            Text = EventText;
+        public SwEventArgs() => Text = null;
     }
 }

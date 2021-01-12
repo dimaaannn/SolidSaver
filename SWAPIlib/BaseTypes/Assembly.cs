@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Diagnostics;
-using SWAPIlib.ComConn;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib.BaseTypes
 {
