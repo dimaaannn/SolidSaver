@@ -27,7 +27,7 @@ namespace SolidApp
         {
             //var swModel = AppConsole.LoadActiveDoc();
             SwAppControl.Connect();
-            var appmodel = ModelFactory.ActiveDoc;
+            var appmodel = ModelClassFactory.ActiveDoc;
 
 
             if (appmodel.SwModel is PartDoc swPart)

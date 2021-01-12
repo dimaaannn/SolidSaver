@@ -110,7 +110,7 @@ namespace SWAPIlib
             bool ret = false;
             if (String.IsNullOrEmpty(pathToModel))
             {
-                RootModel = ModelFactory.GetModel(SwAppControl.MainModel);
+                RootModel = ModelClassFactory.GetModel(SwAppControl.MainModel);
             }
             return ret;
         }
@@ -118,7 +118,7 @@ namespace SWAPIlib
         public bool LoadActiveModel()
         {
             bool ret = false;
-            RootModel = ModelFactory.ActiveDoc;
+            RootModel = ModelClassFactory.ActiveDoc;
             if (RootModel != null) ret = true;
             return ret;
         }

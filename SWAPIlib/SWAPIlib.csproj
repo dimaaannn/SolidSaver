@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AsmComponent\AsmComponent.cs" />
     <Compile Include="BaseTypes\Assembly.cs" />
+    <Compile Include="BaseTypes\BaseTypeFactory.cs" />
     <Compile Include="ComConn\SwComConnect.cs" />
     <Compile Include="Controller\ComponentList\MainPartList.cs" />
     <Compile Include="Controller\MainModel\MainControl.cs" />

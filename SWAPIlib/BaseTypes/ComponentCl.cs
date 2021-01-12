@@ -88,7 +88,7 @@ namespace SWAPIlib
                 //Если компонент не погашен
                 if (swModel != null)
                 {
-                    _appModel = ModelFactory.GetModel(swModel);
+                    _appModel = ModelClassFactory.GetModel(swModel);
                     IsExist = true;
                     DocType = _appModel.DocType;
                     PropList.AddRange(_appModel.PropList);

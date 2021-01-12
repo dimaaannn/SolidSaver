@@ -12,8 +12,6 @@ using SWAPIlib.ComConn;
 namespace SWAPIlib.BaseTypes
 {
 
-
-
     /// <summary>
     /// Базовый класс модели
     /// </summary>
@@ -107,39 +105,6 @@ namespace SWAPIlib.BaseTypes
             set => SwModel.Visible = value;
         }
     }
-
-
-
-    /// <summary>
-    /// Фабрика типов модели
-    /// </summary>
-    public static class ModelFactory
-    {
-        public static AppModel GetModel(ModelDoc2 swModel)
-        {
-            AppDocType docType = PartTypeChecker.GetSWType(swModel);
-            AppModel ret = null;
-            switch (docType)
-            {
-                case AppDocType.swNONE:
-                    break;
-                case AppDocType.swASM:
-                    ret = new AppAssembly(swModel);
-                    break;
-                default:
-                    ret = new AppModel(swModel);
-                    break;
-            }
-            return ret;
-        }
-
-        public static AppModel ActiveDoc
-        {
-            get => GetModel(SwAppControl.ActiveModel);
-        }
-    }
-
-
 
 
     //TODO add ConfigName
