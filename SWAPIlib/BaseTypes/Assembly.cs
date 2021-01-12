@@ -10,7 +10,7 @@ using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib.BaseTypes
 {
-    public class AppAssembly : AppModel, ISwAssembly
+    public class AppAssembly : AppModel, IAppAssembly
     {
         public AppAssembly(ModelDoc2 swModel) : base(swModel)
         {

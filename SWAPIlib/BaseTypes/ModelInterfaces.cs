@@ -9,7 +9,7 @@ using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib
 {
-    public interface ISwModel
+    public interface IAppModel
     {
         bool IsExist { get; }
         ModelDoc2 SwModel { get; }
@@ -52,7 +52,7 @@ namespace SWAPIlib
     /// <summary>
     /// Интерфейс модели сборки
     /// </summary>
-    public interface ISwAssembly : ISwModel
+    public interface IAppAssembly : IAppModel
     {
         int ComponentCount(bool TopLevelOnly);
         List<IAppComponent> GetComponents(bool TopLevelOnly);
@@ -64,7 +64,7 @@ namespace SWAPIlib
     }
 
 
-    public interface IAppComponent :ISwModel
+    public interface IAppComponent :IAppModel
     {
         /// <summary>
         /// Класс детали
@@ -110,7 +110,7 @@ namespace SWAPIlib
 
     }
 
-    public interface ISwPart : ISwModel, IConfProperty
+    public interface ISwPart : IAppModel, IConfProperty
     {
         int BodyCount { get; }
         string ConfigName { get; set; }

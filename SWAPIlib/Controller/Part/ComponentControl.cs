@@ -6,12 +6,38 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using SWAPIlib.BaseTypes;
+using System.ComponentModel;
 
 namespace SWAPIlib.Controller
 {
 
 
     //Template for AsmComponent
+
+    public interface IPartControl1<out T> : INotifyPropertyChanged where T : IAppModel
+    {
+        bool IsSelected { get; set; }
+        /// <summary>
+        /// Модель детали
+        /// </summary>
+        T Appmodel { get; }
+        /// <summary>
+        /// Объект выделения
+        /// </summary>
+        IPartTyper Parttyper { get; }
+        /// <summary>
+        /// Тип детали
+        /// </summary>
+        AppDocType PartType { get; }
+        /// <summary>
+        /// Имя детали
+        /// </summary>
+        string Title { get; }
+        /// <summary>
+        /// Активная группа выделения
+        /// </summary>
+        int SelectionGroup { get; set; }
+    }
 
 
     public interface IComponentControl : IPartControl<IAppComponent>

@@ -32,7 +32,7 @@ namespace SWAPIlib.PropertyObj
 
         public override void Update()
         {
-            if(Validator(AppComponent as ISwModel))
+            if(Validator(AppComponent as IAppModel))
             {
                 _propertyValue = ReadValue();
             }
@@ -61,7 +61,7 @@ namespace SWAPIlib.PropertyObj
         /// </summary>
         /// <param name="swModel"></param>
         /// <returns></returns>
-        public static bool IsAppComp(ISwModel swModel) => swModel is AppComponent;
+        public static bool IsAppComp(IAppModel swModel) => swModel is AppComponent;
         
     }
     public static class CompPropertyFactory

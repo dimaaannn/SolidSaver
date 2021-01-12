@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace SWAPIlib.Controller
 {
-    public interface IPartListTest<T1> where T1 : ISwModel
+    public interface IPartListTest<T1> where T1 : IAppModel
     {
         IPartControl<T1> GetSelectedPart { get; }
         ObservableCollection<IPartControl<T1>> PartCollection { get; set; }
@@ -21,7 +21,7 @@ namespace SWAPIlib.Controller
         void OnPropertyChanged(string prop = "");
     }
 
-    public class PartList<T1> : INotifyPropertyChanged, IPartListTest<T1> where T1 : ISwModel
+    public class PartList<T1> : INotifyPropertyChanged, IPartListTest<T1> where T1 : IAppModel
     {
         public PartList()
         {

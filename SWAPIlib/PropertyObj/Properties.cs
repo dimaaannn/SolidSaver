@@ -16,7 +16,7 @@ namespace SWAPIlib
     /// </summary>
     /// <param name="appModel"></param>
     /// <returns></returns>
-    public delegate bool PropValidator (ISwModel appModel);
+    public delegate bool PropValidator (IAppModel appModel);
 
     /// <summary>
     /// Конвертер свойств в нужный формат
@@ -36,7 +36,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsExist(ISwModel appModel)
+        public static bool IsExist(IAppModel appModel)
         {
             if (appModel != null) return true;
             else return false;
@@ -47,7 +47,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsPartOrAsm(ISwModel appModel)
+        public static bool IsPartOrAsm(IAppModel appModel)
         {
             AppDocType type = appModel.DocType;
             if (type == AppDocType.swASM || type == AppDocType.swPART)
@@ -61,7 +61,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="appModel"></param>
         /// <returns></returns>
-        public static bool IsPartOrAsmOrComp(ISwModel appModel)
+        public static bool IsPartOrAsmOrComp(IAppModel appModel)
         {
             AppDocType type = appModel.DocType;
             if (type == AppDocType.swASM ||
@@ -176,7 +176,7 @@ namespace SWAPIlib
                 else if (appModel is ISwPart swPart)
                     ret = _configName ?? swPart.ConfigName;
 
-                else if (appModel is ISwAssembly swAsm)
+                else if (appModel is IAppAssembly swAsm)
                     ret = _configName ?? swAsm.ConfigName;
 
                 else ret = _configName;

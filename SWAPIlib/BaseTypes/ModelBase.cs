@@ -14,7 +14,7 @@ namespace SWAPIlib.BaseTypes
     /// <summary>
     /// Базовый класс модели
     /// </summary>
-    public class AppModel : ISwModel
+    public class AppModel : IAppModel
     {
         private ModelDoc2 _swModel;
 

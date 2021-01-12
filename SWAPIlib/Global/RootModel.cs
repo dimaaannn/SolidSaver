@@ -143,7 +143,7 @@ namespace SWAPIlib.Global
         public bool GetSubComponents()
         {
             bool ret = false;
-            if (appModel is ISwAssembly swAssembly)
+            if (appModel is IAppAssembly swAssembly)
             {
                 _subComponents = swAssembly.GetComponents(TopLevelOnly);
                 if (_subComponents.Count > 0)

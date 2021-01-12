@@ -25,7 +25,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Экземпляр детали
         /// </summary>
-        ISwModel Appmodel { get; }
+        IAppModel Appmodel { get; }
         /// <summary>
         /// Выбрано пользователем
         /// </summary>
@@ -65,18 +65,18 @@ namespace SWAPIlib.Controller
         /// Main constructor
         /// </summary>
         /// <param name="imodel"></param>
-        public PartTyper(ISwModel imodel)
+        public PartTyper(IAppModel imodel)
         {
             Appmodel = imodel;
 
         }
-        public PartTyper(IPartControl<ISwModel> partcontrol) : this(partcontrol.Appmodel) { }
+        public PartTyper(IPartControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
         public PartTyper(IAppComponent component)
         {
-            Appmodel = component.PartModel ?? component as ISwModel;
+            Appmodel = component.PartModel ?? component as IAppModel;
         }
 
-        public ISwModel Appmodel { get; set; }
+        public IAppModel Appmodel { get; set; }
 
         /// <summary>
         /// Выделение объекта
