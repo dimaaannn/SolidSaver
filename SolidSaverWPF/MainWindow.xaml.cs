@@ -60,6 +60,7 @@ namespace SolidSaverWPF
             PropUI = new PropertyUI();
             PropertyTab.DataContext = PropUI;
             PartsList.ItemsSource = SubComponents;
+            PropUI.ComponentList = SelectedComp;
 
             CompControlList = new ObservableCollection<ComponentControl>();
 
