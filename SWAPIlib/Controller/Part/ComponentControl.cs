@@ -14,59 +14,65 @@ namespace SWAPIlib.Controller
 
     //Template for AsmComponent
 
-    public interface IPartControl1<out T> : INotifyPropertyChanged where T : IAppModel
-    {
-        bool IsSelected { get; set; }
-        /// <summary>
-        /// Модель детали
-        /// </summary>
-        T Appmodel { get; }
-        /// <summary>
-        /// Объект выделения
-        /// </summary>
-        IPartTyper Parttyper { get; }
-        /// <summary>
-        /// Тип детали
-        /// </summary>
-        AppDocType PartType { get; }
-        /// <summary>
-        /// Имя детали
-        /// </summary>
-        string Title { get; }
-        /// <summary>
-        /// Активная группа выделения
-        /// </summary>
-        int SelectionGroup { get; set; }
-    }
+    public interface IComponentControl : 
+        IModelControl<IAppComponent> 
 
-
-    public interface IComponentControl : IModelControl<IAppComponent>
+        //IEnumerable<IComponentControl>,
+        //IEnumerator<IComponentControl>
     {
+        /// <summary>
+        /// Объект модели сборки
+        /// </summary>
         AppModel PartModel { get; }
+        /// <summary>
+        /// Количество дочерних компонентов
+        /// </summary>
         int SubComponentCount { get; }
         /// <summary>
-        /// Имя связанной конфигурации
+        /// Погашен
         /// </summary>
-        string RefConfig { get; }
         bool IsSuppressed { get; }
         /// <summary>
         /// Дочерние компоненты
         /// </summary>
         ObservableCollection<IComponentControl> SubComponents { get; }
+        /// <summary>
+        /// Имя связанной конфигурации
+        /// </summary>
+        string RefConfig { get; }
+        /// <summary>
+        /// Уровень сборки относительно Root
+        /// </summary>
+        int AssemblyLevel { get; }
     }
 
    
-
     /// <summary>
     /// Контроллер компонентов сборки
     /// </summary>
     public class ComponentControl : ModelControl<IAppComponent>, IComponentControl
     {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="component"></param>
         public ComponentControl(IAppComponent component) : base(component) { }
-
+        /// <summary>
+        /// Модель детали
+        /// </summary>
+        public AppModel PartModel => Appmodel.PartModel;
+        /// <summary>
+        /// Количество дочерних компонентов
+        /// </summary>
         public virtual int SubComponentCount => PartType == AppDocType.swASM ?
             Appmodel.GetChildrenCount() : 0;
+        /// <summary>
+        /// Внутренний список дочерних компонентов
+        /// </summary>
         ObservableCollection<IComponentControl> _subComponents = null;
+        /// <summary>
+        /// Список дочерних компонентов
+        /// </summary>
         public ObservableCollection<IComponentControl> SubComponents
         {
             get
@@ -86,27 +92,45 @@ namespace SWAPIlib.Controller
             }
         }
 
-        public AppModel PartModel => Appmodel.PartModel;
+        /// <summary>
+        /// Сокращённое имя компонента
+        /// </summary>
+        public override string Title => TitleFilter.Replace(base.Title, "");
+        /// <summary>
+        /// Уровень сборки относительно Root
+        /// </summary>
+        public int AssemblyLevel => LevelCounter.Matches(base.Title).Count;
+        /// <summary>
+        /// Имя зависимой конфигурации
+        /// </summary>
         public string RefConfig => Appmodel.RefConfigName;
+
+        /// <summary>
+        /// Компонент погашен
+        /// </summary>
         public bool IsSuppressed =>
             Appmodel?.SuppressionState != AppSuppressionState.Resolved ||
             Appmodel?.SuppressionState != AppSuppressionState.FullyResolved;
-        public override string Title => TitleFilter.Replace(base.Title, "");
 
-        public override string ToString()
-        {
-            return $"{Title}:{PartType}";
-        }
-
+        /// <summary>
+        /// Фильтр наименования
+        /// </summary>
         protected static Regex TitleFilter =
             new Regex(@"^.*[\/]", RegexOptions.Compiled);
+        /// <summary>
+        /// Уровень сборки
+        /// </summary>
+        protected static Regex LevelCounter =
+            new Regex(@"\/", RegexOptions.Compiled);
+        /// <summary>
+        /// Имя отображения
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{PartType}:{base.Title}";
+        }
     }
 
-    public class ComponentAssembly : ComponentControl
-    {
-        public ComponentAssembly(IAppComponent component) : base(component) { }
-        public new AppAssembly PartModel => Appmodel.PartModel as AppAssembly;
-        public override int SubComponentCount => PartModel.ComponentCount(true);
-        public string TestAssemblyProperty { get; set; } = "All fine";
-    }
+
 }

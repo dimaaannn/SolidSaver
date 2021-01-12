@@ -32,6 +32,13 @@ namespace SolidApp
 
             if (appmodel.SwModel is PartDoc swPart)
             {
+
+            }
+
+            if (appmodel.SwModel is AssemblyDoc swAsm)
+            {
+                var abc = new AppAssembly(appmodel.SwModel);
+                Console.WriteLine(abc.Title);
             }
 
             var cont = new ContainerContaiter(10);
