@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.PartList"
+             xmlns:treelist="clr-namespace:TreeListView;assembly=TreeListView"
              
              xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
              HorizontalContentAlignment="Stretch"
@@ -45,7 +46,8 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        
+
+    
         
     </Grid>
 </UserControl>
