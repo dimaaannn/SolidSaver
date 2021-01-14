@@ -20,10 +20,21 @@ namespace SolidSaverWPF.PartList
     /// </summary>
     public partial class PartListView : UserControl
     {
+        SWAPIlib.Global.IMainPartView _mainPartView;
+        public SWAPIlib.Global.IMainPartView MainPartView
+        {
+            get => _mainPartView;
+            set => _mainPartView = value;
+        }
         public PartListView()
         {
             InitializeComponent();
-            
+
+        }
+
+        private void TreePartView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            MainPartView.SelectedComp = ((SWAPIlib.Controller.IComponentControl)e.NewValue);
         }
     }
 }

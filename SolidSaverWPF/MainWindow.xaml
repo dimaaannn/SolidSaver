@@ -113,8 +113,11 @@
                     />
                 <!--#endregion-->
 
-                <!--#region Список деталей интерфейс ISwPartData-->
-                <ListView Name="PartsList"
+                <partlist:PartListView x:Name="PartViewList"
+                    Grid.Row="1" Margin="5"/>
+
+                <!--#region Список деталей устаревший интерфейс ISwPartData-->
+                <!--<ListView Name="PartsList"
                     Grid.Row="1"
                     Margin="5"
                           MouseDoubleClick="PartsList_MouseDoubleClick"
@@ -142,7 +145,7 @@
                         </GridView>
                     </ListView.View>
 
-                </ListView>
+                </ListView>-->
                 <!--#endregion-->
 
 
@@ -210,7 +213,7 @@
                         <TabItem Header="PartList" HorizontalContentAlignment="Stretch">
                             <!--#region Property object-->
 
-                            <partlist:PartListView x:Name="TestPartView"/>
+                            <!--<partlist:PartListView x:Name="TestPartView"/>-->
 
                             <!--#endregion-->
                         </TabItem>

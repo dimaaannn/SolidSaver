@@ -27,6 +27,8 @@ namespace SolidSaverWPF
     public partial class MainWindow : Window
     {
 
+        public SWAPIlib.Global.IMainPartView MainPartView { get; set; }
+
         public IRootModel MainModel { get; set; }
         public IList<ISwProperty> PropList { get; set; }
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
@@ -49,7 +51,6 @@ namespace SolidSaverWPF
         {
             InitializeComponent();
             MainModel = new RootModel();
-            //this.DataContext = MainModel;
             this.DataContext = this;
 
             SwAppControl.Connect();
@@ -57,19 +58,33 @@ namespace SolidSaverWPF
             MainModel.TopLevelOnly = true;
             MainModel.GetSubComponents();
 
+            //Основной список деталей
+            MainPartView = new SWAPIlib.Global.MainPartView(MainModel);
+            //PartViewList.TreePartView.ItemsSource = MainPartView.RootComponents;
+            PartViewList.MainPartView = MainPartView;
+
+            #region Свойства поиска
+
+            //Замена свойств
             PropUI = new PropertyUI();
+            //Привязка к ЮзерКонтрол
             PropertyTab.DataContext = PropUI;
-            PartsList.ItemsSource = SubComponents;
+            //Тестовый список хранения
             PropUI.ComponentList = SelectedComp;
+
+            //PartsList.ItemsSource = SubComponents;
+            #endregion
 
             CompControlList = new ObservableCollection<ComponentControl>();
 
+            //Remove class
             ThreePart = new ThreePartList();
+
             foreach (var comp in SubComponents)
             {
                 CompControlList.Add(new ComponentControl(comp));
             }
-            TestPartView.TreePartView.ItemsSource = CompControlList;
+
             //TestThreeview.ItemsSource = CompControlList;
 
 
@@ -81,13 +96,7 @@ namespace SolidSaverWPF
             //PropUI.ConstructorDict.Keys
             //PartsList.ItemsSource = SwPartList;
 
-            TestPartList = new PartList<IAppComponent>();
-            foreach (var appcomp in SubComponents)
-            {
-                var temp = new ComponentControl(appcomp);
-                TestPartList.PartCollection.Add(temp);
-                //TestPartList.SelectionNum
-            }
+
 
             
 
@@ -97,16 +106,16 @@ namespace SolidSaverWPF
         }
 
 
-        private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var index = PartsList.SelectedIndex;
-            if(index >= 0)
-            {
-                var currentPropList = SubComponents[index].PropList;
-                PropList = currentPropList;
-                PropertyBox.ItemsSource = currentPropList;
-            }
-        }
+        //private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    var index = PartsList.SelectedIndex;
+        //    if(index >= 0)
+        //    {
+        //        var currentPropList = SubComponents[index].PropList;
+        //        PropList = currentPropList;
+        //        PropertyBox.ItemsSource = currentPropList;
+        //    }
+        //}
 
         /// <summary>
         /// Обновить свойства активной детали
@@ -153,15 +162,15 @@ namespace SolidSaverWPF
             MainModel.GetSubComponents();
         }
 
-        private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var index = PartsList.SelectedIndex;
-            if (index >= 0)
-            {
-                var currentComp = SubComponents[index];
-                SelectedComp.Add(currentComp);
-            }
-        }
+        //private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        //{
+        //    var index = PartsList.SelectedIndex;
+        //    if (index >= 0)
+        //    {
+        //        var currentComp = SubComponents[index];
+        //        SelectedComp.Add(currentComp);
+        //    }
+        //}
     }
 
     

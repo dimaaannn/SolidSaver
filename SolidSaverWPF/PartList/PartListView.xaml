@@ -25,14 +25,16 @@
 
         <StackPanel>
             <TextBlock Text="{Binding ElementName=testgrid, Path=ActualWidth}" x:Name="wwwd"/>
-            <TextBlock Text="{Binding ElementName=TreePartView, Path=ActualWidth}"/>
+            <TextBlock Text="{Binding MainPartView.SelectedComp.Title}"/>
             
         </StackPanel>
 
 
         <TreeView x:Name="TreePartView" 
                     AutomationProperties.IsColumnHeader="True" AllowDrop="True"
-                    Grid.Row="1" Grid.ColumnSpan="5">
+                    Grid.Row="1" Grid.ColumnSpan="5"
+                    ItemsSource="{Binding MainPartView.RootComponents}"
+                    SelectedItemChanged="TreePartView_SelectedItemChanged">
 
             <TreeView.ItemTemplate>
 
