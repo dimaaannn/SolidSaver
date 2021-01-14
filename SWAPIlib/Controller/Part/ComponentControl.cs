@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using SWAPIlib.BaseTypes;
 using System.ComponentModel;
+using System.Collections;
 
 namespace SWAPIlib.Controller
 {
@@ -15,10 +16,10 @@ namespace SWAPIlib.Controller
     //Template for AsmComponent
 
     public interface IComponentControl : 
-        IModelControl<IAppComponent> 
+        IModelControl<IAppComponent>,
 
-        //IEnumerable<IComponentControl>,
-        //IEnumerator<IComponentControl>
+        IEnumerable<IComponentControl>,
+        IEnumerator<IComponentControl>
     {
         /// <summary>
         /// Объект модели сборки
@@ -130,6 +131,59 @@ namespace SWAPIlib.Controller
         {
             return $"{PartType}:{base.Title}";
         }
+
+        #region Enumerator
+        private IComponentControl _current;
+        object IEnumerator.Current => _current;
+        public IComponentControl Current => _current;
+
+        public IEnumerator<IComponentControl> GetEnumerator()
+        {
+            return this;
+        }
+        public bool MoveNext()
+        {
+            if (iterablePosition < SubComponentCount - 1)
+            {
+                if (subEnum != null && subEnum.MoveNext())
+                {
+                    _current = subEnum.Current;
+                }
+                else
+                {
+                    iterablePosition++;
+                    _current = SubComponents[iterablePosition];
+                    subEnum = _current.GetEnumerator();
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+        public void Reset()
+        {
+            iterablePosition = -1;
+            subEnum = null;
+            _current = null;
+        }
+        public void Dispose()
+        {
+            //throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this;
+        }
+        /// <summary>
+        /// Текущая позиция итерирования
+        /// </summary>
+        private int iterablePosition = -1;
+        /// <summary>
+        /// enumerator дочернего компонента
+        /// </summary>
+        private IEnumerator<IComponentControl> subEnum;
+        #endregion
     }
 
 

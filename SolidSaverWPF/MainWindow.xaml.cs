@@ -63,6 +63,8 @@ namespace SolidSaverWPF
             //PartViewList.TreePartView.ItemsSource = MainPartView.RootComponents;
             PartViewList.MainPartView = MainPartView;
 
+
+
             #region Свойства поиска
 
             //Замена свойств
@@ -160,6 +162,18 @@ namespace SolidSaverWPF
         {
             MainModel.LoadActiveModel();
             MainModel.GetSubComponents();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var comp in MainPartView.RootComponents)
+            {
+                comp.IsSelected = !comp.IsSelected;
+                foreach ( var scomp in comp)
+                {
+                    scomp.IsSelected = !scomp.IsSelected;
+                }
+            }
         }
 
         //private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
