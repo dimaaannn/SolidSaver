@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.PartList"
-             xmlns:treelist="clr-namespace:TreeListView;assembly=TreeListView"
              
              xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
              HorizontalContentAlignment="Stretch"
@@ -13,7 +12,7 @@
     <Grid x:Name="testgrid" ShowGridLines="False" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="200"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 

@@ -18,8 +18,8 @@
             <!--<ColumnDefinition  MinWidth="150" Width="{Binding Source={StaticResource width1}}"/>-->
             <!--<ColumnDefinition MinWidth="150" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:PartListView}, Path=secondRow}"/>-->
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition SharedSizeGroup="test"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition SharedSizeGroup="test" Name="main"/>
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
 
@@ -27,13 +27,13 @@
                 Orientation="Horizontal">
             
             <Ellipse x:Name="Drawing" Margin="2" Visibility="Visible"
-                     Width="10" Height="10" Fill="Red"/>
+                     Width="10" Height="10" Fill="Red" ToolTip="RedCircle"/>
             <Ellipse x:Name="IsSheet" Margin="2" Visibility="Visible"
                      Width="10" Height="10" Fill="Blue"/>
 
         </StackPanel>
         
-        <TextBlock Grid.Column="1"
+        <TextBlock Grid.Column="2"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Text="{Binding Title, FallbackValue=No data}"/>
@@ -42,7 +42,7 @@
             VerticalAlignment="Center"
             Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:PartListView}, Path=ActualWidth}"
             />-->
-        <CheckBox Grid.Column="2"
+        <CheckBox Grid.Column="1"
             Margin="5, 0" 
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
