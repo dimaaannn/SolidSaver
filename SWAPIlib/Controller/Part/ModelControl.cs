@@ -19,7 +19,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Объект выделения
         /// </summary>
-        IPartTyper Parttyper { get; }
+        IModelSelector Modelselector { get; }
         /// <summary>
         /// Тип детали
         /// </summary>
@@ -47,30 +47,30 @@ namespace SWAPIlib.Controller
         public ModelControl(T part)
         {
             Appmodel = part;
-            Parttyper = new PartTyper(part);
+            Modelselector = new ModelSelector(part);
         }
 
         public ModelControl() { }
         public bool IsSelected
         {
-            get => Parttyper.IsSelected;
+            get => Modelselector.IsSelected;
             set
             {
-                Parttyper.IsSelected = value;
+                Modelselector.IsSelected = value;
                 OnPropertyChanged("IsSelected");
             }
         }
         public int SelectionGroup
         {
-            get => Parttyper.GroupNumber;
+            get => Modelselector.GroupNumber;
             set
             {
-                Parttyper.GroupNumber = value;
+                Modelselector.GroupNumber = value;
                 OnPropertyChanged("SelectionGroup");
             }
         }
         public virtual T Appmodel { get; protected set; }
-        public IPartTyper Parttyper { get; protected set; }
+        public IModelSelector Modelselector { get; protected set; }
         public AppDocType PartType => Appmodel.DocType;
         public virtual string Title => Appmodel.Title;
         public override string ToString()

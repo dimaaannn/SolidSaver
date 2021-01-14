@@ -20,7 +20,7 @@ namespace SWAPIlib.Controller
     //    SHEETPART
     //}
 
-    public interface IPartTyper
+    public interface IModelSelector
     {
         /// <summary>
         /// Экземпляр детали
@@ -59,19 +59,19 @@ namespace SWAPIlib.Controller
     }
 
     //TODO add fix to partTyper with virtual or hidden part
-    public class PartTyper : IPartTyper
+    public class ModelSelector : IModelSelector
     {
         /// <summary>
         /// Main constructor
         /// </summary>
         /// <param name="imodel"></param>
-        public PartTyper(IAppModel imodel)
+        public ModelSelector(IAppModel imodel)
         {
             Appmodel = imodel;
 
         }
-        public PartTyper(IModelControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
-        public PartTyper(IAppComponent component)
+        public ModelSelector(IModelControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
+        public ModelSelector(IAppComponent component)
         {
             Appmodel = component.PartModel ?? component as IAppModel;
         }
