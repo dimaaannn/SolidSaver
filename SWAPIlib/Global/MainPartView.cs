@@ -28,6 +28,7 @@ namespace SWAPIlib.Global
         /// Список компонентов корневой сборки (тестовый)
         /// </summary>
         ObservableCollection<SWAPIlib.Controller.IComponentControl> RootComponents { get; }
+        int ActiveSelectionGroup { get; set; }
 
 
     }
@@ -80,7 +81,7 @@ namespace SWAPIlib.Global
         /// Корневые компоненты
         /// </summary>
         public ObservableCollection<IComponentControl> RootComponents { get; private set; }
-
+        public int ActiveSelectionGroup { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string prop = "")
@@ -90,8 +91,4 @@ namespace SWAPIlib.Global
         }
     }
 
-    public class SelectManager
-    {
-        public int S
-    }
 }
