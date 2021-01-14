@@ -17,10 +17,6 @@ namespace SWAPIlib.Global
         /// </summary>
         IRootModel Rootmodel { get; }
         /// <summary>
-        /// Компоненты модели
-        /// </summary>
-        SWAPIlib.Controller.ThreePartList PartList { get; }
-        /// <summary>
         /// Выбранный компонент
         /// </summary>
         SWAPIlib.Controller.IComponentControl SelectedComp { get; set; }
@@ -38,6 +34,10 @@ namespace SWAPIlib.Global
 
     public class MainPartView : IMainPartView
     {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="rootModel"></param>
         public MainPartView(IRootModel rootModel)
         {
             Rootmodel = rootModel;
@@ -51,12 +51,17 @@ namespace SWAPIlib.Global
             }
 
         }
-
+        /// <summary>
+        /// Ссылка на коренную модель
+        /// </summary>
         public IRootModel Rootmodel { get; private set; }
-
-        public ThreePartList PartList { get; }
-
+        /// <summary>
+        /// Выделенный компонент
+        /// </summary>
         SWAPIlib.Controller.IComponentControl _selectedComp = null;
+        /// <summary>
+        /// SelectedComp property
+        /// </summary>
         public SWAPIlib.Controller.IComponentControl SelectedComp
         {
             get => _selectedComp;
@@ -67,10 +72,15 @@ namespace SWAPIlib.Global
                 OnPropertyChanged("SelectedCompProp");
             }
         }
+        /// <summary>
+        /// Свойства выделенного компонента
+        /// </summary>
         public List<ISwProperty> SelectedCompProp => SelectedComp.Appmodel.PropList;
-
-
+        /// <summary>
+        /// Корневые компоненты
+        /// </summary>
         public ObservableCollection<IComponentControl> RootComponents { get; private set; }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string prop = "")
@@ -78,5 +88,10 @@ namespace SWAPIlib.Global
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
+    }
+
+    public class SelectManager
+    {
+        public int S
     }
 }
