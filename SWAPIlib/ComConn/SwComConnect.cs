@@ -26,7 +26,7 @@ namespace SWAPIlib.ComConn
                 ModelDoc2 ret = null;
                 if (_mainModel == null && ComConnected)
                 {
-                    ret = SwAPI.swApp.ActiveDoc;
+                    ret = ActiveModel;
 
                     if (ret != null)
                     {
@@ -35,9 +35,10 @@ namespace SWAPIlib.ComConn
                         _mainModel = ret;
                         MainModelChanged?.Invoke(_mainModel, eventArgs);
                         //TODO обработать событие DestroyNotify2 при закрытии
+                        _mainModel = ret;
                     }
                 }
-                return ret;
+                return _mainModel;
             }
             set
             {
