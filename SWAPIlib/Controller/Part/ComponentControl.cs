@@ -145,20 +145,22 @@ namespace SWAPIlib.Controller
         {
             if (iterablePosition < SubComponentCount - 1)
             {
-                if (subEnum != null && subEnum.MoveNext())
-                {
-                    _current = subEnum.Current;
-                }
-                else
-                {
-                    iterablePosition++;
-                    _current = SubComponents[iterablePosition];
-                    subEnum = _current.GetEnumerator();
-                }
+                iterablePosition++;
+                _current = SubComponents[iterablePosition];
+                subEnum = _current.GetEnumerator();
+                return true;
+            }
+            else if (subEnum != null && subEnum.MoveNext())
+            {
+                _current = subEnum.Current;
                 return true;
             }
             else
+            {
+                Reset();
                 return false;
+            }
+
         }
         public void Reset()
         {
