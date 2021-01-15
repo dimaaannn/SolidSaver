@@ -16,6 +16,7 @@ using SWAPIlib.PropertyObj;
 using System.Collections;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.ComConn.ComObjectProxy;
 
 namespace SolidApp
 {
@@ -32,11 +33,13 @@ namespace SolidApp
             var appmodel = ModelClassFactory.ActiveDoc;
 
             //Print root title
-            AppAssembly rootAsm;
+            AppAssembly rootAsm = null;
+            ModelDoc2 testRawModel = null;
             if (appmodel.SwModel is AssemblyDoc swAsm)
             {
                 rootAsm = new AppAssembly(appmodel.SwModel);
                 Console.WriteLine($"RootDoc: {rootAsm.Title}");
+                testRawModel = rootAsm.GetComponents(true).First().SwModel;
             }
 
 
@@ -47,8 +50,8 @@ namespace SolidApp
             rootModelClass.GetSubComponents();
 
             //Test component in assembly
-            var testcomp = rootModelClass.SubComponents.Skip(4).First();
-
+            var testcomp = rootModelClass.SubComponents.Skip(0).First();
+            var rawmodel = testcomp.SwModel;
             var rawcomp = testcomp.SwCompModel;
             //rootcomp.IsFixed
             //rootcomp.IsMirrored
@@ -66,6 +69,7 @@ namespace SolidApp
             var selManager = rootModelClass.appModel.SwModel.ISelectionManager;
             var selManager2 = testcomp.SwModel.ISelectionManager;
             //ISelectionMgr:CreateSelectData
+
             var selData = selManager.CreateSelectData();
             var callout = selData.Callout;
             var mark = selData.Mark;
@@ -74,12 +78,32 @@ namespace SolidApp
             var ysel = selData.Y;
             var zsel = selData.Z;
 
+            //rawcomp.Select4(true, null, false);
             //rawcomp.Select4(true, selData, false);
             //rawcomp.DeSelect();
 
-            var selcount = selManager.GetSelectedObjectCount2(-1); //-1 - all models, 0 - only whithout mark
-            SWAPIlib.ComConn.Point pt1 = new Point(selManager.GetSelectionPoint2(selcount, -1));
 
+            //appselman.SwSelMan.EnableSelection = false;
+            //appselman.Select(testcomp.SwCompModel);
+            //rawcomp.SelectByMark(false, 1);
+
+            testcomp.SwCompModel.SelectByMark(false, 1);
+
+            selManager.SelectionColor[1] = 2;
+            
+            AppSelMgr.SelectionGroup = 1;
+            var selcomps = AppSelMgr.SelectedComponents;
+
+            var count = AppSelMgr.CurrentSelectCount;
+            Console.WriteLine($"selection count = {count}");
+
+
+            //selManager.GetPreSelectedObject
+            //selManager.DeSelect2
+
+            
+
+                
             Console.ReadKey();
         }
 

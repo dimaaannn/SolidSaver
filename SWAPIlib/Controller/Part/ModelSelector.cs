@@ -58,6 +58,11 @@ namespace SWAPIlib.Controller
 
     }
 
+    public interface IComponentSelector : IModelSelector
+    {
+        //bool
+    }
+
     //TODO add fix to partTyper with virtual or hidden part
     public class ModelSelector : IModelSelector
     {

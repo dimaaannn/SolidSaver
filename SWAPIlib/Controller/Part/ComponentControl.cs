@@ -20,6 +20,7 @@ namespace SWAPIlib.Controller
 
         IEnumerable<IComponentControl>,
         IEnumerator<IComponentControl>
+        //, IComparer<AppModel>
     {
         /// <summary>
         /// Объект модели сборки

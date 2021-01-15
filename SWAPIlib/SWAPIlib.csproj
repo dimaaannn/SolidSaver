@@ -51,6 +51,7 @@
     <Compile Include="ComConn\ComObjectProxy\SwComDrawing.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComModel.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComPart.cs" />
+    <Compile Include="ComConn\ComObjectProxy\SwComSelMgr.cs" />
     <Compile Include="ComConn\SwComConnect.cs" />
     <Compile Include="Controller\ComponentList\MainPartList.cs" />
     <Compile Include="Controller\Part\ComponentControl.cs" />
