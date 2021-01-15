@@ -27,58 +27,58 @@ namespace SolidApp
         {
             //var swModel = AppConsole.LoadActiveDoc();
             SwAppControl.Connect();
+
+            //Get Raw document
             var appmodel = ModelClassFactory.ActiveDoc;
 
-
-            if (appmodel.SwModel is PartDoc swPart)
-            {
-
-            }
-
+            //Print root title
+            AppAssembly rootAsm;
             if (appmodel.SwModel is AssemblyDoc swAsm)
             {
-                var abc = new AppAssembly(appmodel.SwModel);
-                Console.WriteLine(abc.Title);
+                rootAsm = new AppAssembly(appmodel.SwModel);
+                Console.WriteLine($"RootDoc: {rootAsm.Title}");
             }
 
-            var cont = new ContainerContaiter(10);
-            var en = cont.GetEnumerator();
 
-            foreach (var item in cont)
-            {
-                Console.Write(item);
-            }
 
-            //Console.WriteLine($"Vars = {String.Join(",", cont.GetEnumerator().ToString())}");
+            var rootModelClass = new SWAPIlib.Global.RootModel();
+            rootModelClass.GetMainModel();
+            rootModelClass.TopLevelOnly = true;
+            rootModelClass.GetSubComponents();
 
-            var Appcomp = new List<AppComponent>();
-            if (appmodel is AppAssembly appAsm)
-            {
-                var confList = appAsm.ConfigList;
-                Console.WriteLine($"configList = {string.Join(",", confList)}");
-                var compList = appAsm.GetComponents(false);
+            //Test component in assembly
+            var testcomp = rootModelClass.SubComponents.Skip(4).First();
 
-                PropConstructor constructor = SWAPIlib.PropertyObj.PropFactory.Nomination;
+            var rawcomp = testcomp.SwCompModel;
+            //rootcomp.IsFixed
+            //rootcomp.IsMirrored
+            //rootcomp.IsPatternInstance
+            //rootcomp.IsHidden
+            //rootcomp.IsLoaded
+            //rootcomp.IsSuppressed
+            //rootcomp.IsVirtual
+            //rootcomp.IsEnvelope
+            //rootcomp.Select4
 
-            }
+            Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
 
-            var root = new TreeEnumNode() { Name = "Root" };
-            
-            for (int i = 0; i < 5; i++)
-            {
-                var lvl1 = new TreeEnumNode() { Name = $"lvl1-{i}" };
-                for (int j = 0; j < 5; j++)
-                {
-                    lvl1.SubNodes.Add(new TreeEnumNode() { Name = $"lvl2-{j}" });
-                }
-                root.SubNodes.Add(lvl1);
-            }
+            var swApp = SwAppControl.swApp;
+            var selManager = rootModelClass.appModel.SwModel.ISelectionManager;
+            var selManager2 = testcomp.SwModel.ISelectionManager;
+            //ISelectionMgr:CreateSelectData
+            var selData = selManager.CreateSelectData();
+            var callout = selData.Callout;
+            var mark = selData.Mark;
+            var view = selData.View;
+            var xsel = selData.X;
+            var ysel = selData.Y;
+            var zsel = selData.Z;
 
-            foreach(var node in root)
-            {
-                Console.WriteLine(node.Name);
-            }
+            //rawcomp.Select4(true, selData, false);
+            //rawcomp.DeSelect();
 
+            var selcount = selManager.GetSelectedObjectCount2(-1); //-1 - all models, 0 - only whithout mark
+            SWAPIlib.ComConn.Point pt1 = new Point(selManager.GetSelectionPoint2(selcount, -1));
 
             Console.ReadKey();
         }
