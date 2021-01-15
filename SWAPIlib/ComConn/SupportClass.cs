@@ -9,29 +9,35 @@ namespace SWAPIlib.ComConn
     /// <summary>
     /// Abstract point structure
     /// </summary>
-    public struct Point
+    public class Point
     {
         public double x;
         public double y;
         public double z;
         static int unitCorrect = 1000;
+        public bool IsNull = true;
 
         public Point(double x, double y, double z)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+            IsNull = false;
         }
         public Point(IEnumerable<double> coord)
         {
-            if (coord.Count() > 3)
+            //if (coord.Count() > 3)
+            //{
+            //    throw new ArrayTypeMismatchException(
+            //        "Point: array must contain less than 3 elements");
+            //}
+            if(coord != null)
             {
-                throw new ArrayTypeMismatchException(
-                    "Point: array must contain less than 3 elements");
+                x = coord.ElementAtOrDefault(0);
+                y = coord.ElementAtOrDefault(1);
+                z = coord.ElementAtOrDefault(2);
+                IsNull = false;
             }
-            x = coord.ElementAtOrDefault(0);
-            y = coord.ElementAtOrDefault(1);
-            z = coord.ElementAtOrDefault(2);
         }
 
         public static Box operator +(Point p1, Point p2)
