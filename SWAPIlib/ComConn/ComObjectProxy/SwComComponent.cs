@@ -197,5 +197,28 @@ namespace SWAPIlib.ComConn.Proxy
 
             return ret;
         }
+
+        /// <summary>
+        /// Получить свойства материала компонента
+        /// </summary>
+        /// <param name="swComp"></param>
+        /// <returns></returns>
+        public static MaterialProperty GetMaterialProperty(Component2 swComp)
+        {
+            return new MaterialProperty(swComp.MaterialPropertyValues);
+        }
+
+        /// <summary>
+        /// Установить свойства материала компонента
+        /// </summary>
+        /// <param name="swComp">SwComponent</param>
+        /// <param name="matProp">null = remove material</param>
+        public static void SetMaterialProperty(Component2 swComp, MaterialProperty matProp)
+        {
+            if (matProp == null)
+                swComp.RemoveMaterialProperty();
+            else
+                swComp.MaterialPropertyValues = matProp.ToComData();
+        }
     }
 }

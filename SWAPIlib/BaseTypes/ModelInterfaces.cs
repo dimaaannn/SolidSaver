@@ -107,6 +107,7 @@ namespace SWAPIlib
         /// </summary>
         /// <returns></returns>
         int GetChildrenCount();
+        SWAPIlib.ComConn.MaterialProperty MaterialColor { get; set; }
 
     }
 

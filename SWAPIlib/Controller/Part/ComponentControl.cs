@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using SWAPIlib.BaseTypes;
 using System.ComponentModel;
 using System.Collections;
+using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.ComConn;
 
 namespace SWAPIlib.Controller
 {
@@ -46,6 +48,7 @@ namespace SWAPIlib.Controller
         /// Уровень сборки относительно Root
         /// </summary>
         int AssemblyLevel { get; }
+        
     }
 
    

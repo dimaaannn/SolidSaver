@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.ComConn;
 
 namespace SWAPIlib
 {
@@ -49,6 +50,15 @@ namespace SWAPIlib
             get => SwCompModel.ExcludeFromBOM;
             set => SwCompModel.ExcludeFromBOM = value;
         }
+        /// <summary>
+        /// Material visual property, null = remove material
+        /// </summary>
+        public MaterialProperty MaterialColor
+        {
+            get => ComponentProxy.GetMaterialProperty(SwCompModel);
+            set => ComponentProxy.SetMaterialProperty(SwCompModel, value);
+        }
+
         public event EventHandler<SwEventArgs> CloseFile
         {
             add => throw new NotImplementedException();

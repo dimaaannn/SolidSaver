@@ -54,6 +54,50 @@ namespace SWAPIlib.ComConn
 
     }
 
+    public class MaterialProperty
+    {
+        public MaterialProperty()
+        {
+            Red = 0;
+            Green = 0;
+            Blue = 0;
+
+            Ambient = 0;
+            Diffuse = 0;
+            Specular = 0;
+            Shininess = 0;
+            Transparency = 0;
+            Emission = 0;
+        }
+        public MaterialProperty(double[] arr)
+        {
+            Red = Convert.ToInt32(arr[0] * 255);
+            Green = Convert.ToInt32(arr[1] * 255);
+            Blue = Convert.ToInt32(arr[2] * 255);
+
+            Ambient = arr[3]; Diffuse = arr[4]; Specular = arr[5];
+            Shininess = arr[6]; Transparency = arr[7]; Emission = arr[8];
+        }
+        public int Red;
+        public int Green;
+        public int Blue;
+
+        public double Ambient;
+        public double Diffuse;
+        public double Specular;
+        public double Shininess;
+        public double Transparency;
+        public double Emission;
+
+        public static implicit operator double[](MaterialProperty mp)
+        {
+            return new double[] {mp.Red / 255.0, mp.Green / 255.0, mp.Blue / 255.0,
+            mp.Ambient, mp.Diffuse, mp.Specular, mp.Shininess, mp.Transparency, mp.Emission };
+        }
+
+        public double[] ToComData() { return (double[])this; }
+    }
+
     public struct Box
     {
         public Point p1;
