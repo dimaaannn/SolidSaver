@@ -62,19 +62,23 @@ namespace SWAPIlib.Controller
         /// </summary>
         /// <param name="component"></param>
         public ComponentControl(IAppComponent component) : base(component) { }
+
         /// <summary>
         /// Модель детали
         /// </summary>
         public AppModel PartModel => Appmodel.PartModel;
+
         /// <summary>
         /// Количество дочерних компонентов
         /// </summary>
         public virtual int SubComponentCount => PartType == AppDocType.swASM ?
             Appmodel.GetChildrenCount() : 0;
+
         /// <summary>
         /// Внутренний список дочерних компонентов
         /// </summary>
         ObservableCollection<IComponentControl> _subComponents = null;
+
         /// <summary>
         /// Список дочерних компонентов
         /// </summary>
@@ -97,18 +101,33 @@ namespace SWAPIlib.Controller
             }
         }
 
+
         /// <summary>
         /// Сокращённое имя компонента
         /// </summary>
         public override string Title => TitleFilter.Replace(base.Title, "");
+
         /// <summary>
         /// Уровень сборки относительно Root
         /// </summary>
         public int AssemblyLevel => LevelCounter.Matches(base.Title).Count;
+
         /// <summary>
         /// Имя зависимой конфигурации
         /// </summary>
         public string RefConfig => Appmodel.RefConfigName;
+
+        public override bool IsSelected {
+            get => base.IsSelected;
+            set
+            {
+                if(value)
+                    AppSelMgr.Select(this.Appmodel.SwCompModel, true);
+                else
+                    AppSelMgr.DeSelect(this.Appmodel.SwCompModel);
+                base.IsSelected = value; 
+            }
+        }
 
         /// <summary>
         /// Компонент погашен

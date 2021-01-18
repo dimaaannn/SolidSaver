@@ -51,7 +51,7 @@ namespace SWAPIlib.Controller
         }
 
         public ModelControl() { }
-        public bool IsSelected
+        public virtual bool IsSelected
         {
             get => Modelselector.IsSelected;
             set
@@ -60,7 +60,7 @@ namespace SWAPIlib.Controller
                 OnPropertyChanged("IsSelected");
             }
         }
-        public int SelectionGroup
+        public virtual int SelectionGroup
         {
             get => Modelselector.GroupNumber;
             set

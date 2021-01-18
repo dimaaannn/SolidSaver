@@ -16,7 +16,6 @@ using SWAPIlib.PropertyObj;
 using System.Collections;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
-using SWAPIlib.ComConn.ComObjectProxy;
 
 namespace SolidApp
 {
@@ -35,11 +34,13 @@ namespace SolidApp
             //Print root title
             AppAssembly rootAsm = null;
             ModelDoc2 testRawModel = null;
+            List<IAppComponent> compList = null;
             if (appmodel.SwModel is AssemblyDoc swAsm)
             {
                 rootAsm = new AppAssembly(appmodel.SwModel);
                 Console.WriteLine($"RootDoc: {rootAsm.Title}");
-                testRawModel = rootAsm.GetComponents(true).First().SwModel;
+                compList = rootAsm.GetComponents(true);
+                testRawModel = compList.First().SwModel;
             }
 
 
@@ -61,38 +62,35 @@ namespace SolidApp
             //rootcomp.IsSuppressed
             //rootcomp.IsVirtual
             //rootcomp.IsEnvelope
-            //rootcomp.Select4
 
             Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
 
             var swApp = SwAppControl.swApp;
-            var selManager = rootModelClass.appModel.SwModel.ISelectionManager;
-            var selManager2 = testcomp.SwModel.ISelectionManager;
-            //ISelectionMgr:CreateSelectData
+            var selManager = AppSelMgr.SwSelMan;
 
-            var selData = selManager.CreateSelectData();
-            var callout = selData.Callout;
-            var mark = selData.Mark;
-            var view = selData.View;
-            var xsel = selData.X;
-            var ysel = selData.Y;
-            var zsel = selData.Z;
+            var selData = AppSelMgr.SelData;
+            var rawComponents = compList.Take(3).Select(x => x.SwCompModel);
 
-            //rawcomp.Select4(true, null, false);
-            //rawcomp.Select4(true, selData, false);
-            //rawcomp.DeSelect();
+            AppSelMgr.SelectedComponents = rawComponents.ToArray();
 
 
-            //appselman.SwSelMan.EnableSelection = false;
-            //appselman.Select(testcomp.SwCompModel);
-            //rawcomp.SelectByMark(false, 1);
+            double[] colorval = new double[8] { 1, 0.1, 0.1, 0, 0, 0, 0, 0 };
+            var mprop = new MaterialProperty()
+            {
+                Red = 200,
+                Green = 150,
+                Blue = 0,
+                Transparency = 0.5
+            };
 
-            testcomp.SwCompModel.SelectByMark(false, 1);
+            var selected = AppSelMgr.SelectedComponents;
 
-            selManager.SelectionColor[1] = 2;
-            
-            AppSelMgr.SelectionGroup = 1;
-            var selcomps = AppSelMgr.SelectedComponents;
+            foreach(var comp in selected)
+            {
+                Console.WriteLine(comp.Name);
+            }
+
+
 
             var count = AppSelMgr.CurrentSelectCount;
             Console.WriteLine($"selection count = {count}");
