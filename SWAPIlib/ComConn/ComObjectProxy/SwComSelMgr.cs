@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 
 
-namespace SWAPIlib.ComConn
+namespace SWAPIlib
 {
 
 
