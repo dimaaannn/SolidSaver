@@ -34,7 +34,10 @@ namespace SWAPIlib.Controller
         /// Номер группы выделения
         /// </summary>
         int GroupNumber { get; set; }
-
+        /// <summary>
+        /// Путь относительно RootFolder
+        /// </summary>
+        string RootSubFolder { get; }
         /// <summary>
         /// Является объектом детали
         /// </summary>
@@ -51,17 +54,10 @@ namespace SWAPIlib.Controller
         /// Имеется чертёж с таким же именем файла
         /// </summary>
         bool IsHaveDrawing { get; }
-        /// <summary>
-        /// Имя внутренней папки проекта относительно главной сборки
-        /// </summary>
-        string RootSubFolder { get; }
-
+        bool Visible { get; set; }
     }
 
-    public interface IComponentSelector : IModelSelector
-    {
-        //bool
-    }
+    
 
     //TODO add fix to partTyper with virtual or hidden part
     public class ModelSelector : IModelSelector
@@ -101,11 +97,6 @@ namespace SWAPIlib.Controller
             set => _groupNumber = Math.Min(value, _selectionInGroup.Length - 1);
         }
         #endregion
-        
-        public bool IsPart => Appmodel.DocType == AppDocType.swPART;
-        public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
-        public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
-        public bool IsHaveDrawing => CheckDrawing(Appmodel.Path);
         public string RootSubFolder
         {
             get
@@ -121,6 +112,16 @@ namespace SWAPIlib.Controller
                 else return null;
             }
         }
+        
+        public bool IsPart => Appmodel.DocType == AppDocType.swPART;
+        public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
+        public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
+        public bool IsHaveDrawing => CheckDrawing(Appmodel.Path);
+        public virtual bool Visible
+        {
+            get => Appmodel.SwModel.Visible;
+            set => Appmodel.SwModel.Visible = value;
+        }
 
         /// <summary>
         /// Проверить существование чертежа с тем же именем в папке
@@ -134,6 +135,40 @@ namespace SWAPIlib.Controller
                 Path.GetFileNameWithoutExtension(path) + 
                 ".SLDDRW";
             return File.Exists(pathWithNewExt);
+        }
+    }
+
+
+    public interface IComponentSelector : IModelSelector
+    {
+        IAppComponent Appcomponent { get; }
+
+        bool IsFixed { get; }
+        bool IsMirrored { get; }
+        bool IsPatternInstance { get; }
+        bool IsSuppressed { get; }
+        bool IsVirtual { get; }
+        
+    }
+
+    public class ComponentSelector : ModelSelector, IComponentSelector
+    {
+        public ComponentSelector(IAppComponent comp) : base(comp)
+        {
+            Appcomponent = comp;
+        }
+        public IAppComponent Appcomponent { get; set; }
+
+
+        public bool IsFixed => Appcomponent.SwCompModel.IsFixed();
+        public bool IsMirrored => Appcomponent.SwCompModel.IsMirrored();
+        public bool IsPatternInstance => Appcomponent.SwCompModel.IsPatternInstance();
+        public bool IsSuppressed => Appcomponent.SwCompModel.IsSuppressed();
+        public bool IsVirtual => Appcomponent.SwCompModel.IsVirtual;
+        public override bool Visible
+        {
+            get => Appcomponent.SwCompModel.Visible == 1;
+            set => Appcomponent.SwCompModel.Visible = value ? 1 : 0;
         }
     }
 }

@@ -43,6 +43,7 @@ namespace SolidApp
                 testRawModel = compList.First().SwModel;
             }
 
+            var swApp = SwAppControl.swApp;
 
 
             var rootModelClass = new SWAPIlib.Global.RootModel();
@@ -52,8 +53,11 @@ namespace SolidApp
 
             //Test component in assembly
             var testcomp = rootModelClass.SubComponents.Skip(0).First();
+            var testcompcontrol = new SWAPIlib.Controller.ComponentControl(testcomp);
+
             var rawmodel = testcomp.SwModel;
             var rawcomp = testcomp.SwCompModel;
+
             //rootcomp.IsFixed
             //rootcomp.IsMirrored
             //rootcomp.IsPatternInstance
@@ -65,23 +69,17 @@ namespace SolidApp
 
             Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
 
-            var swApp = SwAppControl.swApp;
-            var selManager = AppSelMgr.SwSelMan;
+            testcompcontrol.Modelselector.IsSelected = true;
+            var checklist = new List<bool>();
+            checklist.Add(true);
+            checklist.Add(rawcomp.IsLoaded());
+            
+            
+            
 
-            var selData = AppSelMgr.SelData;
-            var rawComponents = compList.Take(3).Select(x => x.SwCompModel);
 
-            AppSelMgr.SelectedComponents = rawComponents.ToArray();
-
-
-            double[] colorval = new double[8] { 1, 0.1, 0.1, 0, 0, 0, 0, 0 };
-            var mprop = new MaterialProperty()
-            {
-                Red = 200,
-                Green = 150,
-                Blue = 0,
-                Transparency = 0.5
-            };
+            Console.WriteLine($"Checklist: {string.Join(", ", checklist)}");
+            Console.WriteLine($"Visible:{rawcomp.Visible}");
 
             var selected = AppSelMgr.SelectedComponents;
 
@@ -104,6 +102,7 @@ namespace SolidApp
                 
             Console.ReadKey();
         }
+
 
         public static void PrintAsmInfo(List<AppComponent> Appcomp)
         {
