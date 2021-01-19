@@ -53,7 +53,17 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Рабочая папка проекта
         /// </summary>
-        public static string WorkFolder { get; set; } = RootFolder;
+        public static string WorkFolder 
+        { 
+            get => _workFolder ?? RootFolder;
+            set
+            {
+                WorkFolderChanged.Invoke(value, new EventArgs());
+                _workFolder = value;
+            } 
+        } 
+        private static string _workFolder;
+        public static event EventHandler WorkFolderChanged;
 
         /// <summary>
         /// Clear root path if main model changed
