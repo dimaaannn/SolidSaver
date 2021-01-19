@@ -39,6 +39,10 @@ namespace SWAPIlib.Controller
         /// </summary>
         string RootSubFolder { get; }
         /// <summary>
+        /// Находится внутри рабочей папки
+        /// </summary>
+        bool InWorkFolder { get; }
+        /// <summary>
         /// Является объектом детали
         /// </summary>
         bool IsPart { get; }
@@ -112,6 +116,12 @@ namespace SWAPIlib.Controller
                 else return null;
             }
         }
+        /// <summary>
+        /// Находится внутри рабочей папки
+        /// </summary>
+        public bool InWorkFolder => Appmodel.Path.ToLowerInvariant().Contains(
+                    GlobalOptions.WorkFolder.ToLowerInvariant());
+            
         /// <summary>
         /// Является деталью
         /// </summary>
