@@ -70,16 +70,14 @@ namespace SolidApp
             Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
 
             testcompcontrol.Modelselector.IsSelected = true;
-            var checklist = new List<bool>();
-            checklist.Add(true);
-            checklist.Add(rawcomp.IsLoaded());
+
             
-            
+            //testcompcontrol.Modelselector.IsSheetMetal
             
 
 
-            Console.WriteLine($"Checklist: {string.Join(", ", checklist)}");
-            Console.WriteLine($"Visible:{rawcomp.Visible}");
+
+            Console.WriteLine($"Visible:{testcompcontrol.Modelselector.InWorkFolder}");
 
             var selected = AppSelMgr.SelectedComponents;
 

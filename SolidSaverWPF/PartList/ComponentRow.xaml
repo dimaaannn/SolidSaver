@@ -25,9 +25,9 @@
 
         <StackPanel Grid.Column="0" 
                 Orientation="Horizontal">
-            
+
             <Ellipse x:Name="Drawing" Margin="2" Visibility="Visible"
-                     Width="10" Height="10" Fill="Red" ToolTip="RedCircle"/>
+                     Width="10" Height="10" Fill="Red" ToolTip="Листовая деталь"/>
             <Ellipse x:Name="IsSheet" Margin="2" Visibility="Visible"
                      Width="10" Height="10" Fill="Blue"/>
 
