@@ -110,7 +110,7 @@ namespace SWAPIlib.Controller
         {
             get
             {
-                string rootModelFolder = GlobalOptions.ModelRootFolder;
+                string rootModelFolder = GlobalOptions.RootFolder;
                 if (Appmodel.Path.ToLowerInvariant().
                     Contains(rootModelFolder.ToLowerInvariant()))
                 {

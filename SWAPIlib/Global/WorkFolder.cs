@@ -15,9 +15,17 @@ namespace SWAPIlib.Global
     public static class GlobalOptions
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        static GlobalOptions()
+        {
+            SWAPIlib.ComConn.SwAppControl.MainModelChanged += SwAppControl_MainModelChanged;
+        }
+
+        /// <summary>
         /// Путь к основной открытой детали
         /// </summary>
-        public static string MainPartPath
+        public static string RootModelPath
         {
             get
             {
@@ -34,19 +42,28 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Рабочая папка сборки
         /// </summary>
-        public static string ModelRootFolder
+        public static string RootFolder
         {
-            get => string.IsNullOrEmpty(_modelRootFolder) ?
-                System.IO.Path.GetDirectoryName(MainPartPath) :
-                _modelRootFolder;
-            set => _modelRootFolder = value;
+            get => string.IsNullOrEmpty(_rootFolder) ?
+                System.IO.Path.GetDirectoryName(RootModelPath) :
+                _rootFolder;
+            set => _rootFolder = value;
         }
-        static string _modelRootFolder;
+        static string _rootFolder;
         /// <summary>
         /// Рабочая папка проекта
         /// </summary>
-        public static string MainFolder { get; set; } = ModelRootFolder;
+        public static string WorkFolder { get; set; } = RootFolder;
 
+        /// <summary>
+        /// Clear root path if main model changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void SwAppControl_MainModelChanged(object sender, EventArgs e)
+        {
+            RootFolder = null;
+        }
     }
 
 }
