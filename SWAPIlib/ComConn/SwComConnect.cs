@@ -34,7 +34,7 @@ namespace SWAPIlib.ComConn
                         SwEventArgs eventArgs = new SwEventArgs(evT);
                         _mainModel = ret;
                         MainModelChanged?.Invoke(_mainModel, eventArgs);
-                        //TODO обработать событие DestroyNotify2 при закрытии
+                        LoadMainModelAction(_mainModel);
                         _mainModel = ret;
                     }
                 }
@@ -42,8 +42,12 @@ namespace SWAPIlib.ComConn
             }
             set
             {
+                ChangeMainModelAction(_mainModel); //Unsubscribe events
+
                 _mainModel = value;
+
                 string evT = $"Модель {_mainModel?.GetTitle() ?? "не"} установлена";
+                LoadMainModelAction(_mainModel); // Subscribe
                 SwEventArgs eventArgs = new SwEventArgs(evT);
                 MainModelChanged?.Invoke(_mainModel, eventArgs);
             }
@@ -97,6 +101,51 @@ namespace SWAPIlib.ComConn
             }
         }
 
+        private static void LoadMainModelAction(ModelDoc2 model)
+        {
+            if(model is AssemblyDoc asm)
+            {
+                asm.DestroyNotify2 += RootModelClose;
+                asm.NewSelectionNotify += Asm_NewSelectionNotify;
+            }
+            if(model is PartDoc part)
+            {
+                part.DestroyNotify2 += RootModelClose;
+            }
+        }
+        private static void ChangeMainModelAction(ModelDoc2 model)
+        {
+            if (model is AssemblyDoc asm)
+            {
+                asm.DestroyNotify2 -= RootModelClose;
+                asm.NewSelectionNotify -= Asm_NewSelectionNotify;
+            }
+            if (model is PartDoc part)
+            {
+                part.DestroyNotify2 -= RootModelClose;
+            }
+        }
+
+        #region Events
+
+        private static int Asm_NewSelectionNotify()
+        {
+            SelectionNotify?.Invoke(MainModel, new EventArgs());
+            return 0;
+        }
+        /// <summary>
+        /// Изменено выделение
+        /// </summary>
+        public static event EventHandler SelectionNotify;
+        private static int RootModelClose(int DestroyType)
+        {
+            RootModelClosed?.Invoke(_mainModel, new EventArgs());
+            return DestroyType;
+        }
+        /// <summary>
+        /// Основная модель закрыта
+        /// </summary>
+        public static event EventHandler RootModelClosed;
         /// <summary>
         /// Событие при закрытии SW
         /// </summary>
@@ -107,7 +156,6 @@ namespace SWAPIlib.ComConn
             _comStatus = false;
             _mainModel = null;
         }
-
         /// <summary>
         /// Событие при подключении к com
         /// </summary>
@@ -117,7 +165,7 @@ namespace SWAPIlib.ComConn
         {
             _comStatus = true;
         }
-
+        #endregion
     }
 
 }
