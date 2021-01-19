@@ -9,10 +9,11 @@ using System.ComponentModel;
 
 namespace SWAPIlib.Controller
 {
-    public interface IPartListTest<T1> where T1 : IAppModel
+    public interface IPartListTest<T1,  T2> 
+        where T1 : IAppModel where T2 : IModelSelector
     {
-        IModelControl<T1> GetSelectedPart { get; }
-        ObservableCollection<IModelControl<T1>> PartCollection { get; set; }
+        IModelControl<T1, T2> GetSelectedPart { get; }
+        ObservableCollection<IModelControl<T1, T2>> PartCollection { get; set; }
         int SelectionNum { get; set; }
 
         event PropertyChangedEventHandler PropertyChanged;
@@ -21,13 +22,14 @@ namespace SWAPIlib.Controller
         void OnPropertyChanged(string prop = "");
     }
 
-    public class PartList<T1> : INotifyPropertyChanged, IPartListTest<T1> where T1 : IAppModel
+    public class PartList<T1, T2> : INotifyPropertyChanged, 
+        IPartListTest<T1, T2> where T1 : IAppModel where T2: IModelSelector
     {
         public PartList()
         {
-            PartCollection = new ObservableCollection<IModelControl<T1>>();
+            PartCollection = new ObservableCollection<IModelControl<T1, T2>>();
         }
-        public ObservableCollection<IModelControl<T1>> PartCollection { get; set; }
+        public ObservableCollection<IModelControl<T1, T2>> PartCollection { get; set; }
         private int _selectionNum = -1;
         public virtual int SelectionNum
         {
@@ -38,7 +40,7 @@ namespace SWAPIlib.Controller
                 OnPropertyChanged("SelectionNum");
             }
         }
-        public IModelControl<T1> GetSelectedPart { get; }
+        public IModelControl<T1, T2> GetSelectedPart { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

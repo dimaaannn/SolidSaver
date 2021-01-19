@@ -9,7 +9,8 @@ using System.Collections.ObjectModel;
 namespace SWAPIlib.Controller
 {
 
-    public interface IModelControl<out T> :INotifyPropertyChanged where T : IAppModel
+    public interface IModelControl<out T, out T1> :INotifyPropertyChanged 
+        where T : IAppModel where T1 : IModelSelector
     {
         bool IsSelected { get; set; }
         /// <summary>
@@ -38,7 +39,8 @@ namespace SWAPIlib.Controller
     /// Контроллер моделей
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ModelControl<T> : IModelControl<T> where T : IAppModel
+    public class ModelControl<T, T1> : IModelControl<T, T1> 
+        where T : IAppModel where T1 : IModelSelector
     {
         /// <summary>
         /// PartControl constructor
@@ -47,7 +49,6 @@ namespace SWAPIlib.Controller
         public ModelControl(T part)
         {
             Appmodel = part;
-            Modelselector = new ModelSelector(part);
         }
 
         public ModelControl() { }
@@ -70,7 +71,18 @@ namespace SWAPIlib.Controller
             }
         }
         public virtual T Appmodel { get; protected set; }
-        public IModelSelector Modelselector { get; protected set; }
+        private IModelSelector _modelSelector;
+        public virtual IModelSelector Modelselector
+        {
+            get
+            {
+                if(_modelSelector == null)
+                {
+                    _modelSelector = new ModelSelector(Appmodel);
+                }
+                return _modelSelector;
+            }
+        }
         public AppDocType PartType => Appmodel.DocType;
         public virtual string Title => Appmodel.Title;
         public override string ToString()

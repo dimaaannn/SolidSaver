@@ -71,7 +71,7 @@ namespace SWAPIlib.Controller
             Appmodel = imodel;
 
         }
-        public ModelSelector(IModelControl<IAppModel> partcontrol) : this(partcontrol.Appmodel) { }
+        public ModelSelector(IModelControl<IAppModel, IModelSelector> partcontrol) : this(partcontrol.Appmodel) { }
         public ModelSelector(IAppComponent component)
         {
             Appmodel = component.PartModel ?? component as IAppModel;

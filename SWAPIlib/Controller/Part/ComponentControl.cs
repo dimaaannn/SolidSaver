@@ -18,7 +18,7 @@ namespace SWAPIlib.Controller
     //Template for AsmComponent
 
     public interface IComponentControl : 
-        IModelControl<IAppComponent>,
+        IModelControl<IAppComponent, IComponentSelector>,
 
         IEnumerable<IComponentControl>,
         IEnumerator<IComponentControl>
@@ -55,7 +55,8 @@ namespace SWAPIlib.Controller
     /// <summary>
     /// Контроллер компонентов сборки
     /// </summary>
-    public class ComponentControl : ModelControl<IAppComponent>, IComponentControl
+    public class ComponentControl : 
+        ModelControl<IAppComponent, IComponentSelector>, IComponentControl
     {
         /// <summary>
         /// Конструктор

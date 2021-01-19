@@ -44,7 +44,7 @@ namespace SolidSaverWPF
         public ThreePartList ThreePart { get; set; }
         public ObservableCollection<ComponentControl> CompControlList;
 
-        public PartList<IAppComponent> 
+        public PartList<IAppComponent, IModelSelector> 
             TestPartList { get; set; }
 
         public MainWindow()
