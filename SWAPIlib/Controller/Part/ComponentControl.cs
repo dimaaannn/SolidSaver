@@ -22,7 +22,7 @@ namespace SWAPIlib.Controller
 
         IEnumerable<IComponentControl>,
         IEnumerator<IComponentControl>
-        //, IComparer<AppModel>
+        //, IComparable<IComponentControl>
     {
         /// <summary>
         /// Объект модели сборки
@@ -102,6 +102,15 @@ namespace SWAPIlib.Controller
             }
         }
 
+        public override IComponentSelector Modelselector
+        {
+            get
+            {
+                if (_modelSelector == null)
+                    _modelSelector = new ComponentSelector(Appmodel);
+                return (IComponentSelector) _modelSelector;
+            }
+        }
 
         /// <summary>
         /// Сокращённое имя компонента
@@ -119,15 +128,8 @@ namespace SWAPIlib.Controller
         public string RefConfig => Appmodel.RefConfigName;
 
         public override bool IsSelected {
-            get => base.IsSelected;
-            set
-            {
-                if(value)
-                    AppSelMgr.Select(this.Appmodel.SwCompModel, true);
-                else
-                    AppSelMgr.DeSelect(this.Appmodel.SwCompModel);
-                base.IsSelected = value; 
-            }
+            get => Modelselector.IsSelected;
+            set => Modelselector.IsSelected = value;
         }
 
         /// <summary>

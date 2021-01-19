@@ -82,25 +82,36 @@ namespace SWAPIlib.Controller
         }
 
         public IAppModel Appmodel { get; set; }
+        /// <summary>
+        /// Выбор модели пользователем
+        /// </summary>
+        public virtual bool IsSelected { 
+            get => _selectionInGroup[GroupNumber]; 
+            set => _selectionInGroup[GroupNumber] = value; }
+
+        #region свойства выделения объекта
 
         /// <summary>
-        /// Выделение объекта
+        /// Количество групп выделений
         /// </summary>
-        #region свойства выделения объекта
-        ///Количество групп выделений
         public static int SelectionArrayLength = 10;
         System.Collections.BitArray _selectionInGroup =
             new System.Collections.BitArray(SelectionArrayLength);
-        public bool IsSelected { 
-            get => _selectionInGroup[GroupNumber]; 
-            set => _selectionInGroup[GroupNumber] = value; }
+        /// <summary>
+        /// Номер группы выделения
+        /// </summary>
         int _groupNumber = 0;
         public int GroupNumber
         {
             get => Math.Min(_groupNumber, _selectionInGroup.Length - 1);
             set => _groupNumber = Math.Min(value, _selectionInGroup.Length - 1);
         }
+
         #endregion
+
+        /// <summary>
+        /// Находится в подпапке сборки
+        /// </summary>
         public string RootSubFolder
         {
             get
@@ -208,6 +219,22 @@ namespace SWAPIlib.Controller
         /// Объект компонента
         /// </summary>
         public IAppComponent Appcomponent { get; set; }
+
+        public override bool IsSelected
+        {
+            get
+            {
+                return base.IsSelected;
+            }
+            set
+            {
+                if (value)
+                    AppSelMgr.Select(Appcomponent.SwCompModel, true);
+                else
+                    AppSelMgr.DeSelect(Appcomponent.SwCompModel);
+                base.IsSelected = value;
+            }
+        }
 
         public bool IsFixed => Appcomponent.SwCompModel.IsFixed();
         public bool IsMirrored => Appcomponent.SwCompModel.IsMirrored();

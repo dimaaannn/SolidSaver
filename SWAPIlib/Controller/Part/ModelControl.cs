@@ -20,7 +20,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Объект выделения
         /// </summary>
-        IModelSelector Modelselector { get; }
+        T1 Modelselector { get; }
         /// <summary>
         /// Тип детали
         /// </summary>
@@ -71,8 +71,8 @@ namespace SWAPIlib.Controller
             }
         }
         public virtual T Appmodel { get; protected set; }
-        private IModelSelector _modelSelector;
-        public virtual IModelSelector Modelselector
+        protected IModelSelector _modelSelector;
+        public virtual T1 Modelselector
         {
             get
             {
@@ -80,7 +80,7 @@ namespace SWAPIlib.Controller
                 {
                     _modelSelector = new ModelSelector(Appmodel);
                 }
-                return _modelSelector;
+                return (T1)_modelSelector;
             }
         }
         public AppDocType PartType => Appmodel.DocType;
