@@ -114,7 +114,9 @@ namespace SWAPIlib.Controller
                 if (Appmodel.Path.ToLowerInvariant().
                     Contains(rootModelFolder.ToLowerInvariant()))
                 {
-                    return Appmodel.Path.Replace(rootModelFolder + "\\", "");
+                    var ret = Appmodel.Path.Replace(rootModelFolder, "");
+                    ret = ret.Replace(Appmodel.FileName, "");
+                    return ret;
                 }
                 else return null;
             }
