@@ -112,11 +112,25 @@ namespace SWAPIlib.Controller
                 else return null;
             }
         }
-        
+        /// <summary>
+        /// Является деталью
+        /// </summary>
         public bool IsPart => Appmodel.DocType == AppDocType.swPART;
+        /// <summary>
+        /// Является сборкой
+        /// </summary>
         public bool IsAssembly => Appmodel.DocType == AppDocType.swASM;
+        /// <summary>
+        /// Является листовой деталью
+        /// </summary>
         public bool IsSheetMetal => IsPart ? PartDocProxy.IsSheetMetal(Appmodel.SwModel) : false;
+        /// <summary>
+        /// Чертёж с тем же именем
+        /// </summary>
         public bool IsHaveDrawing => CheckDrawing(Appmodel.Path);
+        /// <summary>
+        /// Видимость модели
+        /// </summary>
         public virtual bool Visible
         {
             get => Appmodel.SwModel.Visible;
@@ -138,33 +152,61 @@ namespace SWAPIlib.Controller
         }
     }
 
-
+    /// <summary>
+    /// Свойства компонентов
+    /// </summary>
     public interface IComponentSelector : IModelSelector
     {
+        /// <summary>
+        /// Объект компонента
+        /// </summary>
         IAppComponent Appcomponent { get; }
-
+        /// <summary>
+        /// Фиксирован
+        /// </summary>
         bool IsFixed { get; }
+        /// <summary>
+        /// Отражён
+        /// </summary>
         bool IsMirrored { get; }
+        /// <summary>
+        /// Элемент массива
+        /// </summary>
         bool IsPatternInstance { get; }
+        /// <summary>
+        /// Погашен
+        /// </summary>
         bool IsSuppressed { get; }
+        /// <summary>
+        /// сохранён внутри сборки
+        /// </summary>
         bool IsVirtual { get; }
         
     }
 
     public class ComponentSelector : ModelSelector, IComponentSelector
     {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="comp">Компонент</param>
         public ComponentSelector(IAppComponent comp) : base(comp)
         {
             Appcomponent = comp;
         }
+        /// <summary>
+        /// Объект компонента
+        /// </summary>
         public IAppComponent Appcomponent { get; set; }
-
 
         public bool IsFixed => Appcomponent.SwCompModel.IsFixed();
         public bool IsMirrored => Appcomponent.SwCompModel.IsMirrored();
         public bool IsPatternInstance => Appcomponent.SwCompModel.IsPatternInstance();
         public bool IsSuppressed => Appcomponent.SwCompModel.IsSuppressed();
         public bool IsVirtual => Appcomponent.SwCompModel.IsVirtual;
+        /// <summary>
+        /// Видимость компонента
+        /// </summary>
         public override bool Visible
         {
             get => Appcomponent.SwCompModel.Visible == 1;
