@@ -29,7 +29,7 @@ namespace SWAPIlib.Global
         /// </summary>
         ObservableCollection<SWAPIlib.Controller.IComponentControl> RootComponents { get; }
         int ActiveSelectionGroup { get; set; }
-
+        void ReloadCompList();
 
     }
 
@@ -45,11 +45,7 @@ namespace SWAPIlib.Global
             RootComponents = new ObservableCollection<IComponentControl>();
 
             //Добавить контроллеры компонентов
-            foreach(var comp in Rootmodel.SubComponents)
-            {
-                var compControl = new SWAPIlib.Controller.ComponentControl(comp);
-                RootComponents.Add(compControl);
-            }
+            ReloadCompList();
 
         }
         /// <summary>
@@ -88,6 +84,16 @@ namespace SWAPIlib.Global
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+        public void ReloadCompList()
+        {
+            if (RootComponents.Count > 0)
+                RootComponents.Clear();
+            foreach (var comp in Rootmodel.SubComponents)
+            {
+                var compControl = new SWAPIlib.Controller.ComponentControl(comp);
+                RootComponents.Add(compControl);
+            }
         }
     }
 
