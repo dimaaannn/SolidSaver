@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 
 namespace SolidSaverWPF.ResDictionary
@@ -12,12 +13,11 @@ namespace SolidSaverWPF.ResDictionary
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
-            if(value is bool boolval)
+            if (value is bool boolval)
             {
-                
-                //return System.Windows.UIElement.VisibilityProperty.
+                return boolval ? Visibility.Visible : Visibility.Collapsed;
             }
+            else throw new NotImplementedException();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

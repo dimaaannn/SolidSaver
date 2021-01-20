@@ -7,6 +7,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              
              
+             
              mc:Ignorable="d" 
              d:DesignHeight="25" d:DesignWidth="300"
              x:Name="comprow">
@@ -17,8 +18,9 @@
                 <ResourceDictionary>
                     <sys:Double x:Key="width1">58</sys:Double>
                     <BooleanToVisibilityConverter x:Key="booltovis"/>
+                    
                 </ResourceDictionary>
-                
+                <ResourceDictionary Source="/ResDictionary/DataConverter.xaml"/>
                 <ResourceDictionary Source="/Icons/Icons.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
@@ -43,7 +45,7 @@
                      ToolTip="Тип документа"
                      Width="10" Height="10" Fill="Red" VerticalAlignment="Center"/>
             <Rectangle x:Name="IsSheet" Margin="2" 
-                       Visibility="{Binding Modelselector.IsSheetMetal, Converter={StaticResource booltovis}}"
+                       Visibility="{Binding Modelselector.IsSheetMetal, Converter={StaticResource boolToVisibConverter}}"
                        VerticalAlignment="Center"
                        Width="6" Height="12" Fill="Green" ToolTip="Листовая деталь"/>
     
