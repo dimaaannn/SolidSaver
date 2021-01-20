@@ -173,24 +173,25 @@ namespace SWAPIlib.Controller
         }
         public bool MoveNext()
         {
+            var ret = false;
             if (iterablePosition < SubComponentCount - 1)
             {
                 iterablePosition++;
                 _current = SubComponents[iterablePosition];
                 subEnum = _current.GetEnumerator();
-                return true;
+                ret = true;
             }
             else if (subEnum != null && subEnum.MoveNext())
             {
                 _current = subEnum.Current;
-                return true;
+                ret = true;
             }
             else
             {
                 Reset();
-                return false;
+                ret = false;
             }
-
+            return ret;
         }
         public void Reset()
         {
