@@ -90,15 +90,47 @@ namespace SWAPIlib.Controller
                 if (_subComponents == null)
                 {
                     _subComponents = new ObservableCollection<IComponentControl>();
-                    if (SubComponentCount > 0)
-                    {
-                        foreach (var component in Appmodel.GetComponents(true))
-                        {
-                            _subComponents.Add(new ComponentControl(component));
-                        }
-                    }
+                    LoadSubComponents();
+
+                    if (_allSubComponents.Count > 0)
+                        FilterSubComponents();
                 }
                 return _subComponents;
+            }
+        }
+
+        private List<IComponentControl> _allSubComponents;
+        /// <summary>
+        /// Загрузить все компоненты в список
+        /// </summary>
+        private void LoadSubComponents()
+        {
+            if (_allSubComponents == null)
+                _allSubComponents = new List<IComponentControl>();
+
+            if (SubComponentCount > 0)
+            {
+                _allSubComponents.Clear();
+                foreach (var component in Appmodel.GetComponents(true))
+                {
+                    _allSubComponents.Add(new ComponentControl(component));
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// Фильтр TODO
+        /// </summary>
+        private void FilterSubComponents()
+        {
+            var filter = from comp in _allSubComponents
+                         where comp.Modelselector.IsPatternInstance == false
+                         select comp;
+            _subComponents.Clear();
+            foreach(var component in filter)
+            {
+                _subComponents.Add(component);
             }
         }
 

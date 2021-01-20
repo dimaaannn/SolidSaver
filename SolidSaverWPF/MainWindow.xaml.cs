@@ -176,6 +176,19 @@ namespace SolidSaverWPF
             }
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            foreach(var comp in MainPartView.RootComponents)
+            {
+                comp.SubComponents.Clear();
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            MainPartView.ReloadCompList();
+        }
+
         //private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         //{
         //    var index = PartsList.SelectedIndex;
