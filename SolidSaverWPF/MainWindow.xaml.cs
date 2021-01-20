@@ -27,21 +27,26 @@ namespace SolidSaverWPF
     public partial class MainWindow : Window
     {
         //Законченные классы
-        public SWAPIlib.Global.IMainPartView MainPartView { get; set; }
+        /// <summary>
+        /// Управление коренной моделью сборки
+        /// </summary>
         public IRootModel MainModel { get; set; }
+        /// <summary>
+        /// Список деталей основной модели
+        /// </summary>
+        public SWAPIlib.Global.IMainPartView MainPartview { get; set; }
+        /// <summary>
+        /// Поиск и замена свойств
+        /// </summary>
+        public IPropertyUI PropUI { get; set; }
 
+        ///В доработку
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
-        public IPropertyUI PropUI { get; set; }
         public IList<ISwProperty> PropList { get; set; }
 
         //Tests
-        /// <summary>
-        /// Выбранные компоненты для загрузки в список свойств
-        /// </summary>
-        public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
-        public ObservableCollection<ComponentControl> CompControlList;
 
 
         public MainWindow()
@@ -56,25 +61,27 @@ namespace SolidSaverWPF
             MainModel.GetSubComponents();
 
             //Основной список деталей
-            MainPartView = new SWAPIlib.Global.MainPartView(MainModel);
-            //PartViewList.TreePartView.ItemsSource = MainPartView.RootComponents;
-            PartViewList.MainPartView = MainPartView;
-
-
+            //Создать класс
+            MainPartview = new SWAPIlib.Global.MainPartView(MainModel);
+            ///Подключить к списку деталей WPF - Заменить на binding
+            PartViewList.MainPartView = MainPartview;
+            //Fix binding bug
+            PartViewList.TreePartView.ItemsSource = PartViewList.MainPartView.RootComponents;
+            
 
             #region Свойства поиска
 
-            //Замена свойств
+            //Создать класс поиска свойств
             PropUI = new PropertyUI();
-            //Привязка к ЮзерКонтрол
+            //Привязка к WPF
             PropertyTab.DataContext = PropUI;
             //Тестовый список хранения
-            PropUI.ComponentList = SelectedComp;
-
-            //PartsList.ItemsSource = SubComponents;
+            PropUI.ComponentList = from comp in MainPartview.RootComponents
+                                   where comp.IsSelected
+                                   select comp.Appmodel;
+            //Реализовать загрузку выделенных компонентов
+            //PropUI.ComponentList = SelectedComp;
             #endregion
-
-            CompControlList = new ObservableCollection<ComponentControl>();
 
            
             //MainPartView.SelectedCompProp
@@ -97,7 +104,6 @@ namespace SolidSaverWPF
             {
                 prop.Update();
             }
-
         }
 
         /// <summary>
@@ -125,15 +131,25 @@ namespace SolidSaverWPF
             }
         }
 
+        /// <summary>
+        /// Кнопка "Загрузить модель"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Load_Click(object sender, RoutedEventArgs e)
         {
             MainModel.LoadActiveModel();
             MainModel.GetSubComponents();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Выделить все компоненты в списке деталей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectAll_click(object sender, RoutedEventArgs e)
         {
-            foreach (var comp in MainPartView.RootComponents)
+            foreach (var comp in MainPartview.RootComponents)
             {
                 comp.IsSelected = !comp.IsSelected;
                 foreach ( var scomp in comp)
@@ -143,18 +159,30 @@ namespace SolidSaverWPF
             }
         }
 
+        /// <summary>
+        /// Очистить список деталей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            foreach(var comp in MainPartView.RootComponents)
+            foreach(var comp in MainPartview.RootComponents)
             {
                 comp.SubComponents.Clear();
             }
         }
 
+        /// <summary>
+        /// Перезагрузить список деталей
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            MainPartView.ReloadCompList();
+            MainPartview.ReloadCompList();
         }
+
+
 
         //private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         //{

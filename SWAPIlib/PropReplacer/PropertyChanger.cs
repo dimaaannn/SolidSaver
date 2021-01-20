@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.Controller;
 
 namespace SWAPIlib.PropertyObj
 {
@@ -14,22 +15,56 @@ namespace SWAPIlib.PropertyObj
 
     public interface IPropertyChanger
     {
+        /// <summary>
+        /// Искомое значение
+        /// </summary>
         string SearchValue { get; set; }
+        /// <summary>
+        /// Новое значение
+        /// </summary>
         string NewValue { get; set; }
+        /// <summary>
+        /// Использовать регулярные выражения
+        /// </summary>
         bool UseRegExp { get; set; }
+        /// <summary>
+        /// Регистрозависимый поиск
+        /// </summary>
         bool CaseSensitive { get; set; }
+        /// <summary>
+        /// Конструктор свойств для поиска
+        /// </summary>
         PropConstructor propConstructor {get;set;}
+        /// <summary>
+        /// Начать поиск
+        /// </summary>
         void ProceedValues();
+        /// <summary>
+        /// Записать новые значения
+        /// </summary>
         void WriteValues();
+        /// <summary>
+        /// Восстановить значения
+        /// </summary>
         void RestoreValues();
 
         ITextReplacer textReplacer { get; }
+
+        /// <summary>
+        /// Список компонентов для поиска
+        /// </summary>
         ObservableCollection<IAppComponent> Components { get; }
         ObservableCollection<IPropModifier> Properties { get; }
+        /// <summary>
+        /// Отобразить все конфигурации компонента
+        /// </summary>
         bool AllConfigurations { get; set; }
         
     }
 
+    /// <summary>
+    /// Объект управления свойством
+    /// </summary>
     public interface IPropModifier
     {
         /// <summary>
@@ -81,12 +116,17 @@ namespace SWAPIlib.PropertyObj
             Components.CollectionChanged += Components_AddRemoveItem;
         }
 
-
+        /// <summary>
+        /// Задать искомое значение
+        /// </summary>
         public string SearchValue 
         { 
             get => textReplacer.SearchText; 
             set => textReplacer.SearchText = value; 
         }
+        /// <summary>
+        /// Новое значение
+        /// </summary>
         public string NewValue
         {
             get => textReplacer.ReplaceText;
@@ -153,6 +193,10 @@ namespace SWAPIlib.PropertyObj
             }
         }
 
+        /// <summary>
+        /// Добавление нового свойства в список
+        /// </summary>
+        /// <param name="component"></param>
         protected void AddComponent(AppComponent component)
         {
             //Null part referece check

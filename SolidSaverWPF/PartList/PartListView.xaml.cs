@@ -29,7 +29,7 @@ namespace SolidSaverWPF.PartList
         public PartListView()
         {
             InitializeComponent();
-
+            //MainPartView.Rootmodel.Title
         }
 
         private void TreePartView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

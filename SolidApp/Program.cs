@@ -70,6 +70,7 @@ namespace SolidApp
             Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
 
             testcompcontrol.Modelselector.IsSelected = true;
+            //testcompcontrol.Modelselector.IsSheetMetal;
 
             
             //testcompcontrol.Modelselector.IsSheetMetal

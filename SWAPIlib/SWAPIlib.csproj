@@ -59,20 +59,20 @@
     <Compile Include="BaseTypes\ComponentCl.cs" />
     <Compile Include="Global\MainPartView.cs" />
     <Compile Include="Global\RootModel.cs" />
-    <Compile Include="PropertyObj\PropertyChanger.cs" />
-    <Compile Include="PropertyObj\ComponentProp.cs" />
-    <Compile Include="PropertyObj\PropertyTemplates.cs" />
-    <Compile Include="PropertyObj\PropChangerUnit.cs" />
-    <Compile Include="PropertyObj\PropertyUI.cs" />
-    <Compile Include="PropertyObj\TextReplacer.cs" />
+    <Compile Include="PropReplacer\PropertyChanger.cs" />
+    <Compile Include="PropReplacer\ComponentProp.cs" />
+    <Compile Include="PropReplacer\PropertyTemplates.cs" />
+    <Compile Include="PropReplacer\PropChangerUnit.cs" />
+    <Compile Include="PropReplacer\PropertyUI.cs" />
+    <Compile Include="PropReplacer\TextReplacer.cs" />
     <Compile Include="Global\WorkFolder.cs" />
     <Compile Include="BaseTypes\ModelBase.cs" />
     <Compile Include="BaseTypes\ModelInterfaces.cs" />
     <Compile Include="BaseTypes\CheckModelType.cs" />
-    <Compile Include="PropertyObj\Properties.cs" />
+    <Compile Include="PropReplacer\Properties.cs" />
     <Compile Include="BaseTypes\ModelDocTypes.cs" />
     <Compile Include="ComConn\SupportClass.cs" />
-    <Compile Include="PropertyObj\PropertyInterfaces.cs" />
+    <Compile Include="PropReplacer\PropertyInterfaces.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -87,6 +87,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="PropReplacer\PropertyModule\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

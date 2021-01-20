@@ -74,7 +74,7 @@
             </Grid>
             <!--#endregion-->
             <StackPanel Grid.Column="3" Orientation="Horizontal">
-                <Button  Content="Выделить все" Click="Button_Click"/>
+                <Button  Content="Выделить все" Click="SelectAll_click"/>
                 <Button  Content="Очистить" Click="Button_Click_1"/>
                 <Button  Content="загрузить" Click="Button_Click_2"/>
                 
