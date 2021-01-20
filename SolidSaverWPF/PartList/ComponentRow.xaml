@@ -8,20 +8,21 @@
              
              
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="300"
+             d:DesignHeight="25" d:DesignWidth="300"
              x:Name="comprow">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                
                 <ResourceDictionary>
-        <sys:Double x:Key="width1">58</sys:Double>
-                    
+                    <sys:Double x:Key="width1">58</sys:Double>
+                    <BooleanToVisibilityConverter x:Key="booltovis"/>
                 </ResourceDictionary>
-        <ResourceDictionary Source="/Icons/Icons.xaml"/>
+                
+                <ResourceDictionary Source="/Icons/Icons.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
     </UserControl.Resources>
     
     <Grid x:Name="propGrid"
@@ -37,14 +38,14 @@
 
         <StackPanel Grid.Column="0" 
                 Orientation="Horizontal">
-            <Viewbox Height="20" HorizontalAlignment="Center" >
-                <Path Data="{StaticResource ResourceKey=GearIcon}" HorizontalAlignment="Center" Fill="Black" Stretch="Fill" />
-                
-            </Viewbox>
-            <Ellipse x:Name="Drawing" Margin="2" Visibility="Visible"
-                     Width="10" Height="10" Fill="Red" ToolTip="Тип документа"/>
-            <Rectangle x:Name="IsSheet" Margin="2" Visibility="Visible"
-                     Width="8" Height="16" Fill="Green" ToolTip="Листовая деталь"/>
+            <Ellipse x:Name="Drawing" Margin="2" 
+                     Visibility="Visible"
+                     ToolTip="Тип документа"
+                     Width="10" Height="10" Fill="Red" VerticalAlignment="Center"/>
+            <Rectangle x:Name="IsSheet" Margin="2" 
+                       Visibility="{Binding Modelselector.IsSheetMetal, Converter={StaticResource booltovis}}"
+                       VerticalAlignment="Center"
+                       Width="6" Height="12" Fill="Green" ToolTip="Листовая деталь"/>
     
             
         </StackPanel>
@@ -58,8 +59,8 @@
             VerticalAlignment="Center"
             Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:PartListView}, Path=ActualWidth}"
             />-->
-        <CheckBox Grid.Column="1"
-            Margin="5, 0" 
+        <CheckBox Grid.Column="1" x:Name="checkb"
+            Margin="3, 0" 
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             IsChecked="{Binding IsSelected}"/>
