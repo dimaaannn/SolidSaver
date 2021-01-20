@@ -129,7 +129,11 @@ namespace SWAPIlib.Controller
 
         public override bool IsSelected {
             get => Modelselector.IsSelected;
-            set => Modelselector.IsSelected = value;
+            set
+            {
+                Modelselector.IsSelected = value;
+                OnPropertyChanged("IsSelected");
+            }
         }
 
         /// <summary>
