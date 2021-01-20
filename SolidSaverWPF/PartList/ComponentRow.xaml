@@ -6,14 +6,26 @@
              xmlns:local="clr-namespace:SolidSaverWPF.PartList"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              
+             
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="300"
              x:Name="comprow">
     <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
         <sys:Double x:Key="width1">58</sys:Double>
+                    
+                </ResourceDictionary>
+        <ResourceDictionary Source="/Icons/Icons.xaml"/>
+                
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        
     </UserControl.Resources>
+    
     <Grid x:Name="propGrid"
-        ShowGridLines="True" Height="Auto">
+        ShowGridLines="False" Height="Auto">
         <Grid.ColumnDefinitions>
             <!--<ColumnDefinition  MinWidth="150" Width="{Binding Source={StaticResource width1}}"/>-->
             <!--<ColumnDefinition MinWidth="150" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:PartListView}, Path=secondRow}"/>-->
@@ -25,12 +37,16 @@
 
         <StackPanel Grid.Column="0" 
                 Orientation="Horizontal">
-
+            <Viewbox Height="20" HorizontalAlignment="Center" >
+                <Path Data="{StaticResource ResourceKey=GearIcon}" HorizontalAlignment="Center" Fill="Black" Stretch="Fill" />
+                
+            </Viewbox>
             <Ellipse x:Name="Drawing" Margin="2" Visibility="Visible"
-                     Width="10" Height="10" Fill="Red" ToolTip="Листовая деталь"/>
-            <Ellipse x:Name="IsSheet" Margin="2" Visibility="Visible"
-                     Width="10" Height="10" Fill="Blue"/>
-
+                     Width="10" Height="10" Fill="Red" ToolTip="Тип документа"/>
+            <Rectangle x:Name="IsSheet" Margin="2" Visibility="Visible"
+                     Width="8" Height="16" Fill="Green" ToolTip="Листовая деталь"/>
+    
+            
         </StackPanel>
         
         <TextBlock Grid.Column="2"

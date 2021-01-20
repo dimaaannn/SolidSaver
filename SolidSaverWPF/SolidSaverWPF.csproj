@@ -73,6 +73,10 @@
     <Compile Include="PropTabControl.xaml.cs">
       <DependentUpon>PropTabControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Icons\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
