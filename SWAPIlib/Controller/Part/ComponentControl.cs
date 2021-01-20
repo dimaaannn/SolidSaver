@@ -22,7 +22,7 @@ namespace SWAPIlib.Controller
 
         IEnumerable<IComponentControl>,
         IEnumerator<IComponentControl>
-        //, IComparable<IComponentControl>
+        , IComparable<IComponentControl>
     {
         /// <summary>
         /// Объект модели сборки
@@ -126,6 +126,7 @@ namespace SWAPIlib.Controller
         {
             var filter = from comp in _allSubComponents
                          where comp.Modelselector.IsPatternInstance == false
+                         orderby comp descending
                          select comp;
             _subComponents.Clear();
             foreach(var component in filter)
@@ -194,6 +195,11 @@ namespace SWAPIlib.Controller
             return $"{PartType}:{base.Title}";
         }
 
+        public int CompareTo(IComponentControl other)
+        {
+            return this.PartType.CompareTo(other.PartType);
+        }
+
         #region Enumerator
         private IComponentControl _current;
         object IEnumerator.Current => _current;
@@ -240,6 +246,8 @@ namespace SWAPIlib.Controller
         {
             return this;
         }
+
+
         /// <summary>
         /// Текущая позиция итерирования
         /// </summary>
