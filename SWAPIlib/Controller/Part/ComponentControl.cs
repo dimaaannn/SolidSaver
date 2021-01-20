@@ -174,7 +174,7 @@ namespace SWAPIlib.Controller
         public bool MoveNext()
         {
             var ret = false;
-            if (iterablePosition < SubComponentCount - 1)
+            if (iterablePosition < SubComponents.Count && SubComponents.Count > 0)
             {
                 iterablePosition++;
                 _current = SubComponents[iterablePosition];
