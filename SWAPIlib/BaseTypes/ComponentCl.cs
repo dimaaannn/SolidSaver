@@ -142,6 +142,12 @@ namespace SWAPIlib
             else
                 return false;
         }
-        
+
+        public int CompareTo(object obj)
+        {
+            if (obj is IAppModel model)
+                return this.DocType.CompareTo(model.DocType);
+            else return 0;
+        }
     }
 }

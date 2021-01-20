@@ -89,11 +89,18 @@ namespace SWAPIlib.Global
         {
             if (RootComponents.Count > 0)
                 RootComponents.Clear();
-            foreach (var comp in Rootmodel.SubComponents)
+
+            var filter = from comp in Rootmodel.SubComponents
+                         orderby comp descending
+                         select comp;
+
+            foreach (var comp in filter)
             {
                 var compControl = new SWAPIlib.Controller.ComponentControl(comp);
                 RootComponents.Add(compControl);
             }
+            
+
         }
     }
 

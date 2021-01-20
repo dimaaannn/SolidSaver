@@ -84,6 +84,13 @@ namespace SWAPIlib.BaseTypes
             return 0;
         }
 
+        public int CompareTo(object other)
+        {
+            if (other is IAppModel model)
+                return this.DocType.CompareTo(model.DocType);
+            else return 0;
+        }
+
         /// <summary>
         /// Список имён конфигураций
         /// </summary>

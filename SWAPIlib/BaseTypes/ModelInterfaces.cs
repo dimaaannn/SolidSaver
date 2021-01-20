@@ -9,7 +9,7 @@ using SWAPIlib.ComConn.Proxy;
 
 namespace SWAPIlib
 {
-    public interface IAppModel
+    public interface IAppModel : IComparable
     {
         bool IsExist { get; }
         ModelDoc2 SwModel { get; }

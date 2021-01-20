@@ -125,7 +125,6 @@ namespace SWAPIlib.Controller
         private void FilterSubComponents()
         {
             var filter = from comp in _allSubComponents
-                         where comp.Modelselector.IsPatternInstance == false
                          orderby comp descending
                          select comp;
             _subComponents.Clear();
