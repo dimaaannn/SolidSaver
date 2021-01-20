@@ -26,14 +26,14 @@ namespace SolidSaverWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        //Законченные классы
         public SWAPIlib.Global.IMainPartView MainPartView { get; set; }
-
         public IRootModel MainModel { get; set; }
-        public IList<ISwProperty> PropList { get; set; }
+
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
         public IPropertyUI PropUI { get; set; }
+        public IList<ISwProperty> PropList { get; set; }
 
         //Tests
         /// <summary>
@@ -41,11 +41,8 @@ namespace SolidSaverWPF
         /// </summary>
         public List<IAppComponent> SelectedComp { get; } = new List<IAppComponent>();
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
-        public ThreePartList ThreePart { get; set; }
         public ObservableCollection<ComponentControl> CompControlList;
 
-        public PartList<IAppComponent, IModelSelector> 
-            TestPartList { get; set; }
 
         public MainWindow()
         {
@@ -79,45 +76,15 @@ namespace SolidSaverWPF
 
             CompControlList = new ObservableCollection<ComponentControl>();
 
-            //Remove class
-            ThreePart = new ThreePartList();
-
-            foreach (var comp in SubComponents)
-            {
-                CompControlList.Add(new ComponentControl(comp));
-            }
-
-            //TestThreeview.ItemsSource = CompControlList;
-
-
-
-            //CompControlList[0].PartType
-            //threPL.DataContext = ThreePart;
-
-            //Tests
-            //PropUI.ConstructorDict.Keys
-            //PartsList.ItemsSource = SwPartList;
-
-
-
-            
-
+           
+            //MainPartView.SelectedCompProp
             
             //Run new thread
             //System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
         }
 
 
-        //private void PartsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    var index = PartsList.SelectedIndex;
-        //    if(index >= 0)
-        //    {
-        //        var currentPropList = SubComponents[index].PropList;
-        //        PropList = currentPropList;
-        //        PropertyBox.ItemsSource = currentPropList;
-        //    }
-        //}
+
 
         /// <summary>
         /// Обновить свойства активной детали

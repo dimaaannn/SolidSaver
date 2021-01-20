@@ -182,10 +182,11 @@
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch" SelectedIndex="2">
 
-                        <TabItem Header="TabItem1">
+                        <TabItem Header="Свойства">
 
                             <!--#region Property object-->
                             <ListBox 
+                                ItemsSource="{Binding MainPartView.SelectedCompProp}"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 ScrollViewer.CanContentScroll="False"
