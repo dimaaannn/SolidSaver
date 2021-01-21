@@ -52,6 +52,20 @@ namespace SolidSaverWPF
         public MainWindow()
         {
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
+            
+            
+
+           
+            //MainPartView.SelectedCompProp
+            
+            //Run new thread
+            //System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             MainModel = new RootModel();
             this.DataContext = this;
 
@@ -66,8 +80,10 @@ namespace SolidSaverWPF
             ///Подключить к списку деталей WPF - Заменить на binding
             PartViewList.MainPartView = MainPartview;
             //Fix binding bug
-            PartViewList.TreePartView.ItemsSource = PartViewList.MainPartView.RootComponents;
-            
+            //Bind Main Part list to interface
+            PartViewList.DataContext = MainPartview;
+            //MainPartview.RootComponents
+
 
             #region Свойства поиска
 
@@ -82,12 +98,6 @@ namespace SolidSaverWPF
             //Реализовать загрузку выделенных компонентов
             //PropUI.ComponentList = SelectedComp;
             #endregion
-
-           
-            //MainPartView.SelectedCompProp
-            
-            //Run new thread
-            //System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
         }
 
 

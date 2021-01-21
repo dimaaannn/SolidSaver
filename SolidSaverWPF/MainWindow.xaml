@@ -66,7 +66,7 @@
 
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Column="0" Content="Загрузить модель" Margin="5" Name="Load" Click="Load_Click"/>
+                <Button Grid.Column="0" Content="Загрузить модель" Margin="5" Name="LoadButton" Click="Load_Click"/>
                 <StackPanel Grid.Column="1" Margin="4">
                     <CheckBox Grid.Column="1" Content="Верх.уровня" IsChecked="{Binding TopLevelOnly}"/>
                     <CheckBox Grid.Column="1" Content="Из файла"/>
