@@ -60,6 +60,7 @@
     <Compile Include="Global\MainPartView.cs" />
     <Compile Include="Global\RootModel.cs" />
     <Compile Include="MProperty\PropObj\ModelPropertyBase.cs" />
+    <Compile Include="MProperty\PropGetterBase.cs" />
     <Compile Include="PropReplacer\PropertyChanger.cs" />
     <Compile Include="PropReplacer\ComponentProp.cs" />
     <Compile Include="PropReplacer\PropertyTemplates.cs" />
