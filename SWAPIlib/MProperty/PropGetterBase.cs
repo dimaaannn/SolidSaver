@@ -4,50 +4,148 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.Controller;
+using SWAPIlib.BaseTypes;
+using SWAPIlib.ComConn.Proxy;
+using SWAPIlib;
+using System.Diagnostics;
 
 namespace SWAPIlib.MProperty
 {
-    public delegate bool Validator<in T>(T bindObj);
-    public delegate string GetProp<in T>(T bindObj);
-    public delegate bool SetProp<in T>(T bindObj, string propValue);
+    public delegate bool Validator<in T>(T Target);
+    public delegate string GetProp<in T>(T Target);
+    public delegate bool SetProp<in T>(T Target, string propValue);
 
+    public class GetterSettings
+    {
+
+    }
 
     public interface IPropGetter<in T>
     {
-        bool IsValid(T bindObj);
-        Validator<T> Validator { get; }
-        GetProp<T> Getter { get; }
-        SetProp<T> Setter { get; }
-    }
-
-    public class PropGetter<T> : IPropGetter<T>
-    {
+        bool IsWritable { get; }
+        bool IsReadable { get; }
         /// <summary>
-        /// Проверка применимости свойства к объекту
+        /// Валидность объекта
         /// </summary>
-        public Validator<T> Validator { get; protected set; } = (x) => true;
-        /// <summary>
-        /// Получить значение
-        /// </summary>
-        public GetProp<T> Getter { get; protected set; }
-        /// <summary>
-        /// Записать значение
-        /// </summary>
-        public SetProp<T> Setter { get; protected set; }
-        /// <summary>
-        /// Проверить применимость свойства к объекту
-        /// </summary>
-        /// <param name="bindObj"></param>
+        /// <param name="target"></param>
         /// <returns></returns>
-        public bool IsValid(T bindObj) => Validator.Invoke(bindObj);
-
+        bool IsValid(T target);
+        /// <summary>
+        /// Получить значение свойства
+        /// </summary>
+        /// <returns></returns>
+        string GetValue(T target);
+        /// <summary>
+        /// Задать значение свойства
+        /// </summary>
+        /// <returns></returns>
+        bool SetValue(T target, string value);
     }
-}
 
-namespace SWAPIlib.MProperty.Delegates
-{
-    public static class Component
+    public interface IPropModelNamed : IPropGetter<IAppModel>
     {
-        
+        bool SetValue(IAppModel target, string value, 
+            string propName, string configName);
+        string GetValue(IAppModel target, string propertyName, 
+            string configName);
+    }
+
+
+    /// <summary>
+    /// Именованные свойства модели (обозначение, и пр.)
+    /// </summary>
+    public class PropModelNamed : IPropModelNamed
+    {
+        public bool IsReadable => true;
+        public bool IsWritable => true;
+
+        public bool IsValid(IAppModel target)
+        {
+            bool ret = false;
+            if (
+                target.DocType == (AppDocType.swPART | AppDocType.swASM) &&
+                target.SwModel != null)
+            {
+                ret = true;
+            }
+            return ret;
+        }
+
+        /// <summary>
+        /// Получить именованное свойство
+        /// </summary>
+        /// <param name="target">Модель</param>
+        /// <param name="propertyName">Имя свойства из модели</param>
+        /// <param name="configName">Имя конфигурации, или активная конфигурация</param>
+        /// <returns>Значение свойства (не вычисленное)</returns>
+        public string GetValue(IAppModel target, string propertyName, string configName = null)
+        {
+            string ret = null;
+            if(IsValid(target) && string.IsNullOrEmpty(propertyName))
+            {
+                var model = target.SwModel;
+
+                //Имя конфигурации по умолчанию
+                if (string.IsNullOrEmpty(configName))
+                    configName = ModelConfigProxy.GetActiveConfName(model);
+
+                ret = ModelConfigProxy.GetConfParam(model, configName, propertyName);
+            }
+            Debug.WriteLine($"ReadValue PropModelNamed {target.Title} = {ret}");
+            return ret;
+        }
+
+        /// <summary>
+        /// Установить значение именованного свойства
+        /// </summary>
+        /// <param name="target">Модель</param>
+        /// <param name="value">Новое значение свойства</param>
+        /// <param name="propName">Имя свойства из модели</param>
+        /// <param name="configName">Имя конфигурации или активная конф.</param>
+        /// <returns></returns>
+        public bool SetValue(IAppModel target, string value, string propName, string configName)
+        {
+            var ret = false;
+            Debug.WriteLine($"Write val AppModelPropGetter {target.Title} - {value}");
+            if (IsValid(target) && string.IsNullOrEmpty(propName))
+            {
+                var model = target.SwModel;
+
+                //Имя конфигурации по умолчанию
+                if (string.IsNullOrEmpty(configName))
+                    configName = ModelConfigProxy.GetActiveConfName(model);
+
+                ret = ModelConfigProxy.SetConfParam(model, propName, value, configName);
+            }
+
+            string WriteStatus = ret ? "written" : "Not written";
+            Debug.Write($"Value was {WriteStatus}");
+            return ret;
+        }
+
+        /// <summary>
+        /// Заглушка
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool SetValue(IAppModel target, string value)
+        {
+            throw new ArgumentException("Не указано имя именованного свойства детали");
+        }
+        /// <summary>
+        /// Заглушка
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public string GetValue(IAppModel target)
+        {
+            throw new ArgumentException("Не указано имя именованного свойства детали");
+        }
     }
 }
+
+//namespace SWAPIlib.MProperty.Templates
+//{
+    
+//}

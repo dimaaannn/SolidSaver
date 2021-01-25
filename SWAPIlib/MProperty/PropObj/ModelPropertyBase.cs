@@ -45,6 +45,11 @@ namespace SWAPIlib.MProperty.PropObj
         bool WriteValue();
     }
 
+    public interface AppProperty<T> : IAppPropertyBase
+    {
+        IPropGetter<T> propGetter { get; set; }
+
+    }
 
     public class AppPropertyBase : IAppPropertyBase
     {
