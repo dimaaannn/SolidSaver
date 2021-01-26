@@ -20,7 +20,7 @@ namespace SWAPIlib.MProperty
 
     }
 
-    public interface IPropertyTarget
+    public interface IPropertyBinding
     {
         string Title { get; }
         /// <summary>
@@ -42,13 +42,150 @@ namespace SWAPIlib.MProperty
         /// <param name="newValue"></param>
         /// <returns></returns>
         bool SetValue(string newValue);
+        /// <summary>
+        /// Инфо о привязке
+        /// </summary>
+        string BindingInfo { get; }
     }
 
-    public interface IPropertyTarget<T> : IPropertyTarget
+    public interface IModelBinding<T> : IPropertyBinding
     {
-        T TargetRef { set; }
+        /// <summary>
+        /// Проверка допустимости объекта
+        /// </summary>
+        /// <param name="targetRef"></param>
+        /// <returns></returns>
         bool Validator(T targetRef);
+        /// <summary>
+        /// Ссылка на объект с свойством
+        /// </summary>
+        T TargetRef { get; }
+        /// <summary>
+        /// Имя конфигурации модели
+        /// </summary>
+        string ConfigName { get; set; }
+        /// <summary>
+        /// Изменена модель привязки
+        /// </summary>
+        event EventHandler<T> TargetChanged;
+        
     }
+
+
+    public abstract class BindModelBaseProp<T> : IModelBinding<T> where T : IAppModel
+    {
+        /// <summary>
+        /// Основная привязка
+        /// </summary>
+        protected T targetRef;
+        public T TargetRef 
+        { 
+            get => targetRef; 
+            set
+            {
+                bool status = false;
+                if (!Validator(targetRef))
+                {
+                    targetRef = value;
+                    TargetChanged.Invoke(this, targetRef);
+                    status = true;
+                }
+                else
+                {
+                    IsReadable = false;
+                    IsWritable = false;
+                }
+                string infoState = status ? $"{targetRef.Title} set" : "error";
+                Debug.WriteLine("ModelBindingBase = target {0}", infoState);
+            }
+        }
+
+        public bool IsReadable { get; set; }
+        public bool IsWritable { get; set; }
+
+        protected string title;
+        public virtual string Title { get => title; set => title = value; }
+        public virtual string ConfigName { get; set; }
+
+        public abstract bool Validator(T targetRef);
+        public abstract string GetValue();
+        public abstract bool SetValue(string newValue);
+
+        public event EventHandler<T> TargetChanged;
+        public string BindingInfo { get; set; }
+    }
+
+    public class BindModelNamedProp : BindModelBaseProp<IAppModel>
+    {
+        private string propertyName;
+
+        BindModelNamedProp(string propertyName)
+        {
+            IsReadable = true;
+            IsWritable = true;
+            PropertyName = propertyName;
+        }
+
+        public string PropertyName 
+        { 
+            //Свойство по умолчанию
+            get => propertyName ?? "Наименование"; 
+            set => propertyName = value; 
+        }
+
+        /// <summary>
+        /// Свойство конфигурации
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        public string GetValue(string configName)
+        {
+            return TargetRef[configName, PropertyName];
+        }
+        /// <summary>
+        /// Свойство активной конфигурации
+        /// </summary>
+        /// <returns></returns>
+        public override string GetValue()
+        {
+            return GetValue(TargetRef.ActiveConfigName);
+        }
+
+        /// <summary>
+        /// Задать значение свойства
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        public bool SetValue(string configName, string newValue)
+        {
+            return TargetRef.SetParameterVal(configName: configName, paramName: PropertyName, newValue: newValue);
+        }
+        /// <summary>
+        /// Свойство в активной конфигурации
+        /// </summary>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        public override bool SetValue(string newValue)
+        {
+            return SetValue(TargetRef.ActiveConfigName, newValue: newValue);
+        }
+        /// <summary>
+        /// Проверить наличие конкретного свойства в модели
+        /// </summary>
+        /// <param name="targetRef"></param>
+        /// <returns></returns>
+        public override bool Validator(IAppModel targetRef)
+        {
+            bool ret = true;
+
+            if(targetRef != null)
+                ret = targetRef.ParameterList.Contains(PropertyName);
+
+            return ret;
+        }
+    }
+
 
     public interface IPropGetter<in T>
     {
