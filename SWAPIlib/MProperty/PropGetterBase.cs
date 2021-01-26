@@ -20,6 +20,36 @@ namespace SWAPIlib.MProperty
 
     }
 
+    public interface IPropertyTarget
+    {
+        string Title { get; }
+        /// <summary>
+        /// Допускается чтение
+        /// </summary>
+        bool IsReadable { get; }
+        /// <summary>
+        /// Допускается запись
+        /// </summary>
+        bool IsWritable { get; }
+        /// <summary>
+        /// Прочитать значение переменной
+        /// </summary>
+        /// <returns></returns>
+        string GetValue();
+        /// <summary>
+        /// Записать значение
+        /// </summary>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        bool SetValue(string newValue);
+    }
+
+    public interface IPropertyTarget<T> : IPropertyTarget
+    {
+        T TargetRef { set; }
+        bool Validator(T targetRef);
+    }
+
     public interface IPropGetter<in T>
     {
         bool IsWritable { get; }
