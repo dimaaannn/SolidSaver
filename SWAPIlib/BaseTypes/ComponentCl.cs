@@ -59,7 +59,7 @@ namespace SWAPIlib
             set => ComponentProxy.SetMaterialProperty(SwCompModel, value);
         }
 
-        public event EventHandler<SwEventArgs> CloseFile
+        public event EventHandler<SwEventArgs> FileIsClosed
         {
             add => throw new NotImplementedException();
             remove { }

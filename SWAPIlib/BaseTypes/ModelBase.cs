@@ -27,7 +27,7 @@ namespace SWAPIlib.BaseTypes
         public List<ISwProperty> PropList { get; protected set; }
         public IFileModelProp GlobalModelProp { get; }
 
-        public event EventHandler<SwEventArgs> CloseFile;
+        public event EventHandler<SwEventArgs> FileIsClosed;
 
         /// <summary>
         /// ModelDoc2 Constructor
@@ -80,7 +80,7 @@ namespace SWAPIlib.BaseTypes
             IsExist = false;
             string evT = $"Document {FileName} closed";
             var evArg = new SwEventArgs(evT);
-            CloseFile?.Invoke(this, evArg);
+            FileIsClosed?.Invoke(this, evArg);
             return 0;
         }
 

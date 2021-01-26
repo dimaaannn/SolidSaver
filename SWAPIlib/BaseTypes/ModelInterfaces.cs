@@ -32,7 +32,7 @@ namespace SWAPIlib
         /// <summary>
         /// Close file event
         /// </summary>
-        event EventHandler<SwEventArgs> CloseFile;
+        event EventHandler<SwEventArgs> FileIsClosed;
         /// <summary>
         /// Набор глобальных свойств
         /// </summary>
