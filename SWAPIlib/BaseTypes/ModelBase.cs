@@ -126,6 +126,18 @@ namespace SWAPIlib.BaseTypes
             return ModelConfigProxy.SetActiveConf(SwModel, configName);
         }
 
+        /// <summary>
+        /// Задать значение именованного свойства
+        /// </summary>
+        /// <param name="configName">Имя конфигурации</param>
+        /// <param name="paramName">Имя свойства</param>
+        /// <param name="newValue">Значение свойства</param>
+        /// <returns>Успешная запись</returns>
+        public bool SetParameterVal(string configName, string paramName, string newValue)
+        {
+            return ModelConfigProxy.SetConfParam(SwModel, configName, paramName, newValue);
+        }
+
         public string[] ParameterList => SwModel.GetCustomInfoNames2(ActiveConfigName);
 
 

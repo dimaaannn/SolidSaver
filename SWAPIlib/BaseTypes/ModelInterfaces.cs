@@ -64,6 +64,7 @@ namespace SWAPIlib
         string[] ParameterList { get; }
         string this [string paramName] { get; set; }
         string this [string configName, string paramName] { get; set; }
+        bool SetParameterVal(string configName, string paramName, string newValue);
     }
 
     //TODO сделать интерфейс сборки

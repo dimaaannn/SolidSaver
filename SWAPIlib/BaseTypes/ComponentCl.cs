@@ -161,6 +161,21 @@ namespace SWAPIlib
             return ComponentProxy.SetRefConfig(SwCompModel, configName);
         }
 
+        /// <summary>
+        /// Прокси установки свойства модели
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <param name="paramName"></param>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        bool IAppModel.SetParameterVal(string configName, string paramName, string newValue)
+        {
+            bool ret = false;
+            if (PartModel != null)
+                ret = PartModel.SetParameterVal(configName: configName, paramName: paramName, newValue);
+            return ret;
+        }
+
 
         // Прокси на модель для интерфейса
         string[] IAppModel.ParameterList => PartModel?.ParameterList;
