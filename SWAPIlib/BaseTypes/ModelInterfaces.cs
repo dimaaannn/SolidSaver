@@ -11,6 +11,8 @@ namespace SWAPIlib
 {
     public interface IAppModel : IComparable
     {
+
+        //TODO refactor interface
         bool IsExist { get; }
         ModelDoc2 SwModel { get; }
         /// <summary>
@@ -36,7 +38,7 @@ namespace SWAPIlib
         /// <summary>
         /// Набор глобальных свойств
         /// </summary>
-        IFileModelProp GlobalModelProp { get; }
+        IFileModelProp GlobalModelProp { get; } //TODO remove
         /// <summary>
         /// Список свойств модели
         /// </summary>
@@ -46,6 +48,22 @@ namespace SWAPIlib
         /// Список конфигураций
         /// </summary>
         List<string> ConfigList { get; }
+        /// <summary>
+        /// Имя активной конфигурации
+        /// </summary>
+        string ActiveConfigName { get; set; }
+        /// <summary>
+        /// Задать активную конфигурацию
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        bool SetActiveConfig(string configName);
+        /// <summary>
+        /// Список параметров модели (Пользовательские свойства)
+        /// </summary>
+        string[] ParameterList { get; }
+        string this [string paramName] { get; set; }
+        string this [string configName, string paramName] { get; set; }
     }
 
     //TODO сделать интерфейс сборки
@@ -56,10 +74,6 @@ namespace SWAPIlib
     {
         int ComponentCount(bool TopLevelOnly);
         List<IAppComponent> GetComponents(bool TopLevelOnly);
-        /// <summary>
-        /// Имя конфигурации
-        /// </summary>
-        string ConfigName { get; set; }
         
     }
 
@@ -78,10 +92,6 @@ namespace SWAPIlib
         /// Погашенность компонента
         /// </summary>
         AppSuppressionState SuppressionState { get; }
-        /// <summary>
-        /// Имя связанной конфигурации
-        /// </summary>
-        string RefConfigName { get; set; }
         /// <summary>
         /// Исключено из спецификации
         /// </summary>

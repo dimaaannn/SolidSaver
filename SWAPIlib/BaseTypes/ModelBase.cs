@@ -25,7 +25,7 @@ namespace SWAPIlib.BaseTypes
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
         public List<ISwProperty> PropList { get; protected set; }
-        public IFileModelProp GlobalModelProp { get; }
+        public IFileModelProp GlobalModelProp { get; } //TODO remove
 
         public event EventHandler<SwEventArgs> FileIsClosed;
 
@@ -109,6 +109,35 @@ namespace SWAPIlib.BaseTypes
         {
             get => SwModel.Visible;
             set => SwModel.Visible = value;
+        }
+
+        public string ActiveConfigName 
+        { 
+            get => ModelConfigProxy.GetActiveConfName(SwModel);
+            set => ModelConfigProxy.SetActiveConf(SwModel, value);
+        }
+        /// <summary>
+        /// Задать активную конфигурацию с проверкой
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        bool IAppModel.SetActiveConfig(string configName)
+        {
+            return ModelConfigProxy.SetActiveConf(SwModel, configName);
+        }
+
+        public string[] ParameterList => SwModel.GetCustomInfoNames2(ActiveConfigName);
+
+
+        public string this[string configName, string paramName]
+        {
+            get => ModelConfigProxy.GetConfParamValue(SwModel, configName, paramName);
+            set => ModelConfigProxy.SetConfParam(SwModel, configName, paramName, value);
+        }
+        public string this[string paramName]
+        {
+            get => ModelConfigProxy.GetConfParamValue(SwModel, ActiveConfigName, paramName);
+            set => ModelConfigProxy.SetConfParam(SwModel, paramName, value);
         }
     }
 

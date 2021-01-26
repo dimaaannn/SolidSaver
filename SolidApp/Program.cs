@@ -16,6 +16,8 @@ using SWAPIlib.PropertyObj;
 using System.Collections;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.Controller;
+using SWAPIlib.ComConn.Proxy;
 
 namespace SolidApp
 {
@@ -52,53 +54,41 @@ namespace SolidApp
             rootModelClass.GetSubComponents();
 
             //Test component in assembly
-            var testcomp = rootModelClass.SubComponents.Skip(0).First();
-            var testcompcontrol = new SWAPIlib.Controller.ComponentControl(testcomp);
+            IAppComponent testcomp = rootModelClass.SubComponents.Skip(0).First();
+            IComponentControl testcompcontrol = new SWAPIlib.Controller.ComponentControl(testcomp);
 
-            var rawmodel = testcomp.SwModel;
-            var rawcomp = testcomp.SwCompModel;
+            AppModel compAppModel = testcomp.PartModel;
+            ModelDoc2 rawmodel = testcomp.SwModel;
+            Component2 rawcomp = testcomp.SwCompModel;
 
-            //rootcomp.IsFixed
-            //rootcomp.IsMirrored
-            //rootcomp.IsPatternInstance
-            //rootcomp.IsHidden
-            //rootcomp.IsLoaded
-            //rootcomp.IsSuppressed
-            //rootcomp.IsVirtual
-            //rootcomp.IsEnvelope
-
-            Console.WriteLine($"TestComponent = {testcomp.Title}, type = {testcomp.GetType()}");
-
-            testcompcontrol.Modelselector.IsSelected = true;
-            //testcompcontrol.Modelselector.IsSheetMetal;
-
-            
-            //testcompcontrol.Modelselector.IsSheetMetal
-            
+            Console.WriteLine($"testedCompName={testcomp.Title}");
+            //compAppModel.GlobalModelProp;
 
 
+            #region Тестирование свойств
+            //Основные свойства для тестов
+            string confname = testcomp.ActiveConfigName;
+            string propName = "Обозначение";
+            string baseParam = ModelConfigProxy.GetConfParam(rawmodel, "По умолчанию", propName);
+            Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
-            Console.WriteLine($"Visible:{testcompcontrol.Modelselector.InWorkFolder}");
+            var v3 = rawmodel.GetCustomInfoNames2(confname);
 
-            var selected = AppSelMgr.SelectedComponents;
 
-            foreach(var comp in selected)
-            {
-                Console.WriteLine(comp.Name);
-            }
+            string vParam = compAppModel[confname, "Обозначение"];
+            string param = ModelConfigProxy.GetConfParam(rawmodel, propName);
+
+
+            //Список параметров
+
+            Console.WriteLine($"PropValues={baseParam}");
 
 
 
-            var count = AppSelMgr.CurrentSelectCount;
-            Console.WriteLine($"selection count = {count}");
+            #endregion
 
 
-            //selManager.GetPreSelectedObject
-            //selManager.DeSelect2
 
-            
-
-                
             Console.ReadKey();
         }
 
@@ -108,7 +98,7 @@ namespace SolidApp
             foreach (var a in Appcomp)
             {
                 string s = $"Comp {a.Title}: is {a.VisibState}, s.state: {a.SuppressionState}\n" +
-                    $"Conf: {a.RefConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
+                    $"Conf: {a.ActiveConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
                     $"Exist : {a.IsExist}";
                 Console.WriteLine(s);
                 foreach (var pr in a.PropList)

@@ -207,7 +207,7 @@ namespace SWAPIlib.PropertyObj
                 { AllConfiguration = this.AllConfigurations };
 
                 //Add current active configuration
-                newProp.ConfigNames.Add(component.RefConfigName);
+                newProp.ConfigNames.Add(component.ActiveConfigName);
                 Properties.Add(newProp);
             }
             else

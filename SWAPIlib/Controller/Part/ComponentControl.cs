@@ -157,7 +157,7 @@ namespace SWAPIlib.Controller
         /// <summary>
         /// Имя зависимой конфигурации
         /// </summary>
-        public string RefConfig => Appmodel.RefConfigName;
+        public string RefConfig => Appmodel.ActiveConfigName;
 
         public override bool IsSelected {
             get => Modelselector.IsSelected;

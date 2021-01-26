@@ -129,7 +129,7 @@ namespace SWAPIlib.PropertyObj
             => (swModel as AppComponent).FileName;
 
         public static string GetRefConfig(IAppComponent swModel)
-            => (swModel as AppComponent).RefConfigName;
+            => (swModel as AppComponent).ActiveConfigName;
     }
 
 }

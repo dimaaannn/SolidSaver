@@ -33,9 +33,9 @@ namespace SWAPIlib
         public IFileModelProp GlobalModelProp { get; set; }
         public List<ISwProperty> PropList { get; private set; }
 
-        public string RefConfigName
+        public string ActiveConfigName
         {
-            get => SwCompModel.ReferencedConfiguration;
+            get => ComponentProxy.GetRefConfig(SwCompModel);
             set => SwCompModel.ReferencedConfiguration = value;
         }
         public List<string> ConfigList { get => PartModel?.ConfigList;}
@@ -58,6 +58,7 @@ namespace SWAPIlib
             get => ComponentProxy.GetMaterialProperty(SwCompModel);
             set => ComponentProxy.SetMaterialProperty(SwCompModel, value);
         }
+
 
         public event EventHandler<SwEventArgs> FileIsClosed
         {
@@ -121,7 +122,7 @@ namespace SWAPIlib
 
         public override string ToString()
         {
-            return $"{Title} - {RefConfigName}";
+            return $"{Title} - {ActiveConfigName}";
         }
 
         public override bool Equals(object obj)
@@ -137,7 +138,7 @@ namespace SWAPIlib
         public bool Equals(AppComponent comp)
         {
             if (comp.FileName == this.FileName &&
-                comp.RefConfigName == this.RefConfigName)
+                comp.ActiveConfigName == this.ActiveConfigName)
                 return true;
             else
                 return false;
@@ -148,6 +149,38 @@ namespace SWAPIlib
             if (obj is IAppModel model)
                 return this.DocType.CompareTo(model.DocType);
             else return 0;
+        }
+
+        /// <summary>
+        /// Задать имя активной конфигурации
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        bool IAppModel.SetActiveConfig(string configName)
+        {
+            return ComponentProxy.SetRefConfig(SwCompModel, configName);
+        }
+
+
+        // Прокси на модель для интерфейса
+        string[] IAppModel.ParameterList => PartModel?.ParameterList;
+        string IAppModel.this[string configName, string paramName] 
+        {
+            get => PartModel?[configName: configName, paramName: paramName];
+            set
+            {
+                if(PartModel != null)
+                    PartModel[configName: configName, paramName: paramName] = value;
+            }
+        }
+        string IAppModel.this[string paramName] 
+        {
+            get => PartModel?[paramName: paramName];
+            set
+            {
+                if (PartModel != null)
+                    PartModel[paramName: paramName] = value;
+            }
         }
     }
 }

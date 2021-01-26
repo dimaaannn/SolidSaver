@@ -171,13 +171,13 @@ namespace SWAPIlib
                 string ret = null;
 
                 if (appModel is IAppComponent swComp)
-                    ret = _configName ?? swComp.RefConfigName;
+                    ret = _configName ?? swComp.ActiveConfigName;
 
                 else if (appModel is ISwPart swPart)
                     ret = _configName ?? swPart.ConfigName;
 
                 else if (appModel is IAppAssembly swAsm)
-                    ret = _configName ?? swAsm.ConfigName;
+                    ret = _configName ?? swAsm.ActiveConfigName;
 
                 else ret = _configName;
 
@@ -241,7 +241,7 @@ namespace SWAPIlib
         }
         public override string ConfigName
         {
-            get => _configName ?? AppComponent.RefConfigName;
+            get => _configName ?? AppComponent.ActiveConfigName;
             set => _configName = value;
         }
     }
