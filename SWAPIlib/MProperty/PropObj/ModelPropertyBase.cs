@@ -56,12 +56,12 @@ namespace SWAPIlib.MProperty.PropObj
         /// <summary>
         /// Запрос записи
         /// </summary>
-        event EventHandler WriteVal;
+        event EventHandler<string> WriteVal;
     }
 
     public interface IPropertyTargetView : IPropertyView
     {
-        IPropertyTarget Target { get; set; }
+        IPropertyBinding Target { get; set; }
 
     }
 
@@ -152,7 +152,7 @@ namespace SWAPIlib.MProperty.PropObj
         public virtual bool WriteValue()
         {
             var ret = false;
-            WriteVal.Invoke(this, null);
+            WriteVal.Invoke(this, _NewPropertyValue);
             //Вернуть true если значения совпадают
             if (CurrentValue == _NewPropertyValue)
             {
@@ -189,7 +189,7 @@ namespace SWAPIlib.MProperty.PropObj
 
 
         public event EventHandler UpdateVal;
-        public event EventHandler WriteVal;
+        public event EventHandler<string> WriteVal;
 
         protected void RaisePropertyChanged(string s)
         {
@@ -206,8 +206,8 @@ namespace SWAPIlib.MProperty.PropObj
 
     public class PropertyTargetView :  IPropertyTargetView
     {
-        private IPropertyTarget target;
-        public IPropertyTarget Target { get => target; set => target = value; }
+        private IPropertyBinding target;
+        public IPropertyBinding Target { get => target; set => target = value; }
 
         /// <summary>
         /// Доступно для чтения
@@ -323,7 +323,7 @@ namespace SWAPIlib.MProperty.PropObj
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler UpdateVal;
-        public event EventHandler WriteVal;
+        public event EventHandler<string> WriteVal;
 
         protected void RaisePropertyChanged(string s)
         {
