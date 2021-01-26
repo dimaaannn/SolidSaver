@@ -144,7 +144,7 @@ namespace SWAPIlib.MProperty.PropObj
         public virtual void Update()
         {
             Debug.WriteLine("AppPropertyBase - update");
-            UpdateVal.Invoke(this, null);
+            UpdateVal?.Invoke(this, null);
         }
         /// <summary>
         /// Записать значение
@@ -152,7 +152,7 @@ namespace SWAPIlib.MProperty.PropObj
         public virtual bool WriteValue()
         {
             var ret = false;
-            WriteVal.Invoke(this, _NewPropertyValue);
+            WriteVal?.Invoke(this, _NewPropertyValue);
             //Вернуть true если значения совпадают
             if (CurrentValue == _NewPropertyValue)
             {
@@ -279,7 +279,7 @@ namespace SWAPIlib.MProperty.PropObj
         public void Update()
         {
             Debug.WriteLine("PropertyTargetView - update");
-            UpdateVal.Invoke(this, null);
+            UpdateVal?.Invoke(this, null);
             _SavedPropertyValue = Target.GetValue();
         }
         /// <summary>
@@ -288,7 +288,7 @@ namespace SWAPIlib.MProperty.PropObj
         public bool WriteValue()
         {
             var ret = false;
-            WriteVal.Invoke(this, null);
+            WriteVal?.Invoke(this, null);
             //Записать
             ret = Target.SetValue(_NewPropertyValue);
 

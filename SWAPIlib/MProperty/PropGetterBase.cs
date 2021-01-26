@@ -75,19 +75,27 @@ namespace SWAPIlib.MProperty
     public abstract class BindModelBaseProp<T> : IModelBinding<T> where T : IAppModel
     {
         /// <summary>
+        /// Конструктор абстрактного класса
+        /// </summary>
+
+        public BindModelBaseProp(T target)
+        {
+            TargetRef = target;
+        }
+        /// <summary>
         /// Основная привязка
         /// </summary>
         protected T targetRef;
-        public T TargetRef 
-        { 
-            get => targetRef; 
+        public T TargetRef
+        {
+            get => targetRef;
             set
             {
                 bool status = false;
-                if (!Validator(targetRef))
+                if (Validator(value))
                 {
                     targetRef = value;
-                    TargetChanged.Invoke(this, targetRef);
+                    TargetChanged?.Invoke(this, targetRef);
                     status = true;
                 }
                 else
@@ -105,33 +113,66 @@ namespace SWAPIlib.MProperty
 
         protected string title;
         public virtual string Title { get => title; set => title = value; }
-        public virtual string ConfigName { get; set; }
+        /// <summary>
+        /// Имя конфигурации для запроса свойств
+        /// </summary>
+        public virtual string ConfigName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(configName))
+                {
+                    configName = TargetRef.ActiveConfigName;
+                }
+                return configName;
+            }
+            set => configName = value;
+        }
+        protected string configName;
 
         public abstract bool Validator(T targetRef);
         public abstract string GetValue();
         public abstract bool SetValue(string newValue);
 
         public event EventHandler<T> TargetChanged;
+        /// <summary>
+        /// для вызова события из дочерних классов
+        /// </summary>
+        /// <param name="target"></param>
+        protected void RaiseTargetChanged(T target)
+        {
+            TargetChanged?.Invoke(this, target);
+        }
         public string BindingInfo { get; set; }
     }
 
     public class BindModelNamedProp : BindModelBaseProp<IAppModel>
     {
-        private string propertyName;
 
-        BindModelNamedProp(string propertyName)
+
+        public BindModelNamedProp(IAppModel target, string propName) :base(target)
         {
             IsReadable = true;
             IsWritable = true;
-            PropertyName = propertyName;
+            PropertyName = propName;
         }
 
-        public string PropertyName 
-        { 
+        /// <summary>
+        /// Имя свойства
+        /// </summary>
+        public string PropertyName
+        {
             //Свойство по умолчанию
-            get => propertyName ?? "Наименование"; 
-            set => propertyName = value; 
+            get => propertyName;
+            set
+            {
+                CheckPropValidation(value);
+
+                propertyName = value;
+                RaiseTargetChanged(TargetRef);
+            }
         }
+        private string propertyName;
 
         /// <summary>
         /// Свойство конфигурации
@@ -140,7 +181,13 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public string GetValue(string configName)
         {
-            return TargetRef[configName, PropertyName];
+            string ret;
+
+            ret = TargetRef[configName, PropertyName];
+            if (!IsCurrentPropertyValid && string.IsNullOrEmpty(ret))
+                ret = @"$NOT FOUND$";
+
+            return ret;
         }
         /// <summary>
         /// Свойство активной конфигурации
@@ -148,8 +195,15 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public override string GetValue()
         {
-            return GetValue(TargetRef.ActiveConfigName);
+            string ret;
+
+            ret = TargetRef[ConfigName, PropertyName];
+            if (!IsCurrentPropertyValid && string.IsNullOrEmpty(ret))
+                ret = @"$NOT FOUND$";
+
+            return ret;
         }
+        
 
         /// <summary>
         /// Задать значение свойства
@@ -179,11 +233,29 @@ namespace SWAPIlib.MProperty
         {
             bool ret = true;
 
-            if(targetRef != null)
-                ret = targetRef.ParameterList.Contains(PropertyName);
+            if (targetRef is AppModel)
+                ret = true;
 
             return ret;
         }
+        /// <summary>
+        /// Свойство пристутствует в модели
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <returns></returns>
+        public static bool IsPropertyValid (IAppModel target, string propName)
+        {
+            var ret = false;
+            if(!string.IsNullOrEmpty(propName))
+                ret = target?.ParameterList.Contains(propName) ?? false;
+
+            return ret;
+        }
+        protected bool CheckPropValidation(string propName)
+        {
+            return IsCurrentPropertyValid = IsPropertyValid(TargetRef, propName);
+        }
+        bool IsCurrentPropertyValid { get; set; }
     }
 
 

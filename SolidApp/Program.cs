@@ -84,7 +84,12 @@ namespace SolidApp
             Console.WriteLine($"PropValues={baseParam}");
 
 
+            var target = new SWAPIlib.MProperty.BindModelNamedProp(
+                target: compAppModel, "Наименование") { ConfigName = "С дыркой" };
 
+            var propView = new SWAPIlib.MProperty.PropObj.PropertyTargetView() { Target = target };
+
+            Console.WriteLine($"\ntarget prop = {propView.MainValueView}");
             #endregion
 
 
