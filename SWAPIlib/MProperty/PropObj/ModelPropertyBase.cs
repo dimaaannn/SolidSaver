@@ -9,7 +9,7 @@ using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib.MProperty.PropObj
 {
-    public interface IAppPropertyBase : INotifyPropertyChanged 
+    public interface IPropertyView : INotifyPropertyChanged 
     {
         /// <summary>
         /// Доступно для чтения
@@ -22,15 +22,15 @@ namespace SWAPIlib.MProperty.PropObj
         /// <summary>
         /// Имя свойства
         /// </summary>
-        string PropertyName { get; }
+        string Title { get; set; }
         /// <summary>
         /// Значение свойства
         /// </summary>
-        string PropertyValue { get; set; }
+        string ValueView { get; set; }
         /// <summary>
         /// Значение до редактирования
         /// </summary>
-        string SavedValue { get; }
+        string CurrentValue { get; set; }
         /// <summary>
         /// Значение изменено
         /// </summary>
@@ -43,15 +43,23 @@ namespace SWAPIlib.MProperty.PropObj
         /// Записать значение
         /// </summary>
         bool WriteValue();
+        /// <summary>
+        /// Очистить пользовательское значение
+        /// </summary>
+        void ClearValues();
+
+        /// <summary>
+        /// Запрос обновления
+        /// </summary>
+        event EventHandler UpdateVal;
+        /// <summary>
+        /// Запрос записи
+        /// </summary>
+        event EventHandler WriteVal;
     }
 
-    public interface AppProperty<T> : IAppPropertyBase
-    {
-        IPropGetter<T> propGetter { get; set; }
 
-    }
-
-    public class AppPropertyBase : IAppPropertyBase
+    public class PropertyView : IPropertyView
     {
 
         /// <summary>
@@ -65,7 +73,7 @@ namespace SWAPIlib.MProperty.PropObj
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public string PropertyName { get; set; }
+        public string Title { get; set; }
 
         #region Значения свойств
         protected string _NewPropertyValue;
@@ -73,7 +81,7 @@ namespace SWAPIlib.MProperty.PropObj
         /// <summary>
         /// Значение свойства
         /// </summary>
-        public string PropertyValue
+        public string ValueView
         {
             get
             {
@@ -85,31 +93,36 @@ namespace SWAPIlib.MProperty.PropObj
                 //Прочитать значение в первый раз
                 else
                 {
-                    Update();
-                    return _SavedPropertyValue;
+                    return CurrentValue;
                 }
             }
             set
             {
                 _NewPropertyValue = value;
                 Debug.WriteLine($"AppPropertyBase - value was changed {_NewPropertyValue}");
-                RaisePropertyChanged("IsModifyed");
-                RaisePropertyChanged("SavedValue");
-                RaisePropertyChanged("PropertyValue");
+                ClearValues();
             }
         }
         /// <summary>
         /// Значение до редактирования
         /// </summary>
-        public string SavedValue
+        public string CurrentValue
         {
             get
             {
-                if (IsModifyed)
-                    return _SavedPropertyValue;
-                else 
-                    return null;
+                //Если значение отсутствует - обновить значение
+                if(_SavedPropertyValue == null)
+                {
+                    Update();
+                }
+                return _SavedPropertyValue;
             }
+            set
+            {
+                _SavedPropertyValue = value;
+                ClearValues();
+            }
+
         }
         /// <summary>
         /// Значение было изменено
@@ -118,30 +131,54 @@ namespace SWAPIlib.MProperty.PropObj
         #endregion
 
         /// <summary>
-        /// Очистить временные значения
+        /// Вызвать обновление
         /// </summary>
         public virtual void Update()
         {
             Debug.WriteLine("AppPropertyBase - update");
-            _NewPropertyValue = null;
-            RaisePropertyChanged("PropertyValue");
-            RaisePropertyChanged("SavedValue");
-            RaisePropertyChanged("IsModifyed");
+            UpdateVal.Invoke(this, null);
         }
         /// <summary>
         /// Записать значение
         /// </summary>
         public virtual bool WriteValue()
         {
-            _SavedPropertyValue = _NewPropertyValue;
-            Update();
-            return true;
-        }
+            var ret = false;
+            WriteVal.Invoke(this, null);
+            //Вернуть true если значения совпадают
+            if (CurrentValue == _NewPropertyValue)
+            {
+                ret = true;
+                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");
+                //Очистить значение
+                ClearValues();
+            }
+            else
+            {
+                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");
+            }
 
+            return ret;
+        }
+        /// <summary>
+        /// Сбросить значения пользователя
+        /// </summary>
+        public void ClearValues()
+        {
+            _NewPropertyValue = null;
+            RaisePropertyChanged("ValueView");
+            RaisePropertyChanged("CurrentValue");
+            RaisePropertyChanged("IsModifyed");
+        }
         /// <summary>
         /// Вызвать событие изменения свойства
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public event EventHandler UpdateVal;
+        public event EventHandler WriteVal;
+
         protected void RaisePropertyChanged(string s)
         {
             var e = PropertyChanged;
@@ -151,7 +188,6 @@ namespace SWAPIlib.MProperty.PropObj
             }
         }
 
-        //Добавить событие на изменения свойства и запись, добавить делегат чтения и записи
         //Продумать реализацию фабрики
     }
 }
