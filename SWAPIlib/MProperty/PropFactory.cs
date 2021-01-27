@@ -83,7 +83,6 @@ namespace SWAPIlib.MProperty
             var propList = validTargets.Select(x => CreateByProto(bindPrototype, x));
             return propList.ToList();
         }
-
         /// <summary>
         /// Создать группу свойств для одного объекта
         /// </summary>
@@ -101,8 +100,50 @@ namespace SWAPIlib.MProperty
             var propList = validPrototypes.Select(x => CreateByProto(x, target));
             return propList.ToList();
         }
+        /// <summary>
+        /// Создать группу свойств для группы объектов
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bindPrototypes">Список прототипов</param>
+        /// <param name="targets">Список целей</param>
+        /// <returns></returns>
+        public static List<IPropView> CreateByProto<T>(
+            IEnumerable<IPropBinding<T>> bindPrototypes, IEnumerable<T> targets)
+        {
+            List<IPropView> ret = new List<IPropView>();
+
+            foreach(var prototype in bindPrototypes)
+            {
+                ret.AddRange(CreateByProto(prototype, targets));
+            }
+            return ret;
+        }
+
     }
 
+    /// <summary>
+    /// Фабрика привязок свойств
+    /// </summary>
+    public static class BindingFactory
+    {
+        /// <summary>
+        /// Создать именованную привязку
+        /// </summary>
+        /// <param name="propertyName">Имя свойства модели</param>
+        /// <param name="target">Модель привязки (опционально)</param>
+        /// <param name="configName">Конфигурация модели (опционально)</param>
+        /// <returns>Прототип именованной привязки</returns>
+        public static IPropBinding<IAppModel> NamedProperty(
+            string propertyName, IAppModel target = null, string configName = null)
+        {
+            return new PropBindNamed()
+            {
+                PropertyName = propertyName,
+                TargetRef = target,
+                ConfigName = configName
+            };
+        }
+    }
 
 
 }

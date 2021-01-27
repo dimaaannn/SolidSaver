@@ -9,7 +9,7 @@ namespace SWAPIlib.MProperty
     /// </summary>
     public class PropBindNamed : PropBindSWModel<IAppModel>
     {
-        protected PropBindNamed() :base() { } 
+        public PropBindNamed() :base() { } 
         /// <summary>
         /// Привязка к активной конфигурации модели
         /// </summary>
@@ -60,7 +60,7 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public static string GetValue(IAppModel model, string propName, string configName)
         {
-            return model[configName, propName];
+            return model?[configName, propName] ?? "$NOT FOUND$";
         }
 
         /// <summary>

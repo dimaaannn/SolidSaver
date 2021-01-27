@@ -92,10 +92,13 @@ namespace SolidApp
             var target2 = new SWAPIlib.MProperty.PropBindNamed(
                 target: compAppModel, "Обозначение") ;
 
-            
-            var propView = SWAPIlib.MProperty.PropFactory.AttachToBinding(target);
+            var target3 = SWAPIlib.MProperty.BindingFactory.NamedProperty("Обозначение");
+            var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(target3, compAppModel);
 
-            Console.WriteLine($"\ntarget1 prop = {propView.MainValueView}, IsModifyed={propView.IsModifyed}");
+            
+            var propView = SWAPIlib.MProperty.PropFactory.AttachToBinding(target3);
+
+            Console.WriteLine($"\ntarget1 prop = {propView2.MainValueView}, IsModifyed={propView2.IsModifyed}");
 
             ////Много целей на одну привязку - работает
             //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(target, rootModelClass.SubComponents);
@@ -104,6 +107,11 @@ namespace SolidApp
             //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(
             //    new IPropBinding<IAppModel>[] { target, target2 }, 
             //    compAppModel);
+
+            ////Много целей, много прототипов
+            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(
+            //    new IPropBinding<IAppModel>[] { target, target2 },
+            //    rootModelClass.SubComponents);
 
 
 

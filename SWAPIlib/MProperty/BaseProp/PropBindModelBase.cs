@@ -56,7 +56,7 @@ namespace SWAPIlib.MProperty.BaseProp
                 string ret;
                 if (string.IsNullOrEmpty(configName))
                 {
-                    ret = TargetRef.ActiveConfigName;
+                    ret = TargetRef?.ActiveConfigName;
                 }
                 else
                     ret = configName;
