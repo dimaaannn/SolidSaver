@@ -51,7 +51,7 @@ namespace SWAPIlib.MProperty
         }
         private string propertyName;
 
-        public override string Title => $"{PropertyName}:";
+        public override string PropName => $"{PropertyName}:";
 
         /// <summary>
         /// Получить значение свойства

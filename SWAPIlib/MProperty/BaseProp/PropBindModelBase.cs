@@ -45,7 +45,7 @@ namespace SWAPIlib.MProperty.BaseProp
         /// <summary>
         /// Поле для отображения имени свойства
         /// </summary>
-        public virtual string Title { get => title; set => title = value; }
+        public virtual string PropName { get => title; set => title = value; }
         /// <summary>
         /// Имя конфигурации для запроса свойств
         /// </summary>
@@ -104,8 +104,10 @@ namespace SWAPIlib.MProperty.BaseProp
         /// Текстовое описание свойства, задаётся статически
         /// </summary>
         public abstract string BindingInfo { get; }
-
-        
+        /// <summary>
+        /// Имя объекта привязки
+        /// </summary>
+        public virtual string TargetName => TargetRef.FileName;
     }
 
 

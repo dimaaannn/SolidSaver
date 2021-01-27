@@ -17,7 +17,20 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Информация привязки
         /// </summary>
-        string Title { get; }
+        string PropName { get; }
+        /// <summary>
+        /// Имя объекта привязки
+        /// </summary>
+        string TargetName { get; }
+        /// <summary>
+        /// Имя конфигурации
+        /// </summary>
+        string ConfigName { get; set; }
+        /// <summary>
+        /// Инфо о привязке
+        /// </summary>
+        string BindingInfo { get; }
+
         /// <summary>
         /// Допускается чтение
         /// </summary>
@@ -37,14 +50,6 @@ namespace SWAPIlib.MProperty
         /// <param name="newValue"></param>
         /// <returns></returns>
         bool SetValue(string newValue);
-        /// <summary>
-        /// Инфо о привязке
-        /// </summary>
-        string BindingInfo { get; }
-        /// <summary>
-        /// Имя конфигурации
-        /// </summary>
-        string ConfigName { get; set; }
     }
 
     /// <summary>

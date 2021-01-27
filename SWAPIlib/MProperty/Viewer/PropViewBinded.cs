@@ -26,7 +26,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public virtual string Title => PropBinder.Title;
+        public virtual string Title => PropBinder.PropName;
 
         #region Значения свойств
         protected string _NewPropertyValue;
