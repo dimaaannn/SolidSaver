@@ -231,19 +231,8 @@ namespace SWAPIlib.MProperty.PropObj
         /// </summary>
         public string MainValueView
         {
-            get
-            {
-                //Если значение было получено
-                if (_SavedPropertyValue != null)
-                {
-                    return _NewPropertyValue ?? _SavedPropertyValue;
-                }
-                //Прочитать значение в первый раз
-                else
-                {
-                    return CurrentValue;
-                }
-            }
+            get => _NewPropertyValue ?? CurrentValue;
+
             set
             {
                 _NewPropertyValue = value;
@@ -280,6 +269,7 @@ namespace SWAPIlib.MProperty.PropObj
         {
             Debug.WriteLine("PropertyTargetView - update");
             UpdateVal?.Invoke(this, null);
+            ClearValues();
             _SavedPropertyValue = Target.GetValue();
         }
         /// <summary>
