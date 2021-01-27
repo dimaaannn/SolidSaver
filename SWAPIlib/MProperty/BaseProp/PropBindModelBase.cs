@@ -30,19 +30,10 @@ namespace SWAPIlib.MProperty.BaseProp
             get => targetRef;
             set
             {
-                bool status = false;
-                if (Validator(value))
-                {
-                    targetRef = value;
-                    TargetChanged?.Invoke(this, targetRef);
-                    status = true;
-                }
-                else
-                {
-                    IsReadable = false;
-                    IsWritable = false;
-                }
-                string infoState = status ? $"{targetRef.Title} set" : "error";
+                targetRef = value;
+                TargetChanged?.Invoke(this, targetRef);
+
+                string infoState = (targetRef != null) ? $"{targetRef.Title} set" : "error";
                 Debug.WriteLine("ModelBindingBase = target {0}", infoState);
             }
         }

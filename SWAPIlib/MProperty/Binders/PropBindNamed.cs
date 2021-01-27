@@ -105,9 +105,8 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public override bool Validator(IAppModel targetRef)
         {
-            bool ret = true;
-
-            if (targetRef is AppModel)
+            bool ret = false;
+            if(targetRef?.ParameterList?.Contains(PropertyName) == true)
                 ret = true;
 
             return ret;

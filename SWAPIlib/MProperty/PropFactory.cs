@@ -19,6 +19,7 @@ namespace SWAPIlib.MProperty
             var propView = new PropViewB(binder: binding);
             return propView;
         }
+
         /// <summary>
         /// Создать свойство по прототипу
         /// </summary>
@@ -32,7 +33,6 @@ namespace SWAPIlib.MProperty
             var propView = new PropViewB(binder: newBind);
             return propView;
         }
-        
         /// <summary>
         /// Создать свойство по прототипу
         /// </summary>
@@ -67,4 +67,6 @@ namespace SWAPIlib.MProperty
         }
 
     }
+
+
 }
