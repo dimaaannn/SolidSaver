@@ -66,7 +66,43 @@ namespace SWAPIlib.MProperty
             return propView;
         }
 
+        /// <summary>
+        /// Создать группу свойств по прототипу
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bindPrototype">Прототип привязки</param>
+        /// <param name="targets">Коллекция целей</param>
+        /// <returns>Список свойств</returns>
+        public static List<IPropView> CreateByProto<T>(
+            IPropBinding<T> bindPrototype, IEnumerable<T> targets)
+        {
+            var validTargets = from target in targets
+                           where bindPrototype.Validator(target)
+                           select target;
+
+            var propList = validTargets.Select(x => CreateByProto(bindPrototype, x));
+            return propList.ToList();
+        }
+
+        /// <summary>
+        /// Создать группу свойств для одного объекта
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bindPrototypes">Список прототипов</param>
+        /// <param name="target">Цель привязки</param>
+        /// <returns></returns>
+        public static List<IPropView> CreateByProto<T>(
+            IEnumerable<IPropBinding<T>> bindPrototypes, T target)
+        {
+            var validPrototypes = from prototype in bindPrototypes
+                               where prototype.Validator(target)
+                               select prototype;
+
+            var propList = validPrototypes.Select(x => CreateByProto(x, target));
+            return propList.ToList();
+        }
     }
+
 
 
 }

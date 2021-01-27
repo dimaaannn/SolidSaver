@@ -89,20 +89,24 @@ namespace SolidApp
             var target = new SWAPIlib.MProperty.PropBindNamed(
                 target: compAppModel, "Наименование") ;
 
-            //var test = target.Validator(testcompcontrol.PartModel);
+            var target2 = new SWAPIlib.MProperty.PropBindNamed(
+                target: compAppModel, "Обозначение") ;
 
+            
             var propView = SWAPIlib.MProperty.PropFactory.AttachToBinding(target);
-
-            //propView.MainValueView = "Наименование test7 тест";
-            //propView.WriteValue();
 
             Console.WriteLine($"\ntarget1 prop = {propView.MainValueView}, IsModifyed={propView.IsModifyed}");
 
-            var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(
-                target, testcomp2.PartModel);
-            var propView2Value = propView2.MainValueView;
-            Console.WriteLine($"\ntarget2 prop = {propView2Value}, IsModifyed={propView2.IsModifyed}");
-            
+            ////Много целей на одну привязку - работает
+            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(target, rootModelClass.SubComponents);
+
+            //Много привязок на одну цель - работает
+            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(
+            //    new IPropBinding<IAppModel>[] { target, target2 }, 
+            //    compAppModel);
+
+
+
             #endregion
 
 
