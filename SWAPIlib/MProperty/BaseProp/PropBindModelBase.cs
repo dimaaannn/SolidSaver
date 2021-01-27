@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib.MProperty.BaseProp
 {
+
+
     /// <summary>
     /// Абстрактный класс для привязки моделей SW
     /// </summary>
     /// <typeparam name="T">Наследуется от IAppModel</typeparam>
     public abstract class PropBindSWModel<T> : IPropBinding<T> where T : IAppModel
     {
+        protected PropBindSWModel() { }
         /// <summary>
         /// Конструктор абстрактного класса
         /// </summary>
-        public PropBindSWModel(T target)
+        public PropBindSWModel(T target) : this()
         {
             TargetRef = target;
         }
@@ -58,11 +62,14 @@ namespace SWAPIlib.MProperty.BaseProp
         {
             get
             {
+                string ret;
                 if (string.IsNullOrEmpty(configName))
                 {
-                    configName = TargetRef.ActiveConfigName;
+                    ret = TargetRef.ActiveConfigName;
                 }
-                return configName;
+                else
+                    ret = configName;
+                return ret;
             }
             set => configName = value;
         }
@@ -96,10 +103,18 @@ namespace SWAPIlib.MProperty.BaseProp
         {
             TargetChanged?.Invoke(this, target);
         }
+
+        public virtual object Clone()
+        {
+            return this.MemberwiseClone();
+        }
+
         /// <summary>
         /// Текстовое описание свойства, задаётся статически
         /// </summary>
         public abstract string BindingInfo { get; }
+
+        
     }
 
 

@@ -12,7 +12,7 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Привязка к объекту для получения и задания свойств
     /// </summary>
-    public interface IPropBinding
+    public interface IPropBinding : ICloneable
     {
         /// <summary>
         /// Информация привязки
@@ -41,6 +41,10 @@ namespace SWAPIlib.MProperty
         /// Инфо о привязке
         /// </summary>
         string BindingInfo { get; }
+        /// <summary>
+        /// Имя конфигурации
+        /// </summary>
+        string ConfigName { get; set; }
     }
 
     /// <summary>
@@ -58,11 +62,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Ссылка на объект с свойством
         /// </summary>
-        T TargetRef { get; }
-        /// <summary>
-        /// Имя конфигурации модели
-        /// </summary>
-        string ConfigName { get; set; }
+        T TargetRef { get; set; }
         /// <summary>
         /// Изменена модель привязки
         /// </summary>

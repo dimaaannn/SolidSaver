@@ -56,6 +56,7 @@ namespace SolidApp
 
             //Test component in assembly
             IAppComponent testcomp = rootModelClass.SubComponents.Skip(0).First();
+            IAppComponent testcomp2 = rootModelClass.SubComponents.Skip(1).First();
             IComponentControl testcompcontrol = new SWAPIlib.Controller.ComponentControl(testcomp);
 
             AppModel compAppModel = testcomp.PartModel;
@@ -86,14 +87,19 @@ namespace SolidApp
 
 
             var target = new SWAPIlib.MProperty.PropBindNamed(
-                target: compAppModel, "Наименование") { ConfigName = "С дыркой" };
+                target: compAppModel, "Наименование") ;
 
-            var propView = new PropViewB() { PropBinder = target };
+            var propView = SWAPIlib.MProperty.PropFactory.AttachToBinding(target);
 
-            propView.MainValueView = "Наименование test6 тест";
-            propView.WriteValue();
+            //propView.MainValueView = "Наименование test7 тест";
+            //propView.WriteValue();
 
-            Console.WriteLine($"\ntarget prop = {propView.MainValueView}, IsModifyed={propView.IsModifyed}");
+            Console.WriteLine($"\ntarget1 prop = {propView.MainValueView}, IsModifyed={propView.IsModifyed}");
+
+            var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(target, testcomp2.PartModel);
+            var propView2Value = propView2.MainValueView;
+            Console.WriteLine($"\ntarget2 prop = {propView2Value}, IsModifyed={propView2.IsModifyed}");
+            
             #endregion
 
 

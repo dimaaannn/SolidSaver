@@ -6,6 +6,12 @@ namespace SWAPIlib.MProperty
 {
     public class PropViewB : IPropView
     {
+        public PropViewB() { }
+        public PropViewB(IPropBinding binder) :this()
+        {
+            PropBinder = binder;
+        }
+
         private IPropBinding propBinder;
         public IPropBinding PropBinder { get => propBinder; set => propBinder = value; }
 

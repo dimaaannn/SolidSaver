@@ -9,6 +9,7 @@ namespace SWAPIlib.MProperty
     /// </summary>
     public class PropBindNamed : PropBindSWModel<IAppModel>
     {
+        protected PropBindNamed() :base() { } 
         /// <summary>
         /// Привязка к активной конфигурации модели
         /// </summary>
@@ -49,6 +50,8 @@ namespace SWAPIlib.MProperty
             }
         }
         private string propertyName;
+
+        public override string Title => $"{PropertyName}:";
 
         /// <summary>
         /// Получить значение свойства
@@ -127,6 +130,20 @@ namespace SWAPIlib.MProperty
             return IsCurrentPropertyValid = IsPropertyValid(TargetRef, propName);
         }
         bool IsCurrentPropertyValid { get; set; }
+
+        public override object Clone()
+        {
+            var newProp = new PropBindNamed()
+            {
+                TargetRef = this.targetRef,
+                ConfigName = this.configName,
+                PropertyName = this.propertyName,
+
+                IsReadable = this.IsReadable,
+                IsWritable = this.IsWritable
+            };
+            return newProp;
+        }
 
         public override string BindingInfo => bindingInfo;
         private static readonly string bindingInfo = 
