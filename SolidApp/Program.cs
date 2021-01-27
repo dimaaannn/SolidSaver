@@ -18,6 +18,7 @@ using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.Controller;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.MProperty;
 
 namespace SolidApp
 {
@@ -84,12 +85,15 @@ namespace SolidApp
             Console.WriteLine($"PropValues={baseParam}");
 
 
-            var target = new SWAPIlib.MProperty.BindModelNamedProp(
+            var target = new SWAPIlib.MProperty.PropBindNamed(
                 target: compAppModel, "Наименование") { ConfigName = "С дыркой" };
 
-            var propView = new SWAPIlib.MProperty.PropObj.PropertyTargetView() { Target = target };
+            var propView = new PropViewB() { PropBinder = target };
 
-            Console.WriteLine($"\ntarget prop = {propView.MainValueView}");
+            propView.MainValueView = "Наименование test6 тест";
+            propView.WriteValue();
+
+            Console.WriteLine($"\ntarget prop = {propView.MainValueView}, IsModifyed={propView.IsModifyed}");
             #endregion
 
 
