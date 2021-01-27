@@ -100,18 +100,6 @@ namespace SolidApp
 
             Console.WriteLine($"\ntarget1 prop = {propView2.MainValueView}, IsModifyed={propView2.IsModifyed}");
 
-            ////Много целей на одну привязку - работает
-            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(target, rootModelClass.SubComponents);
-
-            //Много привязок на одну цель - работает
-            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(
-            //    new IPropBinding<IAppModel>[] { target, target2 }, 
-            //    compAppModel);
-
-            ////Много целей, много прототипов
-            //var testPropList = SWAPIlib.MProperty.PropFactory.CreateByProto(
-            //    new IPropBinding<IAppModel>[] { target, target2 },
-            //    rootModelClass.SubComponents);
 
 
 

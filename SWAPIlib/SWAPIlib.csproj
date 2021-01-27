@@ -59,6 +59,7 @@
     <Compile Include="BaseTypes\ComponentCl.cs" />
     <Compile Include="Global\MainPartView.cs" />
     <Compile Include="Global\RootModel.cs" />
+    <Compile Include="MProperty\Manager\PropManager.cs" />
     <Compile Include="MProperty\PropFactory.cs" />
     <Compile Include="MProperty\Viewer\PropViewBinded.cs" />
     <Compile Include="MProperty\Viewer\PropViewPassive.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="PropReplacer\PropertyTemplates.cs" />
     <Compile Include="PropReplacer\PropChangerUnit.cs" />
     <Compile Include="PropReplacer\PropertyUI.cs" />
-    <Compile Include="PropReplacer\TextReplacer.cs" />
+    <Compile Include="MProperty\Manager\TextReplacer.cs" />
     <Compile Include="Global\WorkFolder.cs" />
     <Compile Include="BaseTypes\ModelBase.cs" />
     <Compile Include="BaseTypes\ModelInterfaces.cs" />
