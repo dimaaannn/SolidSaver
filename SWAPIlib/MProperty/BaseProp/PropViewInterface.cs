@@ -8,6 +8,9 @@ using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib.MProperty
 {
+
+
+
     /// <summary>
     /// Базовый интерфейс управления текстовыми свойствами
     /// </summary>
@@ -69,5 +72,10 @@ namespace SWAPIlib.MProperty
         /// Объект привязки свойства
         /// </summary>
         IPropBinding PropBinder { get; set; }
+    }
+
+    public interface IPropView<T> : IPropViewBase
+    {
+        IPropBinding<T> PropBinder { get; set; }
     }
 }
