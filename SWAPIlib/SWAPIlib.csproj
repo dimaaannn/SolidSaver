@@ -61,7 +61,7 @@
     <Compile Include="Global\RootModel.cs" />
     <Compile Include="MProperty\Manager\PropManager.cs" />
     <Compile Include="MProperty\PropFactory.cs" />
-    <Compile Include="MProperty\PropManager.cs" />
+    <Compile Include="MProperty\PropModelManager.cs" />
     <Compile Include="MProperty\Viewer\PropViewBinded.cs" />
     <Compile Include="MProperty\Viewer\PropViewPassive.cs" />
     <Compile Include="MProperty\Binders\PropBindNamed.cs" />

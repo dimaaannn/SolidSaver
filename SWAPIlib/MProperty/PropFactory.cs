@@ -44,7 +44,7 @@ namespace SWAPIlib.MProperty
         {
             var newBind = (IPropBinding<T>)binding.Clone();
             newBind.ConfigName = null;
-            newBind.TargetRef = target;
+            newBind.TargetWrapper = target;
             var propView = new PropViewB(binder: newBind);
             return propView;
         }
@@ -60,7 +60,7 @@ namespace SWAPIlib.MProperty
             string configName)
         {
             var newBind = (IPropBinding<T>)binding.Clone();
-            newBind.TargetRef = target;
+            newBind.TargetWrapper = target;
             newBind.ConfigName = configName;
             var propView = new PropViewB(binder: newBind);
             return propView;
@@ -133,14 +133,16 @@ namespace SWAPIlib.MProperty
         /// <param name="target">Модель привязки (опционально)</param>
         /// <param name="configName">Конфигурация модели (опционально)</param>
         /// <returns>Прототип именованной привязки</returns>
-        public static IPropBinding<IAppModel> NamedProperty(
-            string propertyName, IAppModel target = null, string configName = null)
+        public static IPropBinding<IModelFields> NamedProperty(
+            string propertyName, IModelFields target = null, string configName = null)
         {
             return new PropBindNamed()
             {
                 PropertyName = propertyName,
-                TargetRef = target,
+                TargetWrapper = target,
+                
                 ConfigName = configName
+                
             };
         }
     }

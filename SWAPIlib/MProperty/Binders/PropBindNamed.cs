@@ -7,7 +7,7 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Именованное свойство модели SW
     /// </summary>
-    public class PropBindNamed : PropBindSWModel<IAppModel>
+    public class PropBindNamed : PropBindSWModel<IModelFields>
     {
         public PropBindNamed() :base() { } 
         /// <summary>
@@ -15,7 +15,7 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="target">Модель привязки</param>
         /// <param name="propName">Имя свойства</param>
-        public PropBindNamed(IAppModel target, string propName) :base(target)
+        public PropBindNamed(IModelFields target, string propName) :base(target)
         {
             IsReadable = true;
             IsWritable = true;
@@ -28,7 +28,7 @@ namespace SWAPIlib.MProperty
         /// <param name="propName">Имя свойства</param>
         /// <param name="configName">Имя конфигурации</param>
         public PropBindNamed(
-            IAppModel target, string propName, string configName)
+            IModelFields target, string propName, string configName)
             : this(target, propName)
         {
             ConfigName = configName;
@@ -46,7 +46,7 @@ namespace SWAPIlib.MProperty
                 CheckPropValidation(value);
 
                 propertyName = value;
-                RaiseTargetChanged(TargetRef);
+                RaiseTargetChanged(TargetWrapper);
             }
         }
         private string propertyName;
@@ -70,7 +70,7 @@ namespace SWAPIlib.MProperty
         public override string GetValue()
         {
             string ret;
-            ret = GetValue(TargetRef, PropertyName, ConfigName);
+            ret = GetValue(TargetWrapper?.TargetModel, PropertyName, ConfigName);
             if (!IsCurrentPropertyValid && string.IsNullOrEmpty(ret))
                 ret = @"$NOT FOUND$";
 
@@ -96,17 +96,17 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public override bool SetValue(string newValue)
         {
-            return SetValue(TargetRef, PropertyName, ConfigName, newValue: newValue);
+            return SetValue(TargetWrapper.TargetModel, PropertyName, ConfigName, newValue: newValue);
         }
         /// <summary>
         /// Проверить наличие конкретного свойства в модели
         /// </summary>
         /// <param name="targetRef"></param>
         /// <returns></returns>
-        public override bool Validator(IAppModel targetRef)
+        public override bool Validator(IModelFields targetRef)
         {
             bool ret = false;
-            if(targetRef?.ParameterList?.Contains(PropertyName) == true)
+            if(targetRef?.TargetModel?.ParameterList?.Contains(PropertyName) == true)
                 ret = true;
 
             return ret;
@@ -126,7 +126,7 @@ namespace SWAPIlib.MProperty
         }
         protected bool CheckPropValidation(string propName)
         {
-            return IsCurrentPropertyValid = IsPropertyValid(TargetRef, propName);
+            return IsCurrentPropertyValid = IsPropertyValid(TargetWrapper?.TargetModel, propName);
         }
         bool IsCurrentPropertyValid { get; set; }
 
@@ -134,13 +134,14 @@ namespace SWAPIlib.MProperty
         {
             var newProp = new PropBindNamed()
             {
-                TargetRef = this.targetRef,
-                ConfigName = this.configName,
+                TargetWrapper = this.targetWrapper,
                 PropertyName = this.propertyName,
 
                 IsReadable = this.IsReadable,
-                IsWritable = this.IsWritable
+                IsWritable = this.IsWritable,
+                
             };
+            newProp.targetWrapper.TargetUpdated += newProp.WrapperUpdated;
             return newProp;
         }
 

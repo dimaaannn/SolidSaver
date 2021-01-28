@@ -58,6 +58,7 @@ namespace SWAPIlib.MProperty
     /// <typeparam name="T">Тип объекта</typeparam>
     public interface IPropBinding<T> : IPropBinding
     {
+        EventHandler WrapperUpdated { get; set; }
         /// <summary>
         /// Проверка допустимости объекта
         /// </summary>
@@ -67,7 +68,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Ссылка на объект с свойством
         /// </summary>
-        T TargetRef { get; set; }
+        T TargetWrapper { get; set; }
         /// <summary>
         /// Изменена модель привязки
         /// </summary>

@@ -10,7 +10,7 @@ namespace SWAPIlib.MProperty.BaseProp
     /// Абстрактный класс для привязки моделей SW
     /// </summary>
     /// <typeparam name="T">Наследуется от IAppModel</typeparam>
-    public abstract class PropBindSWModel<T> : IPropBinding<T> where T : IAppModel
+    public abstract class PropBindSWModel<T> : IPropBinding<T> where T : IModelFields
     {
         protected PropBindSWModel() { }
         /// <summary>
@@ -18,22 +18,27 @@ namespace SWAPIlib.MProperty.BaseProp
         /// </summary>
         public PropBindSWModel(T target) : this()
         {
-            TargetRef = target;
+            TargetWrapper = target;
+            //Событие изменения свойств
+            WrapperUpdated = (x, y) =>
+            {
+                this.TargetChanged?.Invoke(this, (T)x);
+            };
         }
 
+        
         /// <summary>
         /// Основная привязка
         /// </summary>
-        protected T targetRef;
-        public T TargetRef
+        protected T targetWrapper;
+        public T TargetWrapper
         {
-            get => targetRef;
+            get => targetWrapper;
             set
             {
-                targetRef = value;
-                TargetChanged?.Invoke(this, targetRef);
+                targetWrapper = value;
 
-                string infoState = (targetRef != null) ? $"{targetRef.Title} set" : "error";
+                string infoState = (targetWrapper != null) ? $"set {targetWrapper.Title}" : "error";
                 Debug.WriteLine("ModelBindingBase = target {0}", infoState);
             }
         }
@@ -41,30 +46,24 @@ namespace SWAPIlib.MProperty.BaseProp
         public bool IsReadable { get; set; }
         public bool IsWritable { get; set; }
 
-        protected string title;
-        /// <summary>
-        /// Поле для отображения имени свойства
-        /// </summary>
-        public virtual string PropName { get => title; set => title = value; }
+        public abstract string PropName { get; }
+        protected string configName;
         /// <summary>
         /// Имя конфигурации для запроса свойств
         /// </summary>
-        public virtual string ConfigName
+        public string ConfigName
         {
             get
             {
                 string ret;
                 if (string.IsNullOrEmpty(configName))
-                {
-                    ret = TargetRef?.ActiveConfigName;
-                }
+                    ret = TargetWrapper.SelectedConfigName;
                 else
                     ret = configName;
                 return ret;
             }
             set => configName = value;
         }
-        protected string configName;
 
         /// <summary>
         /// Проверка поддержки свойства моделью
@@ -107,7 +106,9 @@ namespace SWAPIlib.MProperty.BaseProp
         /// <summary>
         /// Имя объекта привязки
         /// </summary>
-        public virtual string TargetName => TargetRef.FileName;
+        public virtual string TargetName => TargetWrapper.FileName;
+
+        public EventHandler WrapperUpdated { get; set; }
     }
 
 
