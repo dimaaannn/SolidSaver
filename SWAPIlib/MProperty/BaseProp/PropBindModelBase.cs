@@ -135,13 +135,13 @@ namespace SWAPIlib.MProperty.BaseProp
             {
                 targetUpdated += value;
                 if (TargetWrapper != null)
-                    TargetWrapper.TargetUpdated += value;
+                    TargetWrapper.UpdateValuesEvent += value;
             }
             remove
             {
                 targetUpdated -= value;
                 if (TargetWrapper != null)
-                    TargetWrapper.TargetUpdated -= value;
+                    TargetWrapper.UpdateValuesEvent -= value;
             }
         }
         /// <summary>
@@ -152,12 +152,12 @@ namespace SWAPIlib.MProperty.BaseProp
             add
             {
                 if (TargetWrapper != null)
-                    TargetWrapper.WriteData += value;
+                    TargetWrapper.WriteDataEvent += value;
             }
             remove
             {
                 if (TargetWrapper != null)
-                    TargetWrapper.WriteData -= value;
+                    TargetWrapper.WriteDataEvent -= value;
             }
         }
         /// <summary>
@@ -168,12 +168,12 @@ namespace SWAPIlib.MProperty.BaseProp
             add
             {
                 if(TargetWrapper != null)
-                    TargetWrapper.FlushData += value;
+                    TargetWrapper.FlushDataEvent += value;
             }
             remove
             {
                 if (TargetWrapper != null)
-                    TargetWrapper.FlushData -= value;
+                    TargetWrapper.FlushDataEvent -= value;
             }
         }
         #endregion

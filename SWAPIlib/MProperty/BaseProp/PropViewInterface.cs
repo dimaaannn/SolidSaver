@@ -66,15 +66,15 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Событие обновления свойств
         /// </summary>
-        EventHandler TargetUpdated { get; }
+        EventHandler TargetUpdatedHandler { get; }
         /// <summary>
         /// Записать значения свойств
         /// </summary>
-        EventHandler WriteData { get; }
+        EventHandler WriteValueHandler { get; }
         /// <summary>
         /// Очистить локальные свойства
         /// </summary>
-        EventHandler FlushData { get; }
+        EventHandler FlushDataHandler { get; }
 
         /// <summary>
         /// Изменён объект привязки

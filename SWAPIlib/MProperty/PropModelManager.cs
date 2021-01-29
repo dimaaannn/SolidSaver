@@ -56,15 +56,18 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Событие обновления свойств
         /// </summary>
-        event EventHandler TargetUpdated;
+        event EventHandler UpdateValuesEvent;
         /// <summary>
         /// Записать значения свойств
         /// </summary>
-        event EventHandler WriteData;
+        event EventHandler WriteDataEvent;
         /// <summary>
         /// Очистить локальные свойства
         /// </summary>
-        event EventHandler FlushData;
+        event EventHandler FlushDataEvent;
+        void WriteData();
+        void UpdateValues();
+        void FlushData();
     }
     public interface IDataEntity<out T> :IDataEntity
     {
@@ -88,7 +91,7 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Базовые поля для модели
     /// </summary>
-    public struct ModelFields : IModelEntity
+    public class ModelFields : IModelEntity
     {
         public ModelFields(IAppModel targetModel)
         {
@@ -96,10 +99,6 @@ namespace SWAPIlib.MProperty
             title = targetModel.Title;
             fileName = targetModel.FileName;
             modelConfigNames = targetModel.ConfigList.ToArray();
-            tempConfigName = null;
-            TargetUpdated = null;
-            WriteData = null;
-            FlushData = null;
         }
 
         private readonly IAppModel targetModel;
@@ -126,7 +125,7 @@ namespace SWAPIlib.MProperty
             set
             {
                 tempConfigName = value;
-                TargetUpdated?.Invoke(this, null);
+                UpdateValuesEvent?.Invoke(this, null);
             }
         }
 
@@ -135,21 +134,24 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Событие обновления свойств
         /// </summary>
-        public event EventHandler TargetUpdated;
+        public event EventHandler UpdateValuesEvent;
         /// <summary>
         /// Записать значения свойств
         /// </summary>
-        public event EventHandler WriteData;
+        public event EventHandler WriteDataEvent;
         /// <summary>
         /// Очистить локальные свойства
         /// </summary>
-        public event EventHandler FlushData;
+        public event EventHandler FlushDataEvent;
 
         public object GetTarget()
         {
             return TargetWrapper;
         }
 
+        public void UpdateValues() => UpdateValuesEvent?.Invoke(this, EventArgs.Empty);
+        public void WriteData() => WriteDataEvent?.Invoke(this, EventArgs.Empty);
+        public void FlushData() => FlushDataEvent?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>

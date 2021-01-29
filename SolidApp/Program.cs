@@ -70,7 +70,10 @@ namespace SolidApp
             #region Тестирование свойств
             //Основные свойства для тестов
             string confname = testcomp.ActiveConfigName;
-            string propName = "Наименование1";
+            string propName = "Наименование";
+            string confName1 = "По умолчанию";
+            string confName2 = "С дыркой";
+
             string baseParam = ModelConfigProxy.GetConfParam(rawmodel, "По умолчанию", propName);
             Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
@@ -78,12 +81,16 @@ namespace SolidApp
             var binder = new PropBindNamed() { PropertyName = propName};
             var propView = new PropViewB();
 
-            propView.PropBinder = binder;
-            //propView.PropBinder = null;
-
-
             binder.TargetWrapper = modEntity;
-            //propView.Value = "tewt";
+            propView.PropBinder = binder;
+
+            //Задать конфигурацию из свойства - OK
+            //binder.ConfigName = confName1;
+            //Задать конфигурацию из сущности - ОК
+            //modEntity.TempConfigName = confName1;
+
+            propView.Value = "Наименование test8  c дыркой";
+            modEntity.UpdateValues();
 
 
             Console.WriteLine($"\ntarget prop = {propView.Value}, IsModifyed={propView.IsModifyed}");

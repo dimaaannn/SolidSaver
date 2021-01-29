@@ -139,9 +139,9 @@ namespace SWAPIlib.MProperty
         {
             if(binder != null)
             {
-                binder.TargetUpdated += TargetUpdated;
-                binder.WriteDataValue += WriteData;
-                binder.FlushLocalData += FlushData;
+                binder.TargetUpdated += TargetUpdatedHandler;
+                binder.WriteDataValue += WriteValueHandler;
+                binder.FlushLocalData += FlushDataHandler;
                 binder.TargetChanged += TargetChanged;
             }
         }
@@ -149,9 +149,9 @@ namespace SWAPIlib.MProperty
         {
             if (binder != null)
             {
-                binder.TargetUpdated -= TargetUpdated;
-                binder.WriteDataValue -= WriteData;
-                binder.FlushLocalData -= FlushData;
+                binder.TargetUpdated -= TargetUpdatedHandler;
+                binder.WriteDataValue -= WriteValueHandler;
+                binder.FlushLocalData -= FlushDataHandler;
                 binder.TargetChanged -= TargetChanged;
             }
         }
@@ -162,28 +162,28 @@ namespace SWAPIlib.MProperty
         public event PropertyChangedEventHandler PropertyChanged;
 
         public EventHandler<IDataEntity> TargetChanged => targetChanged;
-        public EventHandler TargetUpdated => targetUpdated;
-        public EventHandler WriteData => writeData;
-        public EventHandler FlushData => flushData;
+        public EventHandler TargetUpdatedHandler => targetUpdatedHanlder;
+        public EventHandler WriteValueHandler => writeValueHandler;
+        public EventHandler FlushDataHandler => flushDataHandler;
 
 
         protected virtual void targetChanged<T>(object sender, T newBind) 
         {
             if(sender is IPropBinding binder)
             {
-                binder.TargetUpdated -= TargetUpdated;
-                binder.WriteDataValue -= WriteData;
-                binder.FlushLocalData -= FlushData;
+                binder.TargetUpdated -= TargetUpdatedHandler;
+                binder.WriteDataValue -= WriteValueHandler;
+                binder.FlushLocalData -= FlushDataHandler;
             }
             if(newBind is IDataEntity de)
             {
-                de.TargetUpdated += TargetUpdated;
-                de.WriteData += WriteData;
-                de.FlushData += FlushData;
+                de.UpdateValuesEvent += TargetUpdatedHandler;
+                de.WriteDataEvent += WriteValueHandler;
+                de.FlushDataEvent += FlushDataHandler;
             }
         }
-        protected virtual void targetUpdated(object sender, EventArgs e) => Update();
-        protected virtual void writeData(object sender, EventArgs e) => WriteValue();
-        protected virtual void flushData(object sender, EventArgs e) => ClearValues();
+        protected virtual void targetUpdatedHanlder(object sender, EventArgs e) => Update();
+        protected virtual void writeValueHandler(object sender, EventArgs e) => WriteValue();
+        protected virtual void flushDataHandler(object sender, EventArgs e) => ClearValues();
     }
 }
