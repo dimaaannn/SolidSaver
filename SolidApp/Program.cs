@@ -84,16 +84,26 @@ namespace SolidApp
             binder.TargetWrapper = modEntity;
             propView.PropBinder = binder;
 
+            //var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(binder);
+            var propView2 = new PropViewB();
+            var binder2 = (PropBindNamed) binder.Clone();
+            binder2.TargetWrapper = modEntity;
+            propView2.PropBinder = binder2;
+
+
             //Задать конфигурацию из свойства - OK
             //binder.ConfigName = confName1;
             //Задать конфигурацию из сущности - ОК
             //modEntity.TempConfigName = confName1;
 
-            propView.Value = "Наименование test8  c дыркой";
-            modEntity.UpdateValues();
+            propView.Value = "Наименование test14  c дыркой";
+            //propView2.Value = "Наименование test10  c дыркой";
+            //modEntity.WriteData();
+            //modEntity.UpdateValues();
 
 
             Console.WriteLine($"\ntarget prop = {propView.Value}, IsModifyed={propView.IsModifyed}");
+            Console.WriteLine($"\ntarget2 prop = {propView2.Value}, IsModifyed={propView2.IsModifyed}");
 
 
 

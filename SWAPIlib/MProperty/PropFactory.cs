@@ -24,6 +24,17 @@ namespace SWAPIlib.MProperty
         /// Создать свойство по прототипу
         /// </summary>
         /// <param name="binding">Прототип</param>
+        /// <returns></returns>
+        public static IPropView CreateByProto(IPropBinding binding)
+        {
+            var newBind = (IPropBinding) binding.Clone();
+            var propView = new PropViewB(binder: newBind);
+            return propView;
+        }
+        /// <summary>
+        /// Создать свойство по прототипу
+        /// </summary>
+        /// <param name="binding">Прототип</param>
         /// <param name="configName">Имя конфигурации</param>
         /// <returns></returns>
         public static IPropView CreateByProto(IPropBinding binding, string configName)

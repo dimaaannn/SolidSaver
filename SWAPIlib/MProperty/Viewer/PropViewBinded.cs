@@ -9,7 +9,7 @@ namespace SWAPIlib.MProperty
         public PropViewB() { }
         public PropViewB(IPropBinding binder) : this()
         {
-            AttachBinderEvents(binder);
+            //AttachBinderEvents(binder);
             PropBinder = binder;
         }
 
@@ -101,7 +101,7 @@ namespace SWAPIlib.MProperty
             if (ret)
                 Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");
             else
-                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");
+                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} не записано");
 
             ClearValues();
 
