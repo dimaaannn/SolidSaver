@@ -18,7 +18,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public string Title { get; set; }
+        public string PropName { get; set; }
 
         #region Значения свойств
         protected string _NewPropertyValue;
@@ -27,7 +27,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Значение свойства
         /// </summary>
-        public string MainValueView
+        public string Value
         {
             get
             {
@@ -39,7 +39,7 @@ namespace SWAPIlib.MProperty
                 //Прочитать значение в первый раз
                 else
                 {
-                    return CurrentValue;
+                    return SavedValue;
                 }
             }
             set
@@ -52,7 +52,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Значение до редактирования
         /// </summary>
-        public string CurrentValue
+        public string SavedValue
         {
             get
             {
@@ -92,7 +92,7 @@ namespace SWAPIlib.MProperty
             var ret = false;
             WriteVal?.Invoke(this, _NewPropertyValue);
             //Вернуть true если значения совпадают
-            if (CurrentValue == _NewPropertyValue)
+            if (SavedValue == _NewPropertyValue)
             {
                 ret = true;
                 Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");

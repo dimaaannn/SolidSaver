@@ -133,8 +133,8 @@ namespace SWAPIlib.MProperty
         /// <param name="target">Модель привязки (опционально)</param>
         /// <param name="configName">Конфигурация модели (опционально)</param>
         /// <returns>Прототип именованной привязки</returns>
-        public static IPropBinding<IModelFields> NamedProperty(
-            string propertyName, IModelFields target = null, string configName = null)
+        public static IPropBinding<IModelEntity> NamedProperty(
+            string propertyName, IModelEntity target = null, string configName = null)
         {
             return new PropBindNamed()
             {

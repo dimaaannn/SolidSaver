@@ -27,7 +27,7 @@ namespace SWAPIlib.MProperty
     /// <typeparam name="TBinder"></typeparam>
     public interface IPropManager<out TWrapper, TPropView, TBinder> 
         : IPropManager
-        where TWrapper : IBindDataWrapper
+        where TWrapper : IDataEntity
         where TPropView : IPropView
         where TBinder : IPropBinding
     {
@@ -46,32 +46,49 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Объект с информацией о привязке
     /// </summary>
-    public interface IBindDataWrapper
+    public interface IDataEntity
     {
+        /// <summary>
+        /// Получить объект привязки
+        /// </summary>
+        /// <returns></returns>
         object GetTarget();
+        /// <summary>
+        /// Событие обновления свойств
+        /// </summary>
         event EventHandler TargetUpdated;
+        /// <summary>
+        /// Записать значения свойств
+        /// </summary>
+        event EventHandler WriteData;
+        /// <summary>
+        /// Очистить локальные свойства
+        /// </summary>
+        event EventHandler FlushData;
     }
-    public interface IBindDataWrapper<out T> :IBindDataWrapper
+    public interface IDataEntity<out T> :IDataEntity
     {
+        /// <summary>
+        /// Типизированный объект привязки
+        /// </summary>
         T TargetWrapper { get; }
     }
 
     /// <summary>
     /// Интерфейс для полей модели
     /// </summary>
-    public interface IModelFields : IBindDataWrapper<IAppModel>
+    public interface IModelEntity : IDataEntity<IAppModel>
     {
         string Title { get; }
         string FileName { get; }
-        string[] ModelConfigNames { get; }
-        string SelectedConfigName { get; set; }
-        IAppModel TargetModel { get; }
+        string[] ConfigNames { get; }
+        string TempConfigName { get; set; }
     }
 
     /// <summary>
     /// Базовые поля для модели
     /// </summary>
-    public struct ModelFields : IModelFields
+    public struct ModelFields : IModelEntity
     {
         public ModelFields(IAppModel targetModel)
         {
@@ -79,32 +96,37 @@ namespace SWAPIlib.MProperty
             title = targetModel.Title;
             fileName = targetModel.FileName;
             modelConfigNames = targetModel.ConfigList.ToArray();
-            selectedConfigName = null;
+            tempConfigName = null;
             TargetUpdated = null;
+            WriteData = null;
+            FlushData = null;
         }
+
         private readonly IAppModel targetModel;
         private readonly string fileName;
         private readonly string[] modelConfigNames;
         private readonly string title;
-        private string selectedConfigName;
+        private string tempConfigName;
 
-        public IAppModel TargetWrapper => TargetModel;
+        public IAppModel TargetWrapper => targetModel;
 
-        public IAppModel TargetModel => targetModel;
         public string FileName => fileName;
-        public string[] ModelConfigNames => modelConfigNames;
-        public string SelectedConfigName
+        public string[] ConfigNames => modelConfigNames;
+        /// <summary>
+        /// Временное имя конфигурации передаваемое в привязанные свойства
+        /// </summary>
+        public string TempConfigName
         {
             get
             {
-                if (string.IsNullOrEmpty(selectedConfigName))
-                    return TargetModel.ActiveConfigName;
-                return selectedConfigName;
+                if (string.IsNullOrEmpty(tempConfigName))
+                    return TargetWrapper.ActiveConfigName;
+                return tempConfigName;
             }
             set
             {
+                tempConfigName = value;
                 TargetUpdated?.Invoke(this, null);
-                selectedConfigName = value;
             }
         }
 
@@ -114,10 +136,18 @@ namespace SWAPIlib.MProperty
         /// Событие обновления свойств
         /// </summary>
         public event EventHandler TargetUpdated;
+        /// <summary>
+        /// Записать значения свойств
+        /// </summary>
+        public event EventHandler WriteData;
+        /// <summary>
+        /// Очистить локальные свойства
+        /// </summary>
+        public event EventHandler FlushData;
 
         public object GetTarget()
         {
-            return TargetModel;
+            return TargetWrapper;
         }
 
     }
@@ -129,7 +159,7 @@ namespace SWAPIlib.MProperty
     /// <typeparam name="TBind">Тип привязки</typeparam>
     public abstract class PropManagerBase<TWrapper, TPropView, TBind>
         : IPropManager<TWrapper, TPropView, TBind>
-        where TWrapper : IBindDataWrapper
+        where TWrapper : IDataEntity
         where TPropView : IPropView
         where TBind : IPropBinding
     {

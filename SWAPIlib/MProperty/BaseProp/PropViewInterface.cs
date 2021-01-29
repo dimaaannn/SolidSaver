@@ -27,15 +27,15 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Имя свойства
         /// </summary>
-        string Title { get; }
+        string PropName { get; }
         /// <summary>
         /// Значение свойства
         /// </summary>
-        string MainValueView { get; set; }
+        string Value { get; set; }
         /// <summary>
         /// Значение до редактирования
         /// </summary>
-        string CurrentValue { get; }
+        string SavedValue { get; }
         /// <summary>
         /// Значение изменено
         /// </summary>
@@ -52,15 +52,6 @@ namespace SWAPIlib.MProperty
         /// Очистить пользовательское значение
         /// </summary>
         void ClearValues();
-
-        /// <summary>
-        /// Запрос обновления
-        /// </summary>
-        event EventHandler UpdateVal;
-        /// <summary>
-        /// Запрос записи
-        /// </summary>
-        event EventHandler<string> WriteVal;
     }
 
     /// <summary>
@@ -72,10 +63,28 @@ namespace SWAPIlib.MProperty
         /// Объект привязки свойства
         /// </summary>
         IPropBinding PropBinder { get; set; }
+        /// <summary>
+        /// Событие обновления свойств
+        /// </summary>
+        EventHandler TargetUpdated { get; }
+        /// <summary>
+        /// Записать значения свойств
+        /// </summary>
+        EventHandler WriteData { get; }
+        /// <summary>
+        /// Очистить локальные свойства
+        /// </summary>
+        EventHandler FlushData { get; }
+
+        /// <summary>
+        /// Изменён объект привязки
+        /// </summary>
+        EventHandler<IDataEntity> TargetChanged { get; }
     }
 
-    public interface IPropView<T> : IPropViewBase
+    public interface IPropView<T> : IPropViewBase, IPropView
     {
-        IPropBinding<T> PropBinder { get; set; }
+        new IPropBinding<T> PropBinder { get; set; }
+
     }
 }

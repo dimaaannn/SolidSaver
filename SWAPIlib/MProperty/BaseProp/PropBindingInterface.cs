@@ -39,6 +39,7 @@ namespace SWAPIlib.MProperty
         /// Допускается запись
         /// </summary>
         bool IsWritable { get; }
+
         /// <summary>
         /// Прочитать значение переменной
         /// </summary>
@@ -50,6 +51,20 @@ namespace SWAPIlib.MProperty
         /// <param name="newValue"></param>
         /// <returns></returns>
         bool SetValue(string newValue);
+
+        /// <summary>
+        /// Изменена модель привязки
+        /// </summary>
+        event EventHandler TargetUpdated;
+        event EventHandler WriteDataValue;
+        /// <summary>
+        /// Очистить локальные переменные
+        /// </summary>
+        event EventHandler FlushLocalData;
+        /// <summary>
+        /// Изменён объект привязки (второй аргумент - новый объект привязки)
+        /// </summary>
+        event EventHandler<IDataEntity> TargetChanged;
     }
 
     /// <summary>
@@ -58,7 +73,6 @@ namespace SWAPIlib.MProperty
     /// <typeparam name="T">Тип объекта</typeparam>
     public interface IPropBinding<T> : IPropBinding
     {
-        EventHandler WrapperUpdated { get; set; }
         /// <summary>
         /// Проверка допустимости объекта
         /// </summary>
@@ -69,11 +83,6 @@ namespace SWAPIlib.MProperty
         /// Ссылка на объект с свойством
         /// </summary>
         T TargetWrapper { get; set; }
-        /// <summary>
-        /// Изменена модель привязки
-        /// </summary>
-        event EventHandler<T> TargetChanged;
-        
     }
 
 }

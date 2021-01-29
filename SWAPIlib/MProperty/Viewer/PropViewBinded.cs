@@ -7,37 +7,33 @@ namespace SWAPIlib.MProperty
     public class PropViewB : IPropView
     {
         public PropViewB() { }
-        public PropViewB(IPropBinding binder) :this()
+        public PropViewB(IPropBinding binder) : this()
         {
+            AttachBinderEvents(binder);
             PropBinder = binder;
         }
 
         private IPropBinding propBinder;
-        public IPropBinding PropBinder { get => propBinder; set => propBinder = value; }
+        public IPropBinding PropBinder 
+        { 
+            get => propBinder;
+            set
+            {
+                DetachBinderEvents(propBinder);
+                propBinder = value;
+                AttachBinderEvents(propBinder);
+            }
+        }
 
-        /// <summary>
-        /// Доступно для чтения
-        /// </summary>
-        public bool IsReadable => PropBinder.IsReadable;
-        /// <summary>
-        /// Доступно для записи
-        /// </summary>
-        public bool IsWritable => PropBinder.IsWritable;
-        /// <summary>
-        /// Имя свойства
-        /// </summary>
-        public virtual string Title => PropBinder.PropName;
-
-        #region Значения свойств
         protected string _NewPropertyValue;
-        protected string _SavedPropertyValue;
+        protected string _SavedValue;
 
         /// <summary>
         /// Значение свойства
         /// </summary>
-        public string MainValueView
+        public string Value
         {
-            get => _NewPropertyValue ?? CurrentValue;
+            get => _NewPropertyValue ?? SavedValue;
 
             set
             {
@@ -49,16 +45,16 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Значение до редактирования
         /// </summary>
-        public string CurrentValue
+        public string SavedValue
         {
             get
             {
                 //Если значение отсутствует - обновить значение
-                if (_SavedPropertyValue == null)
+                if (_SavedValue == null)
                 {
                     Update();
                 }
-                return _SavedPropertyValue;
+                return _SavedValue;
             }
 
         }
@@ -66,7 +62,18 @@ namespace SWAPIlib.MProperty
         /// Значение было изменено
         /// </summary>
         public bool IsModifyed => _NewPropertyValue != null;
-        #endregion
+        /// <summary>
+        /// Доступно для чтения
+        /// </summary>
+        public bool IsReadable => PropBinder.IsReadable;
+        /// <summary>
+        /// Доступно для записи
+        /// </summary>
+        public bool IsWritable => PropBinder.IsWritable;
+        /// <summary>
+        /// Имя свойства
+        /// </summary>
+        public virtual string PropName => PropBinder.PropName;
 
         /// <summary>
         /// Вызвать обновление
@@ -74,9 +81,8 @@ namespace SWAPIlib.MProperty
         public void Update()
         {
             Debug.WriteLine("PropertyTargetView - update");
-            UpdateVal?.Invoke(this, null);
             ClearValues();
-            _SavedPropertyValue = PropBinder.GetValue();
+            _SavedValue = PropBinder.GetValue();
         }
         /// <summary>
         /// Записать значение
@@ -84,7 +90,6 @@ namespace SWAPIlib.MProperty
         public bool WriteValue()
         {
             var ret = false;
-            WriteVal?.Invoke(this, null);
             //Записать
             ret = PropBinder.SetValue(_NewPropertyValue);
 
@@ -104,7 +109,7 @@ namespace SWAPIlib.MProperty
         public void ClearValues()
         {
             _NewPropertyValue = null;
-            _SavedPropertyValue = null;
+            _SavedValue = null;
             AllPropertyChanged();
         }
         protected void AllPropertyChanged()
@@ -114,13 +119,9 @@ namespace SWAPIlib.MProperty
             RaisePropertyChanged("IsModifyed");
         }
         /// <summary>
-        /// Вызвать событие изменения свойства
+        /// Прокси для вызова обновления значений
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public event EventHandler UpdateVal;
-        public event EventHandler<string> WriteVal;
-
+        /// <param name="s"></param>
         protected void RaisePropertyChanged(string s)
         {
             var e = PropertyChanged;
@@ -129,5 +130,56 @@ namespace SWAPIlib.MProperty
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
             }
         }
+
+        protected virtual void AttachBinderEvents(IPropBinding binder)
+        {
+            if(binder != null)
+            {
+                binder.TargetUpdated += TargetUpdated;
+                binder.WriteDataValue += WriteData;
+                binder.FlushLocalData += FlushData;
+                binder.TargetChanged += TargetChanged;
+            }
+        }
+        protected virtual void DetachBinderEvents(IPropBinding binder)
+        {
+            if (binder != null)
+            {
+                binder.TargetUpdated -= TargetUpdated;
+                binder.WriteDataValue -= WriteData;
+                binder.FlushLocalData -= FlushData;
+                binder.TargetChanged -= TargetChanged;
+            }
+        }
+
+        /// <summary>
+        /// оповещение об изменении свойства
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public EventHandler<IDataEntity> TargetChanged => targetChanged;
+        public EventHandler TargetUpdated => targetUpdated;
+        public EventHandler WriteData => writeData;
+        public EventHandler FlushData => flushData;
+
+
+        protected virtual void targetChanged<T>(object sender, T newBind) 
+        {
+            if(sender is IPropBinding binder)
+            {
+                binder.TargetUpdated -= TargetUpdated;
+                binder.WriteDataValue -= WriteData;
+                binder.FlushLocalData -= FlushData;
+            }
+            if(newBind is IDataEntity de)
+            {
+                de.TargetUpdated += TargetUpdated;
+                de.WriteData += WriteData;
+                de.FlushData += FlushData;
+            }
+        }
+        protected virtual void targetUpdated(object sender, EventArgs e) => Update();
+        protected virtual void writeData(object sender, EventArgs e) => WriteValue();
+        protected virtual void flushData(object sender, EventArgs e) => ClearValues();
     }
 }

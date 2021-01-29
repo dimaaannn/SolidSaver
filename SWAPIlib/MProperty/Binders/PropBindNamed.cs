@@ -7,7 +7,7 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Именованное свойство модели SW
     /// </summary>
-    public class PropBindNamed : PropBindSWModel<IModelFields>
+    public class PropBindNamed : PropBindSWModel<IModelEntity>
     {
         public PropBindNamed() :base() { } 
         /// <summary>
@@ -15,7 +15,7 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="target">Модель привязки</param>
         /// <param name="propName">Имя свойства</param>
-        public PropBindNamed(IModelFields target, string propName) :base(target)
+        public PropBindNamed(IModelEntity target, string propName) :base(target)
         {
             IsReadable = true;
             IsWritable = true;
@@ -28,7 +28,7 @@ namespace SWAPIlib.MProperty
         /// <param name="propName">Имя свойства</param>
         /// <param name="configName">Имя конфигурации</param>
         public PropBindNamed(
-            IModelFields target, string propName, string configName)
+            IModelEntity target, string propName, string configName)
             : this(target, propName)
         {
             ConfigName = configName;
@@ -37,18 +37,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public string PropertyName
-        {
-            //Свойство по умолчанию
-            get => propertyName;
-            set
-            {
-                CheckPropValidation(value);
-
-                propertyName = value;
-                RaiseTargetChanged(TargetWrapper);
-            }
-        }
+        public string PropertyName { get => propertyName; set => propertyName = value; }
         private string propertyName;
 
         public override string PropName => $"{PropertyName}:";
@@ -70,7 +59,7 @@ namespace SWAPIlib.MProperty
         public override string GetValue()
         {
             string ret;
-            ret = GetValue(TargetWrapper?.TargetModel, PropertyName, ConfigName);
+            ret = GetValue(TargetWrapper?.TargetWrapper, PropertyName, ConfigName);
             if (!IsCurrentPropertyValid && string.IsNullOrEmpty(ret))
                 ret = @"$NOT FOUND$";
 
@@ -96,17 +85,17 @@ namespace SWAPIlib.MProperty
         /// <returns></returns>
         public override bool SetValue(string newValue)
         {
-            return SetValue(TargetWrapper.TargetModel, PropertyName, ConfigName, newValue: newValue);
+            return SetValue(TargetWrapper.TargetWrapper, PropertyName, ConfigName, newValue: newValue);
         }
         /// <summary>
         /// Проверить наличие конкретного свойства в модели
         /// </summary>
         /// <param name="targetRef"></param>
         /// <returns></returns>
-        public override bool Validator(IModelFields targetRef)
+        public override bool Validator(IModelEntity targetRef)
         {
             bool ret = false;
-            if(targetRef?.TargetModel?.ParameterList?.Contains(PropertyName) == true)
+            if(targetRef?.TargetWrapper?.ParameterList?.Contains(PropertyName) == true)
                 ret = true;
 
             return ret;
@@ -124,9 +113,15 @@ namespace SWAPIlib.MProperty
 
             return ret;
         }
+
+        /// <summary>
+        /// Выдавать ли ошибку при запросе свойства
+        /// </summary>
+        /// <param name="propName"></param>
+        /// <returns></returns>
         protected bool CheckPropValidation(string propName)
         {
-            return IsCurrentPropertyValid = IsPropertyValid(TargetWrapper?.TargetModel, propName);
+            return IsCurrentPropertyValid = IsPropertyValid(TargetWrapper?.TargetWrapper, propName);
         }
         bool IsCurrentPropertyValid { get; set; }
 
@@ -136,12 +131,11 @@ namespace SWAPIlib.MProperty
             {
                 TargetWrapper = this.targetWrapper,
                 PropertyName = this.propertyName,
-
+                
                 IsReadable = this.IsReadable,
                 IsWritable = this.IsWritable,
                 
             };
-            newProp.targetWrapper.TargetUpdated += newProp.WrapperUpdated;
             return newProp;
         }
 
