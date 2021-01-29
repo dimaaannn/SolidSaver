@@ -70,35 +70,23 @@ namespace SolidApp
             #region Тестирование свойств
             //Основные свойства для тестов
             string confname = testcomp.ActiveConfigName;
-            string propName = "Обозначение";
+            string propName = "Наименование1";
             string baseParam = ModelConfigProxy.GetConfParam(rawmodel, "По умолчанию", propName);
             Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
-            var v3 = rawmodel.GetCustomInfoNames2(confname);
+            var modEntity = new ModelFields(compAppModel);
+            var binder = new PropBindNamed() { PropertyName = propName};
+            var propView = new PropViewB();
+
+            propView.PropBinder = binder;
+            //propView.PropBinder = null;
 
 
-            string vParam = compAppModel[confname, "Обозначение"];
-            string param = ModelConfigProxy.GetConfParam(rawmodel, propName);
+            binder.TargetWrapper = modEntity;
+            //propView.Value = "tewt";
 
 
-            //Список параметров
-
-            Console.WriteLine($"PropValues={baseParam}");
-
-
-            var target = new SWAPIlib.MProperty.PropBindNamed(
-                target: compAppModel, "Наименование") ;
-
-            var target2 = new SWAPIlib.MProperty.PropBindNamed(
-                target: compAppModel, "Обозначение") ;
-
-            var target3 = SWAPIlib.MProperty.BindingFactory.NamedProperty("Обозначение");
-            var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(target3, compAppModel);
-
-            
-            var propView = SWAPIlib.MProperty.PropFactory.AttachToBinding(target3);
-
-            Console.WriteLine($"\ntarget1 prop = {propView2.MainValueView}, IsModifyed={propView2.IsModifyed}");
+            Console.WriteLine($"\ntarget prop = {propView.Value}, IsModifyed={propView.IsModifyed}");
 
 
 

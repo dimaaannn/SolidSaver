@@ -17,7 +17,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Информация привязки
         /// </summary>
-        string PropName { get; }
+        string DisplayPropName { get; }
         /// <summary>
         /// Имя объекта привязки
         /// </summary>

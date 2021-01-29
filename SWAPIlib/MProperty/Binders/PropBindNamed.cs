@@ -40,7 +40,7 @@ namespace SWAPIlib.MProperty
         public string PropertyName { get => propertyName; set => propertyName = value; }
         private string propertyName;
 
-        public override string PropName => $"{PropertyName}:";
+        public override string DisplayPropName => $"{PropertyName}:";
 
         /// <summary>
         /// Получить значение свойства
@@ -61,7 +61,7 @@ namespace SWAPIlib.MProperty
             string ret;
             ret = GetValue(TargetWrapper?.TargetWrapper, PropertyName, ConfigName);
             if (!IsCurrentPropertyValid && string.IsNullOrEmpty(ret))
-                ret = @"$NOT FOUND$";
+                ret = @"СВОЙСТВО_НЕ_НАЙДЕНО";
 
             return ret;
         }

@@ -18,7 +18,7 @@ namespace SWAPIlib.MProperty.BaseProp
         /// </summary>
         protected PropBindSWModel() 
         {
-            FlushLocalData += FlushValuesHandler;
+            //FlushLocalData += FlushValuesHandler;
         }
         /// <summary>
         /// Конструктор абстрактного класса
@@ -89,7 +89,7 @@ namespace SWAPIlib.MProperty.BaseProp
         /// <summary>
         /// Имя свойства отображаемое пользователю
         /// </summary>
-        public abstract string PropName { get; }
+        public abstract string DisplayPropName { get; }
         /// <summary>
         /// Текстовое описание свойства, задаётся статически
         /// </summary>
@@ -134,12 +134,14 @@ namespace SWAPIlib.MProperty.BaseProp
             add
             {
                 targetUpdated += value;
-                TargetWrapper.TargetUpdated += value;
+                if (TargetWrapper != null)
+                    TargetWrapper.TargetUpdated += value;
             }
             remove
             {
                 targetUpdated -= value;
-                TargetWrapper.TargetUpdated -= value;
+                if (TargetWrapper != null)
+                    TargetWrapper.TargetUpdated -= value;
             }
         }
         /// <summary>
@@ -147,16 +149,32 @@ namespace SWAPIlib.MProperty.BaseProp
         /// </summary>
         public event EventHandler WriteDataValue
         {
-            add =>TargetWrapper.WriteData += value;
-            remove => TargetWrapper.WriteData -= value;
+            add
+            {
+                if (TargetWrapper != null)
+                    TargetWrapper.WriteData += value;
+            }
+            remove
+            {
+                if (TargetWrapper != null)
+                    TargetWrapper.WriteData -= value;
+            }
         }
         /// <summary>
         /// Очистить локальные переменные
         /// </summary>
         public event EventHandler FlushLocalData
         {
-            add => TargetWrapper.FlushData += value;
-            remove => TargetWrapper.FlushData -= value;
+            add
+            {
+                if(TargetWrapper != null)
+                    TargetWrapper.FlushData += value;
+            }
+            remove
+            {
+                if (TargetWrapper != null)
+                    TargetWrapper.FlushData -= value;
+            }
         }
         #endregion
 

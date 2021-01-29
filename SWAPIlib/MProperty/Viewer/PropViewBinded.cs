@@ -33,7 +33,7 @@ namespace SWAPIlib.MProperty
         /// </summary>
         public string Value
         {
-            get => _NewPropertyValue ?? SavedValue;
+            get => _NewPropertyValue ??  SavedValue;
 
             set
             {
@@ -54,7 +54,7 @@ namespace SWAPIlib.MProperty
                 {
                     Update();
                 }
-                return _SavedValue;
+                return _SavedValue ?? null;
             }
 
         }
@@ -65,15 +65,15 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Доступно для чтения
         /// </summary>
-        public bool IsReadable => PropBinder.IsReadable;
+        public bool IsReadable => PropBinder?.IsReadable ?? false;
         /// <summary>
         /// Доступно для записи
         /// </summary>
-        public bool IsWritable => PropBinder.IsWritable;
+        public bool IsWritable => PropBinder?.IsWritable ?? false;
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public virtual string PropName => PropBinder.PropName;
+        public virtual string PropName => PropBinder?.DisplayPropName;
 
         /// <summary>
         /// Вызвать обновление
@@ -82,7 +82,11 @@ namespace SWAPIlib.MProperty
         {
             Debug.WriteLine("PropertyTargetView - update");
             ClearValues();
-            _SavedValue = PropBinder.GetValue();
+            _SavedValue = PropBinder?.GetValue() ?? "ОШИБКА";
+            if(PropBinder == null)
+            {
+                Debug.WriteLine("PropViewB - Null reference to binding");
+            }
         }
         /// <summary>
         /// Записать значение
@@ -91,7 +95,7 @@ namespace SWAPIlib.MProperty
         {
             var ret = false;
             //Записать
-            ret = PropBinder.SetValue(_NewPropertyValue);
+            ret = PropBinder?.SetValue(_NewPropertyValue) ?? false;
 
             //Debug info
             if (ret)
