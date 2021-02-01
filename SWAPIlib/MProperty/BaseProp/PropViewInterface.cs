@@ -20,15 +20,15 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Доступно для чтения
         /// </summary>
-        bool IsReadable { get; }
+        bool IsReadable { get; set; }
         /// <summary>
         /// Доступно для записи
         /// </summary>
-        bool IsWritable { get; }
+        bool IsWritable { get; set; }
         /// <summary>
         /// Имя свойства
         /// </summary>
-        string PropName { get; }
+        string PropName { get; set; }
         /// <summary>
         /// Значение свойства
         /// </summary>
@@ -49,6 +49,8 @@ namespace SWAPIlib.MProperty
         /// Записать значение
         /// </summary>
         PropertyWrite WriteValue { get; set; }
+        void ClearSaved();
+        void SetSavedVal(string s);
     }
 
 }

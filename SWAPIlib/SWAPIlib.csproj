@@ -65,7 +65,7 @@
     <Compile Include="MProperty\Manager\PropManager.cs" />
     <Compile Include="MProperty\PropFactory.cs" />
     <Compile Include="MProperty\PropModelManager.cs" />
-    <Compile Include="MProperty\Viewer\PropViewBinded.cs" />
+    <Compile Include="MProperty\Viewer\PropView.cs" />
     <Compile Include="MProperty\Viewer\PropViewPassive.cs" />
     <Compile Include="MProperty\Getters\ModelNamedParam.cs" />
     <Compile Include="MProperty\Getters\BaseModelProp.cs" />

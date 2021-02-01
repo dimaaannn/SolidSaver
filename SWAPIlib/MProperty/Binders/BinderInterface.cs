@@ -11,7 +11,18 @@ namespace SWAPIlib.MProperty
     /// </summary>
     public interface IBinder : ICloneable
     {
-        object GetTarget();
+        string TargetName { get; }
+        /// <summary>
+        /// Получить сущность привязки
+        /// </summary>
+        /// <returns></returns>
+        IDataEntity GetTarget();
+        /// <summary>
+        /// Задать новую сущность привязки
+        /// </summary>
+        /// <param name="dataEntity"></param>
+        /// <returns></returns>
+        bool SetTarget(IDataEntity dataEntity);
     }
     /// <summary>
     /// Типизированный объект привязки
@@ -59,20 +70,20 @@ namespace SWAPIlib.MProperty
         {
             get
             {
-
                 if (string.IsNullOrEmpty(configName))
                     return Target.TargetWrapper.ActiveConfigName;
                 return configName;
             }
-            set
-            {
-                configName = value;
-            }
+            set =>configName = value;
         }
         /// <summary>
         /// Имя свойства привязки
         /// </summary>
         public string Info { get; set; }
+        /// <summary>
+        /// Имя модели
+        /// </summary>
+        public string TargetName => Target.FileName;
 
         /// <summary>
         /// Клонировать объект с свойствами
@@ -92,9 +103,26 @@ namespace SWAPIlib.MProperty
         /// Вернуть объект привязки
         /// </summary>
         /// <returns></returns>
-        public object GetTarget()
+        public IDataEntity GetTarget()
         {
             return Target;
+        }
+
+        /// <summary>
+        /// Сменить модель привязки
+        /// </summary>
+        /// <param name="dataEntity"></param>
+        /// <returns></returns>
+        public bool SetTarget(IDataEntity dataEntity)
+        {
+            bool ret = false;
+            if(dataEntity is IModelEntity modelEnt)
+            {
+                this.Target = modelEnt;
+                configName = null;
+                ret = true;
+            }
+            return ret;
         }
     }
 }

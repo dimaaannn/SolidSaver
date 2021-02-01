@@ -30,6 +30,23 @@ namespace SWAPIlib.MProperty
         /// Текстовое описание свойства, задаётся статически
         /// </summary>
         string PropertyInfo { get; }
+        /// <summary>
+        /// Прочитать значение переменной
+        /// </summary>
+        /// <returns></returns>
+        string GetValue(IBinder binder);
+        /// <summary>
+        /// Записать значение
+        /// </summary>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        bool SetValue(IBinder binder, string newValue);
+        /// <summary>
+        /// Проверка допустимости объекта
+        /// </summary>
+        /// <param name="targetRef"></param>
+        /// <returns></returns>
+        bool Validator(IBinder binderRef);
     }
 
     /// <summary>

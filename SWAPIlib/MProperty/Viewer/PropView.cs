@@ -31,15 +31,13 @@ namespace SWAPIlib.MProperty
         {
             get
             {
-                //Если значение отсутствует и доступно для чтения - обновить значение
-                if (_SavedValue == null && IsReadable)
+                //Если значение отсутствует - обновить значение
+                if (_SavedValue == null)
                 {
-                    Update();
-                    AllPropertyChanged();
+                    Update?.Invoke();
                 }
                 return _SavedValue;
             }
-
         }
         /// <summary>
         /// Значение было изменено
@@ -48,11 +46,11 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Доступно для чтения
         /// </summary>
-        public bool IsReadable => Update != null;
+        public bool IsReadable  { get; set; }
         /// <summary>
         /// Доступно для записи
         /// </summary>
-        public bool IsWritable => WriteValue != null;
+        public bool IsWritable { get; set; }
         /// <summary>
         /// Имя свойства
         /// </summary>
@@ -85,6 +83,24 @@ namespace SWAPIlib.MProperty
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
             }
         }
+
+        public void ClearSaved()
+        {
+            _SavedValue = null;
+            _NewPropertyValue = null;
+            AllPropertyChanged();
+        }
+        /// <summary>
+        /// Установить обновлённое значение
+        /// </summary>
+        /// <param name="s"></param>
+        public void SetSavedVal(string s)
+        {
+            _NewPropertyValue = null;
+            _SavedValue = s;
+            AllPropertyChanged();
+        }
+
         /// <summary>
         /// оповещение об изменении свойства
         /// </summary>

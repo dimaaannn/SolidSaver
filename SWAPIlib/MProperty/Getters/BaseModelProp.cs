@@ -42,6 +42,30 @@ namespace SWAPIlib.MProperty.Getters
         /// <param name="newValue"></param>
         /// <returns></returns>
         public abstract bool SetValue(T binder, string newValue);
+
+        public string GetValue(IBinder binder)
+        {
+            if (binder is T tbinder)
+                return GetValue(tbinder);
+            else
+                throw new ArgumentException("PropModelGetterBase: Передана Некорректная привязка");
+        }
+
+        public bool SetValue(IBinder binder, string newValue)
+        {
+            if (binder is T tbinder)
+                return SetValue(tbinder,newValue);
+            else
+                throw new ArgumentException("PropModelGetterBase: Передана Некорректная привязка");
+        }
+
+        public bool Validator(IBinder binderRef)
+        {
+            if (binderRef is T tbinder)
+                return Validator(tbinder);
+            else
+                return false;
+        }
     }
 
 
