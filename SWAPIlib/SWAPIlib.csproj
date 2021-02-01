@@ -63,6 +63,7 @@
     <Compile Include="MProperty\BaseProp\PropertyInterface.cs" />
     <Compile Include="MProperty\Binders\BinderInterface.cs" />
     <Compile Include="MProperty\Manager\PropManager.cs" />
+    <Compile Include="MProperty\PropertyClass\PropertyBase.cs" />
     <Compile Include="MProperty\PropFactory.cs" />
     <Compile Include="MProperty\PropModelManager.cs" />
     <Compile Include="MProperty\Viewer\PropView.cs" />

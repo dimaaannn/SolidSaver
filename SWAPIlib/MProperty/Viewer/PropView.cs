@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using SWAPIlib.MProperty.BaseProp;
 
 namespace SWAPIlib.MProperty
 {

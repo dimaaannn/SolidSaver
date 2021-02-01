@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.BaseTypes;
-using SWAPIlib.MProperty.BaseProp;
 
 namespace SWAPIlib.MProperty
 {
