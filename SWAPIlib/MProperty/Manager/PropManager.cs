@@ -23,10 +23,10 @@ namespace SWAPIlib.MProperty.Manager
         public string SearchValue { get; set; }
         public string NewValue { get; set; }
         public ISearchSettings Settings { get; set; }
-        public IPropBinding SinglePrototype { get; set; }
-        public IEnumerable<IPropBinding> PropTemplates { get; set; }
+        public IPropGetter SinglePrototype { get; set; }
+        public IEnumerable<IPropGetter> PropTemplates { get; set; }
         public IEnumerable<IAppModel> AppModels { get; set; }
-        public IObservable<IPropBinding> PropViews { get; set; }
+        public IObservable<IPropGetter> PropViews { get; set; }
 
         public bool CreatePropView() { return false; }
         public void RunSearch() { }

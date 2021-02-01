@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace SWAPIlib.MProperty
 {
-    public class PropViewPassive : IPropViewBase
+    public class PropViewPassive : IPropView
     {
 
         /// <summary>

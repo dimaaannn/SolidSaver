@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.MProperty.BaseProp;
+using SWAPIlib.MProperty.Getters;
 
 namespace SWAPIlib.MProperty
 {
@@ -14,9 +15,9 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="binding">Привязка не копируется</param>
         /// <returns></returns>
-        public static IPropView AttachToBinding(IPropBinding binding)
+        public static IPropView AttachToBinding(IPropGetter binding)
         {
-            var propView = new PropViewB(binder: binding);
+            var propView = new PropView(binder: binding);
             return propView;
         }
 
@@ -25,10 +26,10 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="binding">Прототип</param>
         /// <returns></returns>
-        public static IPropView CreateByProto(IPropBinding binding)
+        public static IPropView CreateByProto(IPropGetter binding)
         {
-            var newBind = (IPropBinding) binding.Clone();
-            var propView = new PropViewB(binder: newBind);
+            var newBind = (IPropGetter) binding.Clone();
+            var propView = new PropView(binder: newBind);
             return propView;
         }
         /// <summary>
@@ -37,11 +38,11 @@ namespace SWAPIlib.MProperty
         /// <param name="binding">Прототип</param>
         /// <param name="configName">Имя конфигурации</param>
         /// <returns></returns>
-        public static IPropView CreateByProto(IPropBinding binding, string configName)
+        public static IPropView CreateByProto(IPropGetter binding, string configName)
         {
-            var newBind = (IPropBinding) binding.Clone();
+            var newBind = (IPropGetter) binding.Clone();
             newBind.ConfigName = configName;
-            var propView = new PropViewB(binder: newBind);
+            var propView = new PropView(binder: newBind);
             return propView;
         }
         /// <summary>
@@ -51,12 +52,12 @@ namespace SWAPIlib.MProperty
         /// <param name="binding">Типизированный прототип</param>
         /// <param name="target">Новая ссылка привязки</param>
         /// <returns></returns>
-        public static IPropView CreateByProto<T>(IPropBinding<T> binding, T target)
+        public static IPropView CreateByProto<T>(IPropGetter<T> binding, T target)
         {
-            var newBind = (IPropBinding<T>)binding.Clone();
+            var newBind = (IPropGetter<T>)binding.Clone();
             newBind.ConfigName = null;
             newBind.TargetWrapper = target;
-            var propView = new PropViewB(binder: newBind);
+            var propView = new PropView(binder: newBind);
             return propView;
         }
         /// <summary>
@@ -67,13 +68,13 @@ namespace SWAPIlib.MProperty
         /// <param name="target">Новая ссылка привязки</param>
         /// <param name="configName">Новое имя конфигурации</param>
         /// <returns></returns>
-        public static IPropView CreateByProto<T>(IPropBinding<T> binding, T target, 
+        public static IPropView CreateByProto<T>(IPropGetter<T> binding, T target, 
             string configName)
         {
-            var newBind = (IPropBinding<T>)binding.Clone();
+            var newBind = (IPropGetter<T>)binding.Clone();
             newBind.TargetWrapper = target;
             newBind.ConfigName = configName;
-            var propView = new PropViewB(binder: newBind);
+            var propView = new PropView(binder: newBind);
             return propView;
         }
 
@@ -85,7 +86,7 @@ namespace SWAPIlib.MProperty
         /// <param name="targets">Коллекция целей</param>
         /// <returns>Список свойств</returns>
         public static List<IPropView> CreateByProto<T>(
-            IPropBinding<T> bindPrototype, IEnumerable<T> targets)
+            IPropGetter<T> bindPrototype, IEnumerable<T> targets)
         {
             var validTargets = from target in targets
                            where bindPrototype.Validator(target)
@@ -102,7 +103,7 @@ namespace SWAPIlib.MProperty
         /// <param name="target">Цель привязки</param>
         /// <returns></returns>
         public static List<IPropView> CreateByProto<T>(
-            IEnumerable<IPropBinding<T>> bindPrototypes, T target)
+            IEnumerable<IPropGetter<T>> bindPrototypes, T target)
         {
             var validPrototypes = from prototype in bindPrototypes
                                where prototype.Validator(target)
@@ -119,7 +120,7 @@ namespace SWAPIlib.MProperty
         /// <param name="targets">Список целей</param>
         /// <returns></returns>
         public static List<IPropView> CreateByProto<T>(
-            IEnumerable<IPropBinding<T>> bindPrototypes, IEnumerable<T> targets)
+            IEnumerable<IPropGetter<T>> bindPrototypes, IEnumerable<T> targets)
         {
             List<IPropView> ret = new List<IPropView>();
 
@@ -144,10 +145,10 @@ namespace SWAPIlib.MProperty
         /// <param name="target">Модель привязки (опционально)</param>
         /// <param name="configName">Конфигурация модели (опционально)</param>
         /// <returns>Прототип именованной привязки</returns>
-        public static IPropBinding<IModelEntity> NamedProperty(
+        public static IPropGetter<IModelEntity> NamedProperty(
             string propertyName, IModelEntity target = null, string configName = null)
         {
-            return new PropBindNamed()
+            return new PropModelNamedParamGetter()
             {
                 PropertyName = propertyName,
                 TargetWrapper = target,

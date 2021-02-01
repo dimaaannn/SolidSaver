@@ -1,29 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using SWAPIlib.MProperty.BaseProp;
 
 namespace SWAPIlib.MProperty
 {
-    public class PropViewB : IPropView
+    public class PropView : IPropView
     {
-        public PropViewB() { }
-        public PropViewB(IPropBinding binder) : this()
-        {
-            //AttachBinderEvents(binder);
-            PropBinder = binder;
-        }
-
-        private IPropBinding propBinder;
-        public IPropBinding PropBinder 
-        { 
-            get => propBinder;
-            set
-            {
-                DetachBinderEvents(propBinder);
-                propBinder = value;
-                AttachBinderEvents(propBinder);
-            }
-        }
 
         protected string _NewPropertyValue;
         protected string _SavedValue;
@@ -33,13 +16,12 @@ namespace SWAPIlib.MProperty
         /// </summary>
         public string Value
         {
-            get => _NewPropertyValue ??  SavedValue;
+            get => _NewPropertyValue ?? SavedValue;
 
             set
             {
                 _NewPropertyValue = value;
                 Debug.WriteLine($"AppPropertyBase - value was changed {_NewPropertyValue}");
-                AllPropertyChanged();
             }
         }
         /// <summary>
@@ -49,12 +31,13 @@ namespace SWAPIlib.MProperty
         {
             get
             {
-                //Если значение отсутствует - обновить значение
-                if (_SavedValue == null)
+                //Если значение отсутствует и доступно для чтения - обновить значение
+                if (_SavedValue == null && IsReadable)
                 {
                     Update();
+                    AllPropertyChanged();
                 }
-                return _SavedValue ?? null;
+                return _SavedValue;
             }
 
         }
@@ -65,57 +48,25 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Доступно для чтения
         /// </summary>
-        public bool IsReadable => PropBinder?.IsReadable ?? false;
+        public bool IsReadable => Update != null;
         /// <summary>
         /// Доступно для записи
         /// </summary>
-        public bool IsWritable => PropBinder?.IsWritable ?? false;
+        public bool IsWritable => WriteValue != null;
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public virtual string PropName => PropBinder?.DisplayPropName;
+        public string PropName { get; set; }
 
         /// <summary>
         /// Вызвать обновление
         /// </summary>
-        public void Update()
-        {
-            Debug.WriteLine("PropertyTargetView - update");
-            ClearValues();
-            _SavedValue = PropBinder?.GetValue() ?? "ОШИБКА";
-            if(PropBinder == null)
-            {
-                Debug.WriteLine("PropViewB - Null reference to binding");
-            }
-        }
+        public PropertyUpdate Update { get; set; }
         /// <summary>
         /// Записать значение
         /// </summary>
-        public bool WriteValue()
-        {
-            var ret = false;
-            //Записать
-            ret = PropBinder?.SetValue(_NewPropertyValue) ?? false;
+        public PropertyWrite WriteValue { get; set; }
 
-            //Debug info
-            if (ret)
-                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} записано");
-            else
-                Debug.WriteLine($"AppPropertyView: Значение {_NewPropertyValue} не записано");
-
-            ClearValues();
-
-            return ret;
-        }
-        /// <summary>
-        /// Сбросить значения пользователя
-        /// </summary>
-        public void ClearValues()
-        {
-            _NewPropertyValue = null;
-            _SavedValue = null;
-            AllPropertyChanged();
-        }
         protected void AllPropertyChanged()
         {
             RaisePropertyChanged("ValueView");
@@ -134,56 +85,10 @@ namespace SWAPIlib.MProperty
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
             }
         }
-
-        protected virtual void AttachBinderEvents(IPropBinding binder)
-        {
-            if(binder != null)
-            {
-                binder.TargetUpdated += TargetUpdatedHandler;
-                binder.WriteDataValue += WriteValueHandler;
-                binder.FlushLocalData += FlushDataHandler;
-                binder.TargetChanged += TargetChanged;
-            }
-        }
-        protected virtual void DetachBinderEvents(IPropBinding binder)
-        {
-            if (binder != null)
-            {
-                binder.TargetUpdated -= TargetUpdatedHandler;
-                binder.WriteDataValue -= WriteValueHandler;
-                binder.FlushLocalData -= FlushDataHandler;
-                binder.TargetChanged -= TargetChanged;
-            }
-        }
-
         /// <summary>
         /// оповещение об изменении свойства
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public EventHandler<IDataEntity> TargetChanged => targetChanged;
-        public EventHandler TargetUpdatedHandler => targetUpdatedHanlder;
-        public EventHandler WriteValueHandler => writeValueHandler;
-        public EventHandler FlushDataHandler => flushDataHandler;
-
-
-        protected virtual void targetChanged<T>(object sender, T newBind) 
-        {
-            if(sender is IPropBinding binder)
-            {
-                binder.TargetUpdated -= TargetUpdatedHandler;
-                binder.WriteDataValue -= WriteValueHandler;
-                binder.FlushLocalData -= FlushDataHandler;
-            }
-            if(newBind is IDataEntity de)
-            {
-                de.UpdateValuesEvent += TargetUpdatedHandler;
-                de.WriteDataEvent += WriteValueHandler;
-                de.FlushDataEvent += FlushDataHandler;
-            }
-        }
-        protected virtual void targetUpdatedHanlder(object sender, EventArgs e) => Update();
-        protected virtual void writeValueHandler(object sender, EventArgs e) => WriteValue();
-        protected virtual void flushDataHandler(object sender, EventArgs e) => ClearValues();
     }
 }

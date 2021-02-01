@@ -19,6 +19,7 @@ using SWAPIlib.BaseTypes;
 using SWAPIlib.Controller;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
+using SWAPIlib.MProperty.Getters;
 
 namespace SolidApp
 {
@@ -77,16 +78,16 @@ namespace SolidApp
             string baseParam = ModelConfigProxy.GetConfParam(rawmodel, "По умолчанию", propName);
             Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
-            var modEntity = new ModelFields(compAppModel);
-            var binder = new PropBindNamed() { PropertyName = propName};
-            var propView = new PropViewB();
+            var modEntity = new ModelEntity(compAppModel);
+            var binder = new PropModelNamedParamGetter() { PropertyName = propName};
+            var propView = new PropView();
 
             binder.TargetWrapper = modEntity;
             propView.PropBinder = binder;
 
             //var propView2 = SWAPIlib.MProperty.PropFactory.CreateByProto(binder);
-            var propView2 = new PropViewB();
-            var binder2 = (PropBindNamed) binder.Clone();
+            var propView2 = new PropView();
+            var binder2 = (PropModelNamedParamGetter) binder.Clone();
             binder2.TargetWrapper = modEntity;
             propView2.PropBinder = binder2;
 

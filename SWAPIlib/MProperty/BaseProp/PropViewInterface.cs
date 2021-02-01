@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.BaseTypes;
+using SWAPIlib.MProperty.BaseProp;
 
 namespace SWAPIlib.MProperty
 {
@@ -14,7 +15,7 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Базовый интерфейс управления текстовыми свойствами
     /// </summary>
-    public interface IPropViewBase : INotifyPropertyChanged
+    public interface IPropView : INotifyPropertyChanged
     {
         /// <summary>
         /// Доступно для чтения
@@ -43,48 +44,11 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Загрузить значение
         /// </summary>
-        void Update();
+        PropertyUpdate Update { get; set; }
         /// <summary>
         /// Записать значение
         /// </summary>
-        bool WriteValue();
-        /// <summary>
-        /// Очистить пользовательское значение
-        /// </summary>
-        void ClearValues();
+        PropertyWrite WriteValue { get; set; }
     }
 
-    /// <summary>
-    /// Управление свойством объекта привязки
-    /// </summary>
-    public interface IPropView : IPropViewBase
-    {
-        /// <summary>
-        /// Объект привязки свойства
-        /// </summary>
-        IPropBinding PropBinder { get; set; }
-        /// <summary>
-        /// Событие обновления свойств
-        /// </summary>
-        EventHandler TargetUpdatedHandler { get; }
-        /// <summary>
-        /// Записать значения свойств
-        /// </summary>
-        EventHandler WriteValueHandler { get; }
-        /// <summary>
-        /// Очистить локальные свойства
-        /// </summary>
-        EventHandler FlushDataHandler { get; }
-
-        /// <summary>
-        /// Изменён объект привязки
-        /// </summary>
-        EventHandler<IDataEntity> TargetChanged { get; }
-    }
-
-    public interface IPropView<T> : IPropViewBase, IPropView
-    {
-        new IPropBinding<T> PropBinder { get; set; }
-
-    }
 }
