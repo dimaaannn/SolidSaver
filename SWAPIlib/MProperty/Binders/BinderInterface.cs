@@ -9,8 +9,9 @@ namespace SWAPIlib.MProperty
     /// <summary>
     /// Объект привязки
     /// </summary>
-    public interface IBinder : ICloneable
+    public interface IBinder : ICloneable 
     {
+        PropertyUpdate Update { get; set; }
         string TargetName { get; }
         /// <summary>
         /// Получить сущность привязки
@@ -48,7 +49,7 @@ namespace SWAPIlib.MProperty
     /// </summary>
     public class ModelBinder : IModelBinder
     {
-        private ModelBinder() { }
+        public ModelBinder() { }
         /// <summary>
         /// Создать сущность модели
         /// </summary>
@@ -74,7 +75,11 @@ namespace SWAPIlib.MProperty
                     return Target.TargetWrapper.ActiveConfigName;
                 return configName;
             }
-            set =>configName = value;
+            set
+            {
+                configName = value;
+                Update?.Invoke();
+            }
         }
         /// <summary>
         /// Имя свойства привязки
@@ -84,6 +89,8 @@ namespace SWAPIlib.MProperty
         /// Имя модели
         /// </summary>
         public string TargetName => Target.FileName;
+
+        public PropertyUpdate Update { get; set; }
 
         /// <summary>
         /// Клонировать объект с свойствами

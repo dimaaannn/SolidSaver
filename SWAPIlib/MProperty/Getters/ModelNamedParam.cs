@@ -35,7 +35,7 @@ namespace SWAPIlib.MProperty.Getters
         /// <returns></returns>
         public override string GetValue(IModelBinder binder)
         {
-            Debug.Write($"Get NamedProperty in {binder.ConfigName} - {binder.ConfigName}: {PropertyName}");
+            Debug.Write($"Get NamedProperty in {binder.TargetName} - {binder.ConfigName}: {PropertyName}");
             string ret = binder.Target?.TargetWrapper
                 [binder.ConfigName, PropertyName]
                 ?? "Имя свойства не найдено";

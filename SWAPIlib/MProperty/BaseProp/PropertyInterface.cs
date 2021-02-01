@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SWAPIlib.MProperty.Getters;
 
 namespace SWAPIlib.MProperty
 {
@@ -31,6 +32,10 @@ namespace SWAPIlib.MProperty
 
     }
 
+    public interface IPropertyModel : 
+        IProperty< IPropGetter<IModelBinder>, IModelBinder, IModelEntity>
+    {
 
+    }
 
 }

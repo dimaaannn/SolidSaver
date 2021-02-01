@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SWAPIlib.MProperty.BaseProp;
+
 using SWAPIlib.MProperty.Getters;
 
 namespace SWAPIlib.MProperty

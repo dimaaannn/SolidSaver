@@ -75,16 +75,19 @@ namespace SolidApp
             string confName1 = "По умолчанию";
             string confName2 = "С дыркой";
 
-            string baseParam = ModelConfigProxy.GetConfParam(rawmodel, "По умолчанию", propName);
+            string baseParam = ModelConfigProxy.GetConfParam(rawmodel, confname, propName);
             Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
-            var modEntity = new ModelEntity(compAppModel);
-            var binder = new PropModelNamedParamGetter() { PropertyName = propName};
-            var propView = new PropView();
+            var modEntity = new ModelEntity(testcomp);
+            var propGetter = new PropModelNamedParamGetter() { PropertyName = propName};
 
+            var modelProperty = new PropertyModel(modEntity);
+            modelProperty.PropGetter = propGetter;
 
             //Задать конфигурацию из свойства - OK
-            //binder.ConfigName = confName1;
+
+            //modelProperty.Binder.ConfigName = confName1;
+            //modelProperty.Update();
             //Задать конфигурацию из сущности - ОК
             //modEntity.TempConfigName = confName1;
 
@@ -94,7 +97,10 @@ namespace SolidApp
             //modEntity.UpdateValues();
 
 
-            Console.WriteLine($"\ntarget prop = {propView.Value}, IsModifyed={propView.IsModifyed}");
+
+
+
+            Console.WriteLine($"\ntarget prop = {modelProperty.Value}, IsModifyed={modelProperty.IsModifyed}");
 
 
 

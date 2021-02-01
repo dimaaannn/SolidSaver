@@ -24,7 +24,8 @@ namespace SWAPIlib.MProperty
         /// </summary>
         public PropertyBase()
         {
-            binder = new TBinder();
+            this.binder = new TBinder();
+            Binder.Update = this.Update;
 
             viewData = new PropView();
             ViewData.Update = Update;
@@ -128,5 +129,18 @@ namespace SWAPIlib.MProperty
             return ret;
         }
 
+    }
+
+    public class PropertyModel :
+        PropertyBase<IPropGetter<IModelBinder>, ModelBinder, IModelEntity>,
+        IPropertyModel
+
+    {
+        public PropertyModel(IModelEntity modelEnt) : base()
+        {
+            Binder.SetTarget(modelEnt);
+        }
+
+        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.Binder => Binder;
     }
 }
