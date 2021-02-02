@@ -17,19 +17,6 @@ namespace SWAPIlib.BaseTypes
     /// </summary>
     public class AppModel : IAppModel
     {
-        private ModelDoc2 _swModel;
-
-        public bool IsExist { get; private set; }
-        public ModelDoc2 SwModel { get => _swModel; }
-        public virtual AppDocType DocType { get; }
-        public string FileName { get => System.IO.Path.GetFileName(Path); }
-        public virtual string Title { get => ModelProxy.GetName(_swModel); }
-        public string Path { get; }
-        public List<ISwProperty> PropList { get; protected set; }
-        private List<string> _configList;
-
-        public event EventHandler<SwEventArgs> FileIsClosed;
-
         /// <summary>
         /// ModelDoc2 Constructor
         /// </summary>
@@ -74,7 +61,25 @@ namespace SWAPIlib.BaseTypes
 
         }
 
+        private ModelDoc2 _swModel;
+        public bool IsExist { get; private set; } //Удалить
+        private List<string> _configList;
+
+
+        /// <summary>
+        /// Список базовых свойств модели
+        /// </summary>
+        public List<ISwProperty> PropList { get; protected set; } //Todo Заменить на актуальный
         
+
+        /// <summary>
+        /// Событие - файл был закрыт
+        /// </summary>
+        public event EventHandler<SwEventArgs> FileIsClosed;
+        /// <summary>
+        /// Прокси для события закрытия файла
+        /// </summary>
+        /// <returns></returns>
         private int CloseFileHandler()
         {
             IsExist = false;
@@ -83,12 +88,39 @@ namespace SWAPIlib.BaseTypes
             FileIsClosed?.Invoke(this, evArg);
             return 0;
         }
+
+        /// <summary>
+        /// Сравнить по типу документа
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public int CompareTo(object other)
         {
             if (other is IAppModel model)
                 return this.DocType.CompareTo(model.DocType);
             else return 0;
         }
+
+        /// <summary>
+        /// Ссылка на объект модели SolidWorks
+        /// </summary>
+        public ModelDoc2 SwModel { get => _swModel; }
+        /// <summary>
+        /// Тип модели
+        /// </summary>
+        public virtual AppDocType DocType { get; }
+        /// <summary>
+        /// Имя модели
+        /// </summary>
+        public virtual string Title { get => ModelProxy.GetName(_swModel); }
+        /// <summary>
+        /// Путь к файлу
+        /// </summary>
+        public string Path { get; }
+        /// <summary>
+        /// Имя файла модели
+        /// </summary>
+        public string FileName { get => System.IO.Path.GetFileName(Path); }
 
         /// <summary>
         /// Список имён конфигураций
