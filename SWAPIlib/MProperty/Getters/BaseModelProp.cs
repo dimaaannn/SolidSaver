@@ -31,6 +31,7 @@ namespace SWAPIlib.MProperty.Getters
         /// <param name="targetRef"></param>
         /// <returns></returns>
         public abstract bool Validator(T targetRef);
+        public abstract bool Validator(IDataEntity dataEntity);
         /// <summary>
         /// Получить значение свойства
         /// </summary>
@@ -66,6 +67,7 @@ namespace SWAPIlib.MProperty.Getters
             else
                 return false;
         }
+
     }
 
 

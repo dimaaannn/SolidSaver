@@ -7,7 +7,9 @@ namespace SWAPIlib.MProperty.Getters
     /// <summary>
     /// Именованное свойство модели SW
     /// </summary>
-    public class PropModelNamedParamGetter : PropModelGetterBase<IModelBinder>
+    public class PropModelNamedParamGetter : 
+        PropModelGetterBase<IModelBinder>, 
+        IModelGetter
     {
         public PropModelNamedParamGetter() : base()
         {
@@ -68,8 +70,8 @@ namespace SWAPIlib.MProperty.Getters
         public override bool Validator(IModelBinder binder)
         {
             bool ret = false;
-            if (binder?.Target?.TargetWrapper is IAppModel model)
-                ret = model.ParameterList.Contains(PropertyName);
+            if (binder?.Target is IModelEntity model)
+                ret = Validator(model);
 
             return ret;
         }
@@ -83,6 +85,16 @@ namespace SWAPIlib.MProperty.Getters
             };
             return newProp;
         }
+
+        public override bool Validator(IDataEntity dataEntity)
+        {
+            bool ret = false;
+            if (dataEntity.GetEntity() is IAppModel model)
+                ret = model.ParameterList.Contains(PropertyName);
+
+            return ret;
+        }
+
         public override string PropertyInfo => bindingInfo;
     }
 }

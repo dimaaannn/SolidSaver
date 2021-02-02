@@ -119,6 +119,28 @@ namespace SWAPIlib.MProperty
             return ret;
         }
 
+        /// <summary>
+        /// Установить привязку к сущности
+        /// </summary>
+        /// <param name="ent"></param>
+        public bool SetTarget(TDataEntity ent)
+        {
+            Binder.SetTarget(ent);
+            ViewData.ClearSaved();
+            return true;
+        }
+
+        public bool SetTarget(IPropGetter propGetter)
+        {
+            var ret = false;
+            if(propGetter is TPropGetter getter)
+            {
+                PropGetter = getter;
+                ret = true;
+            }
+            return ret;
+        }
+
         public virtual object Clone()
         {
             var ret = new PropertyBase<TPropGetter, TBinder, TDataEntity>()
@@ -128,7 +150,6 @@ namespace SWAPIlib.MProperty
             };
             return ret;
         }
-
     }
 
     public class PropertyModel :
@@ -136,11 +157,46 @@ namespace SWAPIlib.MProperty
         IPropertyModel
 
     {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public PropertyModel() : base() { }
+        /// <summary>
+        /// Конструктор с установкой свойства цели
+        /// </summary>
+        /// <param name="modelEnt"></param>
         public PropertyModel(IModelEntity modelEnt) : base()
         {
             Binder.SetTarget(modelEnt);
         }
 
-        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.Binder => Binder;
+        /// <summary>
+        /// Заглушка для доступа к интерфейсу типизированного биндера
+        /// </summary>
+        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.
+            Binder => Binder;
+
+        /// <summary>
+        /// set PropertyGetter
+        /// </summary>
+        /// <param name="propGetter"></param>
+        public void SetBinder(IModelGetter propGetter)
+        {
+            PropGetter = propGetter;
+        }
+
+        /// <summary>
+        /// Клонирование объекта
+        /// </summary>
+        /// <returns></returns>
+        public override object Clone()
+        {
+            var ret = new PropertyModel()
+            {
+                binder = (ModelBinder)Binder?.Clone(),
+                PropGetter = propGetter
+            };
+            return ret;
+        }
     }
 }

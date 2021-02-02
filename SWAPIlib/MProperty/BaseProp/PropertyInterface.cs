@@ -19,7 +19,6 @@ namespace SWAPIlib.MProperty
         string Value { get; set; }
         IPropView ViewData { get; }
 
-
         void Update();
         bool WriteValue(string s);
     }
@@ -29,13 +28,15 @@ namespace SWAPIlib.MProperty
         TPropGetter PropGetter { get; set; }
         TBinder Binder { get; }
         TDataEntity Entity { get; set; }
+        bool SetTarget(TDataEntity ent);
+        bool SetTarget(IPropGetter binder);
 
     }
 
     public interface IPropertyModel : 
         IProperty< IPropGetter<IModelBinder>, IModelBinder, IModelEntity>
     {
-
+        
     }
 
 }
