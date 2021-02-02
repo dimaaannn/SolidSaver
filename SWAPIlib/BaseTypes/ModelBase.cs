@@ -23,7 +23,7 @@ namespace SWAPIlib.BaseTypes
         /// <param name="swModel"></param>
         public AppModel(ModelDoc2 swModel)
         {
-            PropList = new List<ISwProperty>();
+            PropList = new List<IPropertyModel>();
             IsExist = true;
             DocType = PartTypeChecker.GetSWType(swModel);
 
@@ -32,7 +32,8 @@ namespace SWAPIlib.BaseTypes
                 //TODO Add default properties to list
                 _swModel = swModel;
                 Path = ModelProxy.GetPathName(SwModel);
-
+                ModelEntity = new ModelEntity(this);
+                PropList = PropModelFactory.DefaultModel(ModelEntity);
 
                 #region EventProxy
                 if (DocType == AppDocType.swASM)
@@ -49,7 +50,6 @@ namespace SWAPIlib.BaseTypes
                 }
                 #endregion
 
-                ModelEntity = new ModelEntity(this);
             }
             else
             {
@@ -69,7 +69,7 @@ namespace SWAPIlib.BaseTypes
         /// <summary>
         /// Список базовых свойств модели
         /// </summary>
-        public List<ISwProperty> PropList { get; protected set; } //Todo Заменить на актуальный
+        public List<IPropertyModel> PropList { get; protected set; } //Todo Заменить на актуальный
         
 
         /// <summary>

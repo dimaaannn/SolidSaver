@@ -8,6 +8,7 @@ using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
 
+
 namespace SWAPIlib
 {
     public interface IAppModel : IComparable
@@ -39,7 +40,7 @@ namespace SWAPIlib
         /// <summary>
         /// Список свойств модели
         /// </summary>
-        List<ISwProperty> PropList { get;}  //TODO create propList class
+        List<IPropertyModel> PropList { get;}  //TODO create propList class
         bool VisibState { get; set; }
         /// <summary>
         /// Список конфигураций

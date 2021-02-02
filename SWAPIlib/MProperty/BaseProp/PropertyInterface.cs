@@ -21,6 +21,7 @@ namespace SWAPIlib.MProperty
 
         void Update();
         bool WriteValue(string s);
+        bool WriteValue();
         IDataEntity GetTarget();
         IPropGetter GetGetter();
         bool SetTarget(IDataEntity ent);

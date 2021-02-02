@@ -127,18 +127,6 @@ namespace SolidApp
         }
 
 
-        public static void PrintAsmInfo(List<AppComponent> Appcomp)
-        {
-            foreach (var a in Appcomp)
-            {
-                string s = $"Comp {a.Title}: is {a.VisibState}, s.state: {a.SuppressionState}\n" +
-                    $"Conf: {a.ActiveConfigName}, Excluded from BOM : {a.ExcludeFromBOM}\n" +
-                    $"Exist : {a.IsExist}";
-                Console.WriteLine(s);
-                foreach (var pr in a.PropList)
-                    Console.WriteLine(pr.PropertyValue);
-            }
-        }
 
     }
 

@@ -119,6 +119,14 @@ namespace SWAPIlib.MProperty
             return ret;
         }
 
+        public bool WriteValue()
+        {
+            var ret = false;
+            if (IsModifyed)
+                ret = WriteValue(ViewData.Value);
+            return ret;
+        }
+
         /// <summary>
         /// Установить привязку к сущности
         /// </summary>

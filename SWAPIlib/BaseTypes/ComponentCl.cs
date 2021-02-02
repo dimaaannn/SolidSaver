@@ -22,9 +22,11 @@ namespace SWAPIlib
         {
             if(swComp2 != null)
             {
-                PropList = new List<ISwProperty>();
-                PropList.AddRange(PropertyObj.CompPropertyFactory.
-                    ComponentMainProp(this));
+                PropList = new List<IPropertyModel>();
+
+
+                //PropList.AddRange(PropertyObj.CompPropertyFactory. //TODO Создать список свойств для компонента
+                //    ComponentMainProp(this));
 
                 _swCompModel = swComp2;
                 DocType = AppDocType.swNONE;
@@ -64,7 +66,7 @@ namespace SWAPIlib
 
 
         public virtual bool IsExist { get; private set; } //Удалить
-        public List<ISwProperty> PropList { get; private set; } //Переделать
+        public List<IPropertyModel> PropList { get; private set; } //Переделать
 
         /// <summary>
         /// Получить сущность

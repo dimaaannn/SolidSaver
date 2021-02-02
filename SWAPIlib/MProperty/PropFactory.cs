@@ -235,9 +235,9 @@ namespace SWAPIlib.MProperty
             return properties.ToList();
         }
 
-        public static List<PropertyModel> DefaultModel(IModelEntity modelEntity)
+        public static List<IPropertyModel> DefaultModel(IModelEntity modelEntity)
         {
-            var ret = new List<PropertyModel>();
+            var ret = new List<IPropertyModel>();
             var appmodel = modelEntity?.TargetWrapper;
 
             if(appmodel != null)
