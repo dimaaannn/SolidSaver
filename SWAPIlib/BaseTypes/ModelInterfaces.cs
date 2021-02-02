@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib
 {
@@ -65,6 +66,8 @@ namespace SWAPIlib
         string this [string paramName] { get; set; }
         string this [string configName, string paramName] { get; set; }
         bool SetParameterVal(string configName, string paramName, string newValue);
+
+        IModelEntity ModelEntity { get; }
     }
 
     //TODO сделать интерфейс сборки

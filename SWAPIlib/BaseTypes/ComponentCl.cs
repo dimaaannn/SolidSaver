@@ -8,6 +8,7 @@ using System.Diagnostics;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.ComConn;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib
 {
@@ -179,6 +180,9 @@ namespace SWAPIlib
 
         // Прокси на модель для интерфейса
         string[] IAppModel.ParameterList => PartModel?.ParameterList;
+
+        public IModelEntity ModelEntity => PartModel?.ModelEntity;
+
         string IAppModel.this[string configName, string paramName] 
         {
             get => PartModel?[configName: configName, paramName: paramName];

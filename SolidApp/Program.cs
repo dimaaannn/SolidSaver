@@ -78,10 +78,9 @@ namespace SolidApp
             string baseParam = ModelConfigProxy.GetConfParam(rawmodel, confname, propName);
             Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
 
-            var modEntity = new ModelEntity(testcomp);
             var propGetter = new PropModelNamedParamGetter() { PropertyName = propName};
 
-            var modelProperty = new PropertyModel(modEntity);
+            var modelProperty = new PropertyModel(testcomp.ModelEntity);
             modelProperty.PropGetter = propGetter;
 
             //Задать конфигурацию из свойства - OK

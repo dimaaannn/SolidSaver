@@ -7,6 +7,7 @@ using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Diagnostics;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib.BaseTypes
 {
@@ -64,6 +65,8 @@ namespace SWAPIlib.BaseTypes
                     (swModel as DrawingDoc).DestroyNotify += CloseFileHandler;
                 }
                 #endregion
+
+                ModelEntity = new ModelEntity(this);
             }
             else
             {
@@ -139,7 +142,10 @@ namespace SWAPIlib.BaseTypes
         }
 
         public string[] ParameterList => SwModel.GetCustomInfoNames2(ActiveConfigName);
-
+        /// <summary>
+        /// Объект сущности
+        /// </summary>
+        public IModelEntity ModelEntity { get; private set; }
 
         public string this[string configName, string paramName]
         {
