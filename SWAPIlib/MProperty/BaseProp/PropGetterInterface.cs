@@ -47,6 +47,7 @@ namespace SWAPIlib.MProperty
         /// <param name="targetRef"></param>
         /// <returns></returns>
         bool Validator(IBinder binderRef);
+        bool Validator(IDataEntity dataEntity);
     }
 
     /// <summary>
@@ -73,7 +74,6 @@ namespace SWAPIlib.MProperty
         /// <param name="targetRef"></param>
         /// <returns></returns>
         bool Validator(T binderRef);
-        bool Validator(IDataEntity dataEntity);
     }
 
     public interface IModelGetter : IPropGetter<IModelBinder>

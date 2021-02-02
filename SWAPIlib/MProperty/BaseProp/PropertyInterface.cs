@@ -21,6 +21,10 @@ namespace SWAPIlib.MProperty
 
         void Update();
         bool WriteValue(string s);
+        IDataEntity GetTarget();
+        IPropGetter GetGetter();
+        bool SetTarget(IDataEntity ent);
+        bool SetTarget(IPropGetter ent);
     }
 
     public interface IProperty<TPropGetter, out TBinder, TDataEntity> : IProperty

@@ -129,7 +129,11 @@ namespace SWAPIlib.MProperty
             ViewData.ClearSaved();
             return true;
         }
-
+        /// <summary>
+        /// Задать обработчик
+        /// </summary>
+        /// <param name="propGetter"></param>
+        /// <returns></returns>
         public bool SetTarget(IPropGetter propGetter)
         {
             var ret = false;
@@ -149,6 +153,30 @@ namespace SWAPIlib.MProperty
                 PropGetter = propGetter
             };
             return ret;
+        }
+
+        /// <summary>
+        /// Получить цель привязки
+        /// </summary>
+        /// <returns></returns>
+        public IDataEntity GetTarget()
+        {
+            return Entity;
+        }
+
+        /// <summary>
+        /// Задать сущность
+        /// </summary>
+        /// <param name="ent"></param>
+        /// <returns></returns>
+        public bool SetTarget(IDataEntity ent)
+        {
+            return SetTarget((TDataEntity)ent);
+        }
+
+        public IPropGetter GetGetter()
+        {
+            return PropGetter;
         }
     }
 

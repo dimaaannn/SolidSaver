@@ -79,12 +79,13 @@ namespace SWAPIlib.MProperty
         /// <param name="templateProperty">Прототип свойства</param>
         /// <param name="modelEntity">Новая привязка</param>
         /// <returns>В случае неудачи возвращается null</returns>
-        public static IPropertyModel PropertyByTemplate(
-            IPropertyModel templateProperty, IModelEntity modelEntity)
+        public static TProp PropertyByTemplate<TProp>(
+            TProp templateProperty, IDataEntity modelEntity)
+            where TProp : IProperty
         {
-            IPropertyModel ret = null;
-            if((templateProperty?.PropGetter.Validator(modelEntity)) == true){
-                var newProp = (IPropertyModel)templateProperty.Clone();
+            TProp ret = default;
+            if((templateProperty?.GetGetter().Validator(modelEntity)) == true){
+                var newProp = (TProp)templateProperty.Clone();
 
                 newProp.SetTarget(modelEntity);
                 ret = newProp;
@@ -98,19 +99,21 @@ namespace SWAPIlib.MProperty
         /// <param name="templateProperty">Прототип свойства</param>
         /// <param name="modelEntity">Новая привязка</param>
         /// <returns>В случае неудачи возвращается null</returns>
-        public static IPropertyModel PropertyByTemplate(
-            IPropertyModel templateProperty, IModelGetter modelGetter)
+        public static TProp PropertyByTemplate<TProp, TGetter>(
+            TProp templateProperty, TGetter modelGetter)
+            where TProp : IProperty
+            where TGetter : IPropGetter
         {
-            IPropertyModel ret = null;
+            TProp ret = default;
             bool state = false;
-            if ((modelGetter?.Validator(templateProperty.Entity)) == true)
+            if ((modelGetter?.Validator(templateProperty.GetTarget())) == true)
             {
-                var newProp = (IPropertyModel)templateProperty.Clone();
+                var newProp = (TProp)templateProperty.Clone();
 
                 state = newProp.SetTarget(modelGetter);
                 ret = newProp;
             }
-            return state ? ret : null;
+            return state ? ret : default;
         }
 
         #region Старая фабрика
