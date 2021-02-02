@@ -27,6 +27,7 @@ namespace SWAPIlib.BaseTypes
         public string Path { get; }
         public List<ISwProperty> PropList { get; protected set; }
         public IFileModelProp GlobalModelProp { get; } //TODO remove
+        private List<string> _configList;
 
         public event EventHandler<SwEventArgs> FileIsClosed;
 
@@ -78,6 +79,7 @@ namespace SWAPIlib.BaseTypes
 
         }
 
+        
         private int CloseFileHandler()
         {
             IsExist = false;
@@ -86,7 +88,6 @@ namespace SWAPIlib.BaseTypes
             FileIsClosed?.Invoke(this, evArg);
             return 0;
         }
-
         public int CompareTo(object other)
         {
             if (other is IAppModel model)
@@ -106,14 +107,17 @@ namespace SWAPIlib.BaseTypes
                 return _configList;
             }
         }
-        private List<string> _configList;
-
+        /// <summary>
+        /// Статус отображения
+        /// </summary>
         public virtual bool VisibState
         {
             get => SwModel.Visible;
             set => SwModel.Visible = value;
         }
-
+        /// <summary>
+        /// Получить или задать имя активной конфигурации
+        /// </summary>
         public string ActiveConfigName 
         { 
             get => ModelConfigProxy.GetActiveConfName(SwModel);
@@ -130,6 +134,10 @@ namespace SWAPIlib.BaseTypes
         }
 
         /// <summary>
+        /// Список свойств модели
+        /// </summary>
+        public string[] ParameterList => SwModel.GetCustomInfoNames2(ActiveConfigName);
+        /// <summary>
         /// Задать значение именованного свойства
         /// </summary>
         /// <param name="configName">Имя конфигурации</param>
@@ -140,23 +148,32 @@ namespace SWAPIlib.BaseTypes
         {
             return ModelConfigProxy.SetConfParam(SwModel, configName, paramName, newValue);
         }
-
-        public string[] ParameterList => SwModel.GetCustomInfoNames2(ActiveConfigName);
         /// <summary>
-        /// Объект сущности
+        /// Получить свойство в конфигурации
         /// </summary>
-        public IModelEntity ModelEntity { get; private set; }
-
+        /// <param name="configName">имя конфигурации</param>
+        /// <param name="paramName">имя свойства</param>
+        /// <returns></returns>
         public string this[string configName, string paramName]
         {
             get => ModelConfigProxy.GetConfParamValue(SwModel, configName, paramName);
             set => ModelConfigProxy.SetConfParam(SwModel, configName, paramName, value);
         }
+        /// <summary>
+        /// Получить свойство в активной конфигурации
+        /// </summary>
+        /// <param name="paramName">имя свойства</param>
+        /// <returns></returns>
         public string this[string paramName]
         {
             get => ModelConfigProxy.GetConfParamValue(SwModel, ActiveConfigName, paramName);
             set => ModelConfigProxy.SetConfParam(SwModel, paramName, value);
         }
+
+        /// <summary>
+        /// Объект сущности
+        /// </summary>
+        public IModelEntity ModelEntity { get; private set; }
     }
 
 
