@@ -83,15 +83,18 @@ namespace SolidApp
             //var modelProperty = new PropertyModel(testcomp.ModelEntity);
             //modelProperty.PropGetter = propGetter;
 
-            var modelProperty = SWAPIlib.MProperty.PropModelFactory.CreatePrototype(
+            var modelProperty = SWAPIlib.MProperty.PropFactory.CreatePrototype<PropertyModel>(
                 propGetter, testcomp.ModelEntity);
 
             var propGetter2 = new PropModelNamedParamGetter() { PropertyName = "Обозначение" };
 
+            var getterList = new List<IPropGetter>() { propGetter, propGetter2 };
 
             //Тест создания по шаблону
-            var prop2 = SWAPIlib.MProperty.PropModelFactory.PropertyByTemplate(
-                modelProperty, propGetter2);
+            var prop2 = SWAPIlib.MProperty.PropFactory.CreatePrototype<PropertyModel> (testcomp.ModelEntity);
+
+            var entities = rootModelClass.SubComponents.Select(x => x.ModelEntity);
+            var props = SWAPIlib.MProperty.PropFactory.PropertyByTemplate(modelProperty, getterList, entities);
 
 
 

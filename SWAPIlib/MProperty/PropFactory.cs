@@ -10,7 +10,7 @@ namespace SWAPIlib.MProperty
 {
 
 
-    public static class PropModelFactory
+    public static class PropFactory
     {
         /// <summary>
         /// Создать пустой прототип свойства
@@ -26,13 +26,14 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="propGetter"></param>
         /// <returns></returns>
-        public static PropertyModel CreatePrototype(IModelGetter propGetter)
+        public static TProp CreatePrototype<TProp>(IPropGetter propGetter)
+            where TProp : IProperty, new()
         {
-            PropertyModel ret = null;
+            TProp ret = default;
             if(propGetter != null)
             {
-                PropertyModel property = new PropertyModel();
-                property.SetBinder(propGetter);
+                TProp property = new TProp();
+                property.SetTarget(propGetter);
                 ret = property;
             }
             return ret;
@@ -41,14 +42,17 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Создать прототип на основе сущности
         /// </summary>
-        /// <param name="modelEntity"></param>
+        /// <typeparam name="TProp">Тип свойства</typeparam>
+        /// <param name="dataEntity">Сущность</param>
         /// <returns></returns>
-        public static PropertyModel CreatePrototype(IModelEntity modelEntity)
+        public static TProp CreatePrototype<TProp>(IDataEntity dataEntity)
+            where TProp : IProperty, new()
         {
-            PropertyModel ret = null;
-            if (modelEntity != null)
+            TProp ret = default;
+            if (dataEntity != null)
             {
-                ret = new PropertyModel(modelEntity);
+                ret = new TProp();
+                ret.SetTarget(dataEntity);
             }
             return ret;
         }
@@ -59,14 +63,15 @@ namespace SWAPIlib.MProperty
         /// <param name="propGetter"></param>
         /// <param name="modelEntity"></param>
         /// <returns></returns>
-        public static PropertyModel CreatePrototype(
-            IModelGetter propGetter, IModelEntity modelEntity)
+        public static TProp CreatePrototype<TProp>(
+            IPropGetter propGetter, IDataEntity modelEntity)
+            where TProp : IProperty, new()
         {
-            PropertyModel ret = null;
+            TProp ret = default;
             if (propGetter != null && modelEntity != null)
             {
-                PropertyModel property = new PropertyModel();
-                property.SetBinder(propGetter);
+                var property = new TProp();
+                property.SetTarget(propGetter);
                 property.SetTarget(modelEntity);
                 ret = property;
             }
@@ -114,6 +119,75 @@ namespace SWAPIlib.MProperty
                 ret = newProp;
             }
             return state ? ret : default;
+        }
+
+        /// <summary>
+        /// свойства на основе списка обработчиков
+        /// </summary>
+        /// <typeparam name="TProp">тип свойства</typeparam>
+        /// <typeparam name="TGetter">Тип обработчика</typeparam>
+        /// <param name="templateProperty">Свойство с привязкой к сущности</param>
+        /// <param name="modelGetters">Список обработчиков</param>
+        /// <returns></returns>
+        public static  List<TProp> PropertyByTemplate<TProp, TGetter>(
+            TProp templateProperty, IEnumerable<TGetter> modelGetters)
+            where TProp : IProperty
+            where TGetter : IPropGetter
+        {
+            if (templateProperty.GetTarget() == null)
+                throw new ArgumentNullException("PropertyByTemplate: Отсутствует сущность");
+
+            var newProps = modelGetters.Select(
+                getter => PropertyByTemplate(templateProperty, getter));
+
+            return newProps.Where(x => x != null).ToList();
+        }
+
+
+        /// <summary>
+        /// свойства на основе списка сущностей
+        /// </summary>
+        /// <typeparam name="TProp"></typeparam>
+        /// <param name="templateProperty">Свойство с обработчиком</param>
+        /// <param name="entityList">Список сущностей</param>
+        /// <returns></returns>
+        public static List<TProp> PropertyByTemplate<TProp>(
+            TProp templateProperty, IEnumerable<IDataEntity> entityList)
+            where TProp : IProperty
+        {
+            if (templateProperty.GetGetter() == null)
+                throw new ArgumentNullException("PropertyByTemplate: Отсутствует обработчик");
+            var newProps = entityList.Select(
+                entity => PropertyByTemplate(templateProperty, entity));
+
+            return newProps.Where(x => x != null).ToList();
+        }
+
+        /// <summary>
+        /// Свойства по списку привязок и сущностей
+        /// </summary>
+        /// <typeparam name="TProp"></typeparam>
+        /// <param name="templateProperty">Шаблон свойства</param>
+        /// <param name="modelGetters">Список привязок</param>
+        /// <param name="dataEntities">Список сущностей</param>
+        /// <returns></returns>
+        public static List<TProp> PropertyByTemplate<TProp>(
+            TProp templateProperty, 
+            IEnumerable<IPropGetter> modelGetters, 
+            IEnumerable<IDataEntity> dataEntities)
+
+            where TProp : IProperty, new()
+        {
+            var ret = new List<TProp>();
+            var propWithGetters = modelGetters.Select(
+                getter => CreatePrototype<TProp>(getter));
+
+            foreach(var property in propWithGetters)
+            {
+                ret.AddRange(PropertyByTemplate(property, dataEntities));
+            }
+
+            return ret;
         }
 
         #region Старая фабрика
