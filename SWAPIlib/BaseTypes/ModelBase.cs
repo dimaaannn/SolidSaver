@@ -26,7 +26,6 @@ namespace SWAPIlib.BaseTypes
         public virtual string Title { get => ModelProxy.GetName(_swModel); }
         public string Path { get; }
         public List<ISwProperty> PropList { get; protected set; }
-        public IFileModelProp GlobalModelProp { get; } //TODO remove
         private List<string> _configList;
 
         public event EventHandler<SwEventArgs> FileIsClosed;
@@ -38,10 +37,6 @@ namespace SWAPIlib.BaseTypes
         public AppModel(ModelDoc2 swModel)
         {
             PropList = new List<ISwProperty>();
-            GlobalModelProp = new FileModelProp(this)
-            {
-                IsRoot = false,
-            };
             IsExist = true;
             DocType = PartTypeChecker.GetSWType(swModel);
 

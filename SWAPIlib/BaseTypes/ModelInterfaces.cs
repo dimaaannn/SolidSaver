@@ -37,10 +37,6 @@ namespace SWAPIlib
         /// </summary>
         event EventHandler<SwEventArgs> FileIsClosed;
         /// <summary>
-        /// Набор глобальных свойств
-        /// </summary>
-        IFileModelProp GlobalModelProp { get; } //TODO remove
-        /// <summary>
         /// Список свойств модели
         /// </summary>
         List<ISwProperty> PropList { get;}  //TODO create propList class

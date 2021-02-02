@@ -98,7 +98,6 @@ namespace SWAPIlib.Global
         public string Title => appModel?.Title; //TODO add override for types
         public string Path => appModel?.Path;
         public IList<ISwProperty> ActivePropList { get => appModel?.PropList; }
-        public IFileModelProp GlobalModelProp { get => appModel?.GlobalModelProp; }
 
         public List<IAppComponent> SubComponents { get => _subComponents; }
         private List<IAppComponent> _subComponents;

@@ -31,7 +31,6 @@ namespace SWAPIlib
         public virtual string FileName => System.IO.Path.GetFileName(Path);
         public string Title => ComponentProxy.GetName(_swCompModel);
 
-        public IFileModelProp GlobalModelProp { get; set; }
         public List<ISwProperty> PropList { get; private set; }
 
         public string ActiveConfigName
