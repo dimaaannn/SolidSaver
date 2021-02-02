@@ -17,6 +17,11 @@ namespace SWAPIlib.MProperty.Getters
             IsWritable = true;
         }
 
+        public PropModelNamedParamGetter(string propName) : this()
+        {
+            PropertyName = propName;
+        }
+
         private string propertyName;
         private static readonly string bindingInfo =
             "Именованное свойство модели задаваемое пользователем";

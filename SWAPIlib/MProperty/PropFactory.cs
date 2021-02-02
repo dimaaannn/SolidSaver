@@ -189,6 +189,83 @@ namespace SWAPIlib.MProperty
 
             return ret;
         }
+    }
+
+    public static class PropModelFactory
+    {
+        /// <summary>
+        /// Создать пустой прототип
+        /// </summary>
+        /// <returns></returns>
+        public static PropertyModel CreatePrototype()
+        {
+            return new PropertyModel();
+        }
+        /// <summary>
+        /// Создать прототип с привязкой к модели
+        /// </summary>
+        /// <param name="modelEntity"></param>
+        /// <returns></returns>
+        public static PropertyModel CreatePrototype(IModelEntity modelEntity)
+        {
+            return new PropertyModel() { Entity = modelEntity };
+
+        }
+
+        public static PropertyModel CreatePrototype(
+            IModelEntity modelEntity, string configName)
+        {
+            var ret = new PropertyModel() { Entity = modelEntity };
+            ret.Binder.ConfigName = configName;
+            return ret;
+        }
+
+        /// <summary>
+        /// Прототипы свойств для каждой конфигурации
+        /// </summary>
+        /// <param name="modelEntity"></param>
+        /// <param name="allConfigNames"></param>
+        /// <returns></returns>
+        public static List<PropertyModel> CreatePrototype(
+            IModelEntity modelEntity, bool allConfigNames)
+        {
+            var properties = modelEntity.ConfigNames.Select(
+                conf => CreatePrototype(modelEntity, conf));
+
+            return properties.ToList();
+        }
+
+        public static List<PropertyModel> DefaultModel(IModelEntity modelEntity)
+        {
+            var ret = new List<PropertyModel>();
+            var appmodel = modelEntity?.TargetWrapper;
+
+            if(appmodel != null)
+            {
+                var propTemplate = CreatePrototype(modelEntity);
+
+                var getters = new IModelGetter[]
+                {
+                    new PropModelNamedParamGetter("Обозначение"),
+                    new PropModelNamedParamGetter("Наименование"),
+                    //Дополнить
+                };
+
+                ret.AddRange(PropFactory.PropertyByTemplate(propTemplate, getters));
+
+                //switch (appmodel)
+                //{
+                //    case ISwPart p:
+
+
+                //    default:
+                //        break;
+                //}
+
+            }
+            return ret;
+        }
+    }
 
         #region Старая фабрика
         /// <summary>
@@ -313,7 +390,6 @@ namespace SWAPIlib.MProperty
         //        return ret;
         //    }
 
-    }
 
         ///// <summary>
         ///// Фабрика привязок свойств
@@ -343,4 +419,4 @@ namespace SWAPIlib.MProperty
 
         #endregion
 
-    }
+}
