@@ -186,6 +186,11 @@ namespace SWAPIlib.MProperty
         {
             return PropGetter;
         }
+
+        public override string ToString()
+        {
+            return $"{this.TargetName} {this.PropertyName}: {this.Value}";
+        }
     }
 
     public class PropertyModel :
@@ -233,6 +238,10 @@ namespace SWAPIlib.MProperty
                 PropGetter = propGetter
             };
             return ret;
+        }
+        public override string ToString()
+        {
+            return $"{this.TargetName}-{this.Binder.ConfigName} {this.PropertyName}: {this.Value}";
         }
     }
 }
