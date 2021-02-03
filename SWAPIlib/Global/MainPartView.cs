@@ -1,4 +1,5 @@
 ﻿using SWAPIlib.Controller;
+using SWAPIlib.MProperty;
 using SWAPIlib.PropertyObj;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Свойства выбранного компонента
         /// </summary>
-        //List<ISwProperty> SelectedCompProp { get; }
+        List<IPropertyModel> SelectedCompProp { get; }
         /// <summary>
         /// Список компонентов корневой сборки (тестовый)
         /// </summary>
@@ -72,7 +73,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Свойства выделенного компонента
         /// </summary>
-        //public List<ISwProperty> SelectedCompProp => SelectedComp.Appmodel.PropList;
+        public List<IPropertyModel> SelectedCompProp => SelectedComp?.Appmodel.PropList;
         /// <summary>
         /// Корневые компоненты
         /// </summary>

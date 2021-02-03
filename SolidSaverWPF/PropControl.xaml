@@ -40,7 +40,7 @@
 
     <!--#region Property object-->
     <Border Style="{StaticResource StackParamItem}" Name="Border">
-        
+
         <Grid ShowGridLines="False" Name="BaseGrid">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -70,7 +70,7 @@
                 Grid.Row="1" 
                 Name="PropValue"
                 Grid.ColumnSpan="2"
-                Text="{Binding PropertyValue, Mode=TwoWay, FallbackValue=No data}"
+                Text="{Binding Value, Mode=TwoWay, FallbackValue=No data}"
                 IsEnabled="{Binding IsWritable}"
                 Background="{Binding IsModifyed, 
                     Converter={StaticResource BoolToColorConv }}"

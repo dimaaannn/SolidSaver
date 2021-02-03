@@ -83,18 +83,21 @@ namespace SolidSaverWPF
             //Bind Main Part list to interface
             PartViewList.DataContext = MainPartview;
             //MainPartview.RootComponents
+            PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
 
 
+
+            var a = 4;
             #region Свойства поиска
 
-            //Создать класс поиска свойств
-            PropUI = new PropertyUI();
-            //Привязка к WPF
-            PropertyTab.DataContext = PropUI;
-            //Тестовый список хранения
-            PropUI.ComponentList = from comp in MainPartview.RootComponents
-                                   where comp.IsSelected
-                                   select comp.Appmodel;
+            ////Создать класс поиска свойств
+            //PropUI = new PropertyUI();
+            ////Привязка к WPF
+            //PropertyTab.DataContext = PropUI;
+            ////Тестовый список хранения
+            //PropUI.ComponentList = from comp in MainPartview.RootComponents
+            //                       where comp.IsSelected
+            //                       select comp.Appmodel;
             //Реализовать загрузку выделенных компонентов
             //PropUI.ComponentList = SelectedComp;
             #endregion
