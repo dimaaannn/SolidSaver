@@ -87,28 +87,16 @@ namespace SolidApp
 
             var propGetter2 = new PropModelNamedParamGetter() { PropertyName = "Обозначение" };
 
-            var getterList = new List<IPropGetter>() { propGetter, propGetter2 };
+            var getterList = new List<IModelGetter>() { propGetter, propGetter2 };
 
-            //Тест создания по шаблону
-            var prop2 = SWAPIlib.MProperty.PropFactory.CreatePrototype<PropertyModel> (testcomp.ModelEntity);
+            var entities = rootModelClass.SubComponents.Select(comp => comp.ModelEntity);
 
-            var entities = rootModelClass.SubComponents.Select(x => x.ModelEntity);
-            var props = SWAPIlib.MProperty.PropFactory.PropertyByTemplate(modelProperty, getterList, entities);
+            //Все конфигурации привязать к геттеру - ОК
+            //var allConfigProps = PropModelFactory.CreatePrototypeSet(entities, true, null);
+            //PropFactory.AttachToTemplate(allConfigProps, getterList.First());
 
-            var prototypes = PropModelFactory.CreatePrototypeSet(entities, true);
-            PropFactory.AttachToTemplate(prototypes, getterList);
+            var allConfProps = PropModelFactory.GeneratePropertySet(entities, getterList, true);
 
-            //Задать конфигурацию из свойства - OK
-
-            //modelProperty.Binder.ConfigName = confName1;
-            //modelProperty.Update();
-            //Задать конфигурацию из сущности - ОК
-            //modEntity.TempConfigName = confName1;
-
-            //propView.Value = "Наименование test14  c дыркой";
-            //propView2.Value = "Наименование test10  c дыркой";
-            //modEntity.WriteData();
-            //modEntity.UpdateValues();
 
 
 

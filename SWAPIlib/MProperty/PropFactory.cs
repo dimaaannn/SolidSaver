@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using SWAPIlib.MProperty.Getters;
 
 namespace SWAPIlib.MProperty
@@ -104,10 +103,9 @@ namespace SWAPIlib.MProperty
         /// <param name="templateProperty">Прототип свойства</param>
         /// <param name="modelEntity">Новая привязка</param>
         /// <returns>В случае неудачи возвращается null</returns>
-        public static TProp PropertyByTemplate<TProp, TGetter>(
-            TProp templateProperty, TGetter modelGetter)
+        public static TProp PropertyByTemplate<TProp>(
+            TProp templateProperty, IPropGetter modelGetter)
             where TProp : IProperty
-            where TGetter : IPropGetter
         {
             TProp ret = default;
             bool state = false;
@@ -129,10 +127,9 @@ namespace SWAPIlib.MProperty
         /// <param name="templateProperty">Свойство с привязкой к сущности</param>
         /// <param name="modelGetters">Список обработчиков</param>
         /// <returns></returns>
-        public static  List<TProp> PropertyByTemplate<TProp, TGetter>(
-            TProp templateProperty, IEnumerable<TGetter> modelGetters)
+        public static  List<TProp> PropertyByList<TProp>(
+            TProp templateProperty, IEnumerable<IPropGetter> modelGetters)
             where TProp : IProperty
-            where TGetter : IPropGetter
         {
             if (templateProperty.GetTarget() == null)
                 throw new ArgumentNullException("PropertyByTemplate: Отсутствует сущность");
@@ -151,7 +148,7 @@ namespace SWAPIlib.MProperty
         /// <param name="templateProperty">Свойство с обработчиком</param>
         /// <param name="entityList">Список сущностей</param>
         /// <returns></returns>
-        public static List<TProp> PropertyByTemplate<TProp>(
+        public static List<TProp> PropertyByList<TProp>(
             TProp templateProperty, IEnumerable<IDataEntity> entityList)
             where TProp : IProperty
         {
@@ -163,34 +160,51 @@ namespace SWAPIlib.MProperty
             return newProps.Where(x => x != null).ToList();
         }
 
-        /// <summary>
-        /// Свойства по списку привязок и сущностей
-        /// </summary>
-        /// <typeparam name="TProp"></typeparam>
-        /// <param name="templateProperty">Шаблон свойства</param>
-        /// <param name="modelGetters">Список привязок</param>
-        /// <param name="dataEntities">Список сущностей</param>
-        /// <returns></returns>
+        ///// <summary>
+        ///// Свойства по списку привязок и сущностей
+        ///// </summary>
+        ///// <typeparam name="TProp"></typeparam>
+        ///// <param name="templateProperty">Шаблон свойства</param>
+        ///// <param name="modelGetters">Список привязок</param>
+        ///// <param name="dataEntities">Список сущностей</param>
+        ///// <returns></returns>
+        //public static List<TProp> PropertyByTemplate<TProp>(
+        //    TProp templateProperty, 
+        //    IEnumerable<IPropGetter> modelGetters, 
+        //    IEnumerable<IDataEntity> dataEntities)
+
+        //    where TProp : IProperty, new()
+        //{
+        //    var ret = new List<TProp>();
+        //    var propWithGetters = modelGetters.Select(
+        //        getter => CreatePrototype<TProp>(getter));
+
+        //    foreach(var property in propWithGetters)
+        //    {
+        //        ret.AddRange(PropertyByTemplate(property, dataEntities));
+        //    }
+
+        //    return ret;
+        //}
+
+
         public static List<TProp> PropertyByTemplate<TProp>(
-            TProp templateProperty, 
-            IEnumerable<IPropGetter> modelGetters, 
-            IEnumerable<IDataEntity> dataEntities)
+            IEnumerable<TProp> propWithEntity,
+            IEnumerable<IPropGetter> getters)
 
             where TProp : IProperty, new()
         {
             var ret = new List<TProp>();
-            var propWithGetters = modelGetters.Select(
-                getter => CreatePrototype<TProp>(getter));
-
-            foreach(var property in propWithGetters)
+            foreach (var propTemplate in propWithEntity)
             {
-                ret.AddRange(PropertyByTemplate(property, dataEntities));
+                ret.AddRange(
+                    getters.Select(
+                        getter => PropertyByTemplate(propTemplate, getter)));
             }
 
             return ret;
         }
 
-        
         /// <summary>
         /// Прикрепить привязку к списку свойств
         /// </summary>
@@ -206,17 +220,6 @@ namespace SWAPIlib.MProperty
             }
         }
 
-        public static void AttachToTemplate(
-            IEnumerable<IProperty> templateProperties, 
-            IEnumerable<IPropGetter> Getters)
-        {
-
-            //Продумать генерацию свойств с привязкой к конфигурации
-            foreach(var prop in templateProperties)
-            {
-                prop.SetTarget(modelGetter);
-            }
-        }
 
         /// <summary>
         /// Прикрепить сущность к списку свойств 
@@ -268,14 +271,20 @@ namespace SWAPIlib.MProperty
 
         }
 
-
-        public static PropertyModel CreatePrototype(
+        /// <summary>
+        /// Создать прототип с именем конфигурации
+        /// </summary>
+        /// <param name="modelEntity"></param>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        public static IPropertyModel CreatePrototype(
             IModelEntity modelEntity, string configName)
         {
             var ret = new PropertyModel() { Entity = modelEntity };
             ret.Binder.ConfigName = configName;
             return ret;
         }
+
 
 
         /// <summary>
@@ -286,7 +295,8 @@ namespace SWAPIlib.MProperty
         /// <param name="forAllCongigs">Для всех конфигураций</param>
         /// <returns></returns>
         public static List<IPropertyModel> CreatePrototypeSet(
-            IModelEntity modelEntity, bool forAllCongigs, 
+            IModelEntity modelEntity, 
+            bool forAllCongigs, 
             Func<string, bool> confNameFilter = null)
         {
             List<IPropertyModel> ret = new List<IPropertyModel>() ;
@@ -314,18 +324,45 @@ namespace SWAPIlib.MProperty
         /// <param name="forAllCongigs"></param>
         /// <returns></returns>
         public static List<IPropertyModel> CreatePrototypeSet(
-            IEnumerable<IModelEntity> modelEntity, bool forAllCongigs,
+            IEnumerable<IModelEntity> modelEntity, 
+            bool forAllCongigs,
             Func<string, bool> confNameFilter = null)
         {
             List<IPropertyModel> ret = new List<IPropertyModel>();
-            ret.AddRange(
-                (IEnumerable<IPropertyModel>)modelEntity.Select(
-                ent => CreatePrototypeSet(ent, forAllCongigs, confNameFilter)));
+            var test = modelEntity.Select(entity => CreatePrototypeSet(
+                    entity, forAllCongigs, confNameFilter));
+
+            //Group to 1 list
+            ret.AddRange(test.SelectMany(x => x));
 
             return ret;
         }
 
+        /// <summary>
+        /// Глобальная фабрика для списка свойств и привязок модели
+        /// </summary>
+        /// <param name="entities">Список сущностей</param>
+        /// <param name="modelGetters">Список привязок</param>
+        /// <param name="forAllConfigs">Генерировать для всех конфигураций</param>
+        /// <param name="confNameFilter">Фильтр имён конфигураций</param>
+        /// <returns></returns>
+        public static List<IPropertyModel> GeneratePropertySet(
+            IEnumerable<IModelEntity> entities, 
+            IEnumerable<IModelGetter> modelGetters,
+            bool forAllConfigs, 
+            Func<string, bool> confNameFilter = null)
+        {
+            //var ret = new List<IPropertyModel>();
 
+            var allConfigProps = PropModelFactory.CreatePrototypeSet(
+                entities, true, confNameFilter);
+
+            var resultProperty = allConfigProps.Select(propTempl =>
+                PropFactory.PropertyByList(propTempl, modelGetters)).SelectMany(x => x);
+
+            //ret.AddRange(resultProperty);
+            return resultProperty.ToList();
+        }
 
 
         public static List<IPropertyModel> DefaultModel(IModelEntity modelEntity)
@@ -344,7 +381,7 @@ namespace SWAPIlib.MProperty
                     //Дополнить
                 };
 
-                ret.AddRange(PropFactory.PropertyByTemplate(propTemplate, getters));
+                ret.AddRange(PropFactory.PropertyByList(propTemplate, getters));
 
                 //switch (appmodel)
                 //{
