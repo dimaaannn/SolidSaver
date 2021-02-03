@@ -7,6 +7,7 @@ using SolidWorks.Interop.sldworks;
 using SwConst;
 using System.Diagnostics;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib.BaseTypes
 {
@@ -15,8 +16,8 @@ namespace SWAPIlib.BaseTypes
         public AppAssembly(ModelDoc2 swModel) : base(swModel)
         {
             _swAsm = swModel as AssemblyDoc;
-            PropList = new List<ISwProperty>();
-            PropList.AddRange(PropertyFactory.ModelProperty.DefaultModelProp(this));
+            //PropList = new List<IPropertyModel>();
+            //PropList.AddRange(PropModelFactory.DefaultModel(this.ModelEntity)); //TODO add special properties
         }
         private AssemblyDoc _swAsm;
         public string ConfigName

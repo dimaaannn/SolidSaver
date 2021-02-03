@@ -4,6 +4,7 @@ using System.ComponentModel;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.MProperty;
 
 namespace SWAPIlib.Global
 {
@@ -34,7 +35,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Активный список свойств
         /// </summary>
-        IList<ISwProperty> ActivePropList { get; }
+        IList<IPropertyModel> ActivePropList { get; }
         /// <summary>
         /// Класс обработки имени проекта
         /// </summary>
@@ -97,7 +98,7 @@ namespace SWAPIlib.Global
 
         public string Title => appModel?.Title; //TODO add override for types
         public string Path => appModel?.Path;
-        public IList<ISwProperty> ActivePropList { get => appModel?.PropList; }
+        public IList<IPropertyModel> ActivePropList { get => appModel?.PropList; }
 
         public List<IAppComponent> SubComponents { get => _subComponents; }
         private List<IAppComponent> _subComponents;
