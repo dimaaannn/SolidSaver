@@ -12,7 +12,6 @@ using System.Linq;
 using System.Threading;
 using System.Security.Policy;
 using SWAPIlib;
-using SWAPIlib.PropertyObj;
 using System.Collections;
 using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
@@ -96,7 +95,8 @@ namespace SolidApp
             var entities = rootModelClass.SubComponents.Select(x => x.ModelEntity);
             var props = SWAPIlib.MProperty.PropFactory.PropertyByTemplate(modelProperty, getterList, entities);
 
-
+            var prototypes = PropModelFactory.CreatePrototypeSet(entities, true);
+            PropFactory.AttachToTemplate(prototypes, getterList);
 
             //Задать конфигурацию из свойства - OK
 

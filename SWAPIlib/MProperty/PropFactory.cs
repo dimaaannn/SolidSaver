@@ -189,15 +189,71 @@ namespace SWAPIlib.MProperty
 
             return ret;
         }
+
+        
+        /// <summary>
+        /// Прикрепить привязку к списку свойств
+        /// </summary>
+        /// <param name="templateProperties"></param>
+        /// <param name="modelGetter"></param>
+        public static void AttachToTemplate(
+            IEnumerable<IProperty> templateProperties, 
+            IPropGetter modelGetter)
+        {
+            foreach(var prop in templateProperties)
+            {
+                prop.SetTarget(modelGetter);
+            }
+        }
+
+        public static void AttachToTemplate(
+            IEnumerable<IProperty> templateProperties, 
+            IEnumerable<IPropGetter> Getters)
+        {
+
+            //Продумать генерацию свойств с привязкой к конфигурации
+            foreach(var prop in templateProperties)
+            {
+                prop.SetTarget(modelGetter);
+            }
+        }
+
+        /// <summary>
+        /// Прикрепить сущность к списку свойств 
+        /// </summary>
+        /// <param name="templateProperties"></param>
+        /// <param name="entity"></param>
+        public static void AttachToTemplate(
+            IEnumerable<IProperty> templateProperties,
+            IDataEntity entity)
+        {
+            foreach (var prop in templateProperties)
+            {
+                prop.SetTarget(entity);
+            }
+        }
+
+
     }
 
     public static class PropModelFactory
     {
+        //TODO фильтровать развёртки
+        /// <summary>
+        /// Фильтр по умолчанию для имён конфигураций
+        /// </summary>
+        /// <param name="confName">Имя конфигурации</param>
+        /// <returns></returns>
+        public static bool ConfigNamesFilter(string confName)
+        {
+            return true;
+        }
+
         /// <summary>
         /// Создать пустой прототип
         /// </summary>
         /// <returns></returns>
-        public static PropertyModel CreatePrototype()
+        public static IPropertyModel CreatePrototype()
         {
             return new PropertyModel();
         }
@@ -206,11 +262,12 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="modelEntity"></param>
         /// <returns></returns>
-        public static PropertyModel CreatePrototype(IModelEntity modelEntity)
+        public static IPropertyModel CreatePrototype(IModelEntity modelEntity)
         {
             return new PropertyModel() { Entity = modelEntity };
 
         }
+
 
         public static PropertyModel CreatePrototype(
             IModelEntity modelEntity, string configName)
@@ -220,20 +277,56 @@ namespace SWAPIlib.MProperty
             return ret;
         }
 
+
         /// <summary>
-        /// Прототипы свойств для каждой конфигурации
+        /// Создать список прототипов для конфигураций
+        /// </summary>
+        /// <param name="modelEntity">Сущность модели</param>
+        /// <param name="modelGetter">Обработчик свойств</param>
+        /// <param name="forAllCongigs">Для всех конфигураций</param>
+        /// <returns></returns>
+        public static List<IPropertyModel> CreatePrototypeSet(
+            IModelEntity modelEntity, bool forAllCongigs, 
+            Func<string, bool> confNameFilter = null)
+        {
+            List<IPropertyModel> ret = new List<IPropertyModel>() ;
+            //Фильтр по умолчанию
+            confNameFilter = confNameFilter ?? ConfigNamesFilter;
+
+            if (forAllCongigs)
+            {
+                var filteredConfigNames = modelEntity.ConfigNames.Where(
+                    ConfigNamesFilter);
+                ret.AddRange(filteredConfigNames.Select(
+                    confname => CreatePrototype(modelEntity, confname)));
+            }
+            else
+                ret.Add(
+                    CreatePrototype(modelEntity));
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Создать прототипы для набора сущностей с конфигурациями
         /// </summary>
         /// <param name="modelEntity"></param>
-        /// <param name="allConfigNames"></param>
+        /// <param name="forAllCongigs"></param>
         /// <returns></returns>
-        public static List<PropertyModel> CreatePrototype(
-            IModelEntity modelEntity, bool allConfigNames)
+        public static List<IPropertyModel> CreatePrototypeSet(
+            IEnumerable<IModelEntity> modelEntity, bool forAllCongigs,
+            Func<string, bool> confNameFilter = null)
         {
-            var properties = modelEntity.ConfigNames.Select(
-                conf => CreatePrototype(modelEntity, conf));
+            List<IPropertyModel> ret = new List<IPropertyModel>();
+            ret.AddRange(
+                (IEnumerable<IPropertyModel>)modelEntity.Select(
+                ent => CreatePrototypeSet(ent, forAllCongigs, confNameFilter)));
 
-            return properties.ToList();
+            return ret;
         }
+
+
+
 
         public static List<IPropertyModel> DefaultModel(IModelEntity modelEntity)
         {
