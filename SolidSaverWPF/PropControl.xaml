@@ -41,7 +41,7 @@
     <!--#region Property object-->
     <Border Style="{StaticResource StackParamItem}" Name="Border">
 
-        <Grid ShowGridLines="False" Name="BaseGrid">
+        <Grid ShowGridLines="False" Name="BaseGrid" DataContext="{Binding ViewData}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -52,9 +52,9 @@
             </Grid.ColumnDefinitions>
             <!--#region Name-->
             <TextBlock 
-                Name="PropName"
+                Name="PropNameView"
                 Style="{StaticResource StackParamText}" 
-                Text="{Binding UserName, FallbackValue=No name}"
+                Text="{Binding PropName, FallbackValue=No name}"
                 Background="WhiteSmoke"/>
             <!--#endregion-->
             <Button 

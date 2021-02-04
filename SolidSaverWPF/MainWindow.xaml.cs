@@ -18,6 +18,7 @@ using SWAPIlib.PropertyObj;
 using SWAPIlib.Controller;
 using SWAPIlib.ComConn;
 using SWAPIlib.Global;
+using SWAPIlib.MProperty;
 
 namespace SolidSaverWPF
 {
@@ -43,7 +44,7 @@ namespace SolidSaverWPF
         ///В доработку
         public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
         public AppComponent SelectedModel { get; set; }
-        public IList<ISwProperty> PropList { get; set; }
+        public List<IPropertyModel> PropList { get; set; }
 
         //Tests
         public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
@@ -82,6 +83,7 @@ namespace SolidSaverWPF
             //Fix binding bug
             //Bind Main Part list to interface
             PartViewList.DataContext = MainPartview;
+            PropertyBox.DataContext = MainPartview;
             //MainPartview.RootComponents
             //PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
 
@@ -113,10 +115,11 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
         {
-            foreach(var prop in PropList)
-            {
-                prop.Update();
-            }
+            PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
+            //foreach(var prop in PropList)
+            //{
+            //    prop.Update();
+            //}
         }
 
         /// <summary>

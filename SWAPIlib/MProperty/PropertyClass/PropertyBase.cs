@@ -86,9 +86,10 @@ namespace SWAPIlib.MProperty
             set
             {
                 propGetter = value;
-                ViewData.IsReadable = PropGetter?.IsReadable == true;
-                ViewData.IsReadable = PropGetter?.IsWritable == true;
                 ClearValue();
+                ViewData.IsReadable = PropGetter?.IsReadable == true;
+                ViewData.IsWritable = PropGetter?.IsWritable == true;
+                ViewData.PropName = PropGetter?.DisplayPropName;
             }
         }
 

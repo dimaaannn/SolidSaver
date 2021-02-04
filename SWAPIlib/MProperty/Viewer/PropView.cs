@@ -21,6 +21,7 @@ namespace SWAPIlib.MProperty
             {
                 _NewPropertyValue = value;
                 Debug.WriteLine($"AppPropertyBase - value was changed {_NewPropertyValue}");
+                RaisePropertyChanged("IsModifyed");
             }
         }
         /// <summary>

@@ -180,13 +180,13 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="2">
+                        VerticalAlignment="Stretch" SelectedIndex="0">
 
                         <TabItem Header="Свойства">
 
                             <!--#region Property object-->
                             <ListBox 
-                                ItemsSource="{Binding MainPartView.SelectedCompProp}"
+                                ItemsSource="{Binding SelectedCompProp}"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 ScrollViewer.CanContentScroll="False"
