@@ -70,7 +70,7 @@ namespace SWAPIlib.MProperty
             set
             {
                 Binder.SetTarget(value);
-                Update();
+                ClearValue();
             }
         }
         /// <summary>
@@ -88,8 +88,7 @@ namespace SWAPIlib.MProperty
                 propGetter = value;
                 ViewData.IsReadable = PropGetter?.IsReadable == true;
                 ViewData.IsReadable = PropGetter?.IsWritable == true;
-                ViewData.ClearSaved();
-                Update();
+                ClearValue();
             }
         }
 
@@ -98,9 +97,14 @@ namespace SWAPIlib.MProperty
         /// </summary>
         public virtual void Update()
         {
-            ViewData.ClearSaved();
+            ClearValue();
             if (Entity != null && PropGetter?.IsReadable == true)
                 ViewData.SetSavedVal(PropGetter.GetValue(Binder));
+        }
+
+        public void ClearValue()
+        {
+            ViewData.ClearSaved();
         }
         /// <summary>
         /// Записать значение
@@ -134,8 +138,12 @@ namespace SWAPIlib.MProperty
         public bool SetTarget(TDataEntity ent)
         {
             Binder.SetTarget(ent);
-            ViewData.ClearSaved();
+            ClearValue();
             return true;
+        }
+        public bool SetTarget(IDataEntity ent)
+        {
+            return SetTarget((TDataEntity)ent);
         }
         /// <summary>
         /// Задать обработчик
@@ -177,10 +185,6 @@ namespace SWAPIlib.MProperty
         /// </summary>
         /// <param name="ent"></param>
         /// <returns></returns>
-        public bool SetTarget(IDataEntity ent)
-        {
-            return SetTarget((TDataEntity)ent);
-        }
 
         public IPropGetter GetGetter()
         {

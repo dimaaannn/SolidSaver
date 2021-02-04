@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SWAPIlib.Global;
 
 namespace SolidSaverWPF.PartList
 {
@@ -23,8 +24,9 @@ namespace SolidSaverWPF.PartList
         SWAPIlib.Global.IMainPartView _mainPartView;
         public SWAPIlib.Global.IMainPartView MainPartView
         {
-            get => _mainPartView;
-            set => _mainPartView = value;
+            get => _mainPartView ??
+                (_mainPartView = (IMainPartView)this.DataContext);
+            //set => _mainPartView = value;
         }
         public PartListView()
         {

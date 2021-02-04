@@ -78,12 +78,12 @@ namespace SolidSaverWPF
             //Создать класс
             MainPartview = new SWAPIlib.Global.MainPartView(MainModel);
             ///Подключить к списку деталей WPF - Заменить на binding
-            PartViewList.MainPartView = MainPartview;
+            //PartViewList.MainPartView = MainPartview;
             //Fix binding bug
             //Bind Main Part list to interface
             PartViewList.DataContext = MainPartview;
             //MainPartview.RootComponents
-            PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
+            //PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
 
 
 

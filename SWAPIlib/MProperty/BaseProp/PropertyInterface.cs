@@ -20,6 +20,7 @@ namespace SWAPIlib.MProperty
         IPropView ViewData { get; }
 
         void Update();
+        void ClearValue();
         bool WriteValue(string s);
         bool WriteValue();
         IDataEntity GetTarget();
@@ -34,7 +35,7 @@ namespace SWAPIlib.MProperty
         TBinder Binder { get; }
         TDataEntity Entity { get; set; }
         bool SetTarget(TDataEntity ent);
-        bool SetTarget(IPropGetter binder);
+        //bool SetTarget(IPropGetter binder);
 
     }
 

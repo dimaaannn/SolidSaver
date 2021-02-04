@@ -125,8 +125,8 @@ namespace SWAPIlib.MProperty
             bool ret = false;
             if(dataEntity is IModelEntity modelEnt)
             {
-                this.Target = modelEnt;
                 configName = null;
+                this.Target = modelEnt;
                 ret = true;
             }
             return ret;
