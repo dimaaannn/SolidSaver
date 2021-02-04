@@ -87,6 +87,7 @@
     <Compile Include="PropReplacer\PropertyInterfaces.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">
@@ -99,8 +100,6 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="PropReplacer\PropertyModule\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

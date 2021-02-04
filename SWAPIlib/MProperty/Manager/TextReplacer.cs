@@ -15,7 +15,7 @@ namespace SWAPIlib.PropertyObj
     {
 
         string SearchText { get; set; }
-        string ReplaceText { get; set; }
+        string NewText { get; set; }
         bool Replace(string input);
         bool IsReplaced { get; }
         string ReplaceResult { get; }
@@ -36,7 +36,7 @@ namespace SWAPIlib.PropertyObj
             }
         }
         string _searchText;
-        public string ReplaceText { get; set; }
+        public string NewText { get; set; }
         TextReplacerDel textReplacer { get; set; } = ReplaceString;
         public bool IsReplaced { get; set; } = false;
 
@@ -66,7 +66,7 @@ namespace SWAPIlib.PropertyObj
             _result = null;
             if (!String.IsNullOrEmpty(input))
             {
-                IsReplaced = textReplacer(input, SearchText, ReplaceText, out _result);
+                IsReplaced = textReplacer(input, SearchText, NewText, out _result);
             }
             return IsReplaced;
         }
@@ -90,9 +90,12 @@ namespace SWAPIlib.PropertyObj
             string replaceStr, out string output)
         {
             bool ret = false;
+            //Задать свойство зависимости регистра
+            var RegSenseOpt = UseRegExp ? RegexOptions.IgnoreCase : 0;
             //Create pattern if not exist
+
             if(regex == null)
-                regex = new Regex(searchStr, RegexOptions.Compiled);
+                regex = new Regex(searchStr, RegexOptions.Compiled | RegSenseOpt);
 
             ret = regex.IsMatch(input);
 

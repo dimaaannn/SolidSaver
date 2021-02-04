@@ -129,8 +129,8 @@ namespace SWAPIlib.PropertyObj
         /// </summary>
         public string NewValue
         {
-            get => textReplacer.ReplaceText;
-            set => textReplacer.ReplaceText = value;
+            get => textReplacer.NewText;
+            set => textReplacer.NewText = value;
         }
         public bool UseRegExp
         {

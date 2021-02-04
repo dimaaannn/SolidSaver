@@ -70,6 +70,7 @@
     <Compile Include="PropertyRename\PropertyChangerTab.xaml.cs">
       <DependentUpon>PropertyChangerTab.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PropertyView\PropertyConfigurator.cs" />
     <Compile Include="PropListPart.xaml.cs">
       <DependentUpon>PropListPart.xaml</DependentUpon>
     </Compile>
