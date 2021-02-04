@@ -58,7 +58,8 @@
                 Background="WhiteSmoke"/>
             <!--#endregion-->
             <Button 
-                Name="UpdateBtn"
+                Name="SaveBtn"
+                Click="SaveBtn_Click"
                 Content="S"
                 Grid.Column="1" 
                 Grid.Row="0" 

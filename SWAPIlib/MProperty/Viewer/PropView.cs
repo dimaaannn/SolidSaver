@@ -96,7 +96,6 @@ namespace SWAPIlib.MProperty
         /// <param name="s"></param>
         public void SetSavedVal(string s)
         {
-            _NewPropertyValue = null;
             _SavedValue = s;
             AllPropertyChanged();
         }

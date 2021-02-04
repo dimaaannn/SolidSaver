@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWAPIlib.MProperty;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,13 +31,12 @@ namespace SolidSaverWPF.Prop
 
             //PropValueBinding = BindingOperations.GetBinding(PropValue, TextBox.TextProperty);
 
-            UpdateBtn.Click += UpdateBtn_Click;
         }
 
-        private void UpdateBtn_Click(object sender, RoutedEventArgs e)
+        private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("Save property button click");
-            var prop = ((SWAPIlib.ISwProperty)this.DataContext);
+            var prop = ((IProperty)this.DataContext);
             prop.WriteValue();
         }
     }

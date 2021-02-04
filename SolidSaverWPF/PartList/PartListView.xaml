@@ -12,7 +12,6 @@
     <Grid x:Name="testgrid" ShowGridLines="False" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="200"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 

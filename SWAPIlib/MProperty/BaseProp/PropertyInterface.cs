@@ -8,7 +8,7 @@ using SWAPIlib.MProperty.Getters;
 namespace SWAPIlib.MProperty
 {
     public delegate void PropertyUpdate();
-    public delegate bool PropertyWrite(string s);
+    public delegate bool PropertyWrite();
 
     public interface IProperty : ICloneable
     {

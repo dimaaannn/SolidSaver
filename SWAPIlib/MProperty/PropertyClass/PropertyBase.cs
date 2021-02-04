@@ -128,7 +128,10 @@ namespace SWAPIlib.MProperty
         {
             var ret = false;
             if (IsModifyed)
+            {
                 ret = WriteValue(ViewData.Value);
+                ClearValue();
+            }
             return ret;
         }
 
