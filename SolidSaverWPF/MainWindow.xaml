@@ -180,7 +180,7 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="0">
+                        VerticalAlignment="Stretch" SelectedIndex="1">
 
                         <TabItem Header="Свойства">
 
