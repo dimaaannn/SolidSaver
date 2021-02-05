@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace SolidSaverWPF.PropertyView
 {
@@ -21,7 +22,7 @@ namespace SolidSaverWPF.PropertyView
         /// Загрузить модели из источника
         /// </summary>
         void LoadPartList();
-        void ClearPartList();
+        void ClearPropList();
 
         /// <summary>
         /// Начать поиск
@@ -39,7 +40,7 @@ namespace SolidSaverWPF.PropertyView
         /// <summary>
         /// Словарь доступных привязок
         /// </summary>
-        Dictionary<string, IProperty> PropertySelector { get; }
+        Dictionary<string, IPropGetter> PropertySelector { get; }
         /// <summary>
         /// Список объектов свойств
         /// </summary>
@@ -87,20 +88,81 @@ namespace SolidSaverWPF.PropertyView
             TextReplacer = new TextReplacer();
             TextReplacer.UseRegExp = true;
             ModelPropMaker = new ModelPropMaker();
+            //test
+            propertySelector = GetterDictMaker.DefaultGetterList();
         }
-
-        private Dictionary<string, IProperty> propertySelector;
-        private IEnumerable<IComponentControl> SourceList;
         /// <summary>
         /// Промежуточный список свойств
         /// </summary>
         public List<IPropertyModel> PropList;
 
+        private static PropConfigurator configurator;
+        private Dictionary<string, IPropGetter> propertySelector;
+        private IEnumerable<IComponentControl> SourceList;
+        private RelayCommand loadProperties;
+        private RelayCommand clearProperties;
+        private RelayCommand startSearch;
+        private RelayCommand dropValueChanges;
+        private RelayCommand saveValueChanges;
+        private string selectedGetterName;
+
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        /// <returns></returns>
+        public static PropConfigurator GetConfigurator()
+        {
+            if (configurator == null)
+                configurator = new PropConfigurator();
+            return configurator;
+        }
+
+        /// <summary>
+        /// Загрузить детали
+        /// </summary>
+        public RelayCommand LoadProps
+        {
+            get
+            {
+                return loadProperties ??
+                  (loadProperties = new RelayCommand(obj =>
+                  {
+                      //MessageBox.Show("Test");
+                      LoadPartList();
+                  }));
+            }
+        }
+        /// <summary>
+        /// Очистить список свойств
+        /// </summary>
+        public RelayCommand ClearProperties => clearProperties ??
+                  (clearProperties = new RelayCommand(obj => { ClearPropList(); }));
+        /// <summary>
+        /// Запустить поиск строки в свойствах
+        /// </summary>
+        public RelayCommand StartSearch => startSearch ??
+                  (startSearch = new RelayCommand(obj => { BeginSearch(); }));
+        /// <summary>
+        /// Сбросить изменения
+        /// </summary>
+        public RelayCommand DropValueChanges => dropValueChanges ??
+                  (dropValueChanges = new RelayCommand(obj => { DropChanges(); }));
+        /// <summary>
+        /// Сохранить изменённые значения
+        /// </summary>
+        public RelayCommand SaveValueChanges => saveValueChanges ??
+                  (saveValueChanges = new RelayCommand(obj => { SaveChanges(); }));
+
+        public string SelectedGetterName
+        {
+            get => selectedGetterName;
+            set => selectedGetterName = value;
+        }
 
         /// <summary>
         /// Список выбора свойств
         /// </summary>
-        public Dictionary<string, IProperty> PropertySelector => propertySelector;
+        public Dictionary<string, IPropGetter> PropertySelector => propertySelector;
 
         /// <summary>
         /// Представление списка свойств
@@ -127,6 +189,7 @@ namespace SolidSaverWPF.PropertyView
         }
         public static readonly DependencyProperty SearchValueProperty =
             DependencyProperty.Register("SearchValue", typeof(string), typeof(PropConfigurator), new PropertyMetadata(null));
+
         /// <summary>
         /// Новое значение для замены
         /// </summary>
@@ -145,11 +208,15 @@ namespace SolidSaverWPF.PropertyView
         /// </summary>
         public IModelPropMaker ModelPropMaker { get; private set; }
 
+
         /// <summary>
         /// Задать источник компонентов
         /// </summary>
         /// <param name="items"></param>
-        public void SetSource(IEnumerable<IComponentControl> items) => SourceList = items;
+        public void SetSource(IEnumerable<IComponentControl> items) 
+            {
+                SourceList = items;
+            }
 
         /// <summary>
         /// Сгенирировать список свойств для компонентов
@@ -159,13 +226,16 @@ namespace SolidSaverWPF.PropertyView
             //Продумать очистку
             //ModelPropMaker.ClearEntityList();
             //ModelPropMaker.ClearGettersList();
-            var entityRequest = from compcontrol in SourceList
-                                let entity = compcontrol.Appmodel.ModelEntity
-                                where entity != null
-                                select entity;
+            ModelPropMaker.Getters.Clear();
+            ModelPropMaker.Getters.Add(PropertySelector[SelectedGetterName] as IModelGetter);
+
 
             if (SourceList != null && ModelPropMaker.Getters.Count > 0)
             {
+                var entityRequest = from compcontrol in SourceList
+                                    let entity = compcontrol.Appmodel.ModelEntity
+                                    where entity != null
+                                    select entity;
                 ModelPropMaker.DataEntities.AddRange(entityRequest);
 
                 PropList = ModelPropMaker.GetModelProperties();
@@ -175,8 +245,10 @@ namespace SolidSaverWPF.PropertyView
                         modelprop => modelprop.TargetName));
             }
         }
-
-        public void ClearPartList()
+        /// <summary>
+        /// Очистить список свойств
+        /// </summary>
+        public void ClearPropList()
         {
             PropList = null;
             PropertyViewList.Refresh();
@@ -194,6 +266,66 @@ namespace SolidSaverWPF.PropertyView
 
 
 
+    //Move to main assembly
+    public static class GetterDictMaker
+    {
+        public static Dictionary<string, IPropGetter> DefaultGetterList()
+        {
+            var ret = new Dictionary<string, IPropGetter>()
+            {
+                {"Обозначение", new SWAPIlib.MProperty.Getters.PropModelNamedParamGetter("Обозначение") },
+                {"Наименование", new SWAPIlib.MProperty.Getters.PropModelNamedParamGetter("Наименование") }
+            };
+            return ret;
+        }
+    }
+
+
+    /// <summary>
+    /// Объект выполнения привязки команды к кнопке и т.п.
+    /// </summary>
+    public class RelayCommand : ICommand
+    {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="execute"></param>
+        /// <param name="canExecute"></param>
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        {
+            this.execute = execute;
+            this.canExecute = canExecute;
+        }
+        /// <summary>
+        /// Делегат команды
+        /// </summary>
+        private Action<object> execute;
+        /// <summary>
+        /// Возможность выполнения
+        /// </summary>
+        private Func<object, bool> canExecute;
+
+        /// <summary>
+        /// Возможность выполнения команды
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CanExecute(object parameter) => this.canExecute == null || this.canExecute(parameter);
+        /// <summary>
+        /// Выполнить команду
+        /// </summary>
+        /// <param name="parameter"></param>
+        public void Execute(object parameter) => this.execute(parameter);
+
+        /// <summary>
+        /// регистрация
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+    }
 
 
 

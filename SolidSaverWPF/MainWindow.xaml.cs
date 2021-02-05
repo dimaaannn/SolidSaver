@@ -87,7 +87,10 @@ namespace SolidSaverWPF
             //MainPartview.RootComponents
             //PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
 
+            var configurator = PropertyView.PropConfigurator.GetConfigurator();
 
+            var TestCompList = MainPartview.RootComponents.SelectMany(x => x);
+            configurator.SetSource(MainPartview.RootComponents.SelectMany(x => x));
 
             var a = 4;
             #region Свойства поиска

@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.PropertyRename"
+             xmlns:propConfigurator="clr-namespace:SolidSaverWPF.PropertyView"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="300">
     <UserControl.Resources>
+        <propConfigurator:PropConfigurator x:Key="conf"/>
         <local:ChangePropertyPart x:Key="property_part"/>
     </UserControl.Resources>
     <Grid>
@@ -29,15 +31,20 @@
                 
                 <ComboBox Grid.Column="0" Name="PropName" 
                     Height="25" IsReadOnly="True"
-                    ItemsSource="{Binding ConstructorDict.Keys, Mode=OneTime}"/>
+                    ItemsSource="{Binding Source={StaticResource conf}, Path=PropertySelector.Keys}"
+                    SelectedValue="{Binding Source={StaticResource conf}, Path=SelectedGetterName, Mode=TwoWay}"
+                          />
+                <!--ItemsSource="{Binding ConstructorDict.Keys, Mode=OneTime}"-->
                 
                 <Button
+                    Command="{Binding Source={StaticResource conf}, Path=ClearProperties}"
                     Margin="1" Height="Auto"
                     Grid.Column="3" Grid.RowSpan="2" 
                     Name="ClearParts">
                     <TextBlock TextAlignment="Center" TextWrapping="WrapWithOverflow" Text="Очистить"/>
                 </Button>
                 <Button
+                    Command="{Binding Source={StaticResource conf}, Path=LoadProps}"
                     Margin="1" Height="Auto"
                     Grid.Column="2" Grid.RowSpan="2" 
                     Name="LoadParts">
@@ -75,7 +82,7 @@
                     Grid.Row="0" VerticalAlignment="Stretch"
                     x:Name="SearchText"
                     Background="Transparent"
-                    Text="{Binding SearchValue}" Grid.ColumnSpan="2"/>
+                    Text="{Binding Source={StaticResource conf}, Path=SearchValue}" Grid.ColumnSpan="2"/>
 
                 <TextBlock
                     Grid.Row="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="3,4"
@@ -83,12 +90,12 @@
                 <TextBox
                     Grid.Row="1" VerticalAlignment="Stretch" Background="Transparent"
                     x:Name="ReplaceText"
-                    Text="{Binding NewValue}" Grid.ColumnSpan="2"/>
+                    Text="{Binding Source={StaticResource conf}, Path=NewValue}" Grid.ColumnSpan="2"/>
 
                 <CheckBox
                     VerticalAlignment="Center" Margin="2,4"
                     Grid.Column="2" Grid.Row="0"
-                    IsChecked="{Binding UseRegExp}"
+                    IsChecked="{Binding Source={StaticResource conf}, Path=CaseSensitive}"
                     x:Name="CaseSensive">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="уч.регистр"/>
                 </CheckBox>
@@ -96,12 +103,13 @@
                 <CheckBox
                     VerticalAlignment="Center" Margin="2,4"
                     Grid.Column="2" Grid.Row="1"
-                    IsChecked="{Binding AllConfigurations}"
+                    IsChecked="{Binding Source={StaticResource conf}, Path=ForEachConfig}"
                     x:Name="AllConf">
                     <TextBlock TextWrapping="WrapWithOverflow" Text="все конфиг"/>
                 </CheckBox>
 
                 <Button
+                    Command="{Binding Source={StaticResource conf}, Path=SaveValueChanges}"
                     Margin="1" Height="Auto"
                     Grid.Column="4" Grid.RowSpan="2" 
                     Name="WriteValues">
@@ -109,12 +117,14 @@
                 </Button>
 
                 <Button
+                    Command="{Binding Source={StaticResource conf}, Path=DropValueChanges}"
                     Margin="1" Height="Auto"
                     Grid.Column="3" Grid.Row="1"
                     Name="RestoreValues"
                     Content="Сброс"/>
 
                 <Button
+                    Command="{Binding Source={StaticResource conf}, Path=StartSearch}"
                     Margin="1" Height="Auto"
                     Grid.Column="3" Grid.Row="0"
                     Name="SearchValues"
