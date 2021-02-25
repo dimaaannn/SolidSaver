@@ -35,7 +35,7 @@ namespace SolidSaverWPF
         /// <summary>
         /// Список деталей основной модели
         /// </summary>
-        public SWAPIlib.Global.IMainPartView MainPartview { get; set; }
+        public SWAPIlib.Global.IMainPartViewControl MainPartview { get; set; }
         /// <summary>
         /// Поиск и замена свойств
         /// </summary>
@@ -77,7 +77,7 @@ namespace SolidSaverWPF
 
             //Основной список деталей
             //Создать класс
-            MainPartview = new SWAPIlib.Global.MainPartView(MainModel);
+            MainPartview = new SWAPIlib.Global.MainPartViewControl(MainModel);
             ///Подключить к списку деталей WPF - Заменить на binding
             //PartViewList.MainPartView = MainPartview;
             //Fix binding bug
@@ -168,37 +168,11 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void SelectAll_click(object sender, RoutedEventArgs e)
         {
-            ////var first = MainPartview.RootComponents.First();
-            //Ok
-            ////var all = MainPartview.Select(x=>x);
-            //Ok
-            //var all = MainPartview.RootComponents.Union(MainPartview.RootComponents.SelectMany(x => x));
-                      
-
-
-            //first.IsSelected = !first.IsSelected;
-            //Не работает
-            //first.Select(x => x.IsSelected = !x.IsSelected);
-
             foreach (var comp in MainPartview)
             {
                 comp.IsSelected = !comp.IsSelected;
             }
 
-            //var testlist = all.ToList();
-            //var a = 2;
-            //selection tests
-            //foreach (var comp in MainPartview.RootComponents)
-            //{
-            //    comp.IsSelected = !comp.IsSelected;
-            //    foreach ( var scomp in comp)
-            //    {
-            //        scomp.IsSelected = !scomp.IsSelected;
-            //    }
-            //}
-
-            //var many = MainPartview.RootComponents.SelectMany(x => x);
-            //many.Select(x => x.IsSelected = !x.IsSelected);
         }
 
         /// <summary>

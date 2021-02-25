@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Global
 {
-    public interface IMainPartView : INotifyPropertyChanged, IEnumerable<IComponentControl>
+    public interface IMainPartViewControl : INotifyPropertyChanged, IEnumerable<IComponentControl>
     {
         /// <summary>
         /// Загруженная модель
@@ -35,13 +35,13 @@ namespace SWAPIlib.Global
 
     }
 
-    public class MainPartView : IMainPartView
+    public class MainPartViewControl : IMainPartViewControl
     {
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="rootModel"></param>
-        public MainPartView(IRootModel rootModel)
+        public MainPartViewControl(IRootModel rootModel)
         {
             Rootmodel = rootModel;
             //RootComponents = new ObservableCollection<IComponentControl>();
@@ -194,75 +194,6 @@ namespace SWAPIlib.Global
         /// <returns></returns>
         IComponentControl this[int index] => SubComponents[index];
 
-    }
-
-    /// <summary>
-    /// Костыль для правильной последовательности внутренних моделей в главной сборке
-    /// </summary>
-    class AsmIterator :
-        IEnumerable<IComponentControl>,
-        IEnumerator<IComponentControl>
-    {
-        public AsmIterator(ObservableCollection<IComponentControl> rootParts)
-        {
-            this.rootParts = rootParts;
-        }
-        private ObservableCollection<IComponentControl> rootParts;
-
-        public bool MoveNext()
-        {
-            bool ret = false;
-
-            if (CurrentIsSended && iterablePosition < rootParts.Count)
-            {
-                if (rootParts[iterablePosition].MoveNext())
-                {
-                    _current = rootParts[iterablePosition].Current;
-                    ret = true;
-                }
-                else
-                {
-                    CurrentIsSended = false;
-                    ret = true;
-                }
-            }
-            else if (!CurrentIsSended && ++iterablePosition < rootParts.Count)
-            {
-                _current = rootParts[iterablePosition];
-                CurrentIsSended = true;
-                ret = true;
-            }
-            else
-            {
-                Reset();
-                ret = false;
-            }
-
-            return ret;
-        }
-
-        public void Reset()
-        {
-            iterablePosition = -1;
-            _current = null;
-        }
-        public void Dispose()
-        {
-            //throw new NotImplementedException();
-        }
-
-        public IEnumerator<IComponentControl> GetEnumerator() => this;
-        IEnumerator IEnumerable.GetEnumerator() => this;
-
-        /// <summary>
-        /// Текущая позиция итерирования
-        /// </summary>
-        private int iterablePosition = -1;
-        bool CurrentIsSended = false;
-
-        private IComponentControl _current;
-        object IEnumerator.Current => _current;
-        public IComponentControl Current => _current;
     }
 
 }
