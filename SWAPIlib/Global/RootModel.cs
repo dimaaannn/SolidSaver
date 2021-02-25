@@ -64,6 +64,7 @@ namespace SWAPIlib.Global
         /// <returns></returns>
         bool GetSubComponents();
         bool LoadActiveModel();
+        bool SetCurrentModelAsMain();
 
         event EventHandler<SwEventArgs> CloseRootModel;
 
@@ -133,6 +134,7 @@ namespace SWAPIlib.Global
             {
                 appModel = ModelClassFactory.GetModel(SwAppControl.MainModel);
             }
+            //TODO add open doc by uri
             return ret;
         }
 
@@ -142,6 +144,16 @@ namespace SWAPIlib.Global
             appModel = ModelClassFactory.ActiveDoc;
             if (appModel != null) ret = true;
             return ret;
+        }
+
+        /// <summary>
+        /// Задать текущую модель как основную
+        /// </summary>
+        /// <returns></returns>
+        public bool SetCurrentModelAsMain()
+        {
+            SwAppControl.MainModel = appModel.SwModel;
+            return appModel != null ? true : false;
         }
 
         public bool TopLevelOnly { get; set; }
