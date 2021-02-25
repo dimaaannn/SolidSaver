@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Global
 {
-    public interface IMainPartViewControl : INotifyPropertyChanged, IEnumerable<IComponentControl>
+    public interface IMainPartControl : INotifyPropertyChanged, IEnumerable<IComponentControl>
     {
         /// <summary>
         /// Загруженная модель
@@ -35,13 +35,13 @@ namespace SWAPIlib.Global
 
     }
 
-    public class MainPartViewControl : IMainPartViewControl
+    public class MainPartControl : IMainPartControl
     {
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="rootModel"></param>
-        public MainPartViewControl(IRootModel rootModel)
+        public MainPartControl(IRootModel rootModel)
         {
             Rootmodel = rootModel;
             //RootComponents = new ObservableCollection<IComponentControl>();

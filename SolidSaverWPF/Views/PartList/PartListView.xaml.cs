@@ -21,11 +21,11 @@ namespace SolidSaverWPF.PartList
     /// </summary>
     public partial class PartListView : UserControl
     {
-        SWAPIlib.Global.IMainPartViewControl _mainPartView;
-        public SWAPIlib.Global.IMainPartViewControl MainPartView
+        SWAPIlib.Global.IMainPartControl _mainPartView;
+        public SWAPIlib.Global.IMainPartControl MainPartView
         {
             get => _mainPartView ??
-                (_mainPartView = (IMainPartViewControl)this.DataContext);
+                (_mainPartView = (IMainPartControl)this.DataContext);
             //set => _mainPartView = value;
         }
         public PartListView()

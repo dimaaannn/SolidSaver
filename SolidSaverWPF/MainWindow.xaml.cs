@@ -35,7 +35,7 @@ namespace SolidSaverWPF
         /// <summary>
         /// Список деталей основной модели
         /// </summary>
-        public SWAPIlib.Global.IMainPartViewControl MainPartview { get; set; }
+        public SWAPIlib.Global.IMainPartControl MainPartview { get; set; }
         /// <summary>
         /// Поиск и замена свойств
         /// </summary>
@@ -77,7 +77,7 @@ namespace SolidSaverWPF
 
             //Основной список деталей
             //Создать класс
-            MainPartview = new SWAPIlib.Global.MainPartViewControl(MainModel);
+            MainPartview = new SWAPIlib.Global.MainPartControl(MainModel);
             ///Подключить к списку деталей WPF - Заменить на binding
             //PartViewList.MainPartView = MainPartview;
             //Fix binding bug
