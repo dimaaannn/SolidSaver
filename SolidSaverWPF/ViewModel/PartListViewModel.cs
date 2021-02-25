@@ -33,9 +33,17 @@ namespace SolidSaverWPF.ViewModel
             set { Set(ref _PartName, value); }
         }
 
-        public void LoadActiveDocument()
+        /// <summary>
+        /// Загрузить  модель
+        /// </summary>
+        /// <param name="s">Если null - загружается активная модель</param>
+        public void LoadActiveDocument(string s = null) => rootModel.LoadModel(s);
+
+        /// <summary>
+        /// Установить текущую модель в качестве главной
+        /// </summary>
+        public void SetCurrentDocAsMain()
         {
-            rootModel.LoadModel();
             rootModel.SetCurrentModelAsMain();
             MainPart = new MainPartControl(rootModel);
         }

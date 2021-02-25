@@ -70,12 +70,6 @@ namespace SWAPIlib.Global
         /// <returns></returns>
         bool LoadModel();
         /// <summary>
-        /// Загрузить модель COM
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        bool LoadModel(ModelDoc2 model);
-        /// <summary>
         /// Загрузить модель по ссылке
         /// </summary>
         /// <param name="path"></param>
@@ -188,7 +182,10 @@ namespace SWAPIlib.Global
         /// <returns></returns>
         public bool LoadModel(string path)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(path))
+                return LoadModel();
+            else
+                throw new NotImplementedException();
         }
 
         /// <summary>
