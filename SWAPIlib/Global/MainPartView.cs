@@ -115,44 +115,6 @@ namespace SWAPIlib.Global
     }
 
 
-    public class AssemblyTree : IEnumerator<IComponentControl>
-    {
-        public IAppModel RootModel { get; private set; }
-        public ObservableCollection<IComponentControl> SubComponents { get; set; }
-
-        #region IEnumerator
-        private int _CurrentNum = 0;
-        private IComponentControl _CurrentTopLevelObj;
-
-        public IComponentControl Current { get; private set; }
-        object IEnumerator.Current => Current;
-
-        public bool MoveNext()
-        {
-            while (_CurrentNum < SubComponents.Count)
-            {
-                if (SubComponents[_CurrentNum].MoveNext())
-                {
-                    Current = SubComponents[_CurrentNum].Current;
-                    return true;
-                }
-                else _CurrentNum++;
-            }
-            return false;
-        }
-
-        public void Reset() { _CurrentNum = 0; Current = null; }
-        public void Dispose() => Reset(); 
-        #endregion
-
-        /// <summary>
-        /// Компонент под номером
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        IComponentControl this[int index] => SubComponents[index];
-
-    }
 
     /// <summary>
     /// Костыль для правильной последовательности внутренних моделей в главной сборке

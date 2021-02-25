@@ -5,6 +5,9 @@ using SWAPIlib.ComConn;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
+using SWAPIlib.Controller;
+using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace SWAPIlib.Global
 {
@@ -65,6 +68,8 @@ namespace SWAPIlib.Global
         event EventHandler<SwEventArgs> CloseRootModel;
 
     }
+
+
 
 
     public class RootModel : IRootModel
@@ -164,5 +169,84 @@ namespace SWAPIlib.Global
 
         public event EventHandler<SwEventArgs> CloseRootModel;
         public event PropertyChangedEventHandler PropertyChanged;
+    }
+
+
+    /// <summary>
+    /// Ienumerator для компонентов
+    /// </summary>
+    public class AssemblyTree : IEnumerator<IComponentControl>
+    {
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="appModel"></param>
+        public AssemblyTree(IAppModel appModel, Func<IComponentControl, bool> compFilter = null)
+        {
+            SubComponents = new ObservableCollection<IComponentControl>();
+            SubComponentFilter = compFilter;
+            if (appModel is IAppAssembly appAsm)
+            {
+                foreach (var comp in appAsm.GetComponents(true))
+                {
+                    var compControl = new SWAPIlib.Controller.ComponentControl(comp);
+
+                    //Фильтровать компоненты
+                    if (SubComponentFilter?.Invoke(compControl) ?? true)
+                        SubComponents.Add(compControl);
+                }
+            }
+        }
+
+        private IAppModel NodeModel;
+        public ObservableCollection<IComponentControl> SubComponents { get; set; }
+
+        /// <summary>
+        /// Фильтр загрузки компонентов
+        /// </summary>
+        public Func<IComponentControl, bool> SubComponentFilter;
+
+        #region IEnumerator
+        private int _CurrentNum = -1;
+        private IComponentControl _CurrentTopLevelObj;
+
+        public IComponentControl Current { get; private set; }
+        object IEnumerator.Current => Current;
+
+        public virtual bool MoveNext()
+        {
+            if(_CurrentNum < 0)
+            {
+                _CurrentNum++;
+                if(NodeModel is IComponentControl nodeComp)
+                {
+                    Current = nodeComp;
+                    return true;
+                }
+            }
+            while (_CurrentNum < SubComponents.Count)
+            {
+                if (SubComponents[_CurrentNum].MoveNext())
+                {
+                    Current = SubComponents[_CurrentNum].Current;
+                    return true;
+                }
+                else _CurrentNum++;
+            }
+            return false;
+        }
+
+        public void Reset() { _CurrentNum = 0; Current = null; }
+        public void Dispose() => Reset();
+        #endregion
+
+        /// <summary>
+        /// Компонент под номером
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        IComponentControl this[int index] => SubComponents[index];
+
     }
 }
