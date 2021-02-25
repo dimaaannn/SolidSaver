@@ -168,9 +168,9 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void SelectAll_click(object sender, RoutedEventArgs e)
         {
-            var first = MainPartview.RootComponents.First();
+            ////var first = MainPartview.RootComponents.First();
             //Ok
-            var all = MainPartview.Select(x=>x);
+            ////var all = MainPartview.Select(x=>x);
             //Ok
             //var all = MainPartview.RootComponents.Union(MainPartview.RootComponents.SelectMany(x => x));
                       
@@ -180,13 +180,13 @@ namespace SolidSaverWPF
             //Не работает
             //first.Select(x => x.IsSelected = !x.IsSelected);
 
-            foreach (var comp in all)
+            foreach (var comp in MainPartview)
             {
                 comp.IsSelected = !comp.IsSelected;
             }
 
-            var testlist = all.ToList();
-            var a = 2;
+            //var testlist = all.ToList();
+            //var a = 2;
             //selection tests
             //foreach (var comp in MainPartview.RootComponents)
             //{

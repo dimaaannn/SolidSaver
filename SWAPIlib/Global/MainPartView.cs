@@ -44,11 +44,10 @@ namespace SWAPIlib.Global
         public MainPartView(IRootModel rootModel)
         {
             Rootmodel = rootModel;
-            RootComponents = new ObservableCollection<IComponentControl>();
-
+            //RootComponents = new ObservableCollection<IComponentControl>();
             //Добавить контроллеры компонентов
             ReloadCompList();
-            assemblyIterator = new AsmIterator(this.RootComponents);
+            
         }
         /// <summary>
         /// Ссылка на коренную модель
@@ -78,7 +77,8 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Корневые компоненты
         /// </summary>
-        public ObservableCollection<IComponentControl> RootComponents { get; private set; }
+        public ObservableCollection<IComponentControl> RootComponents => RootAssemblyTree.SubComponents; // { get; private set; }
+
         public int ActiveSelectionGroup { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -89,32 +89,112 @@ namespace SWAPIlib.Global
         }
         public void ReloadCompList()
         {
-            if (RootComponents.Count > 0)
-                RootComponents.Clear();
-
-            var filter = from comp in Rootmodel.SubComponents
-                         orderby comp descending
-                         select comp;
-
-            foreach (var comp in filter)
-            {
-                var compControl = new SWAPIlib.Controller.ComponentControl(comp);
-                RootComponents.Add(compControl);
-            }
-            
-
+            RootAssemblyTree = new AssemblyTree(this.Rootmodel.appModel);
         }
 
-        public IEnumerator<IComponentControl> GetEnumerator() => assemblyIterator;
+        public IEnumerator<IComponentControl> GetEnumerator() => RootAssemblyTree;
 
-        IEnumerator IEnumerable.GetEnumerator() => assemblyIterator;
+        IEnumerator IEnumerable.GetEnumerator() => RootAssemblyTree;
+
         /// <summary>
-        /// Итерация сквозь сборку
+        /// Иерархическое представление деталей сборки
         /// </summary>
-        AsmIterator assemblyIterator;
+        AssemblyTree RootAssemblyTree;
     }
 
+    /// <summary>
+    /// Ienumerator для компонентов
+    /// </summary>
+    public class AssemblyTree : IEnumerator<IComponentControl>, IEnumerable<IComponentControl>
+    {
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="appModel"></param>
+        public AssemblyTree(IAppModel appModel, Func<IComponentControl, bool> compFilter = null)
+        {
+            SubComponents = new ObservableCollection<IComponentControl>();
+            SubComponentFilter = compFilter;
+            if (appModel is IAppAssembly appAsm)
+            {
+                foreach (var comp in appAsm.GetComponents(true))
+                {
+                    var compControl = new SWAPIlib.Controller.ComponentControl(comp);
+                    SubComponents.Add(compControl);
+                }
+            }
+        }
+
+        private IAppModel NodeModel;
+        public ObservableCollection<IComponentControl> SubComponents { get; set; }
+
+        /// <summary>
+        /// Фильтр загрузки компонентов
+        /// </summary>
+        public Func<IComponentControl, bool> SubComponentFilter;
+
+        #region IEnumerator
+        private int _CurrentNum = 0;
+        private bool _IsTopLevelObjReturned = false;
+
+        public IComponentControl Current { get; private set; }
+        object IEnumerator.Current => Current;
+
+        public virtual bool MoveNext()
+        {
+            //if (_CurrentNum < 0)
+            //{
+            //    _CurrentNum++;
+            //    if (NodeModel is IComponentControl nodeComp
+            //        && (SubComponentFilter?.Invoke(nodeComp) ?? true))
+            //    {
+
+            //        Current = nodeComp;
+            //        return true;
+            //    }
+            //}
+            while (_CurrentNum < SubComponents.Count)
+            {
+                if(!_IsTopLevelObjReturned)
+                {
+                    _IsTopLevelObjReturned = true;
+                    Current = SubComponents[_CurrentNum];
+                    return true;
+                }
+                if (SubComponents[_CurrentNum].MoveNext())
+                {
+                    Current = SubComponents[_CurrentNum].Current;
+
+                    if (SubComponentFilter?.Invoke(Current) ?? true)
+                        return true;
+                    else
+                        continue;
+                }
+                else
+                {
+                    _IsTopLevelObjReturned = false;
+                    _CurrentNum++;
+                }
+            }
+            return false;
+        }
+
+        public void Reset() { _CurrentNum = 0; Current = null; }
+        public void Dispose() => Reset();
+
+        public IEnumerator<IComponentControl> GetEnumerator() => this;
+        IEnumerator IEnumerable.GetEnumerator() => this;
+        #endregion
+
+        /// <summary>
+        /// Компонент под номером
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        IComponentControl this[int index] => SubComponents[index];
+
+    }
 
     /// <summary>
     /// Костыль для правильной последовательности внутренних моделей в главной сборке
