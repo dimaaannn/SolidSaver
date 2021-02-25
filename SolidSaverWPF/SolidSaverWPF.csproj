@@ -55,26 +55,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PartList\ComponentRow.xaml.cs">
+    <Compile Include="Views\PartList\ComponentRow.xaml.cs">
       <DependentUpon>ComponentRow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PartList\PartListView.xaml.cs">
+    <Compile Include="Views\PartList\PartListView.xaml.cs">
       <DependentUpon>PartListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertyRename\ChangePropertyField.xaml.cs">
+    <Compile Include="Views\PropertyRename\ChangePropertyField.xaml.cs">
       <DependentUpon>ChangePropertyField.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertyRename\ChangePropertyPart.xaml.cs">
+    <Compile Include="Views\PropertyRename\ChangePropertyPart.xaml.cs">
       <DependentUpon>ChangePropertyPart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertyRename\PropertyChangerTab.xaml.cs">
+    <Compile Include="Views\PropertyRename\PropertyChangerTab.xaml.cs">
       <DependentUpon>PropertyChangerTab.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropertyView\PropertyConfigurator.cs" />
-    <Compile Include="PropListPart.xaml.cs">
+    <Compile Include="ViewControls\PropertyConfigurator.cs" />
+    <Compile Include="Views\Property\PropListPart.xaml.cs">
       <DependentUpon>PropListPart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PropTabControl.xaml.cs">
+    <Compile Include="Views\PropTabControl.xaml.cs">
       <DependentUpon>PropTabControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ResDictionary\DataConverters.cs" />
@@ -94,31 +94,31 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PartList\ComponentRow.xaml">
+    <Page Include="Views\PartList\ComponentRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PartList\PartListView.xaml">
+    <Page Include="Views\PartList\PartListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertyRename\ChangePropertyField.xaml">
+    <Page Include="Views\PropertyRename\ChangePropertyField.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertyRename\ChangePropertyPart.xaml">
+    <Page Include="Views\PropertyRename\ChangePropertyPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropertyRename\PropertyChangerTab.xaml">
+    <Page Include="Views\PropertyRename\PropertyChangerTab.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PropListPart.xaml">
+    <Page Include="Views\Property\PropListPart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="PropTabControl.xaml">
+    <Page Include="Views\PropTabControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
