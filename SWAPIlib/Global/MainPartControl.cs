@@ -17,7 +17,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Загруженная модель
         /// </summary>
-        IRootModel Rootmodel { get; }
+        ILinkedModel Rootmodel { get; }
         /// <summary>
         /// Выбранный компонент
         /// </summary>
@@ -41,7 +41,7 @@ namespace SWAPIlib.Global
         /// Конструктор
         /// </summary>
         /// <param name="rootModel"></param>
-        public MainPartControl(IRootModel rootModel)
+        public MainPartControl(ILinkedModel rootModel)
         {
             Rootmodel = rootModel;
             //RootComponents = new ObservableCollection<IComponentControl>();
@@ -52,7 +52,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Ссылка на коренную модель
         /// </summary>
-        public IRootModel Rootmodel { get; private set; }
+        public ILinkedModel Rootmodel { get; private set; }
         /// <summary>
         /// Выделенный компонент
         /// </summary>

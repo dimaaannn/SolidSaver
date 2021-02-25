@@ -49,7 +49,7 @@ namespace SolidApp
             var swApp = SwAppControl.swApp;
 
 
-            var rootModelClass = new SWAPIlib.Global.RootModel();
+            var rootModelClass = new SWAPIlib.Global.LinkedModel();
             rootModelClass.GetMainModel();
             rootModelClass.TopLevelOnly = true;
             rootModelClass.GetSubComponents();

@@ -31,7 +31,7 @@ namespace SolidSaverWPF
         /// <summary>
         /// Управление коренной моделью сборки
         /// </summary>
-        public IRootModel MainModel { get; set; }
+        public ILinkedModel MainModel { get; set; }
         /// <summary>
         /// Список деталей основной модели
         /// </summary>
@@ -67,7 +67,7 @@ namespace SolidSaverWPF
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MainModel = new RootModel();
+            MainModel = new LinkedModel();
             this.DataContext = this;
 
             SwAppControl.Connect();
@@ -157,7 +157,7 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void Load_Click(object sender, RoutedEventArgs e)
         {
-            MainModel.LoadActiveModel();
+            MainModel.LoadModel();
             MainModel.GetSubComponents();
         }
 

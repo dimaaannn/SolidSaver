@@ -8,11 +8,12 @@ using SWAPIlib.MProperty;
 using SWAPIlib.Controller;
 using System.Collections;
 using System.Collections.ObjectModel;
+using SolidWorks.Interop.sldworks;
 
 namespace SWAPIlib.Global
 {
 
-    public interface IRootModel : System.ComponentModel.INotifyPropertyChanged
+    public interface ILinkedModel : System.ComponentModel.INotifyPropertyChanged
     {
         /// <summary>
         /// Коренная модель
@@ -63,7 +64,27 @@ namespace SWAPIlib.Global
         /// </summary>
         /// <returns></returns>
         bool GetSubComponents();
-        bool LoadActiveModel();
+        /// <summary>
+        /// Загрузить активную модель
+        /// </summary>
+        /// <returns></returns>
+        bool LoadModel();
+        /// <summary>
+        /// Загрузить модель COM
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        bool LoadModel(ModelDoc2 model);
+        /// <summary>
+        /// Загрузить модель по ссылке
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        bool LoadModel(string path);
+        /// <summary>
+        /// Установить текущую модель в качестве главной
+        /// </summary>
+        /// <returns></returns>
         bool SetCurrentModelAsMain();
 
         event EventHandler<SwEventArgs> CloseRootModel;
@@ -73,7 +94,7 @@ namespace SWAPIlib.Global
 
 
 
-    public class RootModel : IRootModel
+    public class LinkedModel : ILinkedModel
     {
         public AppModel appModel
         {
@@ -138,12 +159,36 @@ namespace SWAPIlib.Global
             return ret;
         }
 
-        public bool LoadActiveModel()
+        /// <summary>
+        /// Загрузить активную модель
+        /// </summary>
+        /// <returns></returns>
+        public bool LoadModel()
         {
             bool ret = false;
             appModel = ModelClassFactory.ActiveDoc;
             if (appModel != null) ret = true;
             return ret;
+        }
+
+        /// <summary>
+        /// Загрузить неуправляемую модель
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public bool LoadModel(ModelDoc2 model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Открыть модель по ссылке
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool LoadModel(string path)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -178,6 +223,7 @@ namespace SWAPIlib.Global
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
         }
+
 
         public event EventHandler<SwEventArgs> CloseRootModel;
         public event PropertyChangedEventHandler PropertyChanged;
