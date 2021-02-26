@@ -62,6 +62,7 @@ namespace SolidSaverWPF.ViewModel
         public void UpdateList()
         {
             OpenedModels = OpenedDocs.GetVisibleDocs();
+            SelectedIndex = 0;
         }
 
         /// <summary>
