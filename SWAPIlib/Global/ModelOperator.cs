@@ -18,26 +18,26 @@ namespace SWAPIlib.Global
         }
         static OpenedDocsEnumerator DocEnumerator;
 
-        public static List<IAppModel> GetAllDocs()
+        public static List<ISwModelWrapper> GetAllDocs()
         {
-            var ret = new List<IAppModel>();
+            var ret = new List<ISwModelWrapper>();
             foreach (var model in DocEnumerator)
             {
-                var appModel = ModelClassFactory.GetModel(model);
-                ret.Add(appModel);
+                var wrapModel = new SwModelWrapper(model);
+                ret.Add(wrapModel);
             }
             return ret;
         }
 
-        public static List<IAppModel> GetVisibleDocs()
+        public static List<ISwModelWrapper> GetVisibleDocs()
         {
-            var ret = new List<IAppModel>();
+            var ret = new List<ISwModelWrapper>();
             foreach (var model in DocEnumerator)
             {
                 if(model?.Visible == true)
                 {
-                    var appModel = ModelClassFactory.GetModel(model);
-                    ret.Add(appModel);
+                    var wrapModel = new SwModelWrapper(model);
+                    ret.Add(wrapModel);
                 }
             }
             return ret;
