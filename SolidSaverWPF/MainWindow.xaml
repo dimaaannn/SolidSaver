@@ -101,7 +101,7 @@
                   HorizontalAlignment="Stretch">
                 <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="39"/>
+                    <RowDefinition Height="50"/>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
@@ -122,6 +122,7 @@
                     />
                 <!--#endregion-->
 
+                <view:MainDocOptionsView Grid.Row="0"/>
                 <partlist:PartListView x:Name="PartViewList"
                     Grid.Row="1" Margin="5"/>
 

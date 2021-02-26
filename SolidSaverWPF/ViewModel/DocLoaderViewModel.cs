@@ -48,7 +48,7 @@ namespace SolidSaverWPF.ViewModel
         /// <summary>
         /// Загрузить выбранный документ
         /// </summary>
-        public ICommand LoadDocumentCommand => _LoadDocumentCommand ?? (_LoadDocumentCommand = new RelayCommand(UpdateList, LoadDocumentCommandCanExecute));
+        public ICommand LoadDocumentCommand => _LoadDocumentCommand ?? (_LoadDocumentCommand = new RelayCommand(LoadSelected, LoadDocumentCommandCanExecute));
         private ICommand _LoadDocumentCommand;
         private bool LoadDocumentCommandCanExecute()
         {
