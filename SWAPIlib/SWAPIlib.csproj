@@ -57,6 +57,7 @@
     <Compile Include="Controller\Part\ModelControl.cs" />
     <Compile Include="Controller\Part\ModelSelector.cs" />
     <Compile Include="BaseTypes\ComponentCl.cs" />
+    <Compile Include="BaseTypes\ISwModelWrapper.cs" />
     <Compile Include="Global\MainPartControl.cs" />
     <Compile Include="Global\LinkedModel.cs" />
     <Compile Include="BaseTypes\DataEntity.cs" />
