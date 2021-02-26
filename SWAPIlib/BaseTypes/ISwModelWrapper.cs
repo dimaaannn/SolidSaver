@@ -53,5 +53,10 @@ namespace SWAPIlib.BaseTypes
         public string Title => ModelProxy.GetName(SwModel);
         public AppDocType DocType => PartTypeChecker.GetSWType(SwModel);
         public IAppModel GetAppModel() => ModelClassFactory.GetModel(SwModel);
+
+        public override string ToString()
+        {
+            return this.FileName;
+        }
     }
 }
