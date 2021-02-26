@@ -8,6 +8,11 @@ namespace SWAPIlib.ComConn
 {
     public static class SwAppControl
     {
+        static SwAppControl()
+        {
+            SwAPI.ComConnected += SwAPI_ComConnected;
+            SwAPI.SwIsDisposed += SwAPI_SwIsDisposed;
+        }
         public static bool Interface; //TODO создать интерфейс для подключения
 
         private static bool _comStatus = false;
@@ -90,8 +95,7 @@ namespace SWAPIlib.ComConn
         /// <returns></returns>
         public static void Connect()
         {
-            SwAPI.ComConnected += SwAPI_ComConnected;
-            SwAPI.SwIsDisposed += SwAPI_SwIsDisposed;
+            
 
             var swApp = SwAPI.swApp;
             while (swApp == null)
