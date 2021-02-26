@@ -13,6 +13,9 @@ using SolidWorks.Interop.sldworks;
 namespace SWAPIlib.Global
 {
 
+    /// <summary>
+    /// Обёртка для управления моделями и их загрузки
+    /// </summary>
     public interface ILinkedModel : System.ComponentModel.INotifyPropertyChanged
     {
         /// <summary>

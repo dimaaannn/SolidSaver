@@ -60,6 +60,7 @@
     <Compile Include="Global\MainPartControl.cs" />
     <Compile Include="Global\LinkedModel.cs" />
     <Compile Include="BaseTypes\DataEntity.cs" />
+    <Compile Include="Global\ModelOperator.cs" />
     <Compile Include="MProperty\BaseProp\PropertyInterface.cs" />
     <Compile Include="MProperty\Binders\BinderInterface.cs" />
     <Compile Include="MProperty\Manager\PropManager.cs" />

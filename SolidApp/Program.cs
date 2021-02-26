@@ -19,6 +19,7 @@ using SWAPIlib.Controller;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
 using SWAPIlib.MProperty.Getters;
+using SWAPIlib.Global;
 
 namespace SolidApp
 {
@@ -66,48 +67,24 @@ namespace SolidApp
             Console.WriteLine($"testedCompName={testcomp.Title}");
             //compAppModel.GlobalModelProp;
 
+            //var test =  swApp.EnumDocuments2();
+            //var modelList = new List<IAppModel>();
+            //ModelDoc2 tempDoc;
+            //int wtf = 0;
+            //for(int i = 0; i < 15; i++)
+            //{
+            //    test.Next(1, out tempDoc, ref wtf);
+            //    var model = ModelClassFactory.GetModel(tempDoc);
+            //    if(tempDoc?.Visible == true)
+            //    {
+            //        var visibility = tempDoc.Visible;
+            //        modelList.Add(model);
+            //    }
+            //}
 
-            #region Тестирование свойств
-            //Основные свойства для тестов
-            string confname = testcomp.ActiveConfigName;
-            string propName = "Наименование";
-            string confName1 = "По умолчанию";
-            string confName2 = "С дыркой";
-
-            string baseParam = ModelConfigProxy.GetConfParam(rawmodel, confname, propName);
-            Console.WriteLine($"Model config={confname}, prop{propName}, param={baseParam}");
-
-            var propGetter = new PropModelNamedParamGetter() { PropertyName = propName};
-
-            //var modelProperty = new PropertyModel(testcomp.ModelEntity);
-            //modelProperty.PropGetter = propGetter;
-
-            var modelProperty = SWAPIlib.MProperty.PropFactory.CreatePrototype<PropertyModel>(
-                propGetter, testcomp.ModelEntity);
-
-            var propGetter2 = new PropModelNamedParamGetter() { PropertyName = "Обозначение" };
-
-            var getterList = new List<IModelGetter>() { propGetter, propGetter2 };
-
-            var entities = rootModelClass.SubComponents.Select(comp => comp.ModelEntity);
-
-            //Все конфигурации привязать к геттеру - ОК
-            //var allConfigProps = PropModelFactory.CreatePrototypeSet(entities, true, null);
-            //PropFactory.AttachToTemplate(allConfigProps, getterList.First());
-
-            var allConfProps = PropModelFactory.GeneratePropertySet(entities, getterList, true);
-
-
-
-
-
-
-            Console.WriteLine($"\ntarget prop = {modelProperty.Value}, IsModifyed={modelProperty.IsModifyed}");
-
-
-
-
-            #endregion
+            var openedDocs = OpenedDocs.GetVisibleDocs();
+            Console.WriteLine(string.Join(",", openedDocs.Select(doc => doc.FileName)));
+            
 
 
 
