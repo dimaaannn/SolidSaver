@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="SolidSaverWPF.Views.MainDocOptionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF.Views"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:vm="clr-namespace:SolidSaverWPF.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="60" d:DesignWidth="300">
+    <UserControl.Resources>
+        <!--<ResourceDictionary>
+            <fa:FontAwesomeIcon x:Key="fai"/>
+        </ResourceDictionary>-->
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <vm:MainDocOptionsViewModel/>
+    </UserControl.DataContext>
+    <Border Margin="2" BorderThickness="1.5" BorderBrush="DarkRed" CornerRadius="3">
+        
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="MainDocName" Grid.Row="0" 
+                       Grid.ColumnSpan="2"
+                       VerticalAlignment="Center"
+                       Text="{Binding DocName, Mode=OneWay, FallbackValue='test'}"/>
+            <TextBlock x:Name="WorkFolder" Grid.Row="1" 
+                       VerticalAlignment="Center"
+                       Text="Text for long string value work f"/>
+            <Button Grid.Column="1" Grid.Row="1"
+                    Margin="2">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="Folder" Margin="1"/>
+                </Button.Content>
+            </Button>
+            <Line 
+                Grid.Row="0" Stretch="Fill" X1="0" X2="1" 
+                  VerticalAlignment="Bottom"
+                  Stroke="Gray" Margin="-1, 0, -1, -1"
+                  StrokeThickness="2" Grid.ColumnSpan="2" />
+        </Grid>
+    </Border>
+</UserControl>

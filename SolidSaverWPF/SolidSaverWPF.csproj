@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -73,12 +76,15 @@
     <Compile Include="Data\ClassRegistry.cs" />
     <Compile Include="MessagesType\MessagesType.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
+    <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />
     <Compile Include="Views\DocLoaderView.xaml.cs">
       <DependentUpon>DocLoaderView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\MainDocOptionsView.xaml.cs">
+      <DependentUpon>MainDocOptionsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PartList\ComponentRow.xaml.cs">
       <DependentUpon>ComponentRow.xaml</DependentUpon>
     </Compile>
@@ -119,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\DocLoaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainDocOptionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,6 +198,5 @@
       <Name>SWAPIlib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
