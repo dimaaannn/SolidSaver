@@ -10,6 +10,7 @@
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.PartList"
+        xmlns:view="clr-namespace:SolidSaverWPF.Views"
 
         xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
         Title="MainWindow" Height="500" Width="674" MinWidth="350">
@@ -71,7 +72,9 @@
                     <CheckBox Grid.Column="1" Content="Верх.уровня" IsChecked="{Binding TopLevelOnly}"/>
                     <CheckBox Grid.Column="1" Content="Из файла"/>
                 </StackPanel>
+
             </Grid>
+                <view:DocLoaderView Grid.Column="1"/>
             <!--#endregion-->
             <StackPanel Grid.Column="3" Orientation="Horizontal">
                 <Button  Content="Выделить все" Click="SelectAll_click"/>

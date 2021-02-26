@@ -71,6 +71,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\ClassRegistry.cs" />
+    <Compile Include="MessagesType\MessagesType.cs" />
+    <Compile Include="ViewModel\DocLoaderViewModel.cs" />
+    <Compile Include="Views\DocLoaderView.xaml.cs">
+      <DependentUpon>DocLoaderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -113,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\DocLoaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PartList\ComponentRow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
