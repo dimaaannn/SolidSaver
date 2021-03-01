@@ -61,7 +61,7 @@ namespace SWAPIlib.Global
             if(enumDocuments is null)
                 enumDocuments = SwAppControl.swApp.EnumDocuments2();
 
-            enumDocuments.Next(1, out _Current, ref fetched);
+            enumDocuments?.Next(1, out _Current, ref fetched);
             return Current is null ? false : true;
         }
 
