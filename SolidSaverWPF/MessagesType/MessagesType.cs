@@ -35,10 +35,48 @@ namespace SolidSaverWPF.MessagesType
         }
 
     }
-
+    [Flags]
     public enum ModelMessageAction
     {
-        None,
-        SetAsMainModel
+        None = 0,
+        SetAsMainModel = 1 << 0
+    }
+
+    /// <summary>
+    /// Передача URI в сообщении
+    /// </summary>
+    public class PathMessage
+    {
+        public PathMessage(string path, FolderMessageAction action = FolderMessageAction.None)
+        {
+            Path = path;
+            FolderAction = action;
+        }
+
+        private string _Path;
+        /// <summary>
+        /// Ссылка на папку или файл
+        /// </summary>
+        public string Path
+        {
+            get { return _Path; }
+            set { _Path = value; }
+        }
+
+        /// <summary>
+        /// Тип события
+        /// </summary>
+        public FolderMessageAction FolderAction { get; set; }
+
+    }
+
+    /// <summary>
+    /// События для пути
+    /// </summary>
+    [Flags]
+    public enum FolderMessageAction
+    {
+        None = 0,
+        SetAsWorkFolder = 1 << 0
     }
 }
