@@ -7,7 +7,7 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:vm="clr-namespace:SolidSaverWPF.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="60" d:DesignWidth="300">
+             d:DesignHeight="50" d:DesignWidth="300">
     <UserControl.Resources>
         <!--<ResourceDictionary>
             <fa:FontAwesomeIcon x:Key="fai"/>
@@ -34,11 +34,12 @@
             <TextBlock x:Name="WorkFolder" Grid.Row="1" Margin="2, 0, 0,0"
                        VerticalAlignment="Center"
                        Text="{Binding FolderName, Mode=OneWay, TargetNullValue='Нет данных'}"/>
-            <Button Grid.Column="1" Grid.Row="1"
+            
+            <Button x:Name="SelectFolderButton" Grid.Column="1" Grid.Row="1" Height="16" VerticalAlignment="Center"
                     Command="{Binding SelectFolderCommand}"
                     Margin="2">
                 <Button.Content>
-                    <fa:ImageAwesome Icon="Folder" Margin="1"/>
+                    <fa:ImageAwesome Icon="Folder"  />
                 </Button.Content>
             </Button>
             <Line 
