@@ -58,7 +58,7 @@ namespace SWAPIlib.Global
             get => _workFolder ?? RootFolder;
             set
             {
-                WorkFolderChanged.Invoke(value, new EventArgs());
+                WorkFolderChanged?.Invoke(value, new EventArgs());
                 _workFolder = value;
             } 
         } 
