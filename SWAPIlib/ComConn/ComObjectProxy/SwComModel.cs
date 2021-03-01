@@ -20,7 +20,7 @@ namespace SWAPIlib.ComConn.Proxy
 
         public static string GetPathName(ModelDoc2 swModel)
         {
-            return swModel.GetPathName();
+            return swModel?.GetPathName();
         }
 
         /// <summary>
