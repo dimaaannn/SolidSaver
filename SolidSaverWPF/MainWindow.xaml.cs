@@ -31,7 +31,7 @@ namespace SolidSaverWPF
         /// <summary>
         /// Управление коренной моделью сборки
         /// </summary>
-        public ILinkedModel MainModel { get; set; }
+        public ILinkedModel MainLinkedModelTemp { get; set; }
         /// <summary>
         /// Список деталей основной модели
         /// </summary>
@@ -42,7 +42,7 @@ namespace SolidSaverWPF
         public IPropertyUI PropUI { get; set; }
 
         ///В доработку
-        public List<IAppComponent> SubComponents { get => MainModel.SubComponents; }
+        public List<IAppComponent> SubComponents { get => MainLinkedModelTemp.SubComponents; }
         public AppComponent SelectedModel { get; set; }
         public List<IPropertyModel> PropList { get; set; }
 
@@ -67,32 +67,36 @@ namespace SolidSaverWPF
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            MainModel = new LinkedModel();
-            this.DataContext = this;
+            #region Old loading options
+            //MainLinkedModelTemp = MainModel.GetMainModel();
+            //this.DataContext = this;
 
             SwAppControl.Connect();
-            MainModel.GetMainModel();
-            MainModel.TopLevelOnly = true;
-            MainModel.GetSubComponents();
+            //MainLinkedModelTemp.GetMainModel();
+            //MainLinkedModelTemp.TopLevelOnly = true;
+            //MainLinkedModelTemp.GetSubComponents();
 
-            //Основной список деталей
-            //Создать класс
-            MainPartview = new SWAPIlib.Global.MainPartControl(MainModel);
-            ///Подключить к списку деталей WPF - Заменить на binding
-            //PartViewList.MainPartView = MainPartview;
-            //Fix binding bug
-            //Bind Main Part list to interface
-            PartViewList.DataContext = MainPartview;
-            PropertyBox.DataContext = MainPartview;
-            //MainPartview.RootComponents
-            //PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
+            ////Основной список деталей
+            ////Создать класс
+            //MainPartview = new SWAPIlib.Global.MainPartControl(MainLinkedModelTemp);
+            /////Подключить к списку деталей WPF - Заменить на binding
+            ////PartViewList.MainPartView = MainPartview;
+            ////Fix binding bug
+            ////Bind Main Part list to interface
+            //PartViewList.DataContext = MainPartview;
+            //PropertyBox.DataContext = MainPartview;
+            ////MainPartview.RootComponents
+            ////PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
 
-            var configurator = PropertyView.PropConfigurator.GetConfigurator();
+            //var configurator = PropertyView.PropConfigurator.GetConfigurator();
 
-            var TestCompList = MainPartview.RootComponents.SelectMany(x => x);
-            configurator.SetSource(MainPartview.RootComponents.SelectMany(x => x));
+            //var TestCompList = MainPartview.RootComponents.SelectMany(x => x);
+            //configurator.SetSource(MainPartview.RootComponents.SelectMany(x => x));
 
-            var a = 4;
+            //var a = 4; 
+            #endregion
+
+
             #region Свойства поиска
 
             ////Создать класс поиска свойств
@@ -157,8 +161,8 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void Load_Click(object sender, RoutedEventArgs e)
         {
-            MainModel.LoadModel();
-            MainModel.GetSubComponents();
+            MainLinkedModelTemp.LoadModel();
+            MainLinkedModelTemp.GetSubComponents();
         }
 
         /// <summary>

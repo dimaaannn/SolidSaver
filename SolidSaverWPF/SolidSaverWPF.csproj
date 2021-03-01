@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\ClassRegistry.cs" />
+    <Compile Include="Data\Handlers.cs" />
     <Compile Include="MessagesType\MessagesType.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
     <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />

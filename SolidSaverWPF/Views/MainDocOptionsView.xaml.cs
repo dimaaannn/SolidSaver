@@ -24,5 +24,14 @@ namespace SolidSaverWPF.Views
         {
             InitializeComponent();
         }
+
+        private void WorkFolder_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //WorkFolderField.CaretIndex = WorkFolderField.Text.Length;
+            //WorkFolderField.ScrollToEnd();
+            WorkFolderField.ScrollToHorizontalOffset(1000);
+            
+        }
+
     }
 }

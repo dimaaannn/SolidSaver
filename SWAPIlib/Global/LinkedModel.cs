@@ -22,7 +22,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Коренная модель
         /// </summary>
-        AppModel appModel { get; set; }
+        IAppModel appModel { get; set; }
         /// <summary>
         /// Тип документа модели
         /// </summary>
@@ -94,16 +94,21 @@ namespace SWAPIlib.Global
 
     public class LinkedModel : ILinkedModel
     {
-        public AppModel appModel
+        public LinkedModel(IAppModel model)
         {
-            get => _RootModel;
+            _AppModel = model;
+        }
+
+        public IAppModel appModel
+        {
+            get => _AppModel;
             set
             {
                 SubComponents?.Clear();
-                _RootModel = value;
+                _AppModel = value;
             }
         }
-        private AppModel _RootModel;
+        private IAppModel _AppModel;
         public AppDocType DocType
         {
             get
@@ -146,6 +151,22 @@ namespace SWAPIlib.Global
 
         public IFileModelProp ProjectNameProp { get; set; }
 
+
+
+        /// <summary>
+        /// Изменение свойства
+        /// </summary>
+        /// <param name="s"></param>
+        protected void RaisePropertyChanged(string s)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
+        }
+
+        public event EventHandler<SwEventArgs> CloseRootModel;
+        public event PropertyChangedEventHandler PropertyChanged;
+        #region Рефакторить
+
         public bool GetMainModel(string pathToModel = null)
         {
             bool ret = false;
@@ -156,7 +177,19 @@ namespace SWAPIlib.Global
             //TODO add open doc by uri
             return ret;
         }
-
+        
+        /// <summary>
+        /// Открыть модель по ссылке
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public bool LoadModel(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return LoadModel();
+            else
+                throw new NotImplementedException();
+        }
         /// <summary>
         /// Загрузить активную модель
         /// </summary>
@@ -179,18 +212,6 @@ namespace SWAPIlib.Global
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Открыть модель по ссылке
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool LoadModel(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return LoadModel();
-            else
-                throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Задать текущую модель как основную
@@ -215,19 +236,8 @@ namespace SWAPIlib.Global
             return ret;
         }
 
-        /// <summary>
-        /// Изменение свойства
-        /// </summary>
-        /// <param name="s"></param>
-        protected void RaisePropertyChanged(string s)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
-        }
+        #endregion
 
-
-        public event EventHandler<SwEventArgs> CloseRootModel;
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 
 }

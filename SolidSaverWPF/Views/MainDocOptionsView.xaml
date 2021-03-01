@@ -31,8 +31,11 @@
                        Grid.ColumnSpan="2"
                        VerticalAlignment="Center"
                        Text="{Binding DocName, Mode=OneWay, TargetNullValue='Нет данных'}"/>
-            <TextBlock x:Name="WorkFolder" Grid.Row="1" Margin="2, 0, 0,0"
+            <TextBox x:Name="WorkFolderField" Grid.Row="1" Margin="2, 0, 0,0"
                        VerticalAlignment="Center"
+                       TextAlignment="Left"
+                       IsReadOnly="True"
+                       TextChanged="WorkFolder_TextChanged"
                        Text="{Binding FolderName, Mode=OneWay, TargetNullValue='Нет данных'}"/>
             
             <Button x:Name="SelectFolderButton" Grid.Column="1" Grid.Row="1" Height="16" VerticalAlignment="Center"

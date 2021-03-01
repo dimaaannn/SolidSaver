@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using SolidSaverWPF.Data;
 using SolidSaverWPF.MessagesType;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn;
@@ -69,11 +70,12 @@ namespace SolidSaverWPF.ViewModel
         }
 
         /// <summary>
-        /// Сообщение об установке в качестве главной модели
+        /// Задать главную модель
         /// </summary>
         public void LoadSelected()
         {
-            MessengerInstance.Send(new ModelMessage(OpenedModels[SelectedIndex], ModelMessageAction.SetAsMainModel));
+            Variables.SetMainModel(OpenedModels[SelectedIndex]);
+            //MessengerInstance.Send(new ModelMessage(OpenedModels[SelectedIndex], ModelMessageAction.SetAsMainModel));
         }
     }
 }
