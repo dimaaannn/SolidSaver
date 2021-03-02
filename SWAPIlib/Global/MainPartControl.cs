@@ -17,7 +17,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Загруженная модель
         /// </summary>
-        ILinkedModel Rootmodel { get; }
+        ILinkedModel Rootmodel { get; set; }
         /// <summary>
         /// Выбранный компонент
         /// </summary>
@@ -52,7 +52,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Ссылка на коренную модель
         /// </summary>
-        public ILinkedModel Rootmodel { get; private set; }
+        public ILinkedModel Rootmodel { get;  set; }
         /// <summary>
         /// Выделенный компонент
         /// </summary>
