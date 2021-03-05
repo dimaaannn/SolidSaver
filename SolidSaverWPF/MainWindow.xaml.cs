@@ -28,26 +28,12 @@ namespace SolidSaverWPF
     public partial class MainWindow : Window
     {
         //Законченные классы
-        /// <summary>
-        /// Управление коренной моделью сборки
-        /// </summary>
-        public ILinkedModel MainLinkedModelTemp { get; set; }
-        /// <summary>
-        /// Список деталей основной модели
-        /// </summary>
-        public SWAPIlib.Global.IMainPartControl MainPartview { get; set; }
+
         /// <summary>
         /// Поиск и замена свойств
         /// </summary>
         public IPropertyUI PropUI { get; set; }
 
-        ///В доработку
-        public List<IAppComponent> SubComponents { get => MainLinkedModelTemp.SubComponents; }
-        public AppComponent SelectedModel { get; set; }
-        public List<IPropertyModel> PropList { get; set; }
-
-        //Tests
-        public KeyValuePair<string, ISwProperty> TestPropPair { get; set; }
 
 
         public MainWindow()
@@ -115,55 +101,10 @@ namespace SolidSaverWPF
 
 
 
-        /// <summary>
-        /// Обновить свойства активной детали
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
-            //foreach(var prop in PropList)
-            //{
-            //    prop.Update();
-            //}
-        }
 
-        /// <summary>
-        /// Записать значения свойств активной детали
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonWrite_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var prop in PropList)
-                prop.WriteValue();
-        }
 
-        /// <summary>
-        /// Записать значения свойств всех деталей
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonWriteAll_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var comp in SubComponents)
-            {
-                foreach (var prop in comp.PropList)
-                    prop.WriteValue();
-            }
-        }
 
-        /// <summary>
-        /// Кнопка "Загрузить модель"
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Load_Click(object sender, RoutedEventArgs e)
-        {
-            MainLinkedModelTemp.LoadModel();
-            MainLinkedModelTemp.GetSubComponents();
-        }
+
 
         /// <summary>
         /// Выделить все компоненты в списке деталей
@@ -172,47 +113,10 @@ namespace SolidSaverWPF
         /// <param name="e"></param>
         private void SelectAll_click(object sender, RoutedEventArgs e)
         {
-            foreach (var comp in MainPartview)
-            {
-                comp.IsSelected = !comp.IsSelected;
-            }
+            MainModel.MainModelControl.CheckAllComponents();
 
         }
 
-        /// <summary>
-        /// Очистить список деталей
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            foreach(var comp in MainPartview.RootComponents)
-            {
-                comp.SubComponents.Clear();
-            }
-        }
-
-        /// <summary>
-        /// Перезагрузить список деталей
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            MainPartview.ReloadCompList();
-        }
-
-
-
-        //private void PartsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        //{
-        //    var index = PartsList.SelectedIndex;
-        //    if (index >= 0)
-        //    {
-        //        var currentComp = SubComponents[index];
-        //        SelectedComp.Add(currentComp);
-        //    }
-        //}
     }
 
     

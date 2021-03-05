@@ -13,8 +13,11 @@ namespace SWAPIlib.Global
         static MainModel()
         {
             _MainModelsArchive = new List<ILinkedModel>();
+            _MainModelControl = new MainPartControl();
         }
         private static ILinkedModel _CurrentMainmodel;
+        private static IMainPartControl _MainModelControl;
+        public static IMainPartControl MainModelControl => _MainModelControl;
 
         /// <summary>
         /// Текущая базовая модель
@@ -38,6 +41,7 @@ namespace SWAPIlib.Global
                     MainModelsArchive.Add(_CurrentMainmodel);
                 _CurrentMainmodel = linkedModel;
                 SwAppControl.MainModel = swmodel;
+                _MainModelControl.LinkedRootModel = _CurrentMainmodel;
                 MainModelChanged?.Invoke(linkedModel, EventArgs.Empty);
                 ret = true;
             }

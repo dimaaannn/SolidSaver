@@ -14,29 +14,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SWAPIlib.Global;
 
-namespace SolidSaverWPF.PartList
+namespace SolidSaverWPF.Views
 {
     /// <summary>
     /// Interaction logic for PartListView.xaml
     /// </summary>
     public partial class PartListView : UserControl
     {
-        SWAPIlib.Global.IMainPartControl _mainPartView;
-        public SWAPIlib.Global.IMainPartControl MainPartView
-        {
-            get => _mainPartView ??
-                (_mainPartView = (IMainPartControl)this.DataContext);
-            //set => _mainPartView = value;
-        }
+
         public PartListView()
         {
             InitializeComponent();
-            //MainPartView.Rootmodel.Title
         }
 
-        private void TreePartView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            MainPartView.SelectedComp = ((SWAPIlib.Controller.IComponentControl)e.NewValue);
-        }
     }
 }

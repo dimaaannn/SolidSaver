@@ -49,41 +49,6 @@ namespace SolidApp
 
             var swApp = SwAppControl.swApp;
 
-
-            var rootModelClass = new SWAPIlib.Global.LinkedModel();
-            rootModelClass.GetMainModel();
-            rootModelClass.TopLevelOnly = true;
-            rootModelClass.GetSubComponents();
-
-            //Test component in assembly
-            IAppComponent testcomp = rootModelClass.SubComponents.Skip(0).First();
-            IAppComponent testcomp2 = rootModelClass.SubComponents.Skip(1).First();
-            IComponentControl testcompcontrol = new SWAPIlib.Controller.ComponentControl(testcomp);
-
-            AppModel compAppModel = testcomp.PartModel;
-            ModelDoc2 rawmodel = testcomp.SwModel;
-            Component2 rawcomp = testcomp.SwCompModel;
-
-            Console.WriteLine($"testedCompName={testcomp.Title}");
-            //compAppModel.GlobalModelProp;
-
-            //var test =  swApp.EnumDocuments2();
-            //var modelList = new List<IAppModel>();
-            //ModelDoc2 tempDoc;
-            //int wtf = 0;
-            //for(int i = 0; i < 15; i++)
-            //{
-            //    test.Next(1, out tempDoc, ref wtf);
-            //    var model = ModelClassFactory.GetModel(tempDoc);
-            //    if(tempDoc?.Visible == true)
-            //    {
-            //        var visibility = tempDoc.Visible;
-            //        modelList.Add(model);
-            //    }
-            //}
-
-            var openedDocs = OpenedDocs.GetVisibleDocs();
-            Console.WriteLine(string.Join(",", openedDocs.Select(doc => doc.FileName)));
             
 
 

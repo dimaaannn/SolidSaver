@@ -40,9 +40,8 @@ namespace SWAPIlib.Global
         /// Конструктор
         /// </summary>
         /// <param name="linkedModel"></param>
-        public MainPartControl(ILinkedModel linkedModel)
+        public MainPartControl()
         {
-            LinkedRootModel = linkedModel;
 
         }
         /// <summary>

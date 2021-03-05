@@ -9,7 +9,7 @@
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
-        xmlns:partlist="clr-namespace:SolidSaverWPF.PartList"
+        xmlns:partlist="clr-namespace:SolidSaverWPF.Views"
         xmlns:view="clr-namespace:SolidSaverWPF.Views"
 
         xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
@@ -80,8 +80,8 @@
 
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <Button  Content="Выделить все" Click="SelectAll_click"/>
-                <Button  Content="Очистить" Click="Button_Click_1"/>
-                <Button  Content="загрузить" Click="Button_Click_2"/>
+                <Button  Content="Очистить" />
+                <Button  Content="загрузить"/>
 
             </StackPanel>
 
@@ -123,7 +123,7 @@
                 <!--#endregion-->
 
                 <view:MainDocOptionsView Grid.Row="0"/>
-                <partlist:PartListView x:Name="PartViewList"
+                <view:PartListView x:Name="PartViewList"
                     Grid.Row="1" Margin="5"/>
 
                 <!--#region Список деталей устаревший интерфейс ISwPartData-->
@@ -164,9 +164,9 @@
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Grid.Column="1">
-                    <Button Content="Update" Margin="2" Click="ButtonUpdate_Click"/>
-                    <Button Content="Write" Margin="2, 3" Click="ButtonWrite_Click"/>
-                    <Button Content="WriteAll" Margin="2, 3" Click="ButtonWriteAll_Click"/>
+                    <Button Content="Update" Margin="2" />
+                    <Button Content="Write" Margin="2, 3" />
+                    <Button Content="WriteAll" Margin="2, 3"/>
                 </StackPanel>
                 <!--#region Список параметров-->
                 <Grid
