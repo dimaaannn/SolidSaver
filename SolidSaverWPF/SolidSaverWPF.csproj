@@ -77,6 +77,7 @@
     <Compile Include="Data\ClassRegistry.cs" />
     <Compile Include="Data\Handlers.cs" />
     <Compile Include="MessagesType\MessagesType.cs" />
+    <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
     <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />
     <Compile Include="Views\DocLoaderView.xaml.cs">

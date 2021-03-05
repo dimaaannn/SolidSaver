@@ -3,12 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SolidSaverWPF.PartList"
-             
+             xmlns:local="clr-namespace:SolidSaverWPF.Views"
+             xmlns:viewModel ="clr-namespace:SolidSaverWPF.ViewModel"
+             xmlns:partlist ="clr-namespace:SolidSaverWPF.PartList"
              xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
              HorizontalContentAlignment="Stretch"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="250">
+    <UserControl.DataContext>
+        <viewModel:PartListViewModel/>
+    </UserControl.DataContext>
+    
     <Grid x:Name="testgrid" ShowGridLines="False" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -24,8 +29,8 @@
 
         <StackPanel>
             <TextBlock Text="{Binding ElementName=testgrid, Path=ActualWidth}" x:Name="wwwd"/>
-            <TextBlock Text="{Binding MainPartView.SelectedComp.Title}"/>
-            <TextBlock Text="{Binding Rootmodel.Title}"/>
+            <TextBlock Text="{Binding SelectedItemName}"/>
+            <TextBlock Text="test"/>
             
         </StackPanel>
 
@@ -33,15 +38,16 @@
         <TreeView x:Name="TreePartView" 
                     AutomationProperties.IsColumnHeader="True" AllowDrop="True"
                     Grid.Row="1" Grid.ColumnSpan="5"
-                    ItemsSource="{Binding RootComponents}">
+                    ItemsSource="{Binding PartList}"
+                    SelectedItemChanged="SelectedItemChanged"
+                    >
 
             <TreeView.ItemTemplate>
-
 
                 <HierarchicalDataTemplate DataType="{x:Type partcontroller:ComponentControl}"  
                         ItemsSource="{Binding SubComponents}">
 
-                    <local:ComponentRow/>
+                    <partlist:ComponentRow/>
 
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>

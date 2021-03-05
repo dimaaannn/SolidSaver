@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace SolidSaverWPF.MessagesType
 {
+
+
     /// <summary>
     /// Сообщение с моделью
     /// </summary>
@@ -40,6 +42,17 @@ namespace SolidSaverWPF.MessagesType
     {
         None = 0,
         SetAsMainModel = 1 << 0
+    }
+
+    public class SelectionMessage<T>
+    {
+        public SelectionMessage(object sender, T selection)
+        {
+            Sender = sender;
+            Selection = selection;
+        }
+        public object Sender { get; set; }
+        public T Selection { get; set; }
     }
 
     /// <summary>

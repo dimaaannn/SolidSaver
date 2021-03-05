@@ -67,7 +67,14 @@ namespace SWAPIlib.Global
         public void CheckAllComponents()
         {
             if (LinkedRootModel?.IsHaveSubComponents == true)
-                LinkedRootModel.SubComponents.Select(x => x.IsSelected = true);
+            {
+                foreach (var comp in LinkedRootModel.SubComponents)
+                {
+                    comp.IsSelected = true; //TODO replace to linq
+                }
+                //LinkedRootModel.SubComponents.Select(x => x.IsSelected = true); //unknown bug
+            }
+
         }
 
         public void ClearSelection()

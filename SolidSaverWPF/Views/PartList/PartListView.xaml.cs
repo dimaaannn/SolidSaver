@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
+using SolidSaverWPF.MessagesType;
 using SWAPIlib.Global;
 
 namespace SolidSaverWPF.Views
@@ -25,6 +27,17 @@ namespace SolidSaverWPF.Views
         public PartListView()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Компонент выбран в списке
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="e"></param>
+        public void SelectedItemChanged(object o, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Messenger.Default.Send<SelectionMessage<object>>(
+                    new SelectionMessage<object>(this, e.NewValue));
         }
 
     }
