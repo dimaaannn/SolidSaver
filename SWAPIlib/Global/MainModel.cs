@@ -30,7 +30,7 @@ namespace SWAPIlib.Global
         /// <returns></returns>
         public static bool SetMainModel(ILinkedModel linkedModel)
         { 
-            var swmodel = linkedModel?.appModel.SwModel;
+            var swmodel = linkedModel?.AppModel.SwModel;
             bool ret = false;
             if(swmodel != null)
             {

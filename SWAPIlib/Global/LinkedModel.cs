@@ -17,12 +17,12 @@ namespace SWAPIlib.Global
     /// <summary>
     /// Обёртка для управления моделями и их загрузки
     /// </summary>
-    public interface ILinkedModel : System.ComponentModel.INotifyPropertyChanged
+    public interface ILinkedModel 
     {
         /// <summary>
         /// Коренная модель
         /// </summary>
-        IAppModel appModel { get; set; }
+        IAppModel AppModel { get;}
         /// <summary>
         /// Тип документа модели
         /// </summary>
@@ -49,47 +49,23 @@ namespace SWAPIlib.Global
         /// </summary>
         IFileModelProp ProjectNameProp { get; }
         /// <summary>
-        /// Дочерние компоненты сборки
+        /// Дерево компонентов
         /// </summary>
-        List<IAppComponent> SubComponents { get; }
+        AssemblyTree SubComponents { get; }
 
-        /// <summary>
-        /// Загрузить активную модель
-        /// </summary>
-        /// <param name="pathToModel"></param>
-        /// <returns></returns>
-        bool GetMainModel(string pathToModel = null);
-        /// <summary>
-        /// Загружать компоненты только верхнего уровня
-        /// </summary>
-        bool TopLevelOnly { get; set; }
         /// <summary>
         /// Загрузить список дочерних компонентов
         /// </summary>
         /// <returns></returns>
-        bool GetSubComponents();
-        /// <summary>
-        /// Загрузить активную модель
-        /// </summary>
-        /// <returns></returns>
-        bool LoadModel();
-        /// <summary>
-        /// Загрузить модель по ссылке
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        bool LoadModel(string path);
-        /// <summary>
-        /// Установить текущую модель в качестве главной
-        /// </summary>
-        /// <returns></returns>
-        bool SetCurrentModelAsMain();
+        bool GetSubComponents(Func<IComponentControl, bool> compFilter = null);
+        bool? IsHaveSubComponents { get; }
 
-        event EventHandler<SwEventArgs> CloseRootModel;
+        /// <summary>
+        /// Модель была выгружена
+        /// </summary>
+        event EventHandler<SwEventArgs> ModelDisposed;
 
     }
-
-
 
 
     public class LinkedModel : ILinkedModel
@@ -99,144 +75,66 @@ namespace SWAPIlib.Global
             _AppModel = model;
         }
 
-        public IAppModel appModel
-        {
-            get => _AppModel;
-            set
-            {
-                SubComponents?.Clear();
-                _AppModel = value;
-            }
-        }
         private IAppModel _AppModel;
-        public AppDocType DocType
-        {
-            get
-            {
-                if (appModel is null)
-                    return AppDocType.swNONE;
-                else
-                {
-                    return appModel.DocType;
-                }
-            }
-        }
+        private AssemblyTree _subComponents;
+
+        public IAppModel AppModel => _AppModel;
+
+        #region PropProxy
+        public AppDocType DocType => AppModel is null ? AppDocType.swNONE : AppModel.DocType;
         /// <summary>
         /// Является ли модель сборкой
         /// </summary>
         private bool IsAssembly => DocType == AppDocType.swASM;
+        public string Title => AppModel?.Title; //TODO add override for types
+        public string Path => AppModel?.Path;
+        public IList<IPropertyModel> ActivePropList { get => AppModel?.PropList; }
 
-        public string Title => appModel?.Title; //TODO add override for types
-        public string Path => appModel?.Path;
-        public IList<IPropertyModel> ActivePropList { get => appModel?.PropList; }
-
-        public List<IAppComponent> SubComponents { get => _subComponents; }
-        private List<IAppComponent> _subComponents;
-
-        public ISwProperty MainInfoProp { get; set; }
         public string ActiveConfigName //TODO добавить класс детали
         {
             get
             {
-                if (appModel is AppAssembly assembly)
+                if (AppModel is AppAssembly assembly)
                     return assembly.ConfigName;
                 else return "Отсутствует";
             }
             set
             {
-                if (appModel is AppAssembly assembly)
+                if (AppModel is AppAssembly assembly)
                     assembly.ConfigName = value;
             }
         }
 
+        #endregion
+
+        /// <summary>
+        /// Дерево компонентов
+        /// </summary>
+        public AssemblyTree SubComponents 
+        { get => _subComponents; }
+        /// <summary>
+        /// Список прикреплённых свойств
+        /// </summary>
+        public ISwProperty MainInfoProp { get; set; }
         public IFileModelProp ProjectNameProp { get; set; }
 
+        private bool? _IsHaveSubComponents;
+        public bool? IsHaveSubComponents => _IsHaveSubComponents;
 
+        public event EventHandler<SwEventArgs> ModelDisposed;
 
-        /// <summary>
-        /// Изменение свойства
-        /// </summary>
-        /// <param name="s"></param>
-        protected void RaisePropertyChanged(string s)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(s));
-        }
-
-        public event EventHandler<SwEventArgs> CloseRootModel;
-        public event PropertyChangedEventHandler PropertyChanged;
-        #region Рефакторить
-
-        public bool GetMainModel(string pathToModel = null)
+        public bool GetSubComponents(Func<IComponentControl, bool> compFilter = null)
         {
             bool ret = false;
-            if (string.IsNullOrEmpty(pathToModel))
+            if (AppModel is IAppAssembly swAssembly)
             {
-                appModel = ModelClassFactory.GetModel(SwAppControl.MainModel);
-            }
-            //TODO add open doc by uri
-            return ret;
-        }
-        
-        /// <summary>
-        /// Открыть модель по ссылке
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public bool LoadModel(string path)
-        {
-            if (string.IsNullOrEmpty(path))
-                return LoadModel();
-            else
-                throw new NotImplementedException();
-        }
-        /// <summary>
-        /// Загрузить активную модель
-        /// </summary>
-        /// <returns></returns>
-        public bool LoadModel()
-        {
-            bool ret = false;
-            appModel = ModelClassFactory.ActiveDoc;
-            if (appModel != null) ret = true;
-            return ret;
-        }
-
-        /// <summary>
-        /// Загрузить неуправляемую модель
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public bool LoadModel(ModelDoc2 model)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        /// <summary>
-        /// Задать текущую модель как основную
-        /// </summary>
-        /// <returns></returns>
-        public bool SetCurrentModelAsMain()
-        {
-            SwAppControl.MainModel = appModel.SwModel;
-            return appModel != null ? true : false;
-        }
-
-        public bool TopLevelOnly { get; set; }
-        public bool GetSubComponents()
-        {
-            bool ret = false;
-            if (appModel is IAppAssembly swAssembly)
-            {
-                _subComponents = swAssembly.GetComponents(TopLevelOnly);
-                if (_subComponents.Count > 0)
+                _subComponents = new AssemblyTree(swAssembly, compFilter);
+                if (SubComponents.SubComponents.Count > 0)
                     ret = true;
             }
+            _IsHaveSubComponents = ret;
             return ret;
         }
-
-        #endregion
 
     }
 

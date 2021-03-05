@@ -12,26 +12,25 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Global
 {
-    public interface IMainPartControl : INotifyPropertyChanged, IEnumerable<IComponentControl>
+    public interface IMainPartControl 
     {
         /// <summary>
         /// Загруженная модель
         /// </summary>
-        ILinkedModel Rootmodel { get; set; }
-        /// <summary>
-        /// Выбранный компонент
-        /// </summary>
-        SWAPIlib.Controller.IComponentControl SelectedComp { get; set; }
-        /// <summary>
-        /// Свойства выбранного компонента
-        /// </summary>
-        List<IPropertyModel> SelectedCompProp { get; }
+        ILinkedModel LinkedRootModel { get; set; }
         /// <summary>
         /// Список компонентов корневой сборки (тестовый)
         /// </summary>
         ObservableCollection<SWAPIlib.Controller.IComponentControl> RootComponents { get; }
         int ActiveSelectionGroup { get; set; }
-        void ReloadCompList();
+
+        /// <summary>
+        /// Список отмеченных компонентов
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<IComponentControl> GetCheckedComponents();
+        void CheckAllComponents();
+        void ClearSelection();
 
     }
 
@@ -40,66 +39,46 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="rootModel"></param>
-        public MainPartControl(ILinkedModel rootModel)
+        /// <param name="linkedModel"></param>
+        public MainPartControl(ILinkedModel linkedModel)
         {
-            Rootmodel = rootModel;
-            //RootComponents = new ObservableCollection<IComponentControl>();
-            //Добавить контроллеры компонентов
-            ReloadCompList();
-            
+            LinkedRootModel = linkedModel;
+
         }
         /// <summary>
         /// Ссылка на коренную модель
         /// </summary>
-        public ILinkedModel Rootmodel { get;  set; }
+        public ILinkedModel LinkedRootModel { get; set; }
+
         /// <summary>
-        /// Выделенный компонент
+        /// Список дочерних компонентов
         /// </summary>
-        SWAPIlib.Controller.IComponentControl _selectedComp = null;
-        /// <summary>
-        /// SelectedComp property
-        /// </summary>
-        public SWAPIlib.Controller.IComponentControl SelectedComp
+        public ObservableCollection<IComponentControl> RootComponents
         {
-            get => _selectedComp;
-            set
+            get
             {
-                _selectedComp = value;
-                OnPropertyChanged("SelectedComp");
-                OnPropertyChanged("SelectedCompProp");
+                if (LinkedRootModel != null && LinkedRootModel.IsHaveSubComponents == null)
+                    LinkedRootModel.GetSubComponents();
+                return LinkedRootModel.SubComponents.SubComponents; // { get; private set; }
             }
         }
-        /// <summary>
-        /// Свойства выделенного компонента
-        /// </summary>
-        public List<IPropertyModel> SelectedCompProp => SelectedComp?.Appmodel.PropList;
-        /// <summary>
-        /// Корневые компоненты
-        /// </summary>
-        public ObservableCollection<IComponentControl> RootComponents => RootAssemblyTree.SubComponents; // { get; private set; }
 
         public int ActiveSelectionGroup { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged(string prop = "")
+        public void CheckAllComponents()
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-        public void ReloadCompList()
-        {
-            RootAssemblyTree = new AssemblyTree(this.Rootmodel.appModel);
+            if (LinkedRootModel?.IsHaveSubComponents == true)
+                LinkedRootModel.SubComponents.Select(x => x.IsSelected = true);
         }
 
-        public IEnumerator<IComponentControl> GetEnumerator() => RootAssemblyTree;
+        public void ClearSelection()
+        {
+            if (LinkedRootModel?.IsHaveSubComponents == true)
+                LinkedRootModel.SubComponents.Select(x => x.IsSelected = false);
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => RootAssemblyTree;
-
-        /// <summary>
-        /// Иерархическое представление деталей сборки
-        /// </summary>
-        AssemblyTree RootAssemblyTree;
+        public IEnumerable<IComponentControl> GetCheckedComponents() => LinkedRootModel?.SubComponents.Where(x => x.IsSelected).AsEnumerable();
+        
     }
 
     /// <summary>
@@ -111,19 +90,18 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Конструктор
         /// </summary>
-        /// <param name="appModel"></param>
-        public AssemblyTree(IAppModel appModel, Func<IComponentControl, bool> compFilter = null)
+        /// <param name="appAssembly"></param>
+        public AssemblyTree(IAppAssembly appAssembly, Func<IComponentControl, bool> compFilter = null)
         {
             SubComponents = new ObservableCollection<IComponentControl>();
             SubComponentFilter = compFilter;
-            if (appModel is IAppAssembly appAsm)
+
+            foreach (var comp in appAssembly.GetComponents(true))
             {
-                foreach (var comp in appAsm.GetComponents(true))
-                {
-                    var compControl = new SWAPIlib.Controller.ComponentControl(comp);
-                    SubComponents.Add(compControl);
-                }
+                var compControl = new SWAPIlib.Controller.ComponentControl(comp);
+                SubComponents.Add(compControl);
             }
+
         }
 
         private IAppModel NodeModel;
