@@ -24,5 +24,10 @@ namespace SolidSaverWPF.Views
         {
             InitializeComponent();
         }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = !string.IsNullOrEmpty(CompPath.Text);
+        }
     }
 }
