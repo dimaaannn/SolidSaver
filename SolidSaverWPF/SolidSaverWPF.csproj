@@ -80,6 +80,9 @@
     <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
     <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />
+    <Compile Include="Views\ComponentInfoView.xaml.cs">
+      <DependentUpon>ComponentInfoView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DocLoaderView.xaml.cs">
       <DependentUpon>DocLoaderView.xaml</DependentUpon>
     </Compile>
@@ -107,6 +110,9 @@
     <Compile Include="Views\Property\PropListPart.xaml.cs">
       <DependentUpon>PropListPart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Property\SelectedCompView.xaml.cs">
+      <DependentUpon>SelectedCompView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PropTabControl.xaml.cs">
       <DependentUpon>PropTabControl.xaml</DependentUpon>
     </Compile>
@@ -127,6 +133,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\ComponentInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DocLoaderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -158,6 +168,10 @@
     <Page Include="Views\Property\PropListPart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Property\SelectedCompView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PropTabControl.xaml">
       <SubType>Designer</SubType>

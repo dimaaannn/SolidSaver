@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="SolidSaverWPF.Views.ComponentInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF.Views" xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:compContr="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="70" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style TargetType="Line" x:Key="separator">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Stroke" Value="DarkGray"/>
+            <Setter Property="StrokeThickness" Value="2"/>
+            <Setter Property="Margin" Value="-1, 0, -1, -1"/>
+            <Setter Property="Stretch" Value="Fill"/>
+            <Setter Property="Grid.ColumnSpan" Value="2"/>
+            <Setter Property="X1" Value="0"/>
+            <Setter Property="X2" Value="1"/>
+
+        </Style>
+    </UserControl.Resources>
+    
+    
+    <Border Margin="2" BorderThickness="1.5" BorderBrush="DarkGray" CornerRadius="3">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="ComponentNameTextBlock" Grid.Row="0" Margin="2, 0, 0,0"
+                       Grid.ColumnSpan="2"
+                       VerticalAlignment="Center"
+                       Text="{Binding PartModel.Title, Mode=OneWay, TargetNullValue='Нет данных'}"/>
+
+            <Line Grid.Row="0" Style="{StaticResource separator}"/>
+
+            <TextBlock x:Name="ConfigName" Grid.Row="1" Grid.Column="0" Margin="2, 0, 0,0"
+                       VerticalAlignment="Center"
+                       Text="{Binding RefConfig, Mode=OneWay, TargetNullValue='Нет данных'}"/>
+            
+            <TextBlock x:Name="AsmLevel" Grid.Row="1" Grid.Column="1" Margin="2, 0, 0,0"
+                       VerticalAlignment="Center"
+                       Text="{Binding AssemblyLevel, Mode=OneWay, TargetNullValue='-'}"/>
+            
+            <Line Grid.Row="1" Style="{StaticResource separator}"/>
+            
+            <TextBox x:Name="CompPath" Grid.Row="2" Margin="2, 0, 0,0"
+                       VerticalAlignment="Center"
+                       TextAlignment="Left"
+                       IsReadOnly="True"
+                       Text="{Binding PartModel.Path, Mode=OneWay, TargetNullValue='Нет данных'}"/>
+
+            <Button x:Name="OpenPartFolder" Grid.Column="1" Grid.Row="2" Height="16" VerticalAlignment="Center"
+                    Margin="2">
+                <Button.Content>
+                    <fa:ImageAwesome Icon="FolderOutline"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>
