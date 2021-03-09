@@ -1,15 +1,17 @@
-﻿<UserControl x:Class="SolidSaverWPF.PropertyRename.PropertyChangerTab"
+﻿<UserControl x:Class="SolidSaverWPF.Views.PropertyChangerTab"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:SolidSaverWPF.PropertyRename"
+             xmlns:local="clr-namespace:SolidSaverWPF.Views"
              xmlns:propConfigurator="clr-namespace:SolidSaverWPF.PropertyView"
+             xmlns:propview="clr-namespace:SolidSaverWPF.PropertyView" 
+             xmlns:propview1="clr-namespace:SolidSaverWPF.PropertyRename"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="300">
     <UserControl.Resources>
         <propConfigurator:PropConfigurator x:Key="conf"/>
-        <local:ChangePropertyPart x:Key="property_part"/>
+        <propview1:ChangePropertyPart x:Key="property_part"/>
     </UserControl.Resources>
     <Grid>
 
@@ -154,7 +156,7 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <local:ChangePropertyPart/>
+                    <propview1:ChangePropertyPart/>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 

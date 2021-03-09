@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SWAPIlib.PropertyObj;
 
-namespace SolidSaverWPF.PropertyRename
+namespace SolidSaverWPF.Views
 {
     /// <summary>
     /// Interaction logic for PropertyChangerTab.xaml
