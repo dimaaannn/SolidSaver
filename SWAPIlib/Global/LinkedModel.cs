@@ -52,6 +52,7 @@ namespace SWAPIlib.Global
         /// Дерево компонентов
         /// </summary>
         AssemblyTree SubComponents { get; }
+        ObservableCollection<IComponentControl> SelectedComponents { get; }
 
         /// <summary>
         /// Загрузить список дочерних компонентов
@@ -73,6 +74,7 @@ namespace SWAPIlib.Global
         public LinkedModel(IAppModel model)
         {
             _AppModel = model;
+            _selectedComponents = new ObservableCollection<IComponentControl>();
         }
 
         private IAppModel _AppModel;
@@ -110,7 +112,7 @@ namespace SWAPIlib.Global
         /// <summary>
         /// Дерево компонентов
         /// </summary>
-        public AssemblyTree SubComponents 
+        public AssemblyTree SubComponents
         { get => _subComponents; }
         /// <summary>
         /// Список прикреплённых свойств
@@ -118,7 +120,11 @@ namespace SWAPIlib.Global
         public ISwProperty MainInfoProp { get; set; }
         public IFileModelProp ProjectNameProp { get; set; }
 
+        private ObservableCollection<IComponentControl> _selectedComponents;
+        public ObservableCollection<IComponentControl> SelectedComponents { get => _selectedComponents; set => _selectedComponents = value; }
+
         private bool? _IsHaveSubComponents;
+
         public bool? IsHaveSubComponents => _IsHaveSubComponents;
 
         public event EventHandler<SwEventArgs> ModelDisposed;

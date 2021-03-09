@@ -1,7 +1,9 @@
 ﻿using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn;
+using SWAPIlib.Controller;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +52,8 @@ namespace SWAPIlib.Global
 
         public static bool SetMainModel(ISwModelWrapper swModelWrapper) =>
             SetMainModel(new LinkedModel(swModelWrapper.GetAppModel()));
+
+        public static ObservableCollection<IComponentControl> SelectionList => _CurrentMainmodel.SelectedComponents;
 
         public static event EventHandler MainModelChanged;
 

@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Collections;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.ComConn;
+using SWAPIlib.Global;
 
 namespace SWAPIlib.Controller
 {
@@ -164,6 +165,12 @@ namespace SWAPIlib.Controller
             set
             {
                 Modelselector.IsSelected = value;
+                if (value)
+                {
+                    MainModel.SelectionList.Add(this);
+                }
+                else
+                    MainModel.SelectionList.Remove(this);
                 OnPropertyChanged("IsSelected");
             }
         }
