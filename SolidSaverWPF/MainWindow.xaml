@@ -11,6 +11,7 @@
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.Views"
         xmlns:view="clr-namespace:SolidSaverWPF.Views"
+        xmlns:propView="clr-namespace:SolidSaverWPF.Views.Property"
 
         xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
         Title="MainWindow" Height="500" Width="674" MinWidth="350">
@@ -186,12 +187,12 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="1">
+                        VerticalAlignment="Stretch" SelectedIndex="0">
 
                         <TabItem Header="Свойства">
 
                             <!--#region Property object-->
-                            <ListBox 
+                            <!--<ListBox 
                                 ItemsSource="{Binding SelectedCompProp}"
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
@@ -200,22 +201,23 @@
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 Name="PropertyBox">
 
-                                <!--#region Disable selection-->
+                                --><!--#region Disable selection--><!--
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="{x:Type ListBoxItem}">
                                         <Setter Property="Focusable" Value="False"/>
                                     </Style>
                                 </ListBox.ItemContainerStyle>
-                                <!--#endregion-->
+                                --><!--#endregion--><!--
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <propert:PropControl/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
-                            </ListBox>
+                            </ListBox>-->
                             <!--#endregion-->
 
+                            <propView:SelectedCompView/>
                         </TabItem>
 
                         <TabItem Header="Замена">

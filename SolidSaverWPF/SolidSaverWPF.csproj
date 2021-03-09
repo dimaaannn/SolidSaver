@@ -80,6 +80,7 @@
     <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
     <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />
+    <Compile Include="ViewModel\SelectedCompViewModel.cs" />
     <Compile Include="Views\ComponentInfoView.xaml.cs">
       <DependentUpon>ComponentInfoView.xaml</DependentUpon>
     </Compile>

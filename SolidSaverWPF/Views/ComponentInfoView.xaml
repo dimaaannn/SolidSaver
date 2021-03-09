@@ -8,21 +8,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="70" d:DesignWidth="300">
     <UserControl.Resources>
+        <!--#region Line separator-->
         <Style TargetType="Line" x:Key="separator">
+            <Setter Property="Grid.ColumnSpan" Value="3"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="Stroke" Value="DarkGray"/>
             <Setter Property="StrokeThickness" Value="2"/>
             <Setter Property="Margin" Value="-1, 0, -1, -1"/>
             <Setter Property="Stretch" Value="Fill"/>
-            <Setter Property="Grid.ColumnSpan" Value="2"/>
             <Setter Property="X1" Value="0"/>
             <Setter Property="X2" Value="1"/>
+        </Style>
+        <!--#endregion-->
+        
+        <!--#region Text style-->
+        <Style TargetType="TextBlock" x:Key="tblockdefault">
+            <Setter Property="Margin" Value="2,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox" x:Key="tboxdefault">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="2,0,0,0"/>
+            <Setter Property="BorderBrush" Value="White"/>
 
         </Style>
+        <!--#endregion-->
     </UserControl.Resources>
     
     
-    <Border Margin="2" BorderThickness="1.5" BorderBrush="DarkGray" CornerRadius="3">
+    <Border Background="White"
+        Margin="2" BorderThickness="1.5" BorderBrush="DarkGray" CornerRadius="3">
 
         <Grid>
             <Grid.RowDefinitions>
@@ -31,38 +47,56 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <TextBlock x:Name="ComponentNameTextBlock" Grid.Row="0" Margin="2, 0, 0,0"
-                       Grid.ColumnSpan="2"
-                       VerticalAlignment="Center"
+            
+            <!--#region Подписи-->
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Style="{StaticResource tblockdefault}"
+                       Text="Имя"/>
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       Style="{StaticResource tblockdefault}"
+                       Text="Конф"/>
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       Style="{StaticResource tblockdefault}"
+                       Text="Путь"/>
+
+            <!--#endregion-->
+            <TextBlock x:Name="ComponentNameTextBlock"  
+                       Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                       Style="{StaticResource tblockdefault}"
                        Text="{Binding PartModel.Title, Mode=OneWay, TargetNullValue='Нет данных'}"/>
 
             <Line Grid.Row="0" Style="{StaticResource separator}"/>
 
-            <TextBlock x:Name="ConfigName" Grid.Row="1" Grid.Column="0" Margin="2, 0, 0,0"
-                       VerticalAlignment="Center"
+            <TextBlock x:Name="ConfigName" Grid.Row="1" Grid.Column="1" 
+                       Style="{StaticResource tblockdefault}"
                        Text="{Binding RefConfig, Mode=OneWay, TargetNullValue='Нет данных'}"/>
             
-            <TextBlock x:Name="AsmLevel" Grid.Row="1" Grid.Column="1" Margin="2, 0, 0,0"
-                       VerticalAlignment="Center"
+            <TextBlock x:Name="AsmLevel" Grid.Row="1" Grid.Column="2" 
+                       Style="{StaticResource tblockdefault}"
                        Text="{Binding AssemblyLevel, Mode=OneWay, TargetNullValue='-'}"/>
             
-            <Line Grid.Row="1" Style="{StaticResource separator}"/>
             
-            <TextBox x:Name="CompPath" Grid.Row="2" Margin="2, 0, 0,0"
-                       VerticalAlignment="Center"
-                       TextAlignment="Left"
+            <TextBox x:Name="CompPath" Grid.Row="2" Grid.Column="1" 
+                     Margin="2,1,0,1"
+                       Style="{StaticResource tboxdefault}"
                        IsReadOnly="True"
                        Text="{Binding PartModel.Path, Mode=OneWay, TargetNullValue='Нет данных'}"/>
 
-            <Button x:Name="OpenPartFolder" Grid.Column="1" Grid.Row="2" Height="16" VerticalAlignment="Center"
+            <Button x:Name="OpenPartFolder" Grid.Column="2" Grid.Row="2" Height="16" VerticalAlignment="Center"
                     Margin="2">
                 <Button.Content>
                     <fa:ImageAwesome Icon="FolderOutline"/>
                 </Button.Content>
             </Button>
+            <Line Grid.Row="1" Style="{StaticResource separator}"/>
+
+            <Line Grid.Column="0" Style="{StaticResource separator}" Grid.ColumnSpan="1" Grid.RowSpan="3"
+                  HorizontalAlignment="Right"  X1="0" X2="0"  Y1="2" Y2="0" StrokeThickness="1" Panel.ZIndex="1"/>
+
         </Grid>
     </Border>
 </UserControl>

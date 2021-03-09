@@ -4,23 +4,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.Views.Property"
+             xmlns:views="clr-namespace:SolidSaverWPF.Views"
+             xmlns:viewModel="clr-namespace:SolidSaverWPF.ViewModel" 
+             xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="350">
+    <UserControl.DataContext>
+        <viewModel:SelectedCompViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Border 
-                Margin="2" CornerRadius="4"
-                BorderThickness="2" BorderBrush="DarkGray">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-            </Grid>
-            
-        </Border>
+        
+        <views:ComponentInfoView x:Name="CompInfoView" DataContext="{Binding SelectedComponent}"/>
+
+        <ListView
+            Grid.Row="1"
+            ItemsSource="{Binding SelectedComponent.PartModel.PropList}"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Stretch"
+            ScrollViewer.CanContentScroll="False"
+            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            Name="PropertyList">
+
+            <!--#region Disable selection-->
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Focusable" Value="False"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <!--#endregion-->
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <propert:PropControl/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+        </ListView>
     </Grid>
+
+    
 </UserControl>
