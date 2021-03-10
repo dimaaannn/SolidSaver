@@ -108,6 +108,9 @@
       <DependentUpon>PropertyChangerTab.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewControls\PropertyConfigurator.cs" />
+    <Compile Include="Views\Property\ComponentSelectionView.xaml.cs">
+      <DependentUpon>ComponentSelectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Property\PropListPart.xaml.cs">
       <DependentUpon>PropListPart.xaml</DependentUpon>
     </Compile>
@@ -167,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PropertyChangerTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Property\ComponentSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
