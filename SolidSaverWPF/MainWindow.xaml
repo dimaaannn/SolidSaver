@@ -223,12 +223,10 @@
                         <TabItem Header="Замена">
                             <view:PropertyChangerTab x:Name="PropertyTab"/>
                         </TabItem>
-                        <TabItem Header="PartList" HorizontalContentAlignment="Stretch">
-                            <!--#region Property object-->
-
-                            <!--<partlist:PartListView x:Name="TestPartView"/>-->
-
-                            <!--#endregion-->
+                        <TabItem Header="SelectionList" HorizontalContentAlignment="Stretch">
+                            
+                            <propView:ComponentSelectionView/>
+                            
                         </TabItem>
                         <TabItem Header="PartList2">
                             <!--#region Property object-->

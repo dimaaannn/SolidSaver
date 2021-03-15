@@ -37,15 +37,18 @@
         </StackPanel>
         
         <ListView x:Name="SelectionList"
-                  Grid.Row="1">
+                  SelectionMode="Single"
+                  Grid.Row="1"
+                  SelectedIndex="{Binding UserSelection}"
+                  ItemsSource="{Binding SelectedComponentList}">
             <ListView.InputBindings>
-                <KeyBinding Key="Delete" Command="{Binding DeleteSelectedItemsCommand}" />
+                <KeyBinding Key="Delete" Command="{Binding DeleteSelectedItemsCommand}"/>
             </ListView.InputBindings>
 
             <ListView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Удалить" Command="{Binding DeleteSelectedItemsCommand}" 
-                              CommandParameter="{Binding SelectedItems, ElementName=SelectionList}" />
+                    <MenuItem Header="Удалить" 
+                              Command="{Binding DeleteSelectedItemsCommand}" />
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

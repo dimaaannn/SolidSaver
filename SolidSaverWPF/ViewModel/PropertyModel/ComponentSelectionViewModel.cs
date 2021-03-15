@@ -17,23 +17,30 @@ namespace SolidSaverWPF.ViewModel.PropertyModel
 {
     public class ComponentSelectionViewModel : ViewModelBase
     {
+        public ComponentSelectionViewModel()
+        {
+            MainModel.MainModelChanged += MainModel_MainModelChanged;
+        }
+
+        private void MainModel_MainModelChanged(object sender, EventArgs e)
+        {
+            SelectedComponentList = MainModel.SelectionList;
+        }
+
         #region DeleteSelectedItemsCommand
         private ICommand _DeleteSelectedItemsCommand;
 
         public ICommand DeleteSelectedItemsCommand => _DeleteSelectedItemsCommand ?? (
-            _DeleteSelectedItemsCommand = new RelayCommand<IList>(DeleteSelectedItemsExecute, DeleteSelectedItemsCanExecute));
+            _DeleteSelectedItemsCommand = new RelayCommand(DeleteSelectedItemsExecute, DeleteSelectedItemsCanExecute));
 
 
 
-        private bool DeleteSelectedItemsCanExecute(IList obj) => obj?.Count > 0;
+        private bool DeleteSelectedItemsCanExecute() =>  UserSelection >= 0;
 
-        private void DeleteSelectedItemsExecute(IList obj)
+        private void DeleteSelectedItemsExecute()
         {
-            foreach (IComponentControl selectedComp in obj)
-            {
-                SelectedComponentList.Remove(selectedComp);
-            }
-        } 
+            SelectedComponentList[UserSelection].IsSelected = false;
+        }
         #endregion
 
         private ObservableCollection<IComponentControl> _SelectedComponentList;
@@ -42,5 +49,8 @@ namespace SolidSaverWPF.ViewModel.PropertyModel
             get => _SelectedComponentList;
             set => Set(ref _SelectedComponentList, value);
         }
+
+
+        public int UserSelection { get; set; }
     }
 }
