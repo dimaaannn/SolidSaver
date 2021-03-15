@@ -4,12 +4,51 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SolidSaverWPF.Views.Property"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:prop="clr-namespace:SolidSaverWPF.ViewModel.PropertyModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
+
+    <UserControl.DataContext>
+        <prop:ComponentSelectionViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+            Выделение
+            </TextBlock>
+            <Separator Grid.Row="0"
+                   Background="Black" 
+                   HorizontalAlignment="Stretch" Margin="0"
+                   VerticalAlignment="Bottom"/>
+        </StackPanel>
+        
+        <ListView x:Name="SelectionList"
+                  Grid.Row="1">
+            <ListView.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DeleteSelectedItemsCommand}" />
+            </ListView.InputBindings>
+
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Удалить" Command="{Binding DeleteSelectedItemsCommand}" 
+                              CommandParameter="{Binding SelectedItems, ElementName=SelectionList}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+        
     </Grid>
 </UserControl>

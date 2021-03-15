@@ -24,5 +24,6 @@ namespace SolidSaverWPF.Views.Property
         {
             InitializeComponent();
         }
+        
     }
 }
