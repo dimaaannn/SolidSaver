@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWAPIlib", "SWAPIlib\SWAPIl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolidSaverWPF", "SolidSaverWPF\SolidSaverWPF.csproj", "{B0EEC2C6-E909-4076-AEE0-CF38846CD182}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPF", "tests\TestWPF\TestWPF.csproj", "{80E3DA1B-066C-4211-859F-751CA285828D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{B0EEC2C6-E909-4076-AEE0-CF38846CD182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0EEC2C6-E909-4076-AEE0-CF38846CD182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0EEC2C6-E909-4076-AEE0-CF38846CD182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80E3DA1B-066C-4211-859F-751CA285828D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80E3DA1B-066C-4211-859F-751CA285828D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80E3DA1B-066C-4211-859F-751CA285828D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80E3DA1B-066C-4211-859F-751CA285828D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
