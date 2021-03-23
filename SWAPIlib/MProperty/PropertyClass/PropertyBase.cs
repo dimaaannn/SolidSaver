@@ -76,7 +76,7 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Обёртка свойств объекта
         /// </summary>
-        public TBinder Binder => binder;
+        public TBinder Binder { get => binder; set => binder = value; }
         /// <summary>
         /// Обработчик свойств
         /// </summary>
@@ -222,8 +222,8 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Заглушка для доступа к интерфейсу типизированного биндера
         /// </summary>
-        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.
-            Binder => Binder;
+        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.Binder
+        { get => Binder;}
 
         /// <summary>
         /// set PropertyGetter
