@@ -13,7 +13,19 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <Image Height="200" Stretch="Fill" Margin="3" >
+            <Image 
+                Height="200" Stretch="Uniform" Margin="3" >
+                <Image.Source>
+                    <BitmapImage UriSource="c:\Users\Красиков\source\repos\SolidApp\tests\humans.jpg"/>
+                </Image.Source>
+            </Image>
+            <Button Content="test1"/>
+            <Button Content="test2"/>
+        </StackPanel>
+
+        <StackPanel  Grid.Column="1">
+            <Image x:Name="destbox"
+                Height="200">
                 
             </Image>
         </StackPanel>

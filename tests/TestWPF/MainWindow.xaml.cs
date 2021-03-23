@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Emgu.CV.Face;
+using Emgu.CV.Structure;
+using Emgu.CV;
 
 namespace TestWPF
 {
@@ -20,9 +23,18 @@ namespace TestWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ICapture capture;
+        private CascadeClassifier haarCascade;
+
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
