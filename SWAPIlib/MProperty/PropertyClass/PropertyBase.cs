@@ -222,8 +222,10 @@ namespace SWAPIlib.MProperty
         /// <summary>
         /// Заглушка для доступа к интерфейсу типизированного биндера
         /// </summary>
-        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>.Binder
-        { get => Binder;}
+        IModelBinder IProperty<IPropGetter<IModelBinder>, IModelBinder, IModelEntity>
+            .Binder => Binder; 
+
+        public IModelBinder ModelBinder { get => Binder; set => Binder = (ModelBinder)value; }
 
         /// <summary>
         /// set PropertyGetter

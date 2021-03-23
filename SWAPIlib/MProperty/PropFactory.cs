@@ -8,6 +8,24 @@ using SWAPIlib.MProperty.Getters;
 namespace SWAPIlib.MProperty
 {
 
+    public class ModelPropertyBuilder
+    {
+        private IModelBinder modelBinder;
+        private IModelEntity modelEntity;
+        private IPropGetter<IModelBinder> propGetter;
+
+        /// <summary>
+        /// Создать пустое свойство
+        /// </summary>
+        /// <returns></returns>
+        public IPropertyModel Create()
+        {
+            var tempProp = new PropertyModel() {Binder = (ModelBinder)modelBinder;
+            
+        }
+
+
+    }
 
     public static class PropFactory
     {
