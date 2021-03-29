@@ -1,2 +1,9 @@
 // {type:class}
-[PropertyBase]++-[PropView]
+[PropertyBase | string:GetValue(); bool:SetValue(string:s);]
+
+[PropertyBase]<>-[IPropView]
+[PropertyBase]+-[IBinder]
+[PropertyBase]+-[IDataEntity]
+[PropertyBase]<>-[IDataOptions]
+
+
