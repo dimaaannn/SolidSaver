@@ -8,6 +8,9 @@ namespace SWAPIlib.Property.PropertyBase
 {
     public abstract class PropertyBase : IProperty
     {
+
+        public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+
         public PropertyBase(ITargetInteraction target, IPropertyGetter2 propertyGetter)
         {
             Target = target;
@@ -22,6 +25,7 @@ namespace SWAPIlib.Property.PropertyBase
                     //TODO add logger
                 }
             }
+
         }
 
         public ITargetInteraction Target { get; protected set; }
