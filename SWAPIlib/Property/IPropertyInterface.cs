@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Property
 {
-    public interface IProperty2
+    public interface IProperty
     {
         /// <summary>
         /// Объект привязки
         /// </summary>
-        ITargetinteraction Target { get; }
+        ITargetInteraction Target { get; }
         /// <summary>
         /// Обработчик свойства
         /// </summary>
@@ -83,7 +83,7 @@ namespace SWAPIlib.Property
         /// </summary>
         Func<string, bool> WriteValue { get; set; }
         void ClearSaved();
-        void SetSavedVal(string s);
+        void WriteUserValue();
     }
 
 
@@ -93,6 +93,14 @@ namespace SWAPIlib.Property
     public interface IPropertyGetter2
     {
         /// <summary>
+        /// Совместимые цели
+        /// </summary>
+        TargetType CompatibleTypes { get; }
+        /// <summary>
+        /// Идентификатор типа свойства
+        /// </summary>
+        PropertyID PropertyID { get; }
+        /// <summary>
         /// Описание свойства
         /// </summary>
         string PropertyInfo { get; }
@@ -101,24 +109,24 @@ namespace SWAPIlib.Property
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        bool CheckTarget(ITargetinteraction target);
+        bool CheckTarget(ITargetInteraction target);
         /// <summary>
         /// Прочитать значение переменной
         /// </summary>
         /// <returns></returns>
-        bool GetValue(ITargetinteraction target);
+        bool GetValue(ITargetInteraction target);
         /// <summary>
         /// Записать значение
         /// </summary>
         /// <param name="newValue"></param>
         /// <returns></returns>
-        bool SetValue(ITargetinteraction target);
+        bool SetValue(ITargetInteraction target);
     }
 
     /// <summary>
     /// Объект с информацией о свойстве и настройками
     /// </summary>
-    public interface ITargetinteraction
+    public interface ITargetInteraction
     {
         TargetType TargetType { get; }
         string TargetName { get; }
@@ -163,5 +171,11 @@ namespace SWAPIlib.Property
         Component = 1 << 1,
         Assembly =  1 << 2,
         Part =      1 << 3
+    }
+
+    public enum PropertyID
+    {
+        None = 0,
+        PartAppereance = 1
     }
 }
