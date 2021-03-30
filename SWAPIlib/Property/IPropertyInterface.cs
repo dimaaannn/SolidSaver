@@ -9,23 +9,19 @@ namespace SWAPIlib.Property
 {
     public interface IProperty
     {
-        /// <summary>
-        /// Объект привязки
-        /// </summary>
-        ITargetInteraction Target { get; }
-        /// <summary>
-        /// Обработчик свойства
-        /// </summary>
-        IPropertyGetter2 Getter { get; }
-        /// <summary>
-        /// Значение свойства
-        /// </summary>
-        IInteractionValue PropertyValue { get; }
+        bool IsWritable { get; }
         /// <summary>
         /// Несохранённые изменения
         /// </summary>
         bool IsModifyed { get; }
-
+        /// <summary>
+        /// Подсказка
+        /// </summary>
+        string Info { get; }
+        /// <summary>
+        /// Имя свойства
+        /// </summary>
+        string Name { get; }
         /// <summary>
         /// Значение
         /// </summary>
@@ -47,7 +43,115 @@ namespace SWAPIlib.Property
         void ClearSaved();
     }
 
+    public interface IComplexProperty : IProperty
+    {
+        /// <summary>
+        /// Отсутствие ошибок
+        /// </summary>
+        bool IsValid { get; }
+        /// <summary>
+        /// Объект привязки
+        /// </summary>
+        ITarget Target { get; }
+        /// <summary>
+        /// Объект значений
+        /// </summary>
+        IComplexValue ResultValue { get; }
+        /// <summary>
+        /// Дочерние свойства
+        /// </summary>
+        Dictionary<string, IProperty> ChildProperty { get; }
+        /// <summary>
+        /// Настройки свойства
+        /// </summary>
+        IPropertySettings PropertySettings { get; }
 
+    }
+
+    /// <summary>
+    /// Настройки дополнительных опций
+    /// </summary>
+    public interface IPropertySettings
+    {
+        Dictionary<string, string> GetterSettings { get; }
+    }
+
+
+    /// <summary>
+    /// Привязка к объекту для получения и задания свойств
+    /// </summary>
+    public interface IPropertyGetter2
+    {
+        /// <summary>
+        /// Описание свойства
+        /// </summary>
+        string PropertyInfo { get; }
+        /// <summary>
+        /// Проверить совместимость с целью
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        bool CheckTarget(ITarget target);
+        /// <summary>
+        /// Прочитать значение переменной
+        /// </summary>
+        /// <returns></returns>
+        IComplexValue GetValue(ITarget target, IPropertySettings settings);
+        /// <summary>
+        /// Записать значение
+        /// </summary>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        bool SetValue(ITarget target, IComplexValue newValue, IPropertySettings settings);
+        IPropertySettings GetSettings(Dictionary<string, string> settingsDict);
+    }
+
+    /// <summary>
+    /// Объект с информацией о свойстве и настройками
+    /// </summary>
+    public interface ITarget
+    {
+        TargetType TargetType { get; }
+        string TargetName { get; }
+        string TargetInfo { get; }
+        IDictionary<string, IProperty> PreDefinedOptions { get; set; }
+    }
+
+    /// <summary>
+    /// Полученные данные
+    /// </summary>
+    public interface IComplexValue
+    {
+        string PropertyName { get; }
+        /// <summary>
+        /// Последнее полученное значение свойства
+        /// </summary>
+        string Result { get; }
+        /// <summary>
+        /// Значение для записи
+        /// </summary>
+        string NewValue { get; set; }
+    }
+
+    /// <summary>
+    /// Тип цели для проверки совместимости свойств
+    /// </summary>
+    [Flags]
+    public enum TargetType
+    {
+        None = 0,
+        File = 1,
+        Component = 1 << 1,
+        Assembly =  1 << 2,
+        Part =      1 << 3
+    }
+
+    public enum ComponentPropertyTypes
+    {
+        None,
+        ConfigName,
+        UserOptionName
+    }
 
     /// <summary>
     /// Базовый интерфейс управления текстовыми свойствами
@@ -84,98 +188,5 @@ namespace SWAPIlib.Property
         Func<string, bool> WriteValue { get; set; }
         void ClearSaved();
         void WriteUserValue();
-    }
-
-
-    /// <summary>
-    /// Привязка к объекту для получения и задания свойств
-    /// </summary>
-    public interface IPropertyGetter2
-    {
-        /// <summary>
-        /// Совместимые цели
-        /// </summary>
-        TargetType CompatibleTypes { get; }
-        /// <summary>
-        /// Идентификатор типа свойства
-        /// </summary>
-        PropertyID PropertyID { get; }
-        /// <summary>
-        /// Описание свойства
-        /// </summary>
-        string PropertyInfo { get; }
-        /// <summary>
-        /// Проверить совместимость с целью
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        bool CheckTarget(ITargetInteraction target);
-        /// <summary>
-        /// Прочитать значение переменной
-        /// </summary>
-        /// <returns></returns>
-        bool GetValue(ITargetInteraction target);
-        /// <summary>
-        /// Записать значение
-        /// </summary>
-        /// <param name="newValue"></param>
-        /// <returns></returns>
-        bool SetValue(ITargetInteraction target);
-    }
-
-    /// <summary>
-    /// Объект с информацией о свойстве и настройками
-    /// </summary>
-    public interface ITargetInteraction
-    {
-        TargetType TargetType { get; }
-        string TargetName { get; }
-        string[] TargetInfo { get; }
-        IDictionary<string, string> TargetOptions { get; set; }
-        IDictionary<string, string> PropertyOptions { get; set; }
-        /// <summary>
-        /// Полученные данные
-        /// </summary>
-        IInteractionValue PropertyValue { get; }
-    }
-
-    /// <summary>
-    /// Полученные данные
-    /// </summary>
-    public interface IInteractionValue
-    {
-        bool IsReadable { get; }
-        bool IsWritable { get; }
-        /// <summary>
-        /// Расширенная информация о свойстве
-        /// </summary>
-        string[] PropertyInfo { get; }
-        /// <summary>
-        /// Последнее полученное значение свойства
-        /// </summary>
-        string Current { get; }
-        /// <summary>
-        /// Значение для записи
-        /// </summary>
-        string UserEdit { get; set; }
-    }
-
-    /// <summary>
-    /// Тип цели для проверки совместимости свойств
-    /// </summary>
-    [Flags]
-    public enum TargetType
-    {
-        None = 0,
-        File = 1,
-        Component = 1 << 1,
-        Assembly =  1 << 2,
-        Part =      1 << 3
-    }
-
-    public enum PropertyID
-    {
-        None = 0,
-        PartAppereance = 1
     }
 }

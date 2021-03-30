@@ -6,6 +6,111 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Property.PropertyBase
 {
+    public abstract class PropertyBase : IProperty
+    {
+        public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+        private bool isWritable = false;
+        protected string info;
+        protected string name;
+        protected string value;
+        protected string tempValue
+        
+
+        /// <summary>
+        /// Возможность записи новых значений
+        /// </summary>
+        public bool IsWritable { get => isWritable; protected set => isWritable = value; }
+
+        public abstract bool IsModifyed { get; }
+
+        /// <summary>
+        /// Имя свойства
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                if (info is null)
+                {
+                    Logger.Trace("Get property name");
+                    name = GetName();
+                    Logger.Trace("Property name: {name}", name);
+                }
+                return info;
+            }
+        }
+        /// <summary>
+        /// Пояснительная информация
+        /// </summary>
+        public string Info
+        {
+            get
+            {
+                if (info is null)
+                {
+                    Logger.Trace("Get property {PropertyName} info", Name);
+                    info = GetInfo();
+                    Logger.Trace("Property info: {info}", info);
+                }
+                return info;
+            }
+        }
+        /// <summary>
+        /// Значение свойства
+        /// </summary>
+        public string Value
+        {
+            get
+            {
+                Logger.Trace("Property {name} invoke Value property", name);
+                if(value == null)
+                {
+                    Logger.Info("Property {name} invoke GetValue func", name);
+                    value = GetValue();
+                }
+                if(tempValue != null)
+                {
+                    Logger.Info("Property {name} return user modifyed value: {tempvalue}, cashed: {value}", name, tempValue, value);
+                    return tempValue;
+                }
+                else
+                {
+                    Logger.Info("Property {name} return cashed value: {value}", name, value);
+                    return value;
+                }
+            }
+        }
+
+        protected abstract string GetName();
+        protected abstract string GetInfo();
+        protected abstract string GetValue();
+
+        /// <summary>
+        /// Очистить временное значение
+        /// </summary>
+        public virtual void ClearSaved()
+        {
+            Logger.Trace("Property {name} temp value cleared", name);
+            tempValue = null;
+        }
+
+        public virtual bool Update()
+        {
+            Logger.Info("Property {name} invoke Update", name);
+            return true;
+        }
+
+        /// <summary>
+        /// Записать значение
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool WriteValue()
+        {
+            Logger.Info("Property {name} invoke WriteValue with old value: {value} tempValue: {tempValue},  ", name, value, tempValue);
+            return true;
+        }
+    }
+
     //public abstract class PropertyBase : IProperty
     //{
 
@@ -37,7 +142,7 @@ namespace SWAPIlib.Property.PropertyBase
     //    public string Value {
     //        get
     //        {
-                
+
     //            if (PropertyValue.IsReadable == true)
     //                return PropertyValue.UserEdit ?? PropertyValue.Current;
     //            else
