@@ -85,7 +85,6 @@
     <Compile Include="MProperty\Getters\BaseModelProp.cs" />
     <Compile Include="MProperty\BaseProp\PropViewInterface.cs" />
     <Compile Include="MProperty\BaseProp\PropGetterInterface.cs" />
-    <Compile Include="PackagesInit\NlogInit.cs" />
     <Compile Include="Property\IPropertyInterface.cs" />
     <Compile Include="Property\PropertyBase\PropertyBase.cs" />
     <Compile Include="PropReplacer\PropertyChanger.cs" />
@@ -118,7 +117,12 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NLog.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
