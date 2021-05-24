@@ -1,4 +1,5 @@
 ﻿using SWAPIlib.BaseTypes;
+using SWAPIlib.Property;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,20 @@ using System.Threading.Tasks;
 
 namespace SolidSaverWPF.MessagesType
 {
-
+    /// <summary>
+    /// Для загрузки списков свойств
+    /// </summary>
+    public class PropertyMessage
+    {
+        public IEnumerable<IPropertySet> PropertySet;
+        public PropAction Action;
+        public enum PropAction
+        {
+            None,
+            Show,
+            Get
+        }
+    }
 
     /// <summary>
     /// Сообщение с моделью

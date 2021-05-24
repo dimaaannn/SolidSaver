@@ -5,15 +5,61 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ * Интерфейсы для объекта обработки свойств:
+ * 
+ * IProperty - базовый класс для доступа к описанию, имени и значению свойства
+ * Кэширует данные при первом обращении, для последующего обновления требуется вызывать
+ * метод Update() - очищает кэш и временное значение
+ * Запись значения происходит из кэша при помощи соотв.метода. Временное значение и кэш очищаются.
+ * Флаг IsWritable показывает опцию записи у конкретного обработчика.
+ * Метод ToString возвращает значение свойства. 
+ * Перечислитель добавлен для доступа к расширениям
+ * 
+ * 
+ * IComplexProperty - расширенный интерфейс IProperty для более сложных свойств:
+ * 
+ * Target - Класс-обёртка для объекта из которого будет браться свойство. 
+ * Содержит в себе имя, тип, и информацию об объекте внутри. 
+ * 
+ * ResultValue - Возвращает значение свойства в виде объекта IComplexValue (его созданием занимается обработчик)
+ * В результате содержится словарь, где ключом является имя сущности (Имя конфигурации, имя файла, и т.п) а значение представляет строку с данными
+ * Кэширование значения и запись производится аналогично базовому классу, но для записи требуется создать объект IComplexValue, где так же требуется указать сущность поддерживаемую конкретным обработчиком.
+ * При обращении через TempComplexValue объект создаётся автоматически.
+ * 
+ * Value - возвращает одно значение по умолчанию, в случае неоднозначности 
+ * возвращает текст <СПИСОК ЗНАЧЕНИЙ> (Конкретная реализация зависит от дочерних классов)
+ * По факту - является заглушкой.
+ * 
+ * PropertySettings - Объект аггрегатор пар ключ-значение, 
+ * в качестве ключа используется то же имя сущности, а в качестве значения - любой объект с методом ToString(); Предназначен для для комплексных свойств, где результат может зависеть от значения других свойств. При каждой записи или обновлении передаётся опциональным параметром обработчику.
+ * 
+ *
+ *IPropertyGetter - Обработчик для объекта ITarget, реализует только ReadOnly поля и методы.
+ *Содержит внутри себя логику получения значения свойства. 
+ *
+ *GetterType - содержит ключи с информацией о возможности записи, чтения, и т.п.
+ *TargetType - Ключи поддерживаемых типов ITarget
+ *
+ *В поле Name содержит сущность возвращаемого (или записываемого) значения.
+ *
+ *OptionsRequirement содержит обязательные параметры IPropertySettings для конкретного обработчика
+ *
+ */
+
+
 namespace SWAPIlib.Property
 {
-    public interface IProperty
+    #region Property
+    /// <summary>
+    /// Глобальное свойство
+    /// </summary>
+    public interface IProperty : IEnumerable<KeyValuePair<string, string>>, INotifyPropertyChanged
     {
-        bool IsWritable { get; }
         /// <summary>
-        /// Несохранённые изменения
+        /// Доступен для записи
         /// </summary>
-        bool IsModifyed { get; }
+        bool IsReadOnly { get; }
         /// <summary>
         /// Подсказка
         /// </summary>
@@ -23,9 +69,13 @@ namespace SWAPIlib.Property
         /// </summary>
         string Name { get; }
         /// <summary>
-        /// Значение
+        /// Значение для изменений
         /// </summary>
-        string Value { get; set; }
+        string TempValue { get; set; }
+        /// <summary>
+        /// Прочитанное значение
+        /// </summary>
+        string Value { get; }
 
         /// <summary>
         /// Обновить значение
@@ -37,12 +87,11 @@ namespace SWAPIlib.Property
         /// </summary>
         /// <returns></returns>
         bool WriteValue();
-        /// <summary>
-        /// Сбросить изменения
-        /// </summary>
-        void ClearSaved();
     }
 
+    /// <summary>
+    /// Свойство с возможностью настроек и опций
+    /// </summary>
     public interface IComplexProperty : IProperty
     {
         /// <summary>
@@ -58,40 +107,48 @@ namespace SWAPIlib.Property
         /// </summary>
         IComplexValue ResultValue { get; }
         /// <summary>
-        /// Дочерние свойства
+        /// Объект для записи значений
         /// </summary>
-        Dictionary<string, IProperty> ChildProperty { get; }
+        IComplexValue TempComplexValue { get; set; }
         /// <summary>
-        /// Настройки свойства
+        /// Настройки опций при получении и установке значений
         /// </summary>
-        IPropertySettings PropertySettings { get; }
+        PropertySet PropertySettings { get; }
 
+        /// <summary>
+        /// Архив свойств
+        /// </summary>
+        Dictionary<object, List<WeakReference<IComplexProperty>>> PropertyList { get; }
     }
 
-    /// <summary>
-    /// Настройки дополнительных опций
-    /// </summary>
-    public interface IPropertySettings
-    {
-        Dictionary<string, string> GetterSettings { get; }
-    }
+    #endregion
 
 
+    #region Getter
     /// <summary>
     /// Привязка к объекту для получения и задания свойств
     /// </summary>
     public interface IPropertyGetter2
     {
         /// <summary>
+        /// Совместимые типы цели
+        /// </summary>
+        TargetType TargetType { get; }
+        GetterType GetterType { get; }
+        /// <summary>
+        /// Уникальное имя свойства
+        /// </summary>
+        string Name { get; }
+        /// <summary>
         /// Описание свойства
         /// </summary>
-        string PropertyInfo { get; }
+        string Info { get; }
         /// <summary>
         /// Проверить совместимость с целью
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
-        bool CheckTarget(ITarget target);
+        bool CheckTarget(ITarget target, IPropertySettings settings);
         /// <summary>
         /// Прочитать значение переменной
         /// </summary>
@@ -103,34 +160,47 @@ namespace SWAPIlib.Property
         /// <param name="newValue"></param>
         /// <returns></returns>
         bool SetValue(ITarget target, IComplexValue newValue, IPropertySettings settings);
-        IPropertySettings GetSettings(Dictionary<string, string> settingsDict);
+        /// <summary>
+        /// Список имён необходимых параметров
+        /// </summary>
+        HashSet<string> OptionsRequirement { get; }
     }
 
     /// <summary>
-    /// Объект с информацией о свойстве и настройками
+    /// Флаги свойств обработчика
+    /// </summary>
+    [Flags]
+    public enum GetterType
+    {
+        None = 0,
+        IsReadable = 1,
+        IsWritable = 1 << 1,
+        ReadParamRequired = 1 << 2,
+        WriteParamRequired = 1 << 3
+    }
+    #endregion
+
+
+    #region Target
+    /// <summary>
+    /// Объект обёртка для цели обработчика
     /// </summary>
     public interface ITarget
     {
+        object GetTarget();
         TargetType TargetType { get; }
         string TargetName { get; }
         string TargetInfo { get; }
-        IDictionary<string, IProperty> PreDefinedOptions { get; set; }
+        IPropertySettings Settings { get; set; }
     }
 
     /// <summary>
-    /// Полученные данные
+    /// Типизированная обёртка цели
     /// </summary>
-    public interface IComplexValue
+    /// <typeparam name="T"></typeparam>
+    public interface ITarget<out T> : ITarget
     {
-        string PropertyName { get; }
-        /// <summary>
-        /// Последнее полученное значение свойства
-        /// </summary>
-        string Result { get; }
-        /// <summary>
-        /// Значение для записи
-        /// </summary>
-        string NewValue { get; set; }
+        T Target { get; }
     }
 
     /// <summary>
@@ -142,16 +212,48 @@ namespace SWAPIlib.Property
         None = 0,
         File = 1,
         Component = 1 << 1,
-        Assembly =  1 << 2,
-        Part =      1 << 3
+        Assembly = 1 << 2,
+        Part = 1 << 3,
+        Model = Assembly | Part,
+        Drawing = 1 << 4
+    } 
+    #endregion
+
+
+    /// <summary>
+    /// Полученные данные
+    /// </summary>
+    public interface IComplexValue : IEnumerable<KeyValuePair<string, string>>
+    {
+        /// <summary>
+        /// Доступ к дополнительным свойствам
+        /// </summary>
+        /// <param name="valueName"></param>
+        /// <returns></returns>
+        string this[string valueName] { get; set; }
+        /// <summary>
+        /// Имя свойства
+        /// </summary>
+        string PropertyName { get; }
+        /// <summary>
+        /// Значение для записи
+        /// </summary>
+        string BaseValue { get; set; }
     }
 
-    public enum ComponentPropertyTypes
+    /// <summary>
+    /// Настройки дополнительных опций
+    /// </summary>
+    public interface IPropertySettings : IEnumerable<KeyValuePair<string, string>>
     {
-        None,
-        ConfigName,
-        UserOptionName
+        /// <summary>
+        /// Получить свойство по ключу
+        /// </summary>
+        /// <param name="param">Имя свойства</param>
+        /// <returns>В случае отсутствия возвращается null</returns>
+        string this[string param] { get; }
     }
+
 
     /// <summary>
     /// Базовый интерфейс управления текстовыми свойствами

@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SolidSaverWPF.ResDictionary"
+                    xmlns:swApi="clr-namespace:SolidSaverWPF.Properties"
+                    xmlns:swApiProperties="clr-namespace:SWAPIlib.Property;assembly=SWAPIlib"
+                    xmlns:viewModel="clr-namespace:SolidSaverWPF.ViewModel"
+                    xmlns:viewProp="clr-namespace:SolidSaverWPF.Views.Property">
+
+    <DataTemplate DataType="{x:Type swApiProperties:PropertySet}">
+        <viewProp:PropertySetView/>
+    </DataTemplate>
+</ResourceDictionary>

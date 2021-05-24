@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="SolidSaverWPF.Views.Property.EditableFieldView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF.Views.Property"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <local:NullToColorConverter x:Key="nulltocolorconverter"/>
+        <local:ValueTextColorConverter x:Key="valueTextcolorconverter"/>
+
+    </UserControl.Resources>
+    <Grid>
+        <TextBox
+            x:Name="Value"
+            Text="{Binding Value, Mode=OneWay , FallbackValue=No data}"
+            IsReadOnly="True"
+            Background="{Binding TempValue, 
+                    Converter={StaticResource nulltocolorconverter }}"
+            Foreground="{Binding TempValue, Converter={StaticResource  valueTextcolorconverter}}"/>
+
+        <TextBox 
+            x:Name="PropCurrentValue"
+            MouseDoubleClick="PropCurrentValue_MouseDoubleClick"
+            GotFocus="PropCurrentValue_GotFocus"
+            LostFocus="PropCurrentValue_LostFocus"
+            Background="Transparent"
+            
+            Text="{Binding TempValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsReadOnly}">
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="updateCommandName" Header="Обновить"/>
+                    <MenuItem Name="writeCommandName" Header="Записать"/>
+                    <MenuItem Click="CopyTextFromVal" Header="Скопировать" ToolTip="DClick"/>
+                    <MenuItem Click="ClearTextClick" Header="Очистить"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
+    </Grid>
+</UserControl>

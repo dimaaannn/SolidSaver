@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="SolidSaverWPF.Views.Property.PropertySetsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF.Views.Property"
+             xmlns:viewProp="clr-namespace:SolidSaverWPF.ViewModel.Property2"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+    
+    <UserControl.DataContext>
+        <viewProp:PropertySetsViewModel/>
+    </UserControl.DataContext>
+    
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="1.5, 3"/>
+            <Setter Property="Width" Value="50"/>
+        </Style>
+    </UserControl.Resources>
+    
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        
+
+        <DockPanel Grid.Row="0" LastChildFill="False" >
+            <ComboBox Name="PropertyNameComboBox" DockPanel.Dock="Left"
+                      MinWidth="60" Margin="2"
+                      IsEditable="True"
+                      ItemsSource="{Binding PropertyNameOptions}" 
+                      Text="{Binding MainPropertyName}"/>
+
+            <Button x:Name="UpdateAll" DockPanel.Dock="Right" Width="auto"
+                    Command="{Binding UpdateAllPropCommand}"
+                    Content="UpdateAll"/>
+            <Button x:Name="UpdateButton" DockPanel.Dock="Right" 
+                    Command="{Binding UpdateMainPropCommand}"
+                    Content="Update"/>
+            <Button x:Name="WriteButton" DockPanel.Dock="Right"
+                    Command="{Binding WriteMainPropCommand}"
+                    Content="Write"/>
+        </DockPanel>
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Properties}"
+                 HorizontalContentAlignment="Stretch">
+            <!--<ListBox.ItemTemplate>
+                <DataTemplate>
+                    <local:PropertySetView/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>-->
+        </ListBox>
+
+
+
+    </Grid>
+</UserControl>

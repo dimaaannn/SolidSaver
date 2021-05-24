@@ -53,7 +53,7 @@ namespace SWAPIlib.Global
         public static bool SetMainModel(ISwModelWrapper swModelWrapper) =>
             SetMainModel(new LinkedModel(swModelWrapper.GetAppModel()));
 
-        public static ObservableCollection<IComponentControl> SelectionList => _CurrentMainmodel.SelectedComponents;
+        public static ObservableCollection<IComponentControl> SelectionList => _CurrentMainmodel?.SelectedComponents;
 
         public static event EventHandler MainModelChanged;
 

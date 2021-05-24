@@ -187,7 +187,7 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="1">
+                        VerticalAlignment="Stretch" SelectedIndex="3">
 
                         <TabItem Header="Свойства">
 
@@ -228,19 +228,8 @@
                             <propView:ComponentSelectionView/>
                             
                         </TabItem>
-                        <TabItem Header="PartList2">
-                            <!--#region Property object-->
-                            <!--<partlist:PartListView x:Name="threPL" DataContext="{Binding ThreePart}"/>-->
-                            <TreeView x:Name="TestThreeview"
-                                    Grid.Row="1">
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding SubComponents}">
-                                        <TextBlock Text="{Binding Title}"/>
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
-
-                            </TreeView>
-                            <!--#endregion-->
+                        <TabItem Header="PropList">
+                            <propView:PropertyLoaderView/>
                         </TabItem>
 
                     </TabControl>

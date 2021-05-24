@@ -7,7 +7,7 @@ using SolidWorks.Interop.sldworks;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
-
+using SWAPIlib.Property;
 
 namespace SWAPIlib
 {
@@ -120,6 +120,10 @@ namespace SWAPIlib
         int GetChildrenCount();
         SWAPIlib.ComConn.MaterialProperty MaterialColor { get; set; }
 
+        /// <summary>
+        /// Объект для привязки свойств
+        /// </summary>
+        ITarget TargetObject { get; }
     }
 
     public interface ISwPart : IAppModel, IConfProperty

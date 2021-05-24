@@ -1,5 +1,8 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SWAPIlib.ComConn.Proxy;
+using SWAPIlib.Property;
+using SWAPIlib.Property.PropertyBase;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SWAPIlib.BaseTypes
@@ -18,14 +21,6 @@ namespace SWAPIlib.BaseTypes
         /// </summary>
         string FilePath { get; }
         /// <summary>
-        /// Имя
-        /// </summary>
-        string Title { get; }
-        /// <summary>
-        /// Модель привязки
-        /// </summary>
-        ModelDoc2 SwModel { get; set; }
-        /// <summary>
         /// Тип документа
         /// </summary>
         AppDocType DocType { get; }
@@ -38,25 +33,67 @@ namespace SWAPIlib.BaseTypes
     /// <summary>
     /// Класс обёртка над моделью
     /// </summary>
-    public class SwModelWrapper : ISwModelWrapper
+    public class SwModelWrapper : Target<ModelDoc2>, ISwModelWrapper
     {
-        public SwModelWrapper() { }
-        public SwModelWrapper(ModelDoc2 model) : this()
+        //public SwModelWrapper() { }
+        public SwModelWrapper(ModelDoc2 model) : base(
+            model
+            ,ModelProxy.GetName(model)
+            , ToTargetType(PartTypeChecker.GetSWType(model)))
         {
-            _SwModel = model;
         }
-        private ModelDoc2 _SwModel;
-        public ModelDoc2 SwModel { get => _SwModel; set => _SwModel = value; }
 
-        public string FilePath => ModelProxy.GetPathName(SwModel);
+        public string FilePath => ModelProxy.GetPathName(TTarget);
         public string FileName => Path.GetFileName(FilePath);
-        public string Title => ModelProxy.GetName(SwModel);
-        public AppDocType DocType => PartTypeChecker.GetSWType(SwModel);
-        public IAppModel GetAppModel() => ModelClassFactory.GetModel(SwModel);
+        public AppDocType DocType => PartTypeChecker.GetSWType(TTarget);
+
+        public IAppModel GetAppModel() => ModelClassFactory.GetModel(TTarget);
 
         public override string ToString()
         {
-            return this.FileName;
+            if (string.IsNullOrEmpty(FileName))
+                return this.TargetName;
+            else
+                return this.FileName;
         }
+
+        /// <summary>
+        /// Преобразовать тип обёртки в тип свойства
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static TargetType ToTargetType(AppDocType type)
+        {
+            TargetType ret;
+            switch (type)
+            {
+                case AppDocType.swNONE:
+                    ret = TargetType.None;
+                    break;
+                case AppDocType.swPART:
+                    ret = TargetType.Part;
+                    break;
+                case AppDocType.swASM:
+                    ret = TargetType.Assembly;
+                    break;
+                case AppDocType.swDRAWING:
+                    ret = TargetType.Drawing;
+                    break;
+                case AppDocType.swCOMPONENT:
+                    ret = TargetType.Component;
+                    break;
+                default:
+                    ret = TargetType.None;
+                    break;
+            }
+            return ret;
+        }
+
+        #region TargetInterface
+
+        public override string TargetInfo => $"{TargetType}:{FileName}";
+
+
+        #endregion
     }
 }

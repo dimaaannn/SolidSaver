@@ -1,175 +1,83 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SWAPIlib.Property.PropertyBase
 {
-    public abstract class PropertyBase : IProperty
+    public abstract class PropertyBase : IProperty, IPropertySettings
     {
         public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-        private bool isWritable = false;
-        protected string info;
-        protected string name;
-        protected string value;
-        protected string tempValue
-        
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public PropertyBase()
+        {
+            Logger.Trace("PropertyBase launch constructor");
+        }
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Возвратить значение
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => Value;
+        /// <summary>
+        /// Возвратить перечислитель
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
 
         /// <summary>
         /// Возможность записи новых значений
         /// </summary>
-        public bool IsWritable { get => isWritable; protected set => isWritable = value; }
-
-        public abstract bool IsModifyed { get; }
-
+        public abstract bool IsReadOnly { get; }
         /// <summary>
         /// Имя свойства
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                if (info is null)
-                {
-                    Logger.Trace("Get property name");
-                    name = GetName();
-                    Logger.Trace("Property name: {name}", name);
-                }
-                return info;
-            }
-        }
+        public abstract string Name { get; }
         /// <summary>
         /// Пояснительная информация
         /// </summary>
-        public string Info
-        {
-            get
-            {
-                if (info is null)
-                {
-                    Logger.Trace("Get property {PropertyName} info", Name);
-                    info = GetInfo();
-                    Logger.Trace("Property info: {info}", info);
-                }
-                return info;
-            }
-        }
+        public abstract string Info { get; }
         /// <summary>
-        /// Значение свойства
+        /// Временное значение свойства
         /// </summary>
-        public string Value
-        {
-            get
-            {
-                Logger.Trace("Property {name} invoke Value property", name);
-                if(value == null)
-                {
-                    Logger.Info("Property {name} invoke GetValue func", name);
-                    value = GetValue();
-                }
-                if(tempValue != null)
-                {
-                    Logger.Info("Property {name} return user modifyed value: {tempvalue}, cashed: {value}", name, tempValue, value);
-                    return tempValue;
-                }
-                else
-                {
-                    Logger.Info("Property {name} return cashed value: {value}", name, value);
-                    return value;
-                }
-            }
-        }
+        public abstract string TempValue { get; set; }
+        /// <summary>
+        /// Значение для записи
+        /// </summary>
+        public abstract string Value { get; }
 
-        protected abstract string GetName();
-        protected abstract string GetInfo();
-        protected abstract string GetValue();
+        public virtual string this[string param]
+        {
+            get => this.Value;
+            set => TempValue = value;
+        }
 
         /// <summary>
-        /// Очистить временное значение
+        /// Перечисление всех значений
         /// </summary>
-        public virtual void ClearSaved()
-        {
-            Logger.Trace("Property {name} temp value cleared", name);
-            tempValue = null;
-        }
+        /// <returns></returns>
+        public abstract IEnumerator<KeyValuePair<string, string>> GetEnumerator();
 
-        public virtual bool Update()
-        {
-            Logger.Info("Property {name} invoke Update", name);
-            return true;
-        }
-
+        /// <summary>
+        /// Прочитать значение заново
+        /// </summary>
+        /// <returns></returns>
+        public abstract bool Update();
         /// <summary>
         /// Записать значение
         /// </summary>
         /// <returns></returns>
-        public virtual bool WriteValue()
-        {
-            Logger.Info("Property {name} invoke WriteValue with old value: {value} tempValue: {tempValue},  ", name, value, tempValue);
-            return true;
-        }
+        public abstract bool WriteValue();
     }
-
-    //public abstract class PropertyBase : IProperty
-    //{
-
-    //    public static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-
-    //    public PropertyBase(ITargetInteraction target, IPropertyGetter2 propertyGetter)
-    //    {
-    //        Target = target;
-    //        Getter = propertyGetter;
-    //        if(Target.PropertyValue == null)
-    //        {
-    //            Getter.CheckTarget(target); //Create InteractionValue in target
-    //            if(target.PropertyValue == null)
-    //            {
-    //                string errorMessage = "PropertyBase: Wrong target type";
-    //                throw new AggregateException(errorMessage);
-    //                //TODO add logger
-    //            }
-    //        }
-
-    //    }
-
-    //    public ITargetInteraction Target { get; protected set; }
-    //    public IPropertyGetter2 Getter { get; protected set; }
-    //    public IInteractionValue PropertyValue => Target.PropertyValue;
-
-    //    public bool IsModifyed => PropertyValue.UserEdit != null;
-
-    //    public string Value {
-    //        get
-    //        {
-
-    //            if (PropertyValue.IsReadable == true)
-    //                return PropertyValue.UserEdit ?? PropertyValue.Current;
-    //            else
-    //                return "Not avaliable";
-    //        }
-    //        set { 
-    //            if (PropertyValue.IsWritable == true)
-    //                PropertyValue.UserEdit = value;                
-    //            }
-    //    }
-    //    /// <summary>
-    //    /// Очистить пользовательский ввод
-    //    /// </summary>
-    //    public void ClearSaved()
-    //    {
-    //        if(PropertyValue != null)
-    //            PropertyValue.UserEdit = null ;
-    //    }
-
-    //    public bool Update()
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public bool WriteValue()
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
 }

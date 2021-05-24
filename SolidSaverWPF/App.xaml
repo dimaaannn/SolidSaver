@@ -11,6 +11,7 @@
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ResDictionary/BaseDictionary.xaml"/>
+                <ResourceDictionary Source="ResDictionary/DataTemplateDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         
       <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" 

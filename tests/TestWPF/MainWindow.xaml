@@ -29,5 +29,10 @@
                 
             </Image>
         </StackPanel>
+
+        <StackPanel Grid.Column="2">
+            <TextBox Text="{Binding UserData.Name}"></TextBox>
+            <TextBox Text="{Binding UserData.Info, Mode=OneWay}"/>
+        </StackPanel>
     </Grid>
 </Window>

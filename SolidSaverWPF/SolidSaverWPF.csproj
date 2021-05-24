@@ -77,9 +77,13 @@
     <Compile Include="Data\ClassRegistry.cs" />
     <Compile Include="Data\Handlers.cs" />
     <Compile Include="MessagesType\MessagesType.cs" />
+    <Compile Include="ViewModel\DesignInstances\DesignInst.cs" />
     <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
     <Compile Include="ViewModel\MainDocOptionsViewModel.cs" />
+    <Compile Include="ViewModel\Property2\PropertyListViewModel.cs" />
+    <Compile Include="ViewModel\PropertyModel\PropertySetsViewModel.cs" />
+    <Compile Include="ViewModel\Property2\PropertyViewModel.cs" />
     <Compile Include="ViewModel\PropertyModel\ComponentSelectionViewModel.cs" />
     <Compile Include="ViewModel\SelectedCompViewModel.cs" />
     <Compile Include="Views\ComponentInfoView.xaml.cs">
@@ -112,6 +116,18 @@
     <Compile Include="Views\Property\ComponentSelectionView.xaml.cs">
       <DependentUpon>ComponentSelectionView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Property\EditableFieldView.xaml.cs">
+      <DependentUpon>EditableFieldView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Property\PropertyLoaderView.xaml.cs">
+      <DependentUpon>PropertyLoaderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Property\PropertySetsView.xaml.cs">
+      <DependentUpon>PropertySetsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Property\PropertySetView.xaml.cs">
+      <DependentUpon>PropertySetView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Property\PropListPart.xaml.cs">
       <DependentUpon>PropListPart.xaml</DependentUpon>
     </Compile>
@@ -139,6 +155,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="ResDictionary\BaseDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ResDictionary\DataTemplateDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -175,6 +195,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Property\ComponentSelectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Property\EditableFieldView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Property\PropertyLoaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Property\PropertySetsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Property\PropertySetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

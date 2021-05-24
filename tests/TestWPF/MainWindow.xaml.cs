@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using Emgu.CV;
+using TestWPF.BuissnesLogic;
 
 namespace TestWPF
 {
@@ -26,10 +27,15 @@ namespace TestWPF
         private ICapture capture;
         private CascadeClassifier haarCascade;
 
+        public IUserData UserData { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+            DataContext = this;
+
+            UserData = Creator.GetUserData();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

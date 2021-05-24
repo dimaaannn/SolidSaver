@@ -9,6 +9,7 @@ using SWAPIlib.BaseTypes;
 using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.ComConn;
 using SWAPIlib.MProperty;
+using SWAPIlib.Property;
 
 namespace SWAPIlib
 {
@@ -20,7 +21,7 @@ namespace SWAPIlib
         /// <param name="swComp2"></param>
         public AppComponent(Component2 swComp2)
         {
-            if(swComp2 != null)
+            if (swComp2 != null)
             {
                 PropList = new List<IPropertyModel>();
 
@@ -32,6 +33,8 @@ namespace SWAPIlib
                 DocType = AppDocType.swNONE;
 
                 var swModel = ComponentProxy.GetModelDoc2(swComp2);
+                
+                targetObject = new Target<Component2>(swComp2, swComp2.Name2, TargetType.Component) { TargetInfo = "Компонент сборки" };
 
                 //Если компонент не погашен
                 if (swModel != null)
@@ -46,6 +49,7 @@ namespace SWAPIlib
 
         private AppModel _appModel = null;
         private Component2 _swCompModel;
+        private readonly ITarget targetObject;
 
         /// <summary>
         /// Объект сопряжённой модели
@@ -64,7 +68,7 @@ namespace SWAPIlib
         /// </summary>
         public Component2 SwCompModel => _swCompModel;
 
-
+        public ITarget TargetObject => targetObject;
         public virtual bool IsExist { get; private set; } //Удалить
         public List<IPropertyModel> PropList { get; private set; } //Переделать
 
@@ -96,7 +100,7 @@ namespace SWAPIlib
         /// <summary>
         /// Список конфигураций
         /// </summary>
-        public List<string> ConfigList { get => PartModel?.ConfigList;} //Переделать на загрузку из компонента
+        public List<string> ConfigList { get => PartModel?.ConfigList; } //Переделать на загрузку из компонента
         /// <summary>
         /// Статус компонента в сборке
         /// </summary>
@@ -108,7 +112,7 @@ namespace SWAPIlib
         public bool VisibState
         {
             get => (int)ComponentProxy.GetVisibleStatus(SwCompModel) == 1;
-            set => ComponentProxy.SetVisibleStatus(SwCompModel, 
+            set => ComponentProxy.SetVisibleStatus(SwCompModel,
                 value ? AppCompVisibility.Visible : AppCompVisibility.Hidden);
         }
         /// <summary>
@@ -151,7 +155,7 @@ namespace SWAPIlib
             get => PartModel?[configName: configName, paramName: paramName];
             set
             {
-                if(PartModel != null)
+                if (PartModel != null)
                     PartModel[configName: configName, paramName: paramName] = value;
             }
         }
@@ -160,7 +164,7 @@ namespace SWAPIlib
         /// </summary>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        string IAppModel.this[string paramName] 
+        string IAppModel.this[string paramName]
         {
             get => PartModel?[paramName: paramName];
             set
