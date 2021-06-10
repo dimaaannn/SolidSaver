@@ -1,0 +1,16 @@
+// {type:class}
+// {direction:topDown}
+[TaskProvider|Next:TaskUnitInfo;Cancel:TaskUnitInfo|Next(data);Cancel(data)]
+
+[TaskUnitInfo|..SomeData..;FromUnitTask]
+
+[ITaskStep|+NextStep:UnitTask;+CancelStep:UnitTask|GetNextStep():ITaskStep;GetCancelStep():ITaskStep]
+
+[TaskProvider]<>1-0..1>[ITaskStep]
+
+[TaskStep|+AddNextStep(ITaskStep);+AddCancelStep(ITaskStep)]
+
+[TaskStep]^[ITaskStep]
+
+
+[DataProvider|ViewTable:PropTable;ServiceTable:PropTable;Data:List<PropTable>]

@@ -1,0 +1,13 @@
+// {type:class}
+// {direction:topDown}
+[DataBlock|TaskProvider:ITaskProvider|Proceed();Cancel()]
+
+[ITaskProvider|NextStep(PropertySheet);PrevStep(PropertySheet)]
+
+[DataBlock]++-1[ITaskProvider]
+
+[PropertySheet|Name:string;Type:PropSheetType;ViewTable:IPropertySet;Tables:List<IPropertySet>;Log:List<LogObj>]
+
+[DataBlock]+-[PropertySheet]
+
+[PropTableModel]+-1[PropSheetStorage]
