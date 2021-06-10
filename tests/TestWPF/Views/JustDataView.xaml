@@ -6,10 +6,13 @@
              xmlns:local="clr-namespace:TestWPF.Views"
              xmlns:data="clr-namespace:TestWPF.BuissnesLogic"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance data:JustData, IsDesignTimeCreatable=True}"
              d:DesignHeight="80" d:DesignWidth="150">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <data:JustData/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
+    
+    
 
     <UserControl.Resources>
         <Style TargetType="TextBlock">

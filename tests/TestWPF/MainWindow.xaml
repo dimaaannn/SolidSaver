@@ -3,9 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:data="clr-namespace:TestWPF.BuissnesLogic"
         xmlns:local="clr-namespace:TestWPF"
+        xmlns:view="clr-namespace:TestWPF.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+        <!--d:DataContext="{d:DesignInstance data:JustData, IsDesignTimeCreatable=True}"-->
+
+    <Window.Resources>
+        <ObjectDataProvider x:Key="justDataProvider"
+                ObjectType="{x:Type data:DataProvider}" MethodName="GetData"/>
+        
+    </Window.Resources>
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -23,12 +34,33 @@
             <Button Content="test2"/>
         </StackPanel>
 
-        <StackPanel  Grid.Column="1">
-            <Image x:Name="destbox"
-                Height="200">
+        <Grid  Grid.Column="1">
+            <ListView x:Name="DataListView">
+                <ListView.Resources>
+                    <DataTemplate DataType="{x:Type data:JustData}">
+                        <!--<DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ID}">
+                                <DataTrigger.Value>
+                                    5
+                                </DataTrigger.Value>
+                                <Setter TargetName="border" Property="BorderThickness" Value="4"/>
+                                <Setter Property=""
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                        <view:JustDataSmallView/>-->
+                    </DataTemplate>
+                </ListView.Resources>
                 
-            </Image>
-        </StackPanel>
+                <ListView.ItemsSource>
+                    <CompositeCollection>
+                        <ListBoxItem>
+                            <TextBlock Text="SomeTest"/>
+                        </ListBoxItem>
+                        <CollectionContainer Collection="{Binding Source={StaticResource justDataProvider}}"/>
+                    </CompositeCollection>
+                </ListView.ItemsSource>
+            </ListView>
+        </Grid>
 
         <StackPanel Grid.Column="2">
             <TextBox Text="{Binding UserData.Name}"></TextBox>

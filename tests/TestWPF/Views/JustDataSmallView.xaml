@@ -6,13 +6,37 @@
              xmlns:local="clr-namespace:TestWPF.Views"
              xmlns:data="clr-namespace:TestWPF.BuissnesLogic"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=data:JustData, IsDesignTimeCreatable=True}"
              d:DesignHeight="30" d:DesignWidth="80">
     <UserControl.DataContext>
         <data:JustData/>
     </UserControl.DataContext>
 
-    <Grid>
-        <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Padding="2">
+
+
+        <!--<DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ID}">
+                                <DataTrigger.Value>
+                                    5
+                                </DataTrigger.Value>
+                                <Setter TargetName="border" Property="BorderThickness" Value="4"/>
+                                <Setter Property=""
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                        <view:JustDataSmallView/>-->
+
+    
+    <Grid MinWidth="80" MinHeight="30">
+        <Border Name="border"
+            BorderThickness="2" CornerRadius="4" Padding="2">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <!--<Style.Triggers>
+                        <DataTrigger Binding="{Binding }"
+                    </Style.Triggers>-->
+                </Style>
+            </Border.Style>
         </Border>
         <Viewbox>
             
@@ -22,6 +46,7 @@
             Margin="2"
             Text= "{Binding Name}"
             HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
             TextWrapping="Wrap"/>
         </Viewbox>
     </Grid>
