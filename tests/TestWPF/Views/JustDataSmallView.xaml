@@ -24,6 +24,18 @@
                         </DataTemplate.Triggers>
                         <view:JustDataSmallView/>-->
 
+    <UserControl.Resources>
+        <ColorAnimation x:Key="MouseOverAnimation" 
+                        Storyboard.TargetProperty="BorderBrush" 
+                        To="Red" 
+                        Duration="0:0:3"/>
+        <ColorAnimation x:Key="MouseLeaveAnimation" 
+                        Storyboard.TargetProperty="BorderBrush" 
+                        To="Red" 
+                        Duration="0:0:3"/>
+
+            
+    </UserControl.Resources>
     
     <Grid MinWidth="80" MinHeight="30">
         <Viewbox>
@@ -40,16 +52,39 @@
         <Border Name="border"
             Background="Transparent"
             BorderThickness="2" CornerRadius="4" Padding="2">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="Blue">
+                </SolidColorBrush>
+            </Border.BorderBrush>
+
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="BorderBrush" Value="Gray"/>
                     <Style.Triggers>
-                        <Trigger Property="Border.IsMouseOver" Value="True">
+                        <!--<Trigger Property="Border.IsMouseOver" Value="True">
                             <Setter Property="BorderBrush" Value="Red"/>
-                        </Trigger>
+                        </Trigger>-->
                     </Style.Triggers>
                 </Style>
             </Border.Style>
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.MouseEnter">
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard>
+                                <ColorAnimation 
+                                    Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                    To="Red"
+                                    Duration="0:0:0.5"
+                                    AutoReverse="True">
+                                </ColorAnimation>
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            
         </Border>
 
     </Grid>
