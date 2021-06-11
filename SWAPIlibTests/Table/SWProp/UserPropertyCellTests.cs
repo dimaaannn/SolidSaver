@@ -57,5 +57,37 @@ namespace SWAPIlib.Table.SWProp.Tests
             Assert.IsTrue( userProp.Update());
             Assert.IsNotNull(result);
         }
+
+        [TestMethod]
+        public void WriteValueTest()
+        {
+            var targetTable = SWConnections.GetActiveModelTarget();
+            userProp = new UserPropertyCell(targetTable);
+
+            string newText = "NewText";
+
+            settings = new Table()
+            {
+                { UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false },
+                { UserPropertyCell.PropNameKey, new TextCell("Наименование"), false }
+            };
+
+            userProp.Settings = settings;
+            var result = userProp.Text;
+
+            userProp.TempText = newText;
+
+            Assert.IsNotNull(userProp.TempText);
+            Assert.IsTrue(userProp.WriteValue());
+            Assert.IsNull(userProp.TempText);
+            Assert.AreEqual(newText, userProp.Text);
+
+            userProp.TempText = result;
+            Assert.IsTrue(userProp.WriteValue());
+            Assert.IsNull(userProp.TempText);
+            Assert.AreEqual(result, userProp.Text);
+
+
+        }
     }
 }
