@@ -17,7 +17,7 @@ namespace SWAPIlib.Table.SWProp
 
     public class ActiveConfigNameCell : PropertyCellBase
     {
-        public ActiveConfigNameCell(string name, ITargetTable refTable) : base(name, refTable)
+        public ActiveConfigNameCell(ITargetTable refTable) : base(refTable)
         {
             Name = SWPropertyNames.ActiveConfigName.ToString();
             Info = "Имя активной конфигурации";

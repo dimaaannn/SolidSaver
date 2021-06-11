@@ -11,13 +11,12 @@ namespace SWAPIlib.Table
         private string name;
         private IReferencedCell settings;
         private ITable refTable;
-        private bool autoUpdate;
+        private bool autoUpdate = true;
 
         public bool AutoUpdate { get => autoUpdate; set => autoUpdate = value; }
 
-        protected PropertyCellBase(string name, ITargetTable refTable)
+        protected PropertyCellBase(ITargetTable refTable)
         {
-            this.name = name;
             this.refTable = refTable;
         }
 

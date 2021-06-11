@@ -80,7 +80,7 @@ namespace SWAPIlib.Table.SWProp.Tests
 
 
             refTable = new Table(activeModel);
-            configNameCell = new ActiveConfigNameCell("NameTest", refTable);
+            configNameCell = new ActiveConfigNameCell(refTable);
 
             string result = configNameCell.Text;
             Assert.IsTrue(!string.IsNullOrEmpty(result));
@@ -95,7 +95,7 @@ namespace SWAPIlib.Table.SWProp.Tests
 
 
             refTable = new Table(activeModel);
-            configNameCell = new ActiveConfigNameCell("NameTest", refTable) ;
+            configNameCell = new ActiveConfigNameCell(refTable) ;
 
             string result = configNameCell.Text;
             Assert.IsTrue(!string.IsNullOrEmpty(result));

@@ -125,6 +125,7 @@
     <Compile Include="Table\ITable.cs" />
     <Compile Include="Table\PropertyCell.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
+    <Compile Include="Table\SWProp\UserPropertyCell.cs" />
     <Compile Include="Table\TextCell.cs" />
   </ItemGroup>
   <ItemGroup>
