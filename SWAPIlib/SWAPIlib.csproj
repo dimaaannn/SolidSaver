@@ -121,6 +121,8 @@
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
+    <Compile Include="Table\ICell.cs" />
+    <Compile Include="Table\ITable.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">
