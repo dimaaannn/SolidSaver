@@ -123,6 +123,9 @@
     <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
     <Compile Include="Table\ICell.cs" />
     <Compile Include="Table\ITable.cs" />
+    <Compile Include="Table\PropertyCell.cs" />
+    <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
+    <Compile Include="Table\TextCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">

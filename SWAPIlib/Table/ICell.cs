@@ -10,7 +10,7 @@ namespace SWAPIlib.Table
     public interface ICell : INotifyPropertyChanged
     {
         string Text { get; }
-        void Update();
+        bool Update();
     }
 
     public interface IWritableCell : ICell
@@ -19,9 +19,16 @@ namespace SWAPIlib.Table
         bool WriteValue();
     }
 
-    public interface ITableCell : ICell
+    public interface IReferencedCell : ICell
     {
         ITable RefTable { get; set; }
+    }
+
+    public interface IPropertyCell : ICell, IReferencedCell
+    {
+        string Name { get; }
+        string Info { get; }
+        IReferencedCell Settings { get; set; }
     }
 
     public abstract class BaseCell : ICell
@@ -32,26 +39,14 @@ namespace SWAPIlib.Table
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public string Text { get => text; protected set { OnPropertyChanged("Text"); text = value; } }
-        public abstract void Update();
+        public virtual string Text { get => text; protected set { OnPropertyChanged("Text"); text = value; } }
+        public abstract bool Update();
 
-    }
-
-    public class TextCell : BaseCell, IWritableCell
-    {
-        private string tempText;
-
-        public string TempText { get => tempText; set { OnPropertyChanged(); tempText = value; } }
-
-        public override void Update()
+        public override string ToString()
         {
-            TempText = null;
-        }
-
-        public bool WriteValue()
-        {
-            Text = TempText;
-            return true;
+            return Text;
         }
     }
+
+
 }
