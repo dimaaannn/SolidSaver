@@ -79,7 +79,7 @@ namespace SWAPIlib.Table.SWProp.Tests
             activeModel = appModel.SwModel;
 
 
-            refTable = new Table(activeModel);
+            refTable = new TargetTable(activeModel);
             configNameCell = new ActiveConfigNameCell(refTable);
 
             string result = configNameCell.Text;
@@ -94,7 +94,7 @@ namespace SWAPIlib.Table.SWProp.Tests
             activeModel = appModel.SwModel;
 
 
-            refTable = new Table(activeModel);
+            refTable = new TargetTable(activeModel);
             configNameCell = new ActiveConfigNameCell(refTable) ;
 
             string result = configNameCell.Text;

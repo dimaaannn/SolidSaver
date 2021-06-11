@@ -8,19 +8,19 @@ namespace SWAPIlib.Table
 {
     public abstract class PropertyCellBase : BaseCell, IPropertyCell
     {
-        private string name;
-        private IReferencedCell settings;
+        private ITable settings;
         private ITable refTable;
         private bool autoUpdate = true;
 
         public bool AutoUpdate { get => autoUpdate; set => autoUpdate = value; }
+        public object Target => (RefTable as ITargetTable)?.GetTarget();
 
         protected PropertyCellBase(ITargetTable refTable)
         {
             this.refTable = refTable;
         }
 
-        public virtual IReferencedCell Settings { get => settings; set { OnPropertyChanged(); settings = value; } }
+        public virtual ITable Settings { get => settings; set { OnPropertyChanged(); settings = value; } }
 
         public ITable RefTable { get => refTable; set { OnPropertyChanged(); refTable = value; } }
 

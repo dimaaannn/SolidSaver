@@ -10,16 +10,13 @@ using SWAPIlib.Table;
 namespace SWAPIlib.Table.SWProp
 {
 
-    public enum SWPropertyNames
-    {
-        ActiveConfigName
-    }
+
 
     public class ActiveConfigNameCell : PropertyCellBase
     {
         public ActiveConfigNameCell(ITargetTable refTable) : base(refTable)
         {
-            Name = SWPropertyNames.ActiveConfigName.ToString();
+            Name = ModelPropertyNames.ActiveConfigName.ToString();
             Info = "Имя активной конфигурации";
             AutoUpdate = true;
         }

@@ -28,7 +28,7 @@ namespace SWAPIlib.Table
     {
         string Name { get; }
         string Info { get; }
-        IReferencedCell Settings { get; set; }
+        ITable Settings { get; set; }
     }
 
     public abstract class BaseCell : ICell
