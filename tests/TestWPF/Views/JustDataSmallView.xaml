@@ -8,10 +8,9 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=data:JustData, IsDesignTimeCreatable=True}"
              d:DesignHeight="30" d:DesignWidth="80">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <data:JustData/>
-    </UserControl.DataContext>
-
+    </UserControl.DataContext>-->
 
 
         <!--<DataTemplate.Triggers>
@@ -27,19 +26,7 @@
 
     
     <Grid MinWidth="80" MinHeight="30">
-        <Border Name="border"
-            BorderThickness="2" CornerRadius="4" Padding="2">
-            <Border.Style>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="BorderBrush" Value="Gray"/>
-                    <!--<Style.Triggers>
-                        <DataTrigger Binding="{Binding }"
-                    </Style.Triggers>-->
-                </Style>
-            </Border.Style>
-        </Border>
         <Viewbox>
-            
         <TextBlock 
             FontSize="10"
             MaxWidth="80"
@@ -49,5 +36,21 @@
             VerticalAlignment="Center"
             TextWrapping="Wrap"/>
         </Viewbox>
+
+        <Border Name="border"
+            Background="Transparent"
+            BorderThickness="2" CornerRadius="4" Padding="2">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Style.Triggers>
+                        <Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="Red"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+
     </Grid>
 </UserControl>

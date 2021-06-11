@@ -38,16 +38,7 @@
             <ListView x:Name="DataListView">
                 <ListView.Resources>
                     <DataTemplate DataType="{x:Type data:JustData}">
-                        <!--<DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding ID}">
-                                <DataTrigger.Value>
-                                    5
-                                </DataTrigger.Value>
-                                <Setter TargetName="border" Property="BorderThickness" Value="4"/>
-                                <Setter Property=""
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                        <view:JustDataSmallView/>-->
+                        <view:JustDataSmallView/>
                     </DataTemplate>
                 </ListView.Resources>
                 
