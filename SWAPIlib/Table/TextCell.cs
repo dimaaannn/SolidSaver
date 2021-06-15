@@ -18,6 +18,7 @@
         public bool WriteValue()
         {
             Text = TempText;
+            TempText = null;
             return true;
         }
     }
