@@ -12,7 +12,7 @@ namespace SWAPIlib.Table.SWProp
         public string PropertyName { get; }
         public UserPropertyCellBase(ITargetTable reftable) : base(reftable)
         {
-            Settings = new Table();
+            Settings = new SettingsTable(reftable);
             Settings.Add(ConfigNameKey, null);
             Settings.Add(PropNameKey, null);
         }
@@ -20,8 +20,8 @@ namespace SWAPIlib.Table.SWProp
         public static readonly string ConfigNameKey = ModelEntities.ConfigName.ToString();
         private string tempText;
 
-        public string UserPropertyName => GetSettings(PropNameKey).ToString();
-        public string ConfigName => GetSettings(ConfigNameKey).ToString();
+        public string UserPropertyName => GetSettings(PropNameKey)?.ToString();
+        public string ConfigName => GetSettings(ConfigNameKey)?.ToString();
 
         public string TempText { get => tempText; set { OnPropertyChanged(); tempText = value; } }
 

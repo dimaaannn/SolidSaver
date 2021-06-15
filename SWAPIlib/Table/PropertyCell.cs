@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,5 +73,68 @@ namespace SWAPIlib.Table
     }
 
 
+    /// <summary>
+    /// Создание новой таблицы на основе зависимой
+    /// Выборка настроек из зависимой таблицы по иерархии
+    /// Сначала просматривается внутренний словарь, если значение null - 
+    /// добавляется значение из refTable
+    /// Добавление значения к ключу перекрывает refTable
+    /// </summary>
+    class SettingsTable : ITargetTable
+    {
+        private ITable _refTable;
+        private TargetTable _settingsTable;
+
+        public SettingsTable(ITable refTable)
+        {
+            _refTable = refTable;
+            object target = null;
+            if (_refTable is ITargetTable tTable)
+                target = tTable.GetTarget();
+            _settingsTable = new TargetTable(target) { Name = _refTable.Name };
+        }
+
+        public string Name => _settingsTable.Name;
+
+        public void Add(string cellKey, ICell cell, bool replaceVal = true)
+        {
+            _settingsTable.Add(cellKey, cell, replaceVal);
+        }
+        public void CopyTo(ITable other, bool overrideKey)
+        {
+            _settingsTable.CopyTo(other, overrideKey);
+        }
+
+        public ICell GetCell(string cellKey)
+        {
+            ICell ret = _settingsTable.GetCell(cellKey);
+            if (ret == null)
+            {
+                ret = _refTable.GetCell(cellKey);
+                if(ret != null)
+                {
+                    _settingsTable.Add(cellKey: cellKey, cell: ret, replaceVal: true);
+                }
+            }
+            return ret;
+        }
+
+
+        public object GetTarget()
+        {
+            object ret = _settingsTable.GetTarget();
+            if(ret == null && _refTable is ITargetTable tTable)
+            {
+                ret = tTable.GetTarget();
+            }
+            return ret;
+        }
+
+        public IEnumerator<KeyValuePair<string, ICell>> GetEnumerator() => _settingsTable.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+    }
 
 }

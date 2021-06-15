@@ -31,6 +31,7 @@ namespace SWAPIlib.Table
         ITable Settings { get; set; }
     }
 
+
     public abstract class BaseCell : ICell
     {
         private string text;

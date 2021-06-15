@@ -31,11 +31,6 @@ namespace SWAPIlib.Table.SWProp.Tests
             userProp.Settings = settings;
             var result = userProp.Text;
             Assert.IsNotNull(result);
-
-            
-
-
-
         }
 
         [TestMethod()]
@@ -86,6 +81,35 @@ namespace SWAPIlib.Table.SWProp.Tests
             Assert.IsTrue(userProp.WriteValue());
             Assert.IsNull(userProp.TempText);
             Assert.AreEqual(result, userProp.Text);
+
+
+        }
+
+        [TestMethod]
+        public void GetSettingsKeys()
+        {
+            var targetTable = SWConnections.GetActiveModelTarget();
+            userProp = new UserPropertyCell(targetTable);
+            var settings = userProp.Settings.Select(keyval => keyval.Key);
+            List<string> expected = new List<string>() { ModelEntities.UserPropertyName.ToString()
+                , ModelEntities.ConfigName.ToString() };
+
+            CollectionAssert.AreEquivalent(expected, settings.ToList());
+
+            targetTable.Add(UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false);
+            targetTable.Add(UserPropertyCell.PropNameKey, new TextCell("Наименование"), false);
+
+            Assert.IsNotNull(userProp.Settings.GetCell(UserPropertyCell.PropNameKey));
+
+
+            string currentNomination = userProp.Text;
+            Assert.IsNotNull(currentNomination);
+
+            userProp.Settings.Add(UserPropertyCell.PropNameKey, new TextCell("Обозначение"), true);
+            userProp.Update();
+            Assert.AreNotEqual(currentNomination, userProp.Text, "Текст изменился после смены пользовательского свойства");
+
+
 
 
         }
