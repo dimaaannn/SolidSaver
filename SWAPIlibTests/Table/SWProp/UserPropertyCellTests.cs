@@ -108,10 +108,53 @@ namespace SWAPIlib.Table.SWProp.Tests
             userProp.Settings.Add(UserPropertyCell.PropNameKey, new TextCell("Обозначение"), true);
             userProp.Update();
             Assert.AreNotEqual(currentNomination, userProp.Text, "Текст изменился после смены пользовательского свойства");
+        }
+    }
 
+    [TestClass]
+    public class CellViewTest
+    {
+        public static IPropertyCell propCell;
+        [ClassInitialize]
+        public static void CreateProperty(TestContext context)
+        {
+            var targetTable = SWConnections.GetActiveModelTarget();
+            var tempCell = new UserPropertyCell(targetTable);
 
+            targetTable.Add(UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false);
+            targetTable.Add(UserPropertyCell.PropNameKey, new TextCell("Наименование"), false);
 
+            propCell = tempCell;
+        }
 
+        [TestMethod]
+        public void CreatePropertyCellViewTest()
+        {
+            var cellView = new CellView(propCell);
+            Assert.IsNotNull(cellView.Text);
+            Assert.IsTrue(cellView.IsTargeted);
+            Assert.IsTrue(cellView.IsReferenced);
+            Assert.IsTrue(cellView.IsWritable);
+            Assert.IsFalse(cellView.IsNotSaved);
+            Assert.IsNotNull(cellView.Name);
+        }
+
+        [TestMethod]
+        public void CreateSimpleCellViewTest()
+        {
+            string data = "Some text";
+            string testName = "TestName";
+            var cellView = new CellView(new TextCell(data));
+
+            Assert.IsNotNull(cellView.Text);
+            Assert.IsFalse(cellView.IsTargeted);
+            Assert.IsFalse(cellView.IsReferenced);
+            Assert.IsTrue(cellView.IsWritable);
+            Assert.IsFalse(cellView.IsNotSaved);
+            Assert.IsNull(cellView.Name);
+
+            cellView.Name = testName;
+            Assert.AreEqual(testName, cellView.Name);
         }
     }
 }

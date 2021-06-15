@@ -15,9 +15,10 @@ namespace SWAPIlib.Table
         bool IsWritable { get; }
         bool IsReferenced { get; }
         bool IsTargeted { get; }
+        bool IsNotSaved { get; }
 
         string Text { get; }
-        string TempValue { get; set; }
+        string TempText { get; set; }
 
     }
 
@@ -33,6 +34,12 @@ namespace SWAPIlib.Table
         public CellView(ICell cell)
         {
             _cell = cell;
+            _cell.PropertyChanged += _cell_PropertyChanged;
+        }
+
+        private void _cell_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e.PropertyName);
         }
 
         public string Name { get => GetName(); set { OnPropertyChanged(); _name = value; } }
@@ -66,16 +73,32 @@ namespace SWAPIlib.Table
             return ret;
         }
 
-        public bool IsWritable => throw new System.NotImplementedException();
+        public bool IsWritable => _cell is IWritableCell;
+        public bool IsReferenced => _cell is IReferencedCell;
+        public bool IsTargeted => _cell is IPropertyCell;
+        public string Text=> _cell.Text; 
 
-        public bool IsReferenced => throw new System.NotImplementedException();
+        public string TempText
+        {
+            get
+            {
+                if (_cell is IWritableCell wCell)
+                {
+                    return wCell.TempText;
+                }
+                else return null;
+            }
+            set
+            {
+                if(_cell is IWritableCell wCell)
+                {
+                    wCell.TempText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
-        public bool IsTargeted => throw new System.NotImplementedException();
-
-        public string Text => throw new System.NotImplementedException();
-
-        public string TempValue { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
+        public bool IsNotSaved => TempText != null;
     }
 
 
