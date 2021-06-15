@@ -15,6 +15,9 @@ namespace SWAPIlib.Table
         ObservableCollection<ITableView> TableViews { get; }
         ITable GetTable(string tableName);
 
+        void Add(ICell cell);
+        void Add(ITable table);
+
         void UpdateProperties();
         void WriteProperties();
     }
@@ -102,6 +105,16 @@ namespace SWAPIlib.Table
             {
                 prop.Write();
             }
+        }
+
+        public void Add(ICell cell)
+        {
+            Properties.Add(new CellView(cell));
+        }
+
+        public void Add(ITable table)
+        {
+            Tables.Add(table);
         }
     }
 }
