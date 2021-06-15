@@ -21,7 +21,7 @@ namespace SWAPIlibTests
 
         public static ITargetTable GetActiveModelTarget()
         {
-            return new TargetTable(GetActiveModel());
+            return new TargetTable(GetActiveModel()) { Name = "SomeName" };
         }
     }
 }
