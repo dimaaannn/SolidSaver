@@ -20,8 +20,8 @@ namespace SWAPIlib.Table.SWProp
         public static readonly string ConfigNameKey = ModelEntities.ConfigName.ToString();
         private string tempText;
 
-        public string UserPropertyName => Settings?.GetCell(PropNameKey)?.ToString();
-        public string ConfigName => Settings?.GetCell(ConfigNameKey)?.ToString();
+        public string UserPropertyName => GetSettings(PropNameKey).ToString();
+        public string ConfigName => GetSettings(ConfigNameKey).ToString();
 
         public string TempText { get => tempText; set { OnPropertyChanged(); tempText = value; } }
 

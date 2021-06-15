@@ -38,6 +38,20 @@ namespace SWAPIlib.Table
             protected set => base.Text = value;
         }
 
+        protected ICell GetSettings(string key)
+        {
+            ICell ret;
+
+            ret = Settings?.GetCell(key);
+            if (ret != null)
+                return ret;
+            ret = RefTable?.GetCell(key);
+            if (ret != null)
+                return ret;
+
+            return null;
+        }
+
         public abstract string Name { get; }
         public abstract string Info { get; }
     }
