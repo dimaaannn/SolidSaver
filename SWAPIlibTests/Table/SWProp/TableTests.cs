@@ -16,15 +16,15 @@ namespace SWAPIlib.Table.SWProp.Tests
         [TestMethod]
         public void CreateTableTest()
         {
-            var table = new Table() { { FieldKey1, cell1, true } };
+            var table = new TableList() { { FieldKey1, cell1, true } };
             Assert.AreEqual(CellText1, table.GetCell(FieldKey1).Text);
         }
 
         [TestMethod]
         public void TableUnionTest()
         {
-            var table = new Table() { { FieldKey1, cell1, true } };
-            var table2 = new Table() { { FieldKey2, cell2, true } };
+            var table = new TableList() { { FieldKey1, cell1, true } };
+            var table2 = new TableList() { { FieldKey2, cell2, true } };
             table2.CopyTo(table, false);
 
             Assert.AreEqual(CellText1, table.GetCell(FieldKey1).Text);
@@ -35,8 +35,8 @@ namespace SWAPIlib.Table.SWProp.Tests
         public void TableOverrideTest()
         {
             string cellNewText = "NewText";
-            var table = new Table() { { FieldKey1, cell1, true } };
-            var table2 = new Table() { { FieldKey1, new TextCell(cellNewText), true } };
+            var table = new TableList() { { FieldKey1, cell1, true } };
+            var table2 = new TableList() { { FieldKey1, new TextCell(cellNewText), true } };
 
             table2.CopyTo(table, false);
             Assert.AreEqual(CellText1, table.GetCell(FieldKey1).Text);

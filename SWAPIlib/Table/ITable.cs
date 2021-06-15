@@ -57,7 +57,7 @@ namespace SWAPIlib.Table
         }
     }
 
-    public class Table : BaseTable
+    public class TableList : BaseTable
     {
 
     }

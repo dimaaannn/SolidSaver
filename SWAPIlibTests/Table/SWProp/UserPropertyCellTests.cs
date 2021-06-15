@@ -22,7 +22,7 @@ namespace SWAPIlib.Table.SWProp.Tests
             var targetTable = SWConnections.GetActiveModelTarget();
             userProp = new UserPropertyCell(targetTable);
 
-            settings = new Table()
+            settings = new TableList()
             {
                 { UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false },
                 { UserPropertyCell.PropNameKey, new TextCell("Наименование"), false }
@@ -39,7 +39,7 @@ namespace SWAPIlib.Table.SWProp.Tests
             var targetTable = SWConnections.GetActiveModelTarget();
             userProp = new UserPropertyCell(targetTable);
 
-            settings = new Table()
+            settings = new TableList()
             {
                 { UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false },
                 { UserPropertyCell.PropNameKey, new TextCell("Наименование"), false }
@@ -61,7 +61,7 @@ namespace SWAPIlib.Table.SWProp.Tests
 
             string newText = "NewText";
 
-            settings = new Table()
+            settings = new TableList()
             {
                 { UserPropertyCell.ConfigNameKey, new ActiveConfigNameCell(targetTable), false },
                 { UserPropertyCell.PropNameKey, new TextCell("Наименование"), false }
