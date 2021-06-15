@@ -139,6 +139,37 @@ namespace SWAPIlib.Table.SWProp.Tests
             Assert.IsNotNull(cellView.Name);
         }
 
+
+        [TestMethod]
+        public void CreateNullCellView()
+        {
+            var cellView = new CellView(null);
+            Assert.IsNull(cellView.Text);
+            Assert.IsFalse(cellView.IsTargeted);
+            Assert.IsFalse(cellView.IsReferenced);
+            Assert.IsFalse(cellView.IsWritable);
+            Assert.IsFalse(cellView.IsNotSaved);
+            Assert.IsNull(cellView.Name);
+
+            var settings = cellView.SettingsList;
+            Assert.AreEqual(0, settings.Count());
+
+        }
+
+        [TestMethod]
+        public void GetSettingsListTest()
+        {
+            var cellView = new CellView(propCell);
+            var tempList = cellView.SettingsList;
+            Assert.AreEqual(2, tempList.Count());
+
+            var viewNames = tempList.Select(v => v.Name).ToArray();
+
+
+            CollectionAssert.Contains(viewNames, UserPropertyCell.ConfigNameKey);
+            CollectionAssert.Contains(viewNames, UserPropertyCell.PropNameKey);
+        }
+
         [TestMethod]
         public void CreateSimpleCellViewTest()
         {

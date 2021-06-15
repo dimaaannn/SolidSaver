@@ -25,6 +25,10 @@ namespace SWAPIlib.Table
 
     }
 
+
+    /// <summary>
+    /// Визуальное представление свойств
+    /// </summary>
     public class CellView : ICellView
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +41,10 @@ namespace SWAPIlib.Table
         public CellView(ICell cell)
         {
             _cell = cell;
-            _cell.PropertyChanged += _cell_PropertyChanged;
+            if (_cell != null)
+            {
+                _cell.PropertyChanged += _cell_PropertyChanged;
+            }
         }
 
         private void _cell_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -68,7 +75,7 @@ namespace SWAPIlib.Table
 
         private IEnumerable<ICellView> GetSettings()
         {
-            IEnumerable<ICellView> ret = null;
+            IEnumerable<ICellView> ret = Enumerable.Empty<ICellView>();
             if (_cell is IPropertyCell pCell)
             {
                 ret = pCell.Settings.Select(keyval => new CellView(keyval.Value) { Name = keyval.Key });
@@ -92,7 +99,7 @@ namespace SWAPIlib.Table
         public bool IsWritable => _cell is IWritableCell;
         public bool IsReferenced => _cell is IReferencedCell;
         public bool IsTargeted => _cell is IPropertyCell;
-        public string Text=> _cell.Text; 
+        public string Text=> _cell?.Text; 
 
         public string TempText
         {
