@@ -20,6 +20,9 @@ namespace SWAPIlib.Table
         string Text { get; }
         string TempText { get; set; }
 
+        void Write();
+        void Update();
+
     }
 
     public class CellView : ICellView
@@ -71,6 +74,19 @@ namespace SWAPIlib.Table
                 ret = pCell.Settings.Select(keyval => new CellView(keyval.Value) { Name = keyval.Key });
             }
             return ret;
+        }
+
+        public void Write()
+        {
+            if(_cell is IWritableCell wCell && IsNotSaved)
+            {
+                wCell.WriteValue();
+            }
+        }
+
+        public void Update()
+        {
+            _cell.Update();
         }
 
         public bool IsWritable => _cell is IWritableCell;

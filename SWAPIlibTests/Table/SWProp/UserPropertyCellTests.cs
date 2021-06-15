@@ -156,5 +156,19 @@ namespace SWAPIlib.Table.SWProp.Tests
             cellView.Name = testName;
             Assert.AreEqual(testName, cellView.Name);
         }
+
+        [TestMethod]
+        public void ChangeValueTest()
+        {
+            string data = "Some text";
+            string changedText = "Some New text";
+            string testName = "TestName";
+            var cellView = new CellView(new TextCell(data)) { Name = testName };
+
+            cellView.TempText = changedText;
+            Assert.IsTrue(cellView.IsNotSaved);
+            cellView.Write();
+            Assert.IsFalse(cellView.IsNotSaved);
+        }
     }
 }
