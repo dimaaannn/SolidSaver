@@ -13,7 +13,7 @@ namespace SWAPIlib.Table
         private bool autoUpdate = true;
 
         public bool AutoUpdate { get => autoUpdate; set => autoUpdate = value; }
-        public object Target => (RefTable as ITargetTable)?.GetTarget();
+        public object Target => GetTarget();
 
         protected PropertyCellBase(ITargetTable refTable)
         {
@@ -50,6 +50,21 @@ namespace SWAPIlib.Table
                 return ret;
 
             return null;
+        }
+        protected object GetTarget()
+        {
+            object ret = null;
+            
+            if(Settings is ITargetTable tTable)
+            {
+                ret = tTable.GetTarget();
+            }
+            if(ret == null && RefTable is ITargetTable tTable2)
+            {
+                ret = tTable2.GetTarget();
+            }
+
+            return ret;
         }
 
         public abstract string Name { get; }
