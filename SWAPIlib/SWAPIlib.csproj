@@ -132,6 +132,8 @@
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
     <Compile Include="Table\TextCell.cs" />
     <Compile Include="Task\CellTask\CActiveConfigName.cs" />
+    <Compile Include="Task\ICellFactory.cs" />
+    <Compile Include="Task\ICellLogger.cs" />
     <Compile Include="Task\IPropTask.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,10 +14,10 @@ namespace SWAPIlib.Task.CellTask
             if (settings is ITargetTable tTable)
             {
                 cell = new UserPropertyCell(tTable);
-                ret.Action = CellAction.Processed;
+                ret.Action = LogStatus.Processed;
             }
             else
-                ret.Action = CellAction.Failed;
+                ret.Action = LogStatus.Failed;
 
             return ret;
         }
