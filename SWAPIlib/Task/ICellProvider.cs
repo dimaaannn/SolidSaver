@@ -52,9 +52,20 @@ namespace SWAPIlib.Task
                 {
                     object target;
                     bool check = TryGetTarget(table, out target);
-                    if (target is ModelDoc2) return true;
-                    if (target is Component2) return true;
-                    else return false;
+                    bool typeCheck = false;
+
+                    switch (target)
+                    {
+                        case ModelDoc2 model:
+                            typeCheck =  true;
+                            break;
+                        case Component2 comp:
+                            typeCheck =  true;
+                            break;
+                        default:
+                            break;
+                    }
+                    return typeCheck; 
 
                 }
                 , GetCell = (table, settings) =>

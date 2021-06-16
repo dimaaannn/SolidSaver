@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWAPIlib.Task;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace SWAPIlib.Table
         protected PropertyCellBase(ITargetTable refTable)
         {
             this.refTable = refTable;
+            CheckTarget = CheckTargetPrivate;
         }
 
         public virtual ITable Settings { get => settings; set { OnPropertyChanged(); settings = value; } }
@@ -68,8 +70,26 @@ namespace SWAPIlib.Table
             return ret;
         }
 
+        public CheckTableDelegate CheckTarget { get; protected set; }
+        protected static object GetTargetObject(ITable refTable, ITable settings)
+        {
+            object ret = null;
+            if (settings is ITargetTable tTable)
+                ret = tTable.GetTarget();
+            else if (refTable is ITargetTable tTable2)
+                ret = tTable2.GetTarget();
+
+            return ret;
+        }
+        protected virtual bool CheckTargetPrivate(ITable refTable, ITable settings)
+        {
+            return true;
+        }
+
         public abstract string Name { get; }
         public abstract string Info { get; }
+
+
     }
 
 

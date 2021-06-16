@@ -55,5 +55,20 @@ namespace SWAPIlib.Task.Tests
             Assert.IsNotNull(property.Text);
         }
 
+        [TestMethod]
+        public void InvalidTargetTest()
+        {
+            var simpleTable = new TableList() { { "key", new TextCell("some text"), false } };
+            var targetTable = new TargetTable("abcd") { { "key2", new TextCell("ada"), false } };
+
+            var property = cellProvider.GetCellProvider(ProviderName);
+            Assert.IsFalse(property.CheckTable(simpleTable, targetTable));
+            Assert.IsFalse(property.CheckTable(targetTable, simpleTable));
+            Assert.IsFalse(property.CheckTable(targetTable, null));
+            Assert.IsFalse(property.CheckTable(null, targetTable));
+            Assert.IsFalse(property.CheckTable(null, null));
+
+        }
+
     }
 }

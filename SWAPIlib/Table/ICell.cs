@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWAPIlib.Task;
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -29,6 +30,7 @@ namespace SWAPIlib.Table
         string Name { get; }
         string Info { get; }
         ITable Settings { get; set; }
+        CheckTableDelegate CheckTarget { get; }
     }
 
 

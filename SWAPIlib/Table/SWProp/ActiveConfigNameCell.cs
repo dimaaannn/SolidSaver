@@ -19,6 +19,7 @@ namespace SWAPIlib.Table.SWProp
             Name = ModelPropertyNames.ActiveConfigName.ToString();
             Info = "Имя активной конфигурации";
             AutoUpdate = true;
+            CheckTarget = CheckTargetPrivate;
         }
 
         public override string Name { get; }
@@ -50,6 +51,22 @@ namespace SWAPIlib.Table.SWProp
             return ret;
         }
 
+        protected override bool CheckTargetPrivate(ITable refTable, ITable settings)
+        {
+            var obj = GetTargetObject(refTable, settings);
+            switch (obj)
+            {
+                case Component2 comp:
+                    return true;
+                case ModelDoc2 model:
+                    return true;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+
         public override bool Update()
         {
             string result;
@@ -57,5 +74,7 @@ namespace SWAPIlib.Table.SWProp
             Text = result;
             return ret;
         }
+
+
     }
 }
