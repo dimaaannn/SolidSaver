@@ -25,6 +25,22 @@ namespace SWAPIlib.Table.SWProp
 
         public string TempText { get => tempText; set { OnPropertyChanged(); tempText = value; } }
 
+
+        public static bool CheckTargetType(ITable refTable, ITable settings)
+        {
+            var obj = GetTargetObject(refTable, settings);
+            bool ret = false;
+            switch (obj)
+            {
+                case ModelDoc2 model:
+                    ret = true;
+                    break;
+                default:
+                    break;
+            }
+            return ret;
+        }
+
         public override string Name => ModelPropertyNames.UserProperty.ToString();
         public override string Info => $"Пользовательское свойство {UserPropertyName}";
 

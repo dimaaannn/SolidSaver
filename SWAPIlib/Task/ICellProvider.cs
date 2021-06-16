@@ -49,7 +49,7 @@ namespace SWAPIlib.Task
             var ret = new CellProvider()
             {
                 Name = ProviderName.ActiveConfigName.ToString(),
-                CheckTable = ActiveConfigNameCell.CheckTarget
+                CheckTable = ActiveConfigNameCell.CheckTargetType
                 , GetCell = (table, settings) =>
                     new ActiveConfigNameCell(table as ITargetTable)
             };

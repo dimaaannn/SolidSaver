@@ -50,7 +50,7 @@ namespace SWAPIlib.Table.SWProp
             return ret;
         }
 
-        public static bool CheckTarget(ITable refTable, ITable settings)
+        public static bool CheckTargetType(ITable refTable, ITable settings)
         {
             var obj = GetTargetObject(refTable, settings);
             switch (obj)
