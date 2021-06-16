@@ -53,16 +53,11 @@ namespace SWAPIlib.Task.Tests
 
         }
 
-        [TestMethod()]
-        public void CellFactoryTest1()
-        {
-            Assert.Fail();
-        }
 
         [TestMethod()]
         public void CreateCellTest()
         {
-            Assert.Fail();
+            
         }
 
         [TestMethod()]
@@ -93,7 +88,7 @@ namespace SWAPIlib.Task.Tests
                 new CellFactory(cellProvider.GetCellProvider(
                         ModelPropertyNames.UserProperty))
                 {
-                    Key = ModelEntities.UserPropertyName.ToString(),
+                    Key = ModelEntities.UserProperty.ToString(),
                     Name = "Пользовательское свойство"
                 }
                 );
@@ -107,6 +102,49 @@ namespace SWAPIlib.Task.Tests
 
             Assert.AreEqual(2, log.Count);
             Assert.IsNotNull(table.Last().Value.Text);
+        }
+
+        [TestMethod]
+        public void SettingsTableTest()
+        {
+            var propFactoryList = new List<ICellFactory>();
+
+            var activeModel = SWAPIlib.ComConn.SwAppControl.ActiveModel;
+            var modelTable = new TargetTable(activeModel);
+
+            //Создать текстовое свойство, просто добавить в список
+            var paramCell = new TextCell("Обозначение");
+            modelTable.Add(ModelEntities.UserPropertyName.ToString(), paramCell, false);
+
+            var cellProvider = new CellProviderTemplate();
+
+            propFactoryList.Add(
+                new CellFactory(
+                    cellProvider.GetCellProvider(
+                        ModelPropertyNames.ActiveConfigName))
+                {
+                    Key = ModelEntities.ConfigName.ToString(),
+                    Name = "Имя конфигурации"
+                }
+                );
+
+            propFactoryList.Add(
+                new CellFactory(cellProvider.GetCellProvider(
+                        ModelPropertyNames.UserProperty))
+                {
+                    Key = ModelEntities.UserProperty.ToString(),
+                    Name = "Пользовательское свойство"
+                }
+                );
+
+            var table = modelTable as ITable;
+            var log = new List<TableLog>();
+            foreach (var task in propFactoryList)
+            {
+                log.Add(task.Proceed(ref table, null));
+            }
+
+            Assert.IsTrue(table.Count() == 3);
         }
     }
 }
