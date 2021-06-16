@@ -30,7 +30,11 @@ namespace SWAPIlib.Task
         public CellFactory(ICellProvider cellProvider) : this()
         {
             Name = cellProvider.Name;
-            CheckTable = cellProvider.CheckTable;
+            CellProvider = cellProvider;
+            if(cellProvider.CheckTable != null)
+            {
+                CheckTable = cellProvider.CheckTable;
+            }
 
 
         }
@@ -50,7 +54,7 @@ namespace SWAPIlib.Task
             TableLog retLog;
             CellLog createLog;
             CellLog addLog; 
-            string key = Name;
+            string key = Key;
             bool overrideKey = OverrideKey;
 
             if(refTable == null)
@@ -66,7 +70,7 @@ namespace SWAPIlib.Task
             {
                 addLog = AddCellToTable(
                     cell: createLog.Cell
-                    , key: Name
+                    , key: key
                     , refTable: refTable
                     , overrideKey: overrideKey);
             }
@@ -78,6 +82,7 @@ namespace SWAPIlib.Task
 
             retLog = Logger.Log(table: refTable, settings: settings);
             retLog.Info = CellProvider.Name + " cell factory";
+            retLog.Log = new List<CellLog>();
             retLog.Log.Add(createLog);
             retLog.Log.Add(addLog);
             retLog.Status = createLog.Status;
