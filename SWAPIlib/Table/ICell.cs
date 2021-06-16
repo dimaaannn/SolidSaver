@@ -30,7 +30,6 @@ namespace SWAPIlib.Table
         string Name { get; }
         string Info { get; }
         ITable Settings { get; set; }
-        CheckTableDelegate CheckTarget { get; }
     }
 
 

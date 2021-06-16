@@ -20,7 +20,6 @@ namespace SWAPIlib.Table
         protected PropertyCellBase(ITargetTable refTable)
         {
             this.refTable = refTable;
-            CheckTarget = CheckTargetPrivate;
         }
 
         public virtual ITable Settings { get => settings; set { OnPropertyChanged(); settings = value; } }
@@ -70,7 +69,6 @@ namespace SWAPIlib.Table
             return ret;
         }
 
-        public CheckTableDelegate CheckTarget { get; protected set; }
         protected static object GetTargetObject(ITable refTable, ITable settings)
         {
             object ret = null;
@@ -81,10 +79,7 @@ namespace SWAPIlib.Table
 
             return ret;
         }
-        protected virtual bool CheckTargetPrivate(ITable refTable, ITable settings)
-        {
-            return true;
-        }
+
 
         public abstract string Name { get; }
         public abstract string Info { get; }

@@ -45,29 +45,11 @@ namespace SWAPIlib.Task
 
         private static ICellProvider ActiveConfigName()
         {
+            IPropertyCell temp = new ActiveConfigNameCell(null);
             var ret = new CellProvider()
             {
                 Name = ProviderName.ActiveConfigName.ToString(),
-                CheckTable = (table, settings) =>
-                {
-                    object target;
-                    bool check = TryGetTarget(table, out target);
-                    bool typeCheck = false;
-
-                    switch (target)
-                    {
-                        case ModelDoc2 model:
-                            typeCheck =  true;
-                            break;
-                        case Component2 comp:
-                            typeCheck =  true;
-                            break;
-                        default:
-                            break;
-                    }
-                    return typeCheck; 
-
-                }
+                CheckTable = ActiveConfigNameCell.CheckTarget
                 , GetCell = (table, settings) =>
                     new ActiveConfigNameCell(table as ITargetTable)
             };
