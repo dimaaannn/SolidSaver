@@ -67,6 +67,7 @@
     <Compile Include="Table\SWProp\TableTests.cs" />
     <Compile Include="Table\SWProp\UserPropertyCellTests.cs" />
     <Compile Include="Table\TableViewTests.cs" />
+    <Compile Include="Task\CellProviderTemplateTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

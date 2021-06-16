@@ -29,12 +29,6 @@ namespace SWAPIlib.Task
         CellGetterDelegate GetCell { get; }
     }
 
-    public interface ICellProvider : ITableChecker
-    {
-        string Name { get; }
-        CellGetterDelegate GetCell { get; }
-    }
-
     public interface ICellTask
     {
         string Name { get; }

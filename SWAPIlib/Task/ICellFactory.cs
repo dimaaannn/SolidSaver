@@ -19,9 +19,6 @@ namespace SWAPIlib.Task
     }
 
 
-
-
-
     public class CellFactory : ICellFactory
     {
         public CellFactory()

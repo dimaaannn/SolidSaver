@@ -131,10 +131,9 @@
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
     <Compile Include="Table\TextCell.cs" />
-    <Compile Include="Task\CellsBuilder.cs" />
-    <Compile Include="Task\CellTask\CActiveConfigName.cs" />
     <Compile Include="Task\ICellFactory.cs" />
     <Compile Include="Task\ICellLogger.cs" />
+    <Compile Include="Task\ICellProvider.cs" />
     <Compile Include="Task\IPropTask.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +155,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Task\CellTask\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
