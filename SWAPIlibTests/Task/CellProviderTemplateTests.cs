@@ -18,7 +18,8 @@ namespace SWAPIlib.Task.Tests
         public static IPropertyCell propCell;
         public static ITable TargetTable;
 
-        public static ProviderName ProviderName = ProviderName.ActiveConfigName;
+        public static ModelPropertyNames ConfigNameProviderName = ModelPropertyNames.ActiveConfigName;
+        public static ModelPropertyNames UserPropertyProviderName = ModelPropertyNames.UserProperty;
 
         public static string tableName = "SomeName"; //задано в внешней функции
 
@@ -40,14 +41,14 @@ namespace SWAPIlib.Task.Tests
         [TestMethod()]
         public void GetCellProviderTest()
         {
-            var configNameProp = cellProvider.GetCellProvider(ProviderName);
+            var configNameProp = cellProvider.GetCellProvider(ConfigNameProviderName);
             Assert.IsNotNull(configNameProp);
         }
 
         [TestMethod]
         public void ConfigNameProviderTest()
         {
-            var configNameProp = cellProvider.GetCellProvider(ProviderName);
+            var configNameProp = cellProvider.GetCellProvider(ConfigNameProviderName);
             Assert.IsTrue( configNameProp.CheckTable(TargetTable, null));
 
             var property = configNameProp.GetCell(TargetTable, null);
@@ -61,13 +62,30 @@ namespace SWAPIlib.Task.Tests
             var simpleTable = new TableList() { { "key", new TextCell("some text"), false } };
             var targetTable = new TargetTable("abcd") { { "key2", new TextCell("ada"), false } };
 
-            var property = cellProvider.GetCellProvider(ProviderName);
+            var property = cellProvider.GetCellProvider(ConfigNameProviderName);
             Assert.IsFalse(property.CheckTable(simpleTable, targetTable));
             Assert.IsFalse(property.CheckTable(targetTable, simpleTable));
             Assert.IsFalse(property.CheckTable(targetTable, null));
             Assert.IsFalse(property.CheckTable(null, targetTable));
             Assert.IsFalse(property.CheckTable(null, null));
+        }
 
+        [TestMethod]
+        public void UserPropertyTest()
+        {
+            var activeConfFactory = cellProvider.GetCellProvider( ModelPropertyNames.ActiveConfigName);
+
+            var targetObj = (TargetTable as ITargetTable).GetTarget();
+            var targetTable = new TargetTable(targetObj) { { ModelEntities.UserPropertyName.ToString(), new TextCell("Обозначение"), false }};
+
+            targetTable.Add(ModelEntities.ConfigName.ToString(), activeConfFactory.GetCell(targetTable, null), false);
+
+            var userPropertyFactory = cellProvider.GetCellProvider(ModelPropertyNames.UserProperty);
+
+            var userProperty = userPropertyFactory.GetCell(targetTable, null);
+
+            Assert.IsNotNull(userProperty);
+            Assert.IsNotNull(userProperty.Text, $"User property is {userProperty.Text}");
         }
 
     }

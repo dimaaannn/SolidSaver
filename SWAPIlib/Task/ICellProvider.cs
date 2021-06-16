@@ -2,6 +2,7 @@
 using SWAPIlib.Table;
 using SWAPIlib.Table.SWProp;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SWAPIlib.Task
@@ -10,6 +11,7 @@ namespace SWAPIlib.Task
     {
         string Name { get; }
         CellGetterDelegate GetCell { get; }
+        HashSet<ModelEntities> Requirements { get; }
     }
 
     public class CellProvider : ICellProvider
@@ -20,35 +22,47 @@ namespace SWAPIlib.Task
 
         public CheckTableDelegate CheckTable { get; set; }
 
+        public HashSet<ModelEntities> Requirements { get; set; } = new HashSet<ModelEntities>();
+
     }
 
-    public enum ProviderName
-    {
-        ActiveConfigName
-    }
 
 
     public class CellProviderTemplate
     {
       
-        public ICellProvider GetCellProvider(ProviderName name)
+        public ICellProvider GetCellProvider(ModelPropertyNames name)
         {
             switch (name)
             {
-                case ProviderName.ActiveConfigName:
+                case ModelPropertyNames.ActiveConfigName:
                     return ActiveConfigName();
+                case ModelPropertyNames.UserProperty:
+                    return UserProperty();
                 default:
                     break;
             }
             return null;
         }
 
-        private static ICellProvider ActiveConfigName()
+        private static ICellProvider UserProperty()
         {
-            IPropertyCell temp = new ActiveConfigNameCell(null);
             var ret = new CellProvider()
             {
-                Name = ProviderName.ActiveConfigName.ToString(),
+                Name = ModelPropertyNames.UserProperty.ToString(),
+                CheckTable = ActiveConfigNameCell.CheckTargetType,
+                GetCell = (table, settings) =>
+                    new ActiveConfigNameCell(table as ITargetTable),
+                Requirements = new HashSet<ModelEntities>() { ModelEntities.ConfigName, ModelEntities.UserPropertyName }
+            };
+            return ret;
+        }
+
+        private static ICellProvider ActiveConfigName()
+        {
+            var ret = new CellProvider()
+            {
+                Name = ModelPropertyNames.ActiveConfigName.ToString(),
                 CheckTable = ActiveConfigNameCell.CheckTargetType
                 , GetCell = (table, settings) =>
                     new ActiveConfigNameCell(table as ITargetTable)
