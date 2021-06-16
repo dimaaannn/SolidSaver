@@ -5,6 +5,36 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Task
 {
+    public delegate TableLog TableActionDelegate(ref ITable refTable, ITable settings);
+
+    public delegate bool CheckTableDelegate(ITable refTable, ITable settings);
+    public delegate ICell CellGetterDelegate(ITable refTable, ITable settings);
+
+
+    public interface ITableChecker
+    {
+        CheckTableDelegate CheckTable { get; }
+    }
+
+    public interface ITableAction
+    {
+        string Name { get; }
+        TableActionDelegate Proceed { get; }
+    }
+
+    public interface ICellInTableAction
+    {
+        string Name { get; }
+        CheckTableDelegate CheckTable { get; }
+        CellGetterDelegate GetCell { get; }
+    }
+
+    public interface ICellProvider : ITableChecker
+    {
+        string Name { get; }
+        CellGetterDelegate GetCell { get; }
+    }
+
     public interface ICellTask
     {
         string Name { get; }
@@ -19,62 +49,6 @@ namespace SWAPIlib.Task
 
         public abstract CellLog Proceed(ref ICell cell, ITable settings);
     }
-
-
-
-    public delegate TableLog TableActionDelegate(ref ITable refTable, ITable settings);
-
-    public abstract class TableTaskBase : ITableTask
-    {
-        protected static ITable GetNewTable(bool targeted = false)
-        {
-            if (targeted)
-            {
-                return new TargetTable(null);
-            }
-            else
-                return new TableList();
-        }
-        protected ICellLogger Logger = new SimpleCellLogger();
-        public string Name { get; }
-        public abstract TableLog Proceed(ref ITable table, ITable settings);
-    }
-
-
-    public class CellFactoryConfigName : ICellFactory
-    {
-        public string Key { get; set; } = ModelEntities.ConfigName.ToString();
-
-        public Func<ITable, ICell, bool> GetCell { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    }
-
-
-
-
-    public class TableTaskAddUP : TableTaskBase
-    {
-        public ICellFactory UserPropName { get; set; }
-        public override TableLog Proceed(ref ITable table, ITable settings)
-        {
-            var log = Logger.Log(table, settings);
-
-            if (settings is ITargetTable tTable)
-            {
-                log.Status = LogStatus.Processed;
-
-            }
-            else
-                log.Status = LogStatus.Failed;
-
-            return log;
-        }
-
-        
-
-    }
-
-
-
 
 
 

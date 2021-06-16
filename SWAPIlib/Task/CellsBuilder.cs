@@ -4,31 +4,36 @@ using System.Linq;
 
 namespace SWAPIlib.Task
 {
-    public class CellFactory
+    public class CellsBuilder : ITableAction
     {
-        public CellFactory()
+        protected static ICellLogger Logger = new SimpleCellLogger<CellsBuilder>();
+        public string Name { get; set; }
+
+        public CellsBuilder()
         {
             Proceed = BuildCells;
         }
-        protected static ICellLogger Logger = new SimpleCellLogger<CellFactory>();
         public Dictionary<string, ICellFactory> CellFactories { get; set; }
         public TableActionDelegate Proceed { get; }
         public bool OverrideKeys { get; set; } = false;
 
-        public bool CheckValidation(ICellFactory factory, ITable target, ITable settings = null)
+        public CheckTableDelegate CheckTable { get; set; } =  (x, y) => true;
+
+
+        public bool CheckValidation(ICellInTableAction factory, ITable target, ITable settings = null)
         {
-            bool ret = factory.CheckTarget(target, settings);
+            bool ret = factory.CheckTable(target, settings);
             return ret;
         }
 
-        public CellLog CreateCell(ICellFactory factory, ITable refTable, ITable settings = null)
+        public CellLog CreateCell(ICellInTableAction factory, ITable refTable, ITable settings = null)
         {
             ICell cell = null;
             bool isValid = CheckValidation(factory: factory, target: refTable, settings: settings);
 
             if (isValid)
             {
-                cell = factory.Build(refTable: refTable, settings: settings);
+                cell = factory.GetCell(refTable: refTable, settings: settings);
             }
 
             CellLog ret = Logger.Log(cell, settings);
