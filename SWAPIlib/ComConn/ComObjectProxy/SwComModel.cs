@@ -17,7 +17,11 @@ namespace SWAPIlib.ComConn.Proxy
         {
             return swModel.GetTitle();
         }
-
+        /// <summary>
+        /// Gets the full path name for this document, including the file name. 
+        /// </summary>
+        /// <param name="swModel"></param>
+        /// <returns></returns>
         public static string GetPathName(ModelDoc2 swModel)
         {
             return swModel?.GetPathName();
