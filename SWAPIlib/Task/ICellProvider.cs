@@ -1,5 +1,6 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SWAPIlib.Table;
+using SWAPIlib.Table.Prop;
 using SWAPIlib.Table.SWProp;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,8 @@ namespace SWAPIlib.Task
         {
             switch (name)
             {
+                case ModelPropertyNames.WorkFolder:
+                    return WorkFolder();
                 case ModelPropertyNames.ActiveConfigName:
                     return ActiveConfigName();
                 case ModelPropertyNames.UserProperty:
@@ -58,6 +61,16 @@ namespace SWAPIlib.Task
                     break;
             }
             return null;
+        }
+
+        private static ICellFactoryProvider WorkFolder()
+        {
+            return new CellFactoryProvider(key: ModelEntities.Folder.ToString(),
+                (refTable, settings) => new WorkFolderCell())
+            {
+                Name = "Рабочая папка",
+                OverrideKey = false
+            };
         }
 
         private static ICellFactoryProvider UserProperty()

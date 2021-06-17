@@ -49,7 +49,7 @@ namespace SWAPIlib.Task.Tests
         public void ConfigNameProviderTest()
         {
             var configNameProp = cellProvider.GetCellProvider(ConfigNameProviderName);
-            Assert.IsTrue( configNameProp.CheckTable(TargetTable, null));
+            Assert.IsTrue(configNameProp.CheckTable(TargetTable, null));
 
             var property = configNameProp.GetCell(TargetTable, null);
             Assert.IsNotNull(property);
@@ -73,10 +73,10 @@ namespace SWAPIlib.Task.Tests
         [TestMethod]
         public void UserPropertyTest()
         {
-            var activeConfFactory = cellProvider.GetCellProvider( ModelPropertyNames.ActiveConfigName);
+            var activeConfFactory = cellProvider.GetCellProvider(ModelPropertyNames.ActiveConfigName);
 
             var targetObj = (TargetTable as ITargetTable).GetTarget();
-            var targetTable = new TargetTable(targetObj) { { ModelEntities.UserPropertyName.ToString(), new TextCell("Обозначение"), false }};
+            var targetTable = new TargetTable(targetObj) { { ModelEntities.UserPropertyName.ToString(), new TextCell("Обозначение"), false } };
 
             targetTable.Add(ModelEntities.ConfigName.ToString(), activeConfFactory.GetCell(targetTable, null), false);
 
@@ -88,5 +88,30 @@ namespace SWAPIlib.Task.Tests
             Assert.IsNotNull(userProperty.Text, $"User property is {userProperty.Text}");
         }
 
+    }
+
+    [TestClass]
+    public class CellProviderMethods
+    {
+        private static ITargetTable TargetTable;
+        private static CellProviderTemplate cellProvider;
+
+        [ClassInitialize]
+        public static void CreateProperty(TestContext context)
+        {
+            TargetTable = SWConnections.GetActiveModelTarget();
+            cellProvider = new CellProviderTemplate();
+        }
+
+        [TestMethod]
+        public void ForkFolderCellFactoryTest()
+        {
+            ITable table = null;
+            var factory = new CellFactory(cellProvider.GetCellProvider(ModelPropertyNames.WorkFolder));
+
+            factory.Proceed(ref table, null);
+            Assert.IsTrue(table.Count() == 1);
+            Assert.IsNotNull(table.GetCell(ModelEntities.Folder.ToString()).Text);
+        }
     }
 }

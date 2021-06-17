@@ -17,7 +17,7 @@ namespace SWAPIlib.Table
         public bool AutoUpdate { get => autoUpdate; set => autoUpdate = value; }
         public object Target => GetTarget();
 
-        protected PropertyCellBase(ITargetTable refTable)
+        protected PropertyCellBase(ITable refTable)
         {
             this.refTable = refTable;
         }

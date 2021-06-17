@@ -32,6 +32,7 @@ namespace SWAPIlib.Table
         UserSelection,
         Title,
         UserProperty,
-        UserPropertyName
+        UserPropertyName,
+        Folder
     }
 }
