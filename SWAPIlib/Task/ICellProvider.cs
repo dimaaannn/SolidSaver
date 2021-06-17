@@ -7,31 +7,44 @@ using System.Linq;
 
 namespace SWAPIlib.Task
 {
-    public interface ICellProvider : ITableChecker
+    public interface ICellProvider 
     {
-        string Name { get; }
         CellGetterDelegate GetCell { get; }
+    }
+
+    public interface ICellFactoryProvider : ICellProvider, ITableChecker
+    {
+        string Name { get; set; }
+        string Key { get; set; }
+        bool OverrideKey { get; set; }
         HashSet<ModelEntities> Requirements { get; }
     }
 
-    public class CellProvider : ICellProvider
+    public class CellFactoryProvider : ICellFactoryProvider
     {
-        public string Name { get; set; }
+        private string name;
 
+        public CellFactoryProvider() { }
+        public CellFactoryProvider(string key, CellGetterDelegate cellGetter)
+        {
+            Key = key;
+            GetCell = cellGetter;
+        }
+        public string Name { get => name ?? Key; set => name = value; }
+        public string Key { get; set; } = "NoKey";
+        public bool OverrideKey { get; set; } = false;
         public CellGetterDelegate GetCell { get; set; }
-
-        public CheckTableDelegate CheckTable { get; set; }
-
+        public CheckTableDelegate CheckTable { get; set; } = (x, y) => true;
         public HashSet<ModelEntities> Requirements { get; set; } = new HashSet<ModelEntities>();
-
     }
+
 
 
 
     public class CellProviderTemplate
     {
       
-        public ICellProvider GetCellProvider(ModelPropertyNames name)
+        public ICellFactoryProvider GetCellProvider(ModelPropertyNames name)
         {
             switch (name)
             {
@@ -45,32 +58,29 @@ namespace SWAPIlib.Task
             return null;
         }
 
-        private static ICellProvider UserProperty()
+        private static ICellFactoryProvider UserProperty()
         {
-            var ret = new CellProvider()
+            var ret = new CellFactoryProvider()
             {
-                Name = ModelPropertyNames.UserProperty.ToString(),
-                CheckTable = ActiveConfigNameCell.CheckTargetType,
+                Name = "Свойство пользователя",
+                Key = ModelEntities.UserProperty.ToString(),
                 GetCell = (table, settings) =>
                     new UserPropertyCell(table as ITargetTable) { Settings = settings },
+                CheckTable = ActiveConfigNameCell.CheckTargetType,
                 Requirements = new HashSet<ModelEntities>() { ModelEntities.ConfigName, ModelEntities.UserPropertyName }
             };
             return ret;
         }
 
-        private static ICellProvider ActiveConfigName()
+        private static ICellFactoryProvider ActiveConfigName()
         {
-            var ret = new CellProvider()
+            var ret = new CellFactoryProvider()
             {
-                Name = ModelPropertyNames.ActiveConfigName.ToString(),
-                CheckTable = ActiveConfigNameCell.CheckTargetType
-                , GetCell = (table, settings) =>
-                {
-                    var newCell = new ActiveConfigNameCell(table as ITargetTable);
-                    newCell.Settings = settings;
-                    return newCell;
-
-                }
+                Name = "Имя активной конфигурации",
+                Key = ModelEntities.ConfigName.ToString(),
+                GetCell = (table, settings) =>
+                    new ActiveConfigNameCell(table as ITargetTable) { Settings = settings }
+                ,CheckTable = ActiveConfigNameCell.CheckTargetType
             };
             return ret;
         }

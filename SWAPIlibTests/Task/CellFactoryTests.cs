@@ -34,11 +34,7 @@ namespace SWAPIlib.Task.Tests
         [TestMethod()]
         public void CellFactoryTest()
         {
-            var factory = new CellFactory() { 
-                CellProvider = cellProvider.GetCellProvider(ModelPropertyNames.ActiveConfigName), 
-                Key = ModelEntities.ConfigName.ToString()
-                , OverrideKey = true
-            };
+            var factory = new CellFactory(cellProvider.GetCellProvider(ModelPropertyNames.ActiveConfigName));
 
             var targetTable = new TargetTable((TargetTable as ITargetTable).GetTarget());
             var tableInterface = targetTable as ITable;
@@ -77,20 +73,11 @@ namespace SWAPIlib.Task.Tests
             propFactoryList.Add(
                 new CellFactory(
                     cellProvider.GetCellProvider(
-                        ModelPropertyNames.ActiveConfigName))
-                {
-                    Key = ModelEntities.ConfigName.ToString(),
-                    Name = "Имя конфигурации"
-                }
-                );
+                        ModelPropertyNames.ActiveConfigName)));
 
             propFactoryList.Add(
                 new CellFactory(cellProvider.GetCellProvider(
                         ModelPropertyNames.UserProperty))
-                {
-                    Key = ModelEntities.UserProperty.ToString(),
-                    Name = "Пользовательское свойство"
-                }
                 );
 
             var table = modelTable as ITable;
@@ -101,7 +88,9 @@ namespace SWAPIlib.Task.Tests
             }
 
             Assert.AreEqual(2, log.Count);
-            Assert.IsNotNull(table.Last().Value.Text);
+            var prop = table.Last().Value;
+            prop.Update();
+            Assert.IsNotNull(prop.Text);
         }
 
         [TestMethod]
@@ -122,21 +111,11 @@ namespace SWAPIlib.Task.Tests
             propFactoryList.Add(
                 new CellFactory(
                     cellProvider.GetCellProvider(
-                        ModelPropertyNames.ActiveConfigName))
-                {
-                    Key = ModelEntities.ConfigName.ToString(),
-                    Name = "Имя конфигурации"
-                }
-                );
+                        ModelPropertyNames.ActiveConfigName)));
 
             propFactoryList.Add(
                 new CellFactory(cellProvider.GetCellProvider(
-                        ModelPropertyNames.UserProperty))
-                {
-                    Key = ModelEntities.UserProperty.ToString(),
-                    Name = "Пользовательское свойство"
-                }
-                );
+                        ModelPropertyNames.UserProperty)));
 
             var table = modelTable as ITable;
             var log = new List<TableLog>();

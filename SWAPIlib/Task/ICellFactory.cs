@@ -9,53 +9,30 @@ namespace SWAPIlib.Task
 {
     public interface ICellFactory : ITableAction
     {
-        /// <summary>
-        /// Ключ добавления в списки
-        /// </summary>
-        string Key { get; set; }
-
-        bool OverrideKey { get; set; }
-        ICellProvider CellProvider { get; }
+        ICellFactoryProvider CellProvider { get; }
     }
 
 
     public class CellFactory : ICellFactory
     {
-        public CellFactory()
-        {
-            Proceed = ProceedAction;
-            CheckTable = (x, y) => true;
-        }
-
-        public CellFactory(ICellProvider cellProvider) : this()
-        {
-            Name = cellProvider.Name;
-            CellProvider = cellProvider;
-            if(cellProvider.CheckTable != null)
-            {
-                CheckTable = cellProvider.CheckTable;
-            }
-
-
-        }
         protected static ICellLogger Logger = new SimpleCellLogger<CellFactory>();
-        public string Name { get; set; }
-        public string Key { get; set; }
-        public bool OverrideKey { get; set; }
 
-        public TableActionDelegate Proceed { get; }
-
-        public CheckTableDelegate CheckTable { get; set; } 
-        public ICellProvider CellProvider { get; set; }
-
-        protected virtual TableLog ProceedAction(ref ITable refTable, ITable settings)
+        public CellFactory(ICellFactoryProvider cellProvider) 
         {
-            ICellProvider cellProvider = CellProvider;
+            CellProvider = cellProvider;
+        }
+        public string Name => CellProvider.Name;
+        public ICellFactoryProvider CellProvider { get; set; }
+
+
+
+        public virtual TableLog Proceed(ref ITable refTable, ITable settings)
+        {
             TableLog retLog;
             CellLog createLog;
-            CellLog addLog; 
-            string key = Key;
-            bool overrideKey = OverrideKey;
+            CellLog addLog;
+            string key = CellProvider.Key;
+            bool overrideKey = CellProvider.OverrideKey;
 
             if(refTable == null)
             {
@@ -65,7 +42,7 @@ namespace SWAPIlib.Task
                     : null);
             }
 
-            createLog = CreateCell(cellProvider, refTable: refTable, settings: settings);
+            createLog = CreateCell(CellProvider, refTable: refTable, settings: settings);
             if(createLog.Status == LogStatus.Processed)
             {
                 addLog = AddCellToTable(
@@ -82,9 +59,11 @@ namespace SWAPIlib.Task
 
             retLog = Logger.Log(table: refTable, settings: settings);
             retLog.Info = CellProvider.Name + " cell factory";
-            retLog.Log = new List<CellLog>();
-            retLog.Log.Add(createLog);
-            retLog.Log.Add(addLog);
+            retLog.Log = new List<CellLog>
+            {
+                createLog,
+                addLog
+            };
             retLog.Status = createLog.Status;
 
             return retLog;
@@ -92,7 +71,7 @@ namespace SWAPIlib.Task
         }
 
 
-        public static CellLog CreateCell(ICellProvider cellProvider, ITable refTable, ITable settings = null)
+        public static CellLog CreateCell(ICellFactoryProvider cellProvider, ITable refTable, ITable settings = null)
         {
             ICell cell = null;
             bool isValid = cellProvider.CheckTable(refTable: refTable, settings: settings);

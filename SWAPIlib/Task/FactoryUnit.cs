@@ -26,30 +26,11 @@ namespace SWAPIlib.Task
                 new CellFactory(
                     cellProvider.GetCellProvider(
                         ModelPropertyNames.ActiveConfigName))
-                    {
-                        Key = ModelEntities.ConfigName.ToString(),
-                        Name = "Имя конфигурации"
-                    }
                 );
-
-            //ret.Add(
-            //    new CellFactory()
-            //    {
-            //        CellProvider = 
-            //            new CellProvider()
-            //            { GetCell = (x, y) => new TextCell("Обозначение") },
-            //        Key = ModelEntities.UserPropertyName.ToString(),
-            //        Name = "Имя параметра"
-            //    }
-            //);
 
             ret.Add(
                 new CellFactory(cellProvider.GetCellProvider(
                         ModelPropertyNames.UserProperty))
-                    {
-                        Key = ModelEntities.UserPropertyName.ToString(),
-                        Name = "Пользовательское свойство"
-                    }
                 );
 
             return ret;

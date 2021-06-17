@@ -19,7 +19,7 @@ namespace SWAPIlib.Task
     public interface ITableAction
     {
         string Name { get; }
-        TableActionDelegate Proceed { get; }
+        TableLog Proceed(ref ITable refTable, ITable settings);
     }
 
     public interface ICellInTableAction
