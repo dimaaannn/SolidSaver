@@ -17,6 +17,10 @@ namespace SWAPIlib.Table
         object GetTarget();
     }
 
+    public interface ITargetTable<T> : ITargetTable
+    {
+        T Target { get; }
+    }
 
     public abstract class BaseTable : ITable
     {
@@ -75,5 +79,15 @@ namespace SWAPIlib.Table
         {
             return targetObj;
         }
+    }
+
+    public class TargetTable<T> : TargetTable, ITargetTable<T>
+    {
+        public TargetTable(object targetObject) : base(targetObj: targetObject)
+        {
+
+        }
+
+        public T Target => (T) GetTarget();
     }
 }
