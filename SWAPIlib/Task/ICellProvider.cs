@@ -52,7 +52,7 @@ namespace SWAPIlib.Task
                 Name = ModelPropertyNames.UserProperty.ToString(),
                 CheckTable = ActiveConfigNameCell.CheckTargetType,
                 GetCell = (table, settings) =>
-                    new ActiveConfigNameCell(table as ITargetTable),
+                    new UserPropertyCell(table as ITargetTable) { Settings = settings },
                 Requirements = new HashSet<ModelEntities>() { ModelEntities.ConfigName, ModelEntities.UserPropertyName }
             };
             return ret;
@@ -65,7 +65,12 @@ namespace SWAPIlib.Task
                 Name = ModelPropertyNames.ActiveConfigName.ToString(),
                 CheckTable = ActiveConfigNameCell.CheckTargetType
                 , GetCell = (table, settings) =>
-                    new ActiveConfigNameCell(table as ITargetTable)
+                {
+                    var newCell = new ActiveConfigNameCell(table as ITargetTable);
+                    newCell.Settings = settings;
+                    return newCell;
+
+                }
             };
             return ret;
         }

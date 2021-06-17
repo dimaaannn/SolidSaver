@@ -111,10 +111,11 @@ namespace SWAPIlib.Task.Tests
 
             var activeModel = SWAPIlib.ComConn.SwAppControl.ActiveModel;
             var modelTable = new TargetTable(activeModel);
+            var propTable = new TableList();
 
             //Создать текстовое свойство, просто добавить в список
             var paramCell = new TextCell("Обозначение");
-            modelTable.Add(ModelEntities.UserPropertyName.ToString(), paramCell, false);
+            propTable.Add(ModelEntities.UserPropertyName.ToString(), paramCell, false);
 
             var cellProvider = new CellProviderTemplate();
 
@@ -141,10 +142,10 @@ namespace SWAPIlib.Task.Tests
             var log = new List<TableLog>();
             foreach (var task in propFactoryList)
             {
-                log.Add(task.Proceed(ref table, null));
+                log.Add(task.Proceed(ref table, propTable));
             }
 
-            Assert.IsTrue(table.Count() == 3);
+            Assert.IsTrue(table.Count() == 2);
         }
     }
 }
