@@ -33,6 +33,7 @@ namespace SWAPIlib.Table
         Title,
         UserProperty,
         UserPropertyName,
-        Folder
+        Folder,
+        SubFolder
     }
 }
