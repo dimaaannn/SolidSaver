@@ -7,25 +7,37 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Task
 {
-    public interface ITableTask : ITableAction, ITableChecker
+    public interface ITableTask : ITableAction, ITableChecker, IRequirementKeys
     {
 
     }
 
-    public class TableTask : ITableTask
+    public abstract class TableTaskBase : ITableTask
     {
-        public TableTask(TableActionDelegate action)
+        protected TableActionDelegate ProceedAction { get; set; }
+        public string Name { get; set; }
+
+        public CheckTableDelegate CheckTable { get; set; } = (reftable, settings) => true;
+        public HashSet<ModelEntities> Requirements { get; set; } = new HashSet<ModelEntities>();
+
+        public abstract TableLog Proceed(ref ITable refTable, ITable settings);
+
+    }
+
+    public class SaveSheetMetalTask : TableTaskBase
+    {
+        public SaveSheetMetalTask()
         {
-            if (action == null)
-                throw new NullReferenceException("TableTask: Null action ref");
-            ProceedAction = action;
+            Requirements.Add(ModelEntities.FileName);
+            Requirements.Add(ModelEntities.ConfigName);
+            Requirements.Add(ModelEntities.IsSheetMetal);
         }
 
-        public string Name { get; set; }
-        public CheckTableDelegate CheckTable { get; set; }
-        protected TableActionDelegate ProceedAction { get; set; }
-
-        public TableLog Proceed(ref ITable refTable, ITable settings) => 
-            ProceedAction(refTable: ref refTable, settings: settings);
+        public override TableLog Proceed(ref ITable refTable, ITable settings)
+        {
+            throw new NotImplementedException();
+        }
     }
+
+
 }

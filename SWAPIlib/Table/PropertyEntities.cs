@@ -34,6 +34,7 @@ namespace SWAPIlib.Table
         UserProperty,
         UserPropertyName,
         Folder,
-        SubFolder
+        SubFolder,
+        IsSheetMetal
     }
 }

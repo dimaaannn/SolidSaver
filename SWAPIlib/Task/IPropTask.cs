@@ -35,6 +35,11 @@ namespace SWAPIlib.Task
         CellLog Proceed(ref ICell cell, ITable settings);
     }
 
+    public interface IPathOption
+    {
+        string Path { get; set; }
+    }
+
     public abstract class CellTaskBase : ICellTask
     {
         protected static ICellLogger Logger = new SimpleCellLogger<CellTaskBase>();
@@ -43,6 +48,8 @@ namespace SWAPIlib.Task
 
         public abstract CellLog Proceed(ref ICell cell, ITable settings);
     }
+
+
 
 
 

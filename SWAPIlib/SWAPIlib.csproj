@@ -130,6 +130,7 @@
     <Compile Include="Table\PropertyEntities.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
+    <Compile Include="Task\SWTask\SaveSheetMetalTask.cs" />
     <Compile Include="Table\SWProp\PropertyCellUtils.cs" />
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
     <Compile Include="Table\Prop\WorkFolderCell.cs" />
