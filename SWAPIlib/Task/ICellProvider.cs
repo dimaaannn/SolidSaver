@@ -13,12 +13,16 @@ namespace SWAPIlib.Task
         CellGetterDelegate GetCell { get; }
     }
 
-    public interface ICellFactoryProvider : ICellProvider, ITableChecker
+    public interface IRequirementKeys
+    {
+        HashSet<ModelEntities> Requirements { get; }
+    }
+
+    public interface ICellFactoryProvider : ICellProvider, ITableChecker, IRequirementKeys
     {
         string Name { get; set; }
         string Key { get; set; }
         bool OverrideKey { get; set; }
-        HashSet<ModelEntities> Requirements { get; }
     }
 
     public class CellFactoryProvider : ICellFactoryProvider
