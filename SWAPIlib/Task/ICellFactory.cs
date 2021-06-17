@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Task
 {
-    public interface ICellFactory : ITableAction
+    public interface ICellFactory : ITableAction, ITableChecker
     {
         ICellFactoryProvider CellProvider { get; }
     }
@@ -26,7 +26,7 @@ namespace SWAPIlib.Task
         public string Name => CellProvider.Name;
         public ICellFactoryProvider CellProvider { get; set; }
 
-
+        public CheckTableDelegate CheckTable => CellProvider.CheckTable;
 
         public virtual TableLog Proceed(ref ITable refTable, ITable settings)
         {
