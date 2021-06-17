@@ -46,17 +46,40 @@ namespace SWAPIlib.Task.SWTask
 
             if (isDirectoryExist)
             {
-                ret = SaveDxf(model: (ModelDoc2) Target, path: combinedPath);
+                ret = SaveDxfFromAssembly(model: (ModelDoc2) Target, path: combinedPath);
+                if (ret)
+                {
+                    Text = combinedPath;
+                    ret = IsFileExist(Path);
+                }
             }
 
             return ret;
         }
 
-        bool SaveDxf(ModelDoc2 model, string path)
+        static bool SaveDxfFromAssembly(ModelDoc2 model, string path)
         {
             bool ret = false;
-            ret = SWAPIlib.ComConn.Proxy.PartDocProxy.ExportDXF(model, path);
+            string modelName = model.GetTitle();
+            int errors = 0;
+            //Открыть деталь в отдельном окне
+            ModelDoc2 tempModel = SWAPIlib.ComConn.SwAppControl.swApp.ActivateDoc2(modelName, false, ref errors);
+            bool status = tempModel.EditRebuild3();
+            //Сохранить развёртку
+            ret = SWAPIlib.ComConn.Proxy.PartDocProxy.ExportDXF(tempModel, path);
+            //закрыть окно детали
+            SWAPIlib.ComConn.SwAppControl.swApp.CloseDoc(modelName);
+            
             return ret;
+        }
+
+        static bool IsFileExist(string path)
+        {
+
+            var fileinfo = new System.IO.FileInfo(path);
+            var length = fileinfo.Length;
+            return length > 10;
+
         }
 
         string GetDirectory() => System.IO.Path.GetDirectoryName(Path);

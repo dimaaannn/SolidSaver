@@ -49,50 +49,38 @@ namespace SolidApp
                 TestRawComponent = compList.First().SwCompModel;
             }
 
+
+
             var swApp = SwAppControl.swApp;
 
+            string pathToFile = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 Основа топпера.SLDPRT";
 
-            var propTest = new PropertyTest();
+            var savePath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Tests\TestSave.dxf";
 
-            //Создать объект из которого будет получаться свойство
-            var targetComp = propTest.CreateTarget(TestRawComponent, TestRawComponent.Name, SWAPIlib.Property.TargetType.Component, "Component info");
+            int longstatus = 0;
+            int longwarnings = 0;
+            ModelDoc2 Part = swApp.OpenDoc6(pathToFile, 1, 0, "", ref longstatus, longwarnings);
+
+            Part = swApp.ActiveDoc;
+
+            ModelView myModelView = Part.ActiveView;
+
+            myModelView.FrameLeft = 0;
+            myModelView.FrameTop = 21;
+            myModelView = Part.ActiveView;
+
+            myModelView.FrameState = (int)swWindowState_e.swWindowMaximized;
+            swApp.ActivateDoc2("2670 Основа топпера", false, ref longstatus);
+            Part = swApp.ActiveDoc;
+
+            bool boolstatus = Part.Extension.SelectByID2("Развертка1", "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
+            longstatus = Part.SaveAs3(savePath, 0, 0);
+            myModelView = Part.ActiveView;
+            myModelView.FrameState = (int) swWindowState_e.swWindowMaximized;
+            Part = swApp.ActiveDoc;
 
 
-            var lazyInstance = new Lazy<NotifyOnInstance>(() => (new NotifyOnInstance("someString")));
-
-
-            var instance = lazyInstance.Value;
-
-
-            #region PropertyTest
-            //var target = propTest.CreateWrapperTarget(testRawModel);
-            //propTest.SetTarget(targetComp);
-
-            ////Задать обработчик
-            //var activeConfNamegetter = propTest.CreateActiveConfGetter();
-            //var confListgetter = propTest.CreateConfListGetter();
-            //propTest.SetPropertyGetter(confListgetter);
-
-            ////создать свойства (тест)
-            //var propSettings = propTest.CreateSettings(new KeyValuePair<string, string>("test", "value"));
-            //propTest.PropertySettings = propSettings;
-
-            //var property = propTest.CreateProperty();
-            //property.Update();
-            //Console.WriteLine("PropertyValue = " + string.Join("\n", property.Select(x => x.Value).ToArray()));
-
-            //#region SetValue
-            //if (property.IsReadOnly)
-            //{
-            //    string tempVal = "По умолчанию";
-            //    property.TempValue = tempVal;
-            //    var result = property.WriteValue();
-            //}
-            //#endregion 
-            //Console.WriteLine("new PropertyValue = " + property.Value);
-            #endregion
-
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
 
