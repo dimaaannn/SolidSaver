@@ -17,7 +17,8 @@ namespace SWAPIlib.Table
         FileName,
         FilePath,
         Title,
-        UserProperty
+        UserProperty,
+        WorkFolder
     }
 
     /// <summary>

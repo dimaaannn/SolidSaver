@@ -19,6 +19,8 @@ namespace SWAPIlib.Task
 
         public CellFactory(ICellFactoryProvider cellProvider) 
         {
+            if (cellProvider == null)
+                throw new NullReferenceException("CellFactory: cellProvider null reference");
             CellProvider = cellProvider;
         }
         public string Name => CellProvider.Name;

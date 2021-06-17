@@ -64,7 +64,7 @@
     <Compile Include="Table\PropertySheetTests.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCellTests.cs" />
     <Compile Include="Table\SWProp\CellViewTest.cs" />
-    <Compile Include="Table\SWProp\SwPropertyTest.cs" />
+    <Compile Include="Table\SWProp\SwAllPropertyTest.cs" />
     <Compile Include="Table\SWProp\TableTests.cs" />
     <Compile Include="Table\SWProp\UserPropertyCellTests.cs" />
     <Compile Include="Table\TableViewTests.cs" />

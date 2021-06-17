@@ -52,6 +52,8 @@ namespace SWAPIlib.Task
                     return ActiveConfigName();
                 case ModelPropertyNames.UserProperty:
                     return UserProperty();
+                case ModelPropertyNames.FilePath:
+                    return FilePath();
                 default:
                     break;
             }
@@ -83,6 +85,17 @@ namespace SWAPIlib.Task
                 ,CheckTable = ActiveConfigNameCell.CheckTargetType
             };
             return ret;
+        }
+
+        private static ICellFactoryProvider FilePath()
+        {
+            return new CellFactoryProvider(
+                ModelEntities.FileName.ToString(),
+                (reftable, settings) => new FilePathCell(refTable: reftable as ITargetTable))
+            {
+                CheckTable = FilePathCell.CheckTargetType,
+                Name = "Путь к файлу"
+            };
         }
 
         private static bool TryGetTarget(ITable table, out object obj)
