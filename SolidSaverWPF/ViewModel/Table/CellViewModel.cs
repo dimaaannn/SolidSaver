@@ -56,14 +56,19 @@ namespace SolidSaverWPF.ViewModel.Table
     {
         public CellViewModel()
         {
-            if (IsInDesignMode)
+            _name = "staticDesignName";
+            if (IsInDesignModeStatic)
             {
                 _cell = new MockCell();
+                var writableCell = Cell as IWritableCell;
+                //writableCell.TempText = "This Is temp Text";
+                
+                BorderColorBrush = new SolidColorBrush(Colors.LightGray);
             }
-            BGColorBrush = new SolidColorBrush(Colors.LightGray);
         }
 
         ICell _cell;
+        public ICell Cell { get => _cell; set { Set(ref _cell, value); } }
         private string _name;
 
         public CellViewModel(ICell cell)
@@ -103,7 +108,7 @@ namespace SolidSaverWPF.ViewModel.Table
         {
             get
             {
-                if (_cell is IWritableCell wCell)
+                if (Cell is IWritableCell wCell)
                 {
                     return wCell.TempText;
                 }
@@ -111,7 +116,7 @@ namespace SolidSaverWPF.ViewModel.Table
             }
             set
             {
-                if (_cell is IWritableCell wCell)
+                if (Cell is IWritableCell wCell)
                 {
                     wCell.TempText = value;
                     RaisePropertyChanged();
@@ -142,7 +147,6 @@ namespace SolidSaverWPF.ViewModel.Table
                 wCell.WriteValue();
             }
         }
-
         public void Update()
         {
             _cell.Update();
@@ -158,8 +162,9 @@ namespace SolidSaverWPF.ViewModel.Table
         public ICommand WriteCommand => writeProp ?? (
             writeProp = new RelayCommand(Write, WriteCanExecute));
 
-        private Brush bGColorBrush;
-        public Brush BGColorBrush { get => bGColorBrush; set => Set(ref bGColorBrush, value); }
+        private Brush borderColorBrush;
+        public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); }
+
 
     }
 
