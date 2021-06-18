@@ -17,7 +17,7 @@ namespace SWAPIlibTests.Table.SWProp
     {
         private static ITargetTable TargetTable;
         private static ITable Table;
-        private static CellProviderTemplate CellProvider;
+        private static CellFactoryTemplate CellProvider;
 
 
         [ClassInitialize]
@@ -25,7 +25,7 @@ namespace SWAPIlibTests.Table.SWProp
         {
             TargetTable = SWConnections.GetActiveModelTarget();
             Table = TargetTable;
-            CellProvider = new CellProviderTemplate();
+            CellProvider = new CellFactoryTemplate();
         }
 
         [TestMethod]

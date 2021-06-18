@@ -17,7 +17,7 @@ namespace SWAPIlib.Task.SWTask.Tests
     public class SaveSheetMetalTaskTests
     {
         private static ModelDoc2 mainModel;
-        private static CellProviderTemplate cellProvider;
+        private static CellFactoryTemplate cellProvider;
         public static Component2[] components;
         private static ModelDoc2 sheetModel;
         private static TargetTable<ModelDoc2> targetTable;
@@ -28,7 +28,7 @@ namespace SWAPIlib.Task.SWTask.Tests
         {
 
             mainModel = SWConnections.GetActiveModel();
-            cellProvider = new CellProviderTemplate();
+            cellProvider = new CellFactoryTemplate();
             components = SWAPIlib.ComConn.Proxy.AsmDocProxy.GetComponents(mainModel);
 
             sheetModel = GetSheetModel(components);
@@ -60,12 +60,6 @@ namespace SWAPIlib.Task.SWTask.Tests
                 }
             }
             return null;
-        }
-
-        [TestMethod]
-        public void SWGetSheetModel()
-        {
-            Assert.IsNotNull(sheetModel);
         }
 
         [TestMethod()]
@@ -119,15 +113,6 @@ namespace SWAPIlib.Task.SWTask.Tests
 
             Assert.IsTrue(System.IO.File.Exists(replaceExtension));
         }
-
-
-        [TestMethod()]
-        public void SaveSheetMetalTaskTest()
-        {
-            Assert.Fail();
-        }
-
-
 
     }
 }

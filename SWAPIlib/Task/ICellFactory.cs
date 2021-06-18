@@ -23,6 +23,8 @@ namespace SWAPIlib.Task
                 throw new NullReferenceException("CellFactory: cellProvider null reference");
             CellProvider = cellProvider;
         }
+
+        public CellFactory(ICellFactoryTemplate cellFactoryTemplate, ModelPropertyNames modelProperty) : this(cellFactoryTemplate.GetCellProvider(modelProperty)) { }
         public string Name => CellProvider.Name;
         public ICellFactoryProvider CellProvider { get; set; }
 

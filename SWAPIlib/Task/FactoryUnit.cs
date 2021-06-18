@@ -20,7 +20,7 @@ namespace SWAPIlib.Task
                 new TextCell("Обозначение"),
                 false);
 
-            var cellProvider = new CellProviderTemplate();
+            var cellProvider = new CellFactoryTemplate();
 
             ret.Add(
                 new CellFactory(

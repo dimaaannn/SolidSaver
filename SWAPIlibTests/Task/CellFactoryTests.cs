@@ -14,7 +14,7 @@ namespace SWAPIlib.Task.Tests
     public class CellFactoryTests
     {
 
-        public static CellProviderTemplate cellProvider;
+        public static CellFactoryTemplate cellProvider;
         public static IPropertyCell propCell;
         public static ITable TargetTable;
 
@@ -28,7 +28,7 @@ namespace SWAPIlib.Task.Tests
         {
             TargetTable = SWConnections.GetActiveModelTarget();
 
-            cellProvider = new CellProviderTemplate();
+            cellProvider = new CellFactoryTemplate();
         }
 
         [TestMethod()]
@@ -51,9 +51,14 @@ namespace SWAPIlib.Task.Tests
 
 
         [TestMethod()]
-        public void CreateCellTest()
+        public void CreateCellFromProviderTemplate()
         {
-            
+
+            var factory = new CellFactory(cellProvider, ModelPropertyNames.WorkFolder);
+            ITable table = null;
+            var log = factory.Proceed(ref table, null);
+
+            Assert.IsNotNull(table.First().Value.Text);
         }
 
         [TestMethod()]
@@ -68,7 +73,7 @@ namespace SWAPIlib.Task.Tests
             var paramCell = new TextCell("Обозначение");
             modelTable.Add(ModelEntities.UserPropertyName.ToString(), paramCell, false);
 
-            var cellProvider = new CellProviderTemplate();
+            var cellProvider = new CellFactoryTemplate();
 
             propFactoryList.Add(
                 new CellFactory(
@@ -106,7 +111,7 @@ namespace SWAPIlib.Task.Tests
             var paramCell = new TextCell("Обозначение");
             propTable.Add(ModelEntities.UserPropertyName.ToString(), paramCell, false);
 
-            var cellProvider = new CellProviderTemplate();
+            var cellProvider = new CellFactoryTemplate();
 
             propFactoryList.Add(
                 new CellFactory(

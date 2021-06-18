@@ -14,7 +14,7 @@ namespace SWAPIlib.Task.Tests
     [TestClass()]
     public class CellProviderTemplateTests
     {
-        public static CellProviderTemplate cellProvider;
+        public static CellFactoryTemplate cellProvider;
         public static IPropertyCell propCell;
         public static ITable TargetTable;
 
@@ -35,7 +35,7 @@ namespace SWAPIlib.Task.Tests
 
             //propCell = tempCell;
 
-            cellProvider = new CellProviderTemplate();
+            cellProvider = new CellFactoryTemplate();
         }
 
         [TestMethod()]
@@ -94,13 +94,13 @@ namespace SWAPIlib.Task.Tests
     public class CellProviderMethods
     {
         private static ITargetTable TargetTable;
-        private static CellProviderTemplate cellProvider;
+        private static CellFactoryTemplate cellProvider;
 
         [ClassInitialize]
         public static void CreateProperty(TestContext context)
         {
             TargetTable = SWConnections.GetActiveModelTarget();
-            cellProvider = new CellProviderTemplate();
+            cellProvider = new CellFactoryTemplate();
         }
 
         [TestMethod]
