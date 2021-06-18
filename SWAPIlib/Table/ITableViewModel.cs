@@ -47,7 +47,7 @@ namespace SWAPIlib.Table
         {
             if (table.Count() > 0)
             {
-                return table.Select(keyval => new CellView(keyval.Value) { Name = keyval.Key });
+                return null;// table.Select(keyval => new CellView(keyval.Value) { Name = keyval.Key });
             }
             else
                 return Enumerable.Empty<ICellView>();

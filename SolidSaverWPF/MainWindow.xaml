@@ -183,7 +183,7 @@
                                         <Button Content="UpdateAll"/>
                                         <Button Content="SaveAll"/>
                                     </StackPanel>
-                                    <StackPanel DockPanel.Dock="Left"
+                                    <StackPanel DockPanel.Dock="Left" 
                                         Orientation="Horizontal">
                                         <Button Content="&lt;"/>
                                         <Button Content="&gt;"/>

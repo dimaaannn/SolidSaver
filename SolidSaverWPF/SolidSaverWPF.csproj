@@ -87,6 +87,9 @@
     <Compile Include="ViewModel\PropertyModel\ComponentSelectionViewModel.cs" />
     <Compile Include="ViewModel\SelectedCompViewModel.cs" />
     <Compile Include="ViewModel\Table\CellViewModel.cs" />
+    <Compile Include="Views\Table\CellView.xaml.cs">
+      <DependentUpon>CellView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ComponentInfoView.xaml.cs">
       <DependentUpon>ComponentInfoView.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResDictionary\DataTemplateDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Table\CellView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

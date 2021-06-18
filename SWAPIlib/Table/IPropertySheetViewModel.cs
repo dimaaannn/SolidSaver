@@ -38,21 +38,21 @@ namespace SWAPIlib.Table
 
         private void Tables_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 AddTableToView(e.NewItems);
             }
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 RemoveTablesFromView(e.OldItems);
             }
 
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
             {
                 TableViews.Clear();
             }
 
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
                 RemoveTablesFromView(e.OldItems);
                 AddTableToView(e.NewItems);
@@ -109,7 +109,7 @@ namespace SWAPIlib.Table
 
         public void Add(ICell cell)
         {
-            Properties.Add(new CellView(cell));
+            //Properties.Add(new CellView(cell));
         }
 
         public void Add(ITable table)
