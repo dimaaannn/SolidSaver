@@ -3,7 +3,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using SWAPIlib.Table;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,12 +56,12 @@ namespace SolidSaverWPF.ViewModel.Table
         public CellViewModel()
         {
             _name = "staticDesignName";
-            if (IsInDesignModeStatic)
+            if (IsInDesignMode)
             {
                 _cell = new MockCell();
                 var writableCell = Cell as IWritableCell;
                 //writableCell.TempText = "This Is temp Text";
-                
+                Name = "PropName";
                 BorderColorBrush = new SolidColorBrush(Colors.LightGray);
             }
         }
@@ -87,15 +86,8 @@ namespace SolidSaverWPF.ViewModel.Table
 
 
         public string Text => _cell?.Text; //ReadOnly!
-        public string Name { get => GetName(); set => Set(ref _name, value); }
-        private string GetName()
-        {
-            if (_name == null && _cell is IPropertyCell pCell)
-            {
-                _name = pCell.Name;
-            }
-            return _name;
-        }
+        public string Name { get => _name; set => Set(ref _name, value); }
+
         public string Info => GetInfo();
         private string GetInfo()
         {
@@ -162,45 +154,8 @@ namespace SolidSaverWPF.ViewModel.Table
         public ICommand WriteCommand => writeProp ?? (
             writeProp = new RelayCommand(Write, WriteCanExecute));
 
-        private Brush borderColorBrush;
-        public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); }
+        private Brush borderColorBrush = new SolidColorBrush(Colors.Gray);
+        public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); } 
 
-
-    }
-
-
-
-    public class TableViewModel : ViewModelBase
-    {
-        private ITable _table;
-        private string _tableName;
-
-
-        public TableViewModel(ITable table)
-        {
-            _table = table;
-            Properties = new ObservableCollection<ICellView>(GetCells(_table));
-            Name = _table.Name;
-        }
-
-        public ITable Table => _table;
-
-        public string Name { get => _tableName; set => Set(ref _tableName, value); }
-        public ObservableCollection<ICellView> Properties { get; }
-
-        public bool IsReferencedTable => _table is ITargetTable;
-
-        public string TargetName => "Не реализовано";
-
-
-        protected IEnumerable<ICellView> GetCells(ITable table)
-        {
-            if (table.Count() > 0)
-            {
-                return  table.Select(keyval => new CellViewModel(keyval.Value) { Name = keyval.Key });
-            }
-            else
-                return Enumerable.Empty<ICellView>();
-        }
     }
 }

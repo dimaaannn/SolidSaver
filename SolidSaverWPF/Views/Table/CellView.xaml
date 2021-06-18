@@ -7,7 +7,7 @@
              xmlns:tablemodel="clr-namespace:SolidSaverWPF.ViewModel.Table"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=tablemodel:CellViewModel, IsDesignTimeCreatable=True}"
-             d:DesignHeight="30" d:DesignWidth="150">
+             d:DesignHeight="30" d:DesignWidth="200">
 
     <UserControl.Resources>
     <local:NullToColorConverter x:Key="nulltocolorconverter"/>
@@ -22,30 +22,42 @@
        
         <!--d:DataContext="{d:DesignInstance Type=tablemodel:CellViewModel, IsDesignTimeCreatable=True}"-->
     <Grid>
-        <TextBox
-            x:Name="Value"
-            Text="{Binding Text, Mode=OneWay , FallbackValue=No data}"
-            IsReadOnly="True"
-            Background="{Binding TempText, 
-                    Converter={StaticResource nulltocolorconverter }}"
-            Foreground="{Binding TempText, Converter={StaticResource  valueTextcolorconverter}}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
-        <TextBox 
-            x:Name="PropCurrentValue"
-            GotFocus="PropCurrentValue_GotFocus"
-            LostFocus="PropCurrentValue_LostFocus"
-            Background="Transparent"
+        <TextBlock VerticalAlignment="Center"
+            Margin="2"
+            Text="{Binding Name}"/>
+
+        <Grid Grid.Column="1" >
+            <TextBox
+                x:Name="Value"
+                Text="{Binding Text, Mode=OneWay , FallbackValue=No data}"
+                IsReadOnly="True"
+                Background="{Binding TempText, 
+                        Converter={StaticResource nulltocolorconverter }}"
+                Foreground="{Binding TempText, Converter={StaticResource  valueTextcolorconverter}}"/>
+
+            <TextBox 
+                x:Name="PropCurrentValue"
+                GotFocus="PropCurrentValue_GotFocus"
+                LostFocus="PropCurrentValue_LostFocus"
+                Background="Transparent"
             
-            Text="{Binding TempText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-            <TextBox.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Name="updateCommandName" Header="Обновить" Command="{Binding UpdatePropCommand}" />
-                    <MenuItem Name="writeCommandName" Header="Записать" Command="{Binding WriteCommand}"/>
-                    <!--<MenuItem Click="CopyTextFromVal" Header="Скопировать" ToolTip="DClick"/>
-                    <MenuItem Click="ClearTextClick" Header="Очистить"/>-->
-                </ContextMenu>
-            </TextBox.ContextMenu>
-        </TextBox>
-        <Border BorderThickness="2" BorderBrush="{Binding BorderColorBrush}"/>
+                Text="{Binding TempText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="updateCommandName" Header="Обновить" Command="{Binding UpdatePropCommand}" />
+                        <MenuItem Name="writeCommandName" Header="Записать" Command="{Binding WriteCommand}"/>
+                        <!--<MenuItem Click="CopyTextFromVal" Header="Скопировать" ToolTip="DClick"/>
+                        <MenuItem Click="ClearTextClick" Header="Очистить"/>-->
+                    </ContextMenu>
+                </TextBox.ContextMenu>
+            </TextBox>
+        </Grid>
+        <Border Grid.ColumnSpan="2"
+            BorderThickness="2, 1" BorderBrush="{Binding BorderColorBrush}"/>
     </Grid>
 </UserControl>
