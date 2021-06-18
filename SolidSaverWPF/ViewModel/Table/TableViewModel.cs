@@ -28,7 +28,19 @@ namespace SolidSaverWPF.ViewModel.Table
             Name = _table.Name;
         }
 
-        public ITable Table => _table;
+        public ITable Table
+        {
+            get => _table;
+            set
+            {
+                Set(ref _table, value);
+                Properties.Clear();
+                foreach (var cell in Table)
+                {
+                    Properties.Add(new CellViewModel(cell.Value) { Name = cell.Key });
+                }
+            }
+        }
 
         public string Name { get => _tableName; set => Set(ref _tableName, value); }
         public ObservableCollection<CellViewModel> Properties { get; }

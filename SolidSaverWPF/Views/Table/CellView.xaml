@@ -58,6 +58,6 @@
             </TextBox>
         </Grid>
         <Border Grid.ColumnSpan="2"
-            BorderThickness="2, 1" BorderBrush="{Binding BorderColorBrush}"/>
+            BorderThickness="0, 1" BorderBrush="{Binding BorderColorBrush}"/>
     </Grid>
 </UserControl>

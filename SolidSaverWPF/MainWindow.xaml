@@ -11,6 +11,8 @@
         xmlns:vm="clr-namespace:SolidSaverWPF.ViewModel"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.Views"
+        xmlns:tableView="clr-namespace:SolidSaverWPF.Views.Table"
+        xmlns:tableModel="clr-namespace:SolidSaverWPF.ViewModel.Table"
         xmlns:view="clr-namespace:SolidSaverWPF.Views"
         xmlns:propView="clr-namespace:SolidSaverWPF.Views.Property"
 
@@ -194,13 +196,23 @@
                                                 Command="{Binding GetSelectedComponentsCommand}"/>
                                         <Button Content="&gt;"
                                                 Command="{Binding ProceedCommand}"/>
+                                        <Button Content="&gt;"
+                                                Command="{Binding ProceedCommand}"/>
                                     </StackPanel>
                                 </DockPanel>
 
-                                <DataGrid Grid.Row="1"
-                                          ItemsSource="{Binding TableView}">
+                                <ListView 
+                                    Grid.Row="1"
+                                    HorizontalContentAlignment="Stretch"
+                                    ItemsSource="{Binding TableView}">
+                                    
+                                    <ListView.Resources>
+                                        <DataTemplate DataType="{x:Type tableModel:TableViewModel}">
+                                            <tableView:TableView/>
+                                        </DataTemplate>
+                                    </ListView.Resources>
 
-                                </DataGrid>
+                                </ListView>
                             </Grid>
                         </TabItem>
 

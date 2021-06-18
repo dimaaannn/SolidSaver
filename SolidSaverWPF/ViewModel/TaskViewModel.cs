@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using SolidSaverWPF.ViewModel.Table;
 using SWAPIlib.Table;
 using SWAPIlib.Task;
 using System;
@@ -14,40 +15,47 @@ namespace SolidSaverWPF.ViewModel
 {
     public class TaskViewModel : ViewModelBase
     {
-        public ObservableCollection<ITableView> TableView { get => tableView; set => Set(ref tableView , value); }
-        protected ICellFactory GetFactory()
-        {
-            ICellFactory ret;
-            var factoryTemplate = new CellFactoryTemplate();
-            ret = new CellFactory(factoryTemplate, ModelPropertyNames.ActiveConfigName);
-            return ret;
-        }
+        private ObservableCollection<TableViewModel> tableView = new ObservableCollection<TableViewModel>();
+        public ObservableCollection<TableViewModel> TableView { get => tableView; set => Set(ref tableView, value); }
+
+
+        TableViewModel CurrentTableView { get => currentTableView; set => Set(ref currentTableView, value); }
 
         public void Proceed()
         {
-            var factory = GetFactory();
+            var factoryTemplate = new CellFactoryTemplate();
 
+            var getActiveConfigName = new CellFactory(factoryTemplate, ModelPropertyNames.ActiveConfigName);
+            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FilePath);
+
+
+            ITable settings = null;
             foreach (var tTable in TableView)
             {
                 var table = tTable.Table;
 
-                factory.Proceed(ref table, null);
+                getActiveConfigName.Proceed(ref table, null);
+                getFileName.Proceed(ref table, null);
 
-                if (tTable.Table != table)
-                    tTable.Table = table;
+                tTable.Table = table;
             }
         }
 
-        public ObservableCollection<ITableView> GetTables()
+        public void TestSaveDxf()
         {
-            var ret = new ObservableCollection<ITableView>();
+
+        }
+
+        public ObservableCollection<TableViewModel> GetTables()
+        {
+            var ret = new ObservableCollection<TableViewModel>();
 
             ITable tempTable;
             foreach (var component in SWAPIlib.Global.MainModel.SelectionList)
             {
                 var target = new TargetWrapper(component.Appmodel);
                 tempTable = new TargetTable(target.GetTarget());
-                ret.Add(new TableView(tempTable));
+                ret.Add(new TableViewModel(tempTable));
             }
             return ret;
         }
@@ -61,7 +69,7 @@ namespace SolidSaverWPF.ViewModel
                 GetSelectedComponentsCanExecute));
 
         private ICommand proceedCommand;
-        private ObservableCollection<ITableView> tableView = new ObservableCollection<ITableView>();
+        private TableViewModel currentTableView;
 
         private bool ProceedCanExecute() => TableView.Count > 0;
         public ICommand ProceedCommand => proceedCommand ?? (
