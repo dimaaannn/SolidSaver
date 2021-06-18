@@ -177,16 +177,22 @@
                                     <RowDefinition Height="40"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Orientation="Horizontal" >
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="Update"/>
-                                        <Button Content="Save"/>
+                                <DockPanel LastChildFill="False" >
+                                    <StackPanel DockPanel.Dock="Right"
+                                        Orientation="Horizontal">
+                                        <Button Content="UpdateAll"/>
+                                        <Button Content="SaveAll"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel DockPanel.Dock="Left"
+                                        Orientation="Horizontal">
                                         <Button Content="&lt;"/>
                                         <Button Content="&gt;"/>
                                     </StackPanel>
-                                </StackPanel>
+                                </DockPanel>
+
+                                <DataGrid Grid.Row="1">
+                                    
+                                </DataGrid>
                             </Grid>
                         </TabItem>
 
