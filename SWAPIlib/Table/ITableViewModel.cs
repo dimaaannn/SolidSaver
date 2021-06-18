@@ -13,7 +13,8 @@ namespace SWAPIlib.Table
 
         bool IsReferencedTable { get; }
         string TargetName { get; }
-        ITable Table { get; }
+        ITable Table { get; set; }
+        string FirstValue { get; }
     }
 
     public class TableView : ITableView
@@ -33,7 +34,7 @@ namespace SWAPIlib.Table
             Name = _table.Name;
         }
 
-        public ITable Table => _table;
+        public ITable Table { get => _table; set { _table = value; OnPropertyChanged(); } }
 
         public string Name { get => _tableName; set { OnPropertyChanged(); _tableName = value; } }
         public ObservableCollection<ICellView> Properties { get; }
@@ -42,6 +43,7 @@ namespace SWAPIlib.Table
 
         public string TargetName => "Не реализовано";
 
+        public string FirstValue => Table.FirstOrDefault().Value?.Text;
 
         protected IEnumerable<ICellView> GetCells(ITable table)
         {

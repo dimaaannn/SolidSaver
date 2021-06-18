@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using SWAPIlib.Table;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -160,5 +161,41 @@ namespace SolidSaverWPF.ViewModel.Table
         private Brush bGColorBrush;
         public Brush BGColorBrush { get => bGColorBrush; set => Set(ref bGColorBrush, value); }
 
+    }
+
+
+
+    public class TableViewModel : ViewModelBase
+    {
+        private ITable _table;
+        private string _tableName;
+
+
+        public TableViewModel(ITable table)
+        {
+            _table = table;
+            Properties = new ObservableCollection<ICellView>(GetCells(_table));
+            Name = _table.Name;
+        }
+
+        public ITable Table => _table;
+
+        public string Name { get => _tableName; set => Set(ref _tableName, value); }
+        public ObservableCollection<ICellView> Properties { get; }
+
+        public bool IsReferencedTable => _table is ITargetTable;
+
+        public string TargetName => "Не реализовано";
+
+
+        protected IEnumerable<ICellView> GetCells(ITable table)
+        {
+            if (table.Count() > 0)
+            {
+                return  table.Select(keyval => new CellViewModel(keyval.Value) { Name = keyval.Key });
+            }
+            else
+                return Enumerable.Empty<ICellView>();
+        }
     }
 }

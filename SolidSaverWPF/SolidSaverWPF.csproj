@@ -87,6 +87,7 @@
     <Compile Include="ViewModel\PropertyModel\ComponentSelectionViewModel.cs" />
     <Compile Include="ViewModel\SelectedCompViewModel.cs" />
     <Compile Include="ViewModel\Table\CellViewModel.cs" />
+    <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Views\Table\CellView.xaml.cs">
       <DependentUpon>CellView.xaml</DependentUpon>
     </Compile>

@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
+        xmlns:vm="clr-namespace:SolidSaverWPF.ViewModel"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.Views"
         xmlns:view="clr-namespace:SolidSaverWPF.Views"
@@ -167,6 +168,10 @@
 
                         <TabItem Header="SaveSheet">
                             <Grid ShowGridLines="True">
+                                <Grid.DataContext>
+                                    <vm:TaskViewModel/>
+                                </Grid.DataContext>
+                                
                                 <Grid.Resources>
                                     <Style TargetType="Button">
                                         <Setter Property="Width" Value="45"/>
@@ -185,13 +190,16 @@
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left" 
                                         Orientation="Horizontal">
-                                        <Button Content="&lt;"/>
-                                        <Button Content="&gt;"/>
+                                        <Button Content="&lt;" 
+                                                Command="{Binding GetSelectedComponentsCommand}"/>
+                                        <Button Content="&gt;"
+                                                Command="{Binding ProceedCommand}"/>
                                     </StackPanel>
                                 </DockPanel>
 
-                                <DataGrid Grid.Row="1">
-                                    
+                                <DataGrid Grid.Row="1"
+                                          ItemsSource="{Binding TableView}">
+
                                 </DataGrid>
                             </Grid>
                         </TabItem>

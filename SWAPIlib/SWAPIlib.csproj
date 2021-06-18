@@ -126,6 +126,7 @@
     <Compile Include="Table\IPropertySheetViewModel.cs" />
     <Compile Include="Table\ITable.cs" />
     <Compile Include="Table\ITableViewModel.cs" />
+    <Compile Include="Table\ITargetWrapper.cs" />
     <Compile Include="Table\PropertyCell.cs" />
     <Compile Include="Table\PropertyEntities.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
