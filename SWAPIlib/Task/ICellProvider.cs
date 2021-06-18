@@ -6,16 +6,25 @@ using System.Linq;
 
 namespace SWAPIlib.Task
 {
+    /// <summary>
+    /// Поставщик ячеек
+    /// </summary>
     public interface ICellProvider 
     {
         CellGetterDelegate GetCell { get; }
     }
 
+    /// <summary>
+    /// Требуемые ключи ячеек
+    /// </summary>
     public interface IRequirementKeys
     {
         HashSet<ModelEntities> Requirements { get; }
     }
 
+    /// <summary>
+    /// Шаблон для ICellFactory
+    /// </summary>
     public interface ICellFactoryProvider : ICellProvider, ITableChecker, IRequirementKeys
     {
         string Name { get; set; }

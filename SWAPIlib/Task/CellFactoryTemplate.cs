@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace SWAPIlib.Task
 {
+    /// <summary>
+    /// Заготовленные шаблоны свойств для фабрики
+    /// </summary>
     public interface ICellFactoryTemplate
     {
         ICellFactoryProvider GetCellProvider(ModelPropertyNames name);

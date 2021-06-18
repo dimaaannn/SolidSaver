@@ -5,49 +5,54 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Task
 {
+    /// <summary>
+    /// Делегат взаимодействия с таблицей ячеек
+    /// </summary>
+    /// <param name="refTable">Объект взаимодействия</param>
+    /// <param name="settings">Настройки (опционально)</param>
+    /// <returns>Лог взаимодействия</returns>
     public delegate TableLog TableActionDelegate(ref ITable refTable, ITable settings);
-
+    /// <summary>
+    /// Делегат проверки таблицы
+    /// </summary>
+    /// <param name="refTable">Таблица проверки</param>
+    /// <param name="settings">Опции проверки</param>
+    /// <returns></returns>
     public delegate bool CheckTableDelegate(ITable refTable, ITable settings);
+    /// <summary>
+    /// Делегат получения (или создания) ячейки
+    /// </summary>
+    /// <param name="refTable">Объект извлечения (опционально)</param>
+    /// <param name="settings">Свойства извлечения (опционально)</param>
+    /// <returns>Ячейка</returns>
     public delegate ICell CellGetterDelegate(ITable refTable, ITable settings);
 
-
+    /// <summary>
+    /// Валидация таблицы
+    /// </summary>
     public interface ITableChecker
     {
         CheckTableDelegate CheckTable { get; }
     }
 
+    /// <summary>
+    /// Взаимодействие с таблицей
+    /// </summary>
     public interface ITableAction
     {
         string Name { get; }
         TableLog Proceed(ref ITable refTable, ITable settings);
     }
 
-    public interface ICellInTableAction
-    {
-        string Name { get; }
-        CheckTableDelegate CheckTable { get; }
-        CellGetterDelegate GetCell { get; }
-    }
 
-    public interface ICellTask
-    {
-        string Name { get; }
-        CellLog Proceed(ref ICell cell, ITable settings);
-    }
-
+    /// <summary>
+    /// Файловый URI
+    /// </summary>
     public interface IPathOption
     {
         string Path { get; set; }
     }
 
-    public abstract class CellTaskBase : ICellTask
-    {
-        protected static ICellLogger Logger = new SimpleCellLogger<CellTaskBase>();
-
-        public abstract string Name { get; }
-
-        public abstract CellLog Proceed(ref ICell cell, ITable settings);
-    }
 
 
 
