@@ -176,7 +176,7 @@
                                 
                                 <Grid.Resources>
                                     <Style TargetType="Button">
-                                        <Setter Property="Width" Value="45"/>
+                                        <Setter Property="Width" Value="65"/>
                                         <Setter Property="Margin" Value="2, 3"/>
                                     </Style>
                                 </Grid.Resources>
@@ -187,17 +187,15 @@
                                 <DockPanel LastChildFill="False" >
                                     <StackPanel DockPanel.Dock="Right"
                                         Orientation="Horizontal">
-                                        <Button Content="UpdateAll"/>
-                                        <Button Content="SaveAll"/>
+                                        <Button Content="Обновить"
+                                                Command="{Binding WriteVisibleCommand}"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left" 
                                         Orientation="Horizontal">
-                                        <Button Content="&lt;" 
+                                        <Button Content="Загрузить" 
                                                 Command="{Binding GetSelectedComponentsCommand}"/>
-                                        <Button Content="&gt;"
-                                                Command="{Binding ProceedCommand}"/>
-                                        <Button Content="&gt;"
-                                                Command="{Binding ProceedCommand}"/>
+                                        <Button Content="Сохранить"
+                                                Command="{Binding WriteVisibleCommand}"/>
                                     </StackPanel>
                                 </DockPanel>
 

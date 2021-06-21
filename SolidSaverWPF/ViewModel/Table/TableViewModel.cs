@@ -44,11 +44,11 @@ namespace SolidSaverWPF.ViewModel.Table
 
         public string Name { get => _tableName; set => Set(ref _tableName, value); }
         public ObservableCollection<CellViewModel> Properties { get; }
+        public bool HasNoError { get; set; } = true;
 
         public bool IsReferencedTable => _table is ITargetTable;
 
-        public string TargetName => "Не реализовано";
-
+        public string TargetName { get; set; }
 
         protected IEnumerable<CellViewModel> GetCells(ITable table)
         {
@@ -58,6 +58,30 @@ namespace SolidSaverWPF.ViewModel.Table
             }
             else
                 return Enumerable.Empty<CellViewModel>();
+        }
+
+        public void WriteAll()
+        {
+            HasNoError = true;
+            var notSaved = from propcell in Properties
+                           let cell = propcell.Cell
+                           where cell is IWritableCell
+                           let wcell = cell as IWritableCell
+                           where wcell.TempText != null
+                           select wcell;
+            foreach (var cell in notSaved)
+            {
+                HasNoError &= cell.WriteValue();
+            }
+        }
+
+        public void UpdateAll()
+        {
+            HasNoError = true;
+            foreach (var prop in Properties)
+            {
+                prop.Cell.Update();
+            }
         }
     }
 }

@@ -20,47 +20,24 @@ namespace SolidSaverWPF.ViewModel
         public ObservableCollection<TableViewModel> TableView { get => tableView; set => Set(ref tableView, value); }
 
 
+        private TableViewModel currentTableView;
         TableViewModel CurrentTableView { get => currentTableView; set => Set(ref currentTableView, value); }
 
         private static ICellFactoryTemplate cellFactoryTemplate = new CellFactoryTemplate();
 
-        public void Proceed()
+        public void WriteVisibleCells()
         {
-            var factoryTemplate = new CellFactoryTemplate(); //Источник шаблонов для ячеек
-
-            var getActiveConfigName = new CellFactory(
-                factoryTemplate, 
-                ModelPropertyNames.ActiveConfigName); 
-
-            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FilePath);
-
-            var workFolderPath = new CellFactory(factoryTemplate, ModelPropertyNames.WorkFolder);
-
-            var textBuilderSettings = TextBuilderCell.BuildSettings(
-                (reftable) =>
-                {
-                    string workFolder = reftable.GetCell(workFolderPath.CellProvider.Key).ToString();
-                    string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
-                    string savingFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-
-                    return System.IO.Path.Combine(workFolder, savingFileName);
-                });
-            
-            ITable settings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSettings, true } };
-
-            var textBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
-
-            foreach (var tTable in TableView)
+            foreach (var table in TableView)
             {
-                var table = tTable.Table;
+                table.WriteAll();
+            }
+        }
 
-                getActiveConfigName.Proceed(ref table, null);
-                getFileName.Proceed(ref table, null);
-                workFolderPath.Proceed(ref table, null);
-
-                textBuilder.Proceed(ref table, settings);
-
-                tTable.Table = table;
+        public void UpdateVisibleCells()
+        {
+            foreach (var table in TableView)
+            {
+                table.UpdateAll();
             }
         }
 
@@ -106,7 +83,7 @@ namespace SolidSaverWPF.ViewModel
 
         }
 
-        public void StepOne()
+        public void LoadSelection()
         {
             TableView.Clear();
 
@@ -148,6 +125,21 @@ namespace SolidSaverWPF.ViewModel
             var globalTable = GetGlobalTable();
             var cellsTemplate = GetBuildTemplates();
 
+
+            var nomination = new CellFactory(
+                cellFactoryTemplate, ModelPropertyNames.UserProperty);
+            nomination.CellProvider.Key = "Наименование";
+            var nominationSettings = new TableList {
+                { ModelEntities.UserPropertyName.ToString(),
+                    new TextCell("Обозначение"), false} };
+
+            var designation = new CellFactory(
+                cellFactoryTemplate, ModelPropertyNames.UserProperty);
+            designation.CellProvider.Key = "Обозначение";
+            var designationSettings = new TableList {
+                { ModelEntities.UserPropertyName.ToString(),
+                    new TextCell("Наименование"), false} };
+
             var saveSheetMetalFactory = new CellFactory(cellFactoryTemplate, ModelPropertyNames.SaveSheetMetal);
 
             List<TableLog> logList = new List<TableLog>();
@@ -164,6 +156,9 @@ namespace SolidSaverWPF.ViewModel
                 logList.AddRange(validCells.Select(
                     template => template.Proceed(ref table, null))
                     .ToList());
+
+                nomination.Proceed(ref table, nominationSettings);
+                designation.Proceed(ref table, designationSettings);
                 
                 savingPathBuilder.Proceed(ref table, savingPathSettings);
                 fileNameViewBuilder.Proceed(ref table, fileNameSettings);
@@ -176,10 +171,10 @@ namespace SolidSaverWPF.ViewModel
 
             var showedKeys = new HashSet<string>
             {
-                ModelPropertyNames.SaveSheetMetal.ToString(),
-                ModelEntities.FilePath.ToString(),
                 ModelEntities.ConfigName.ToString(),
-                "PartName",
+                ModelPropertyNames.SaveSheetMetal.ToString(),
+                "Наименование",
+                "Обозначение"
             };
 
 
@@ -219,7 +214,7 @@ namespace SolidSaverWPF.ViewModel
                 else
                     resultTable = table;
 
-                ret.Add(new TableViewModel(resultTable));
+                ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
             }
             return ret;
         }
@@ -231,14 +226,18 @@ namespace SolidSaverWPF.ViewModel
             SWAPIlib.Global.MainModel.SelectionList?.Count() > 0;
         public ICommand GetSelectedComponentsCommand => getSelectedComponentsCommand ?? (
             getSelectedComponentsCommand = new RelayCommand(
-                StepOne,
+                LoadSelection,
                 GetSelectedComponentsCanExecute));
 
-        private ICommand proceedCommand;
-        private TableViewModel currentTableView;
 
-        private bool ProceedCanExecute() => false;
-        public ICommand ProceedCommand => proceedCommand ?? (
-            proceedCommand = new RelayCommand(Proceed, ProceedCanExecute));
+        private ICommand writeVisible;
+        private bool WriteVisibleCanExecute() => TableView.Count > 0;
+        public ICommand WriteVisibleCommand => writeVisible ?? (
+            writeVisible = new RelayCommand(WriteVisibleCells, WriteVisibleCanExecute));
+
+        private ICommand updateVisible;
+        private bool UpdateVisibleCanExecute() => TableView.Count > 0;
+        public ICommand UpdateCommand => updateVisible ?? (
+            updateVisible = new RelayCommand(UpdateVisibleCells, UpdateVisibleCanExecute));
     }
 }
