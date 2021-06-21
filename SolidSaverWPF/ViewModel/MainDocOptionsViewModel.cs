@@ -25,7 +25,7 @@ namespace SolidSaverWPF.ViewModel
 
         private void MainModelChanged(object sender, EventArgs e)
         {
-            DocName = System.IO.Path.GetFileName(Variables.GetMainModel().Path);
+            DocName = System.IO.Path.GetFileName(Variables.GetMainModel()?.Path);
             UpdateWorkFolder(null, null);
         }
 
@@ -33,14 +33,20 @@ namespace SolidSaverWPF.ViewModel
         public string DocName { get => _DocName; set => Set(ref _DocName, value); }
 
         private string _FolderName;
-        public string FolderName {
+        public string FolderName
+        {
             get
             {
-                if(string.IsNullOrWhiteSpace(_FolderName))
+                if (string.IsNullOrWhiteSpace(_FolderName))
                     _FolderName = Variables.GetWorkFolder();
                 return _FolderName;
             }
-            set => Set(ref _FolderName, value); }
+            set
+            {
+                _FolderName = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private ICommand _SelectFolderCommand;
         public ICommand SelectFolderCommand => _SelectFolderCommand
@@ -56,8 +62,10 @@ namespace SolidSaverWPF.ViewModel
                 var dialogResult =  dialog.ShowDialog();
                 if(dialogResult == DialogResult.OK && dialog.SelectedPath != FolderName)
                 {
-                    //if(Variables.SetWorkFolder(dialog.SelectedPath))
-                    //    FolderName = dialog.SelectedPath;
+                    Variables.SetWorkFolder(dialog.SelectedPath);
+                    _FolderName = null;
+                    RaisePropertyChanged("FolderName");
+
                     MessengerInstance.Send<PathMessage>(
                         new PathMessage
                         (
