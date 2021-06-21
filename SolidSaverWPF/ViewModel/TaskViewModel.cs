@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using SolidSaverWPF.ViewModel.Table;
 using SWAPIlib.Table;
+using SWAPIlib.Table.Prop;
 using SWAPIlib.Task;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,39 @@ namespace SolidSaverWPF.ViewModel
 
         public void Proceed()
         {
-            var factoryTemplate = new CellFactoryTemplate();
+            var factoryTemplate = new CellFactoryTemplate(); //Источник шаблонов для ячеек
 
-            var getActiveConfigName = new CellFactory(factoryTemplate, ModelPropertyNames.ActiveConfigName);
+            var getActiveConfigName = new CellFactory(
+                factoryTemplate, 
+                ModelPropertyNames.ActiveConfigName); 
+
             var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FilePath);
 
+            var workFolderPath = new CellFactory(factoryTemplate, ModelPropertyNames.WorkFolder);
 
-            ITable settings = null;
+            var textBuilderSettings = TextBuilderCell.BuildSettings(
+                (reftable) =>
+                {
+                    string workFolder = reftable.GetCell(workFolderPath.CellProvider.Key).ToString();
+                    string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
+                    string savingFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+                    return System.IO.Path.Combine(workFolder, savingFileName);
+                });
+            
+            ITable settings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSettings, true } };
+
+            var textBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
+
             foreach (var tTable in TableView)
             {
                 var table = tTable.Table;
 
                 getActiveConfigName.Proceed(ref table, null);
                 getFileName.Proceed(ref table, null);
+                workFolderPath.Proceed(ref table, null);
+
+                textBuilder.Proceed(ref table, settings);
 
                 tTable.Table = table;
             }

@@ -28,10 +28,26 @@ namespace SWAPIlib.Task
                     return UserProperty();
                 case ModelPropertyNames.FilePath:
                     return FilePath();
+                case ModelPropertyNames.TextBuilder:
+                    return TextBuilder();
                 default:
                     break;
             }
             return null;
+        }
+
+        private static ICellFactoryProvider TextBuilder()
+        {
+            return new CellFactoryProvider
+            {
+                Name = "Составной текст",
+                Key = ModelEntities.None.ToString(),
+                GetCell = (table, settings) =>
+                    new TextBuilderCell(table) { Settings = settings },
+                CheckTable = TextBuilderCell.CheckTargetType,
+                Requirements = new HashSet<ModelEntities> { ModelEntities.TextBuilderSettings },
+                OverrideKey = true
+            };
         }
 
         private static ICellFactoryProvider WorkFolder()

@@ -18,7 +18,8 @@ namespace SWAPIlib.Table
         FilePath,
         Title,
         UserProperty,
-        WorkFolder
+        WorkFolder,
+        TextBuilder
     }
 
     /// <summary>
@@ -35,6 +36,7 @@ namespace SWAPIlib.Table
         UserPropertyName,
         Folder,
         SubFolder,
-        IsSheetMetal
+        IsSheetMetal,
+        TextBuilderSettings
     }
 }
