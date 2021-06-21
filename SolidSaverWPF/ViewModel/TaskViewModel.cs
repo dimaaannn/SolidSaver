@@ -67,32 +67,132 @@ namespace SolidSaverWPF.ViewModel
 
         }
 
-        public ObservableCollection<TableViewModel> GetTables()
+        public ITable[] GetSelectedModels()
         {
-            var ret = new ObservableCollection<TableViewModel>();
+            var ret = new List<ITable>();
 
-            ITable tempTable;
             foreach (var component in SWAPIlib.Global.MainModel.SelectionList)
             {
                 var target = new TargetWrapper(component.Appmodel);
-                tempTable = new TargetTable(target.GetTarget());
-                ret.Add(new TableViewModel(tempTable));
+                ret.Add( new TargetTable(target.GetTarget()));
             }
-            return ret;
+
+            return ret.ToArray();
         }
+
+        public void StepOne()
+        {
+            TableView.Clear();
+
+            var tables = GetSelectedModels();
+
+            var factoryTemplate = new CellFactoryTemplate(); //Источник шаблонов для ячеек
+            var getActiveConfigName = new CellFactory(
+                factoryTemplate,
+                ModelPropertyNames.ActiveConfigName);
+
+            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FilePath);
+            var workFolderPath = new CellFactory(factoryTemplate, ModelPropertyNames.WorkFolder);
+            var savingPathBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
+            savingPathBuilder.CellProvider.Key = ModelEntities.FileName.ToString();
+
+            var fileNameViewBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
+            fileNameViewBuilder.CellProvider.Key = "PartName";
+            
+            //var saveSheetMetalProp = 
+
+
+            #region SettingsTable
+            var textBuilderSavingPathSettings = TextBuilderCell.BuildSettings(
+            (reftable) =>
+            {
+                string workFolder = reftable.GetCell(workFolderPath.CellProvider.Key).ToString();
+                string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
+                string savingFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+
+                return System.IO.Path.Combine(workFolder, savingFileName);
+            });
+
+            var textBuilderFileNameSettings = TextBuilderCell.BuildSettings(
+                reftable =>
+                {
+                    string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
+                    return System.IO.Path.GetFileName(filePath);
+                });
+
+
+
+            ITable savingPathSettings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSavingPathSettings, true } };
+            
+
+            ITable fileNameSettings = new TableList { { TextBuilderCell.SETTINGS_KEY,
+                textBuilderFileNameSettings, true } };
+
+            #endregion
+
+
+            ITable globalTable = null;
+            var workFolderCell = workFolderPath.Proceed(ref globalTable, null).Log.First();
+
+            for (int i = 0; i < tables.Length; i++)
+            {
+                var table = tables[i];
+
+                globalTable.CopyTo(table, false);
+
+                getFileName.Proceed(ref table, null);
+                getActiveConfigName.Proceed(ref table, null);
+                
+                savingPathBuilder.Proceed(ref table, savingPathSettings);
+                fileNameViewBuilder.Proceed(ref table, fileNameSettings);
+
+                tables[i] = table;
+            }
+
+            var showedKeys = new HashSet<string>
+            {
+                ModelEntities.FileName.ToString(),
+                ModelEntities.ConfigName.ToString(),
+                "PartName",
+            };
+
+
+            TableViewModel resultView;
+            foreach (var rtable in tables)
+            {
+                var tempTable = new TargetTable((rtable as ITargetTable).GetTarget());
+                if (tempTable.GetTarget() == null)
+                    throw new NullReferenceException("Ошибка в передаче объекта цели");
+
+                var keyFilter = rtable.Where(keyval => showedKeys.Contains(keyval.Key));
+
+                foreach (var keyval in keyFilter)
+                {
+                    tempTable.Add(keyval.Key, keyval.Value, true);
+                }
+
+                var table = rtable;
+
+                resultView = new TableViewModel(tempTable);
+                TableView.Add(resultView);
+            }
+        }
+
+
+
 
         private ICommand getSelectedComponentsCommand;
         private bool GetSelectedComponentsCanExecute() =>
             SWAPIlib.Global.MainModel.SelectionList?.Count() > 0;
         public ICommand GetSelectedComponentsCommand => getSelectedComponentsCommand ?? (
             getSelectedComponentsCommand = new RelayCommand(
-                    () => TableView = GetTables(),
+                StepOne,
                 GetSelectedComponentsCanExecute));
 
         private ICommand proceedCommand;
         private TableViewModel currentTableView;
 
-        private bool ProceedCanExecute() => TableView.Count > 0;
+        private bool ProceedCanExecute() => false;
         public ICommand ProceedCommand => proceedCommand ?? (
             proceedCommand = new RelayCommand(Proceed, ProceedCanExecute));
     }
