@@ -1,6 +1,7 @@
 ﻿using SWAPIlib.Table;
 using SWAPIlib.Table.Prop;
 using SWAPIlib.Table.SWProp;
+using SWAPIlib.Task.SWTask;
 using System.Collections.Generic;
 
 namespace SWAPIlib.Task
@@ -26,15 +27,30 @@ namespace SWAPIlib.Task
                     return ActiveConfigName();
                 case ModelPropertyNames.UserProperty:
                     return UserProperty();
-                case ModelPropertyNames.FilePath:
+                case ModelPropertyNames.FileName:
                     return FilePath();
                 case ModelPropertyNames.TextBuilder:
                     return TextBuilder();
+                case ModelPropertyNames.SaveSheetMetal:
+                    return SaveSheetMetal();
                 default:
                     break;
             }
             return null;
         }
+        private static ICellFactoryProvider SaveSheetMetal()
+        {
+            return new CellFactoryProvider
+            {
+                Name = "Сохранить развёртку листового металла",
+                Key = ModelPropertyNames.SaveSheetMetal.ToString(),
+                CheckTable = SaveSheetMetalTask.CheckTargetType,
+                Requirements = new HashSet<ModelEntities> { ModelEntities.FilePath },
+                GetCell = (table, settings) =>
+                    new SaveSheetMetalTask(table as ITargetTable) { Settings = settings }
+            };
+        }
+
 
         private static ICellFactoryProvider TextBuilder()
         {
@@ -90,12 +106,13 @@ namespace SWAPIlib.Task
 
         private static ICellFactoryProvider FilePath()
         {
-            return new CellFactoryProvider(
-                ModelEntities.FileName.ToString(),
-                (reftable, settings) => new FilePathCell(refTable: reftable as ITargetTable))
+            return new CellFactoryProvider
             {
+                Key = ModelEntities.FileName.ToString(),
                 CheckTable = FilePathCell.CheckTargetType,
-                Name = "Путь к файлу"
+                Name = "Путь к файлу",
+                GetCell = (refTable, settings) =>
+                    new FilePathCell(refTable: refTable as ITargetTable)
             };
         }
 

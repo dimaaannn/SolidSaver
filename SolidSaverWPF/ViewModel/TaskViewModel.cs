@@ -91,15 +91,15 @@ namespace SolidSaverWPF.ViewModel
                 factoryTemplate,
                 ModelPropertyNames.ActiveConfigName);
 
-            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FilePath);
+            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FileName);
             var workFolderPath = new CellFactory(factoryTemplate, ModelPropertyNames.WorkFolder);
             var savingPathBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
-            savingPathBuilder.CellProvider.Key = ModelEntities.FileName.ToString();
+            savingPathBuilder.CellProvider.Key = ModelEntities.FilePath.ToString();
 
             var fileNameViewBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
             fileNameViewBuilder.CellProvider.Key = "PartName";
-            
-            //var saveSheetMetalProp = 
+
+            var saveSheetMetalProp = new CellFactory(factoryTemplate, ModelPropertyNames.SaveSheetMetal);
 
 
             #region SettingsTable
@@ -146,12 +146,17 @@ namespace SolidSaverWPF.ViewModel
                 savingPathBuilder.Proceed(ref table, savingPathSettings);
                 fileNameViewBuilder.Proceed(ref table, fileNameSettings);
 
+                //Сохранение листового материала
+                if(saveSheetMetalProp.CheckTable(table, null))
+                    saveSheetMetalProp.Proceed(ref table, null);
+
                 tables[i] = table;
             }
 
             var showedKeys = new HashSet<string>
             {
-                ModelEntities.FileName.ToString(),
+                ModelPropertyNames.SaveSheetMetal.ToString(),
+                ModelEntities.FilePath.ToString(),
                 ModelEntities.ConfigName.ToString(),
                 "PartName",
             };

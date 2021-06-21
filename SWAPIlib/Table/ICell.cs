@@ -41,7 +41,7 @@ namespace SWAPIlib.Table
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public virtual string Text { get => text; protected set { OnPropertyChanged("Text"); text = value; } }
+        public virtual string Text { get => text; protected set { text = value; OnPropertyChanged(); } }
         public abstract bool Update();
 
         public override string ToString()

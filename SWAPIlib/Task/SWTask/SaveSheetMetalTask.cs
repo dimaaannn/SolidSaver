@@ -9,27 +9,31 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.Task.SWTask
 {
-    
+
 
     public class SaveSheetMetalTask : PropertyCellBase, IWritableCell, IPathOption
     {
-        public SaveSheetMetalTask(ITargetTable<ModelDoc2> refTable) : base(refTable)
+        private string tempText;
+
+        public SaveSheetMetalTask(ITargetTable refTable) : base(refTable)
         {
-            
+
         }
         public override string Name => "SaveSheetMetal";
 
         public override string Info => "Сохранить листовую развёртку материала";
 
-        public string TempText { get; set; }
-        public string Path { get => TempText ?? Text; 
-            set { OnPropertyChanged(); TempText = value; } }
+        public string TempText { get => tempText; set { tempText = value; OnPropertyChanged(); } }
+        public string Path
+        {
+            get => TempText ?? Text;
+            set { OnPropertyChanged(); TempText = value; }
+        }
 
         public override bool Update()
         {
-            Text = RefTable.GetCell(ModelEntities.FileName.ToString())?.Text;
-            TempText = null;
-            return Text != null;
+            TempText = GetSettings(ModelEntities.FilePath.ToString())?.Text;
+            return TempText != null;
         }
 
         public bool WriteValue()
@@ -37,6 +41,8 @@ namespace SWAPIlib.Task.SWTask
             bool ret = false;
             string directory = GetDirectory();
             string fileName = GetFileName();
+            if (string.IsNullOrEmpty(fileName))
+                fileName = "NoName";
             string extension = ".dxf";
             string combinedPath = System.IO.Path.Combine(directory, fileName + extension);
 
@@ -46,11 +52,12 @@ namespace SWAPIlib.Task.SWTask
 
             if (isDirectoryExist)
             {
-                ret = SaveDxfFromAssembly(model: (ModelDoc2) Target, path: combinedPath);
+                ret = SaveDxfFromAssembly(model: (ModelDoc2)Target, path: combinedPath);
                 if (ret)
                 {
                     Text = combinedPath;
-                    ret = IsFileExist(Path);
+                    TempText = null;
+                    ret = IsFileExist(combinedPath);
                 }
             }
 
@@ -69,7 +76,7 @@ namespace SWAPIlib.Task.SWTask
             ret = SWAPIlib.ComConn.Proxy.PartDocProxy.ExportDXF(tempModel, path);
             //закрыть окно детали
             SWAPIlib.ComConn.SwAppControl.swApp.CloseDoc(modelName);
-            
+
             return ret;
         }
 
@@ -77,7 +84,7 @@ namespace SWAPIlib.Task.SWTask
         {
 
             var fileinfo = new System.IO.FileInfo(path);
-            var length = fileinfo.Length;
+            var length = fileinfo?.Length;
             return length > 10;
 
         }
@@ -102,7 +109,7 @@ namespace SWAPIlib.Task.SWTask
         {
             bool ret = false;
             var obj = GetTargetObject(refTable: refTable, settings: settings);
-            if(obj is ModelDoc2 model)
+            if (obj is ModelDoc2 model)
             {
                 ret = SWAPIlib.ComConn.Proxy.PartDocProxy.IsSheetMetal(model);
             }
