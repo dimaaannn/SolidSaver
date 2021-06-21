@@ -22,6 +22,8 @@ namespace SolidSaverWPF.ViewModel
 
         TableViewModel CurrentTableView { get => currentTableView; set => Set(ref currentTableView, value); }
 
+        private static ICellFactoryTemplate cellFactoryTemplate = new CellFactoryTemplate();
+
         public void Proceed()
         {
             var factoryTemplate = new CellFactoryTemplate(); //Источник шаблонов для ячеек
@@ -62,10 +64,6 @@ namespace SolidSaverWPF.ViewModel
             }
         }
 
-        public void TestSaveDxf()
-        {
-
-        }
 
         public ITable[] GetSelectedModels()
         {
@@ -80,75 +78,98 @@ namespace SolidSaverWPF.ViewModel
             return ret.ToArray();
         }
 
+        public ITable GetGlobalTable()
+        {
+            ITable globalTable = null;
+
+
+            var workFolderPath = new CellFactory(cellFactoryTemplate, ModelPropertyNames.WorkFolder);
+            var workFolderCell = workFolderPath.Proceed(ref globalTable, null).Log.First();
+
+            var dxfFolderName = new TextCell("Развёртки");
+            globalTable.Add("dxfFolder", dxfFolderName);
+
+            return globalTable;
+        }
+
+
+        public List<ICellFactory> GetBuildTemplates()
+        {
+            var ret = new List<ICellFactory>();
+
+            ret.Add(new CellFactory(cellFactoryTemplate, ModelPropertyNames.FileName));
+            ret.Add(new CellFactory(
+                cellFactoryTemplate,
+                ModelPropertyNames.ActiveConfigName));
+
+            return ret;
+
+        }
+
         public void StepOne()
         {
             TableView.Clear();
 
             var tables = GetSelectedModels();
 
-            var factoryTemplate = new CellFactoryTemplate(); //Источник шаблонов для ячеек
-            var getActiveConfigName = new CellFactory(
-                factoryTemplate,
-                ModelPropertyNames.ActiveConfigName);
-
-            var getFileName = new CellFactory(factoryTemplate, ModelPropertyNames.FileName);
-            var workFolderPath = new CellFactory(factoryTemplate, ModelPropertyNames.WorkFolder);
-            var savingPathBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
-            savingPathBuilder.CellProvider.Key = ModelEntities.FilePath.ToString();
-
-            var fileNameViewBuilder = new CellFactory(factoryTemplate, ModelPropertyNames.TextBuilder);
-            fileNameViewBuilder.CellProvider.Key = "PartName";
-
-            var saveSheetMetalProp = new CellFactory(factoryTemplate, ModelPropertyNames.SaveSheetMetal);
-
 
             #region SettingsTable
+            var savingPathBuilder = new CellFactory(cellFactoryTemplate, 
+                ModelPropertyNames.TextBuilder);
+            savingPathBuilder.CellProvider.Key = ModelEntities.FilePath.ToString();
+
             var textBuilderSavingPathSettings = TextBuilderCell.BuildSettings(
             (reftable) =>
             {
-                string workFolder = reftable.GetCell(workFolderPath.CellProvider.Key).ToString();
-                string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
+                string workFolder = reftable.GetCell(ModelEntities.Folder.ToString()).ToString();
+                string filePath = reftable.GetCell(ModelEntities.FileName.ToString()).ToString();
                 string savingFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                string subFolder = reftable.GetCell("dxfFolder").ToString();
 
-                return System.IO.Path.Combine(workFolder, savingFileName);
+                return System.IO.Path.Combine(workFolder, subFolder, savingFileName);
             });
+            ITable savingPathSettings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSavingPathSettings, true } };
 
+
+            var fileNameViewBuilder = new CellFactory(cellFactoryTemplate, 
+                ModelPropertyNames.TextBuilder);
+            fileNameViewBuilder.CellProvider.Key = "PartName";
             var textBuilderFileNameSettings = TextBuilderCell.BuildSettings(
                 reftable =>
                 {
-                    string filePath = reftable.GetCell(getFileName.CellProvider.Key).ToString();
+                    string filePath = reftable.GetCell(ModelEntities.FileName.ToString()).ToString();
                     return System.IO.Path.GetFileName(filePath);
                 });
-
-
-
-            ITable savingPathSettings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSavingPathSettings, true } };
-            
-
             ITable fileNameSettings = new TableList { { TextBuilderCell.SETTINGS_KEY,
                 textBuilderFileNameSettings, true } };
 
             #endregion
 
+            var globalTable = GetGlobalTable();
+            var cellsTemplate = GetBuildTemplates();
 
-            ITable globalTable = null;
-            var workFolderCell = workFolderPath.Proceed(ref globalTable, null).Log.First();
+            var saveSheetMetalFactory = new CellFactory(cellFactoryTemplate, ModelPropertyNames.SaveSheetMetal);
+
+            List<TableLog> logList = new List<TableLog>();
 
             for (int i = 0; i < tables.Length; i++)
             {
                 var table = tables[i];
 
-                globalTable.CopyTo(table, false);
+                globalTable.CopyTo(table, false);  //TODO поместить свойства в настройки, не вызывая ошибку
 
-                getFileName.Proceed(ref table, null);
-                getActiveConfigName.Proceed(ref table, null);
+                var validCells = cellsTemplate.Where(template => template.CheckTable(table, null));
+
+
+                logList.AddRange(validCells.Select(
+                    template => template.Proceed(ref table, null))
+                    .ToList());
                 
                 savingPathBuilder.Proceed(ref table, savingPathSettings);
                 fileNameViewBuilder.Proceed(ref table, fileNameSettings);
 
-                //Сохранение листового материала
-                if(saveSheetMetalProp.CheckTable(table, null))
-                    saveSheetMetalProp.Proceed(ref table, null);
+                if(saveSheetMetalFactory.CheckTable(table, null))
+                    saveSheetMetalFactory.Proceed(ref table, null);
 
                 tables[i] = table;
             }
@@ -162,27 +183,46 @@ namespace SolidSaverWPF.ViewModel
             };
 
 
-            TableViewModel resultView;
-            foreach (var rtable in tables)
+            var viewModels = GetViewModel(tables, showedKeys);
+            foreach (var vm in viewModels)
             {
-                var tempTable = new TargetTable((rtable as ITargetTable).GetTarget());
-                if (tempTable.GetTarget() == null)
-                    throw new NullReferenceException("Ошибка в передаче объекта цели");
-
-                var keyFilter = rtable.Where(keyval => showedKeys.Contains(keyval.Key));
-
-                foreach (var keyval in keyFilter)
-                {
-                    tempTable.Add(keyval.Key, keyval.Value, true);
-                }
-
-                var table = rtable;
-
-                resultView = new TableViewModel(tempTable);
-                TableView.Add(resultView);
+                TableView.Add(vm);
             }
         }
 
+        protected static List<TableViewModel> GetViewModel(IEnumerable<ITable> tables, HashSet<string> cellFilter)
+        {
+            var ret = new List<TableViewModel>();
+
+            bool addFilter = false;
+            if (cellFilter?.Count > 0)
+                addFilter = true;
+
+            ITable resultTable;
+            foreach (var table in tables)
+            {
+                if (addFilter)
+                {
+                    resultTable = new TargetTable((table as ITargetTable).GetTarget());
+
+                    var keyVals = from keyval in table
+                                  let key = keyval.Key
+                                  where cellFilter.Contains(key)
+                                  where keyval.Value != null
+                                  select keyval;
+
+                    foreach (var keyval in keyVals)
+                    {
+                        resultTable.Add(keyval.Key, keyval.Value, false);
+                    }
+                }
+                else
+                    resultTable = table;
+
+                ret.Add(new TableViewModel(resultTable));
+            }
+            return ret;
+        }
 
 
 
