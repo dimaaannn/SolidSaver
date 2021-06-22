@@ -71,6 +71,11 @@ namespace SolidSaverWPF.ViewModel.Table
         ICell _cell;
         public ICell Cell { get => _cell; set { Set(ref _cell, value); } }
         private string _name;
+        private void _cell_PropertyChanged1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            this.RaisePropertyChanged(e.PropertyName);
+            RaisePropertyChanged("IsNotSaved");
+        }
 
         public CellViewModel(ICell cell)
         {
@@ -88,16 +93,6 @@ namespace SolidSaverWPF.ViewModel.Table
 
 
         public string Text => _cell?.Text; //ReadOnly!
-        public string Name { get => _name; set => Set(ref _name, value); }
-
-        public string Info => GetInfo();
-        private string GetInfo()
-        {
-            if (_cell is IPropertyCell pCell)
-                return pCell.Info;
-            else
-                return null;
-        }
         public string TempText
         {
             get
@@ -118,6 +113,16 @@ namespace SolidSaverWPF.ViewModel.Table
             }
         }
 
+        public string Name { get => _name; set => Set(ref _name, value); }
+        public string Info => GetInfo();
+        private string GetInfo()
+        {
+            if (_cell is IPropertyCell pCell)
+                return pCell.Info;
+            else
+                return null;
+        }
+
         public IEnumerable<ICellView> SettingsList => GetSettings();
         private IEnumerable<ICellView> GetSettings()
         {
@@ -129,10 +134,6 @@ namespace SolidSaverWPF.ViewModel.Table
             return ret;
         }
 
-        private void _cell_PropertyChanged1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            this.RaisePropertyChanged(e.PropertyName);
-        }
 
         public void Write()
         {
@@ -147,6 +148,16 @@ namespace SolidSaverWPF.ViewModel.Table
             _cell.Update();
         }
 
+        public void CopyTextToTemp()
+        {
+            if (_cell is IWritableCell wcell)
+                wcell.TempText = wcell.Text;
+        }
+
+        public void ClearTemp()
+        {
+            TempText = null;
+        }
         private ICommand updateProp;
         private bool UpdatePropCanExecute() => _cell != null;
         public ICommand UpdatePropCommand => updateProp ?? (
@@ -157,12 +168,19 @@ namespace SolidSaverWPF.ViewModel.Table
         public ICommand WriteCommand => writeProp ?? (
             writeProp = new RelayCommand(Write, WriteCanExecute));
 
-        private Brush borderColorBrush = new SolidColorBrush(Colors.Gray);
-        private Brush bGColorBrush;
+        private ICommand copyValToText;
+        private bool CopyValToTextCanExecute() => IsReadOnly == false && string.IsNullOrEmpty(Text) == false;
+        public ICommand CopyValToTextCommand => copyValToText ?? (
+            copyValToText = new RelayCommand(CopyTextToTemp, CopyValToTextCanExecute));
 
+        private ICommand clearTempTextCommand;
+        private bool ClearTempTextCommandCanExecute() => _cell is IWritableCell wcell && wcell.TempText != null;
+        public ICommand ClearTempTextCommand => clearTempTextCommand ?? (
+            clearTempTextCommand = new RelayCommand(ClearTemp, ClearTempTextCommandCanExecute));
+
+        private Brush borderColorBrush = new SolidColorBrush(Colors.Gray);
         public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); }
 
-        public Brush BGColorBrush { get => bGColorBrush; set => Set(ref bGColorBrush, value); }
 
     }
 }

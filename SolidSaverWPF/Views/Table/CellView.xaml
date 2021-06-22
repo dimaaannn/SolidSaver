@@ -13,6 +13,7 @@
     <local:NullToColorConverter x:Key="nulltocolorconverter"/>
     <local:ValueTextColorConverter x:Key="valueTextcolorconverter"/>
 
+        <SolidColorBrush x:Key="onFocusedTempBG" Color="White" Opacity="0.7"/>
     </UserControl.Resources>
 
     <!--<UserControl.DataContext>
@@ -35,25 +36,55 @@
             <TextBox
                 x:Name="Value"
                 Text="{Binding Text, Mode=OneWay , FallbackValue=No data}"
-                IsReadOnly="True"
-                Background="{Binding TempText, 
-                        Converter={StaticResource nulltocolorconverter }}"
-                Foreground="{Binding TempText, Converter={StaticResource  valueTextcolorconverter}}"/>
+                IsReadOnly="True">
+                <TextBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNotSaved}" Value="true">
+                                <Setter Property="TextBox.Background" Value="LightYellow"/>
+                                <Setter Property="TextBox.Foreground" Value="LightGray"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
 
+                <!--GotFocus="PropCurrentValue_GotFocus"
+                LostFocus="PropCurrentValue_LostFocus"-->
             <TextBox 
                 x:Name="PropCurrentValue"
-                GotFocus="PropCurrentValue_GotFocus"
-                LostFocus="PropCurrentValue_LostFocus"
-                Background="Transparent"
                 
                 IsReadOnly="{Binding IsReadOnly}"
                 Text="{Binding TempText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TextBox.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <!--<MultiTrigger>
+
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="TextBox.IsReadOnly" Value="False"/>
+                                    --><!--<Condition Property="TextBox.IsFocused" Value="True"/>--><!--
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="TextBox.Background" 
+                                            Value="{StaticResource onFocusedTempBG}"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>-->
+                            <Trigger Property="TextBox.IsFocused" Value="True">
+                                <Setter Property="TextBox.Background" Value="{StaticResource onFocusedTempBG}"/>
+                            </Trigger>
+                            <Trigger Property="TextBox.IsFocused" Value="False">
+                                <Setter Property="TextBox.Background" Value="Transparent"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Name="updateCommandName" Header="Обновить" Command="{Binding UpdatePropCommand}" />
                         <MenuItem Name="writeCommandName" Header="Записать" Command="{Binding WriteCommand}"/>
-                        <!--<MenuItem Click="CopyTextFromVal" Header="Скопировать" ToolTip="DClick"/>
-                        <MenuItem Click="ClearTextClick" Header="Очистить"/>-->
+                        <MenuItem Header="Скопировать" ToolTip="DClick" Command="{Binding CopyValToTextCommand}"/>
+                        <MenuItem  Header="Очистить" Command="{Binding ClearTempTextCommand}"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
             </TextBox>
