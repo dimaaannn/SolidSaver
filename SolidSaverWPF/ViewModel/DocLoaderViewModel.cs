@@ -64,7 +64,7 @@ namespace SolidSaverWPF.ViewModel
         {
             if (SwAppControl.ComConnected)
             {
-                OpenedModels = OpenedDocs.GetVisibleDocs();
+                OpenedModels = OpenedDocs.GetVisibleAssembly();
                 SelectedIndex = 0;
             }
         }

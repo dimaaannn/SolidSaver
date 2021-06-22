@@ -42,6 +42,23 @@ namespace SWAPIlib.Global
             }
             return ret;
         }
+
+        public static List<ISwModelWrapper> GetVisibleAssembly()
+        {
+            var ret = new List<ISwModelWrapper>();
+            foreach (var model in DocEnumerator)
+            {
+                if (model?.Visible == true)
+                {
+                    var wrapModel = new SwModelWrapper(model);
+                    if(wrapModel.DocType == AppDocType.swASM)
+                    {
+                        ret.Add(wrapModel);
+                    }
+                }
+            }
+            return ret;
+        }
     }
 
     /// <summary>
