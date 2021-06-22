@@ -10,9 +10,6 @@
              d:DesignHeight="30" d:DesignWidth="200">
 
     <UserControl.Resources>
-    <local:NullToColorConverter x:Key="nulltocolorconverter"/>
-    <local:ValueTextColorConverter x:Key="valueTextcolorconverter"/>
-
         <SolidColorBrush x:Key="onFocusedTempBG" Color="White" Opacity="0.7"/>
     </UserControl.Resources>
 
@@ -49,8 +46,6 @@
                 </TextBox.Style>
             </TextBox>
 
-                <!--GotFocus="PropCurrentValue_GotFocus"
-                LostFocus="PropCurrentValue_LostFocus"-->
             <TextBox 
                 x:Name="PropCurrentValue"
                 
@@ -87,6 +82,10 @@
                         <MenuItem  Header="Очистить" Command="{Binding ClearTempTextCommand}"/>
                     </ContextMenu>
                 </TextBox.ContextMenu>
+                <TextBox.InputBindings>
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding CopyValToTextCommand}"/>
+                </TextBox.InputBindings>
+                
             </TextBox>
         </Grid>
         <Border Grid.ColumnSpan="2"

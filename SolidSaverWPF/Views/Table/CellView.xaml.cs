@@ -25,58 +25,5 @@ namespace SolidSaverWPF.Views.Table
         {
             InitializeComponent();
         }
-
-
-        private void PropCurrentValue_GotFocus(object sender, RoutedEventArgs e)
-        {
-            var brush = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
-            PropCurrentValue.Background = brush;
-        }
-
-        private void PropCurrentValue_LostFocus(object sender, RoutedEventArgs e)
-        {
-            PropCurrentValue.Background = Brushes.Transparent;
-        }
-
-    }
-
-    public class NullToColorConverter : IValueConverter
-    {
-
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            bool status = String.IsNullOrEmpty((string)value);
-            if (!status)
-            {
-                return new SolidColorBrush(Colors.LightYellow);
-            }
-            else return new SolidColorBrush(Colors.White);
-        }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    /// <summary>
-    /// После изменения текста сделать записанное значение серым
-    /// </summary>
-    public class ValueTextColorConverter : IValueConverter
-    {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            bool notNull = !String.IsNullOrEmpty((string)value);
-            if (notNull)
-            {
-                return new SolidColorBrush(Colors.LightGray);
-            }
-            else return new SolidColorBrush(Colors.Black);
-        }
-
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
