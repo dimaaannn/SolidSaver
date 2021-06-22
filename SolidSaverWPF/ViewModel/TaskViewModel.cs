@@ -100,8 +100,12 @@ namespace SolidSaverWPF.ViewModel
             {
                 string workFolder = reftable.GetCell(ModelEntities.Folder.ToString()).ToString();
                 string filePath = reftable.GetCell(ModelEntities.FileName.ToString()).ToString();
-                string savingFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                string partFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
                 string subFolder = reftable.GetCell("dxfFolder").ToString();
+                string snomination = reftable.GetCell("Наименование").ToString();
+                string sdesignation = reftable.GetCell("Обозначение").ToString();
+
+                string savingFileName = $"{snomination}-{sdesignation}_{partFileName}";
 
                 return System.IO.Path.Combine(workFolder, subFolder, savingFileName);
             });

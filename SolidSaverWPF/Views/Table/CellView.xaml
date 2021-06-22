@@ -45,7 +45,8 @@
                 GotFocus="PropCurrentValue_GotFocus"
                 LostFocus="PropCurrentValue_LostFocus"
                 Background="Transparent"
-            
+                
+                IsReadOnly="{Binding IsReadOnly}"
                 Text="{Binding TempText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <TextBox.ContextMenu>
                     <ContextMenu>

@@ -188,7 +188,7 @@
                                     <StackPanel DockPanel.Dock="Right"
                                         Orientation="Horizontal">
                                         <Button Content="Обновить"
-                                                Command="{Binding WriteVisibleCommand}"/>
+                                                Command="{Binding UpdateCommand}"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left" 
                                         Orientation="Horizontal">

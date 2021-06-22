@@ -123,7 +123,6 @@
     <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
     <Compile Include="Table\ICell.cs" />
     <Compile Include="Table\ICellView.cs" />
-    <Compile Include="Table\IPropertySheetViewModel.cs" />
     <Compile Include="Table\ICellT.cs" />
     <Compile Include="Table\ITable.cs" />
     <Compile Include="Table\ITableViewModel.cs" />

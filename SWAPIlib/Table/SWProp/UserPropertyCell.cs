@@ -23,7 +23,7 @@ namespace SWAPIlib.Table.SWProp
         public string UserPropertyName => GetSettings(PropNameKey)?.ToString();
         public string ConfigName => GetSettings(ConfigNameKey)?.ToString();
 
-        public string TempText { get => tempText; set { OnPropertyChanged(); tempText = value; } }
+        public string TempText { get => tempText; set { tempText = value; OnPropertyChanged(); } }
 
 
         public static bool CheckTargetType(ITable refTable, ITable settings)
@@ -95,6 +95,7 @@ namespace SWAPIlib.Table.SWProp
             string result;
             bool ret = GetUserProperty(Target, out result);
             Text = result;
+            TempText = null;
             return ret;
         }
 

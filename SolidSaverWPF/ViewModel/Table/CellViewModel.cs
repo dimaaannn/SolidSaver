@@ -64,6 +64,8 @@ namespace SolidSaverWPF.ViewModel.Table
                 Name = "PropName";
                 BorderColorBrush = new SolidColorBrush(Colors.LightGray);
             }
+
+
         }
 
         ICell _cell;
@@ -79,7 +81,7 @@ namespace SolidSaverWPF.ViewModel.Table
             }
         }
 
-        public bool IsWritable => _cell is IWritableCell;
+        public bool IsReadOnly => (_cell is IWritableCell) == false;
         public bool IsReferenced => _cell is IReferencedCell;
         public bool IsTargeted => _cell is IPropertyCell;
         public bool IsNotSaved => TempText != null;
@@ -137,6 +139,7 @@ namespace SolidSaverWPF.ViewModel.Table
             if (_cell is IWritableCell wCell && IsNotSaved)
             {
                 wCell.WriteValue();
+                //RaisePropertyChanged("TempText");
             }
         }
         public void Update()
@@ -150,12 +153,16 @@ namespace SolidSaverWPF.ViewModel.Table
             updateProp = new RelayCommand(Update, UpdatePropCanExecute));
 
         private ICommand writeProp;
-        private bool WriteCanExecute() => IsWritable && IsNotSaved;
+        private bool WriteCanExecute() => !IsReadOnly && IsNotSaved;
         public ICommand WriteCommand => writeProp ?? (
             writeProp = new RelayCommand(Write, WriteCanExecute));
 
         private Brush borderColorBrush = new SolidColorBrush(Colors.Gray);
-        public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); } 
+        private Brush bGColorBrush;
+
+        public Brush BorderColorBrush { get => borderColorBrush; set => Set(ref borderColorBrush, value); }
+
+        public Brush BGColorBrush { get => bGColorBrush; set => Set(ref bGColorBrush, value); }
 
     }
 }

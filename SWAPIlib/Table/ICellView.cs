@@ -12,7 +12,7 @@ namespace SWAPIlib.Table
         string Info { get; }
         IEnumerable<ICellView> SettingsList { get; }
 
-        bool IsWritable { get; }
+        bool IsReadOnly { get; }
         bool IsReferenced { get; }
         bool IsTargeted { get; }
         bool IsNotSaved { get; }
