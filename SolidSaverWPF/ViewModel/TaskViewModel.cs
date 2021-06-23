@@ -107,6 +107,11 @@ namespace SolidSaverWPF.ViewModel
 
                 string savingFileName = $"{snomination}-{sdesignation}_{partFileName}";
 
+                //Replace invalid chars in fileName - create new interface
+                savingFileName = string.Join("_", 
+                    savingFileName.Split(
+                        System.IO.Path.GetInvalidFileNameChars()));
+
                 return System.IO.Path.Combine(workFolder, subFolder, savingFileName);
             });
             ITable savingPathSettings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSavingPathSettings, true } };
