@@ -17,7 +17,10 @@
         xmlns:propView="clr-namespace:SolidSaverWPF.Views.Property"
 
         xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
-        Title="MainWindow" Height="500" Width="674" MinWidth="350">
+        Title="MainWindow" Height="500" Width="920" MinWidth="920">
+    
+    
+    
     <Window.Resources>
         <!--#region Button style-->
         <Style TargetType="{x:Type Control}" x:Key="baseStyle">
@@ -63,31 +66,10 @@
                 <ColumnDefinition Width="59*"/>
                 <ColumnDefinition Width="222*"/>
             </Grid.ColumnDefinitions>
-            <!--#region Load button-->
-            <!--<Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="115*"/>
-                    <ColumnDefinition Width="107*"/>
 
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="0" Content="Загрузить модель" Margin="5" Name="LoadButton" Click="Load_Click"/>
-                <StackPanel Grid.Column="1" Margin="4">
-                    <CheckBox Grid.Column="1" Content="Верх.уровня" IsChecked="{Binding TopLevelOnly}"/>
-                    <CheckBox Grid.Column="1" Content="Из файла"/>
-                </StackPanel>
-
-            </Grid>-->
             <view:DocLoaderView Grid.Column="0"/>
             <!--#endregion-->
 
-
-            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Button  Content="Выделить все" Click="SelectAll_click"/>
-                <Button  Content="Очистить" />
-                <Button  Content="загрузить"/>
-
-            </StackPanel>
 
         </Grid>
 
@@ -101,7 +83,7 @@
             VerticalAlignment="Stretch" Grid.Row="1"
             >
 
-            <Grid ShowGridLines="True"
+            <Grid ShowGridLines="False"
                   HorizontalAlignment="Stretch">
                 <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
@@ -111,7 +93,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350" MinWidth="300"/>
-                    <ColumnDefinition MinWidth="200"/>
+                    <ColumnDefinition MinWidth="400"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -134,7 +116,8 @@
                 <!--#region Список параметров-->
                 <Grid
                     Grid.Column="1" 
-                    Grid.Row="1" 
+                    Grid.Row="0" 
+                    Grid.RowSpan="2"
 
                     ShowGridLines="True">
                     <Grid.RowDefinitions>
@@ -159,7 +142,10 @@
                         <TabItem Header="Замена" Visibility="{StaticResource debugElementVis}">
                             <view:PropertyChangerTab x:Name="PropertyTab"/>
                         </TabItem>
-                        <TabItem Header="SelectionList" HorizontalContentAlignment="Stretch" >
+                        <TabItem 
+                            Visibility="{StaticResource debugElementVis}"
+                            Header="SelectionList" 
+                            HorizontalContentAlignment="Stretch" >
                             
                             <propView:ComponentSelectionView/>
                             

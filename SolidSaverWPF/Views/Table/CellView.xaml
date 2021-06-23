@@ -13,7 +13,7 @@
         <SolidColorBrush x:Key="onFocusedTempBG" Color="White" Opacity="0.7"/>
         <Style x:Key="test" TargetType="TextBox">
             <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
-            <Setter Property="MaxWidth" Value="500"/>
+            <Setter Property="MaxWidth" Value="400"/>
         </Style>
     </UserControl.Resources>
 
