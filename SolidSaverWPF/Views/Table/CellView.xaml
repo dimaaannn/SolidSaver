@@ -11,6 +11,10 @@
 
     <UserControl.Resources>
         <SolidColorBrush x:Key="onFocusedTempBG" Color="White" Opacity="0.7"/>
+        <Style x:Key="test" TargetType="TextBox">
+            <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
+            <Setter Property="MaxWidth" Value="500"/>
+        </Style>
     </UserControl.Resources>
 
     <!--<UserControl.DataContext>
@@ -21,11 +25,13 @@
         <!--d:DataContext="{d:DesignInstance Type=tablemodel:CellViewModel, IsDesignTimeCreatable=True}"-->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock VerticalAlignment="Center"
+        <TextBlock 
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"
             Margin="2"
             Text="{Binding Name}"/>
 
@@ -35,7 +41,7 @@
                 Text="{Binding Text, Mode=OneWay , FallbackValue=No data}"
                 IsReadOnly="True">
                 <TextBox.Style>
-                    <Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource test}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsNotSaved}" Value="true">
                                 <Setter Property="TextBox.Background" Value="LightYellow"/>
@@ -52,7 +58,7 @@
                 IsReadOnly="{Binding IsReadOnly}"
                 Text="{Binding TempText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                 <TextBox.Style>
-                    <Style>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource test}">
                         <Style.Triggers>
                             <!--<MultiTrigger>
 

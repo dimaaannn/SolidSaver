@@ -12,22 +12,30 @@
     <!--<UserControl.DataContext>
         <tablemodel:TableViewModel/>
     </UserControl.DataContext>-->
+    <Border 
+        BorderThickness="4, 0, 0, 0" BorderBrush="Green"
+        CornerRadius="10"
+        Margin="1"
+        Padding="3, 0">
 
-    <DockPanel>
-        <StackPanel DockPanel.Dock="Top"
-            Orientation="Vertical">
-            <TextBlock Text="{Binding TargetName}"/>
-            <TextBlock Text="{Binding Name, FallbackValue=NoName }"/>
-        </StackPanel>
-        <ListView
-            HorizontalContentAlignment="Stretch"
-            ItemsSource="{Binding Properties}">
-            <ListView.Resources>
-                <DataTemplate DataType="{x:Type tablemodel:CellViewModel}">
-                    <local:CellView/>
-                </DataTemplate>
-            </ListView.Resources>
-            
-        </ListView>
-    </DockPanel>
+        <DockPanel
+            Background="LightBlue">
+            <StackPanel DockPanel.Dock="Top"
+                Orientation="Vertical">
+                <TextBlock 
+                    Margin="3"
+                    Text="{Binding TargetName}"/>
+            </StackPanel>
+            <ListBox
+                HorizontalContentAlignment="Stretch"
+                ItemsSource="{Binding Properties}">
+                <ListBox.Resources>
+                    <DataTemplate 
+                        DataType="{x:Type tablemodel:CellViewModel}">
+                        <local:CellView/>
+                    </DataTemplate>
+                </ListBox.Resources>
+            </ListBox>
+        </DockPanel>
+    </Border>
 </UserControl>
