@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseTypes\Assembly.cs" />
     <Compile Include="BaseTypes\AppTypeFactory.cs" />
+    <Compile Include="BaseTypes\ModelWrapper.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComComponent.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComDrawing.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComModel.cs" />
