@@ -1,0 +1,58 @@
+﻿<Window x:Class="SolidSaverWPF.Tests.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SolidSaverWPF.Tests"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:DebugWindowModel, IsDesignTimeCreatable=True}"
+        Title="DebugWindow" Height="400" Width="400">
+
+
+    <Window.DataContext>
+        <local:DebugWindowModel/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel 
+            Orientation="Horizontal"
+            Grid.Row="0"
+            HorizontalAlignment="Left">
+            
+            <TextBlock 
+                Text="{Binding Name}" 
+                TextWrapping="Wrap"
+                Width="100"/>
+            <Button 
+                Content="GetOpenedDocs"
+                Command="{Binding LoadDocsCommand}"/>
+            <Button
+                Content="Cancel"
+                Command="{Binding CancelTaskCommand}"/>
+        </StackPanel>
+
+        <DockPanel 
+            Grid.Row="1"
+            LastChildFill="False">
+            <ComboBox 
+                DockPanel.Dock="Top"
+                ItemsSource="{Binding StringData}"/>
+            <ListBox
+                DockPanel.Dock="Top"
+                MinHeight="100"
+                ItemsSource="{Binding StringData}"/>
+
+        </DockPanel>
+    </Grid>
+</Window>

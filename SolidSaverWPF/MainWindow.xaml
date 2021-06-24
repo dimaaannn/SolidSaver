@@ -68,6 +68,15 @@
             </Grid.ColumnDefinitions>
 
             <view:DocLoaderView Grid.Column="0"/>
+            <StackPanel
+                HorizontalAlignment="Right"
+                Grid.Column="2">
+                
+                <Button
+                    Click="DebugButtonClick"
+                    Content="Test"/>
+
+            </StackPanel>
             <!--#endregion-->
 
 

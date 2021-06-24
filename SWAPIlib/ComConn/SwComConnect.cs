@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SWAPIlib.ComConn.Proxy;
 
@@ -170,6 +172,39 @@ namespace SWAPIlib.ComConn
             _comStatus = true;
         }
         #endregion
+
+        /// <summary>
+        /// Передать все загруженные в память модели в метод
+        /// </summary>
+        /// <param name="modelAction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async System.Threading.Tasks.Task GetOpenedModels(
+            Action<ModelDoc2> modelAction,
+            CancellationToken cancellationToken)
+        {
+            var enumOpenedDocuments = swApp.EnumDocuments2();
+
+            ModelDoc2 model = await GetNextDocAsync(enumOpenedDocuments);
+
+            while(model != null &&
+                cancellationToken.IsCancellationRequested == false)
+            {
+                modelAction(model);    
+                model = await GetNextDocAsync(enumOpenedDocuments);
+            }
+        }
+
+        private static async Task<ModelDoc2> GetNextDocAsync(EnumDocuments2 enumerator)
+        {
+            return await System.Threading.Tasks.Task<ModelDoc2>.Run(() =>
+            {
+                int fetched = 0;
+                ModelDoc2 model;
+                enumerator.Next(1, out model, ref fetched);
+                return model;
+            });
+        }
     }
 
 }

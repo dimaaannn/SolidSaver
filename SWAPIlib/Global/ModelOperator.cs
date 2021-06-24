@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SWAPIlib.Global
@@ -58,6 +59,41 @@ namespace SWAPIlib.Global
                 }
             }
             return ret;
+        }
+
+        public static ModelDoc2 GetNextOpenedDoc(EnumDocuments2 enumerator)
+        {
+            int fetched = 0;
+            ModelDoc2 model;
+            enumerator.Next(1, out model, ref fetched);
+            return model;
+        }
+
+        public static async Task<ModelDoc2> GetNextOpenedDocAsync (EnumDocuments2 enumerator)
+        {
+            var ret = Task<ModelDoc2>.Run(
+                () => GetNextOpenedDoc(enumerator)
+                );
+            return await ret;
+        }
+
+
+
+        public static async System.Threading.Tasks.Task AddOpenedDocsAsync(Action<object> action, CancellationToken cancellationToken)
+        {
+            //var enumDocuments = SwAppControl.swApp.EnumDocuments2();
+
+            //var model = await GetNextOpenedDocAsync(enumDocuments);
+            //while(model != null 
+            //    && cancellationToken.IsCancellationRequested == false)
+            //{
+            //    action(model.GetTitle());
+            //    model = await GetNextOpenedDocAsync(enumDocuments);
+            //}
+
+            Action<ModelDoc2> modelAction = (model) => action(model.GetTitle());
+
+            await SWAPIlib.ComConn.SwAppControl.GetOpenedModels(modelAction, cancellationToken);
         }
     }
 

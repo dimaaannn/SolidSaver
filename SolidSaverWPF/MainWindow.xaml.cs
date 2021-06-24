@@ -117,6 +117,11 @@ namespace SolidSaverWPF
 
         }
 
+        private void DebugButtonClick(object sender, RoutedEventArgs e)
+        {
+            var window = new Tests.DebugWindow();
+            window.Show();
+        }
     }
 
     

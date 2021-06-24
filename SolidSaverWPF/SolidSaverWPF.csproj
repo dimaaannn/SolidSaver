@@ -99,6 +99,10 @@
     <Compile Include="Data\ClassRegistry.cs" />
     <Compile Include="Data\Handlers.cs" />
     <Compile Include="MessagesType\MessagesType.cs" />
+    <Compile Include="Tests\DebugWindow.xaml.cs">
+      <DependentUpon>DebugWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\DebugWindowModel.cs" />
     <Compile Include="ViewModel\DesignInstances\DesignInst.cs" />
     <Compile Include="ViewModel\PartListViewModel.cs" />
     <Compile Include="ViewModel\DocLoaderViewModel.cs" />
@@ -190,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ResDictionary\DataTemplateDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tests\DebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

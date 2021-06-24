@@ -20,6 +20,7 @@ using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
 using SWAPIlib.MProperty.Getters;
 using SWAPIlib.Global;
+using System.Threading.Tasks;
 
 namespace SolidApp
 {
@@ -50,41 +51,101 @@ namespace SolidApp
             }
 
 
-
-            var swApp = SwAppControl.swApp;
-
-            string pathToFile = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\2670 Основа топпера.SLDPRT";
-
-            var savePath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\VBA\SolidWorks\Тестовая сборка\Tests\TestSave.dxf";
-
-            int longstatus = 0;
-            int longwarnings = 0;
-            ModelDoc2 Part = swApp.OpenDoc6(pathToFile, 1, 0, "", ref longstatus, longwarnings);
-
-            Part = swApp.ActiveDoc;
-
-            ModelView myModelView = Part.ActiveView;
-
-            myModelView.FrameLeft = 0;
-            myModelView.FrameTop = 21;
-            myModelView = Part.ActiveView;
-
-            myModelView.FrameState = (int)swWindowState_e.swWindowMaximized;
-            swApp.ActivateDoc2("2670 Основа топпера", false, ref longstatus);
-            Part = swApp.ActiveDoc;
-
-            bool boolstatus = Part.Extension.SelectByID2("Развертка1", "BODYFEATURE", 0, 0, 0, true, 0, null, 0);
-            longstatus = Part.SaveAs3(savePath, 0, 0);
-            myModelView = Part.ActiveView;
-            myModelView.FrameState = (int) swWindowState_e.swWindowMaximized;
-            Part = swApp.ActiveDoc;
+            var ds = new DataSourceEnumerator() { Delay = 300 };
 
 
+            PrintDataAsync(ds);
+
+            Console.WriteLine("Some other work");
+            Thread.Sleep(4000);
             //Console.ReadKey();
         }
 
+        public static async void PrintDataAsync(DataSourceEnumerator intEnum)
+        {
+            //var taskList = new List<Task<int>>();
+            while (intEnum.MoveNext())
+            {
+
+                await intEnum.GetNextAsync().ContinueWith(t => Console.WriteLine(t.Result));
+            }
+        }
+
+        //public static IEnumerable<Task<int>> GetDataAsync(int delay = 300)
+        //{
+        //    var ds = new DataSourceEnumerator() { Delay = delay };
+
+        //    while(ds.MoveNext())
+        //    {
+        //        yield return Task.Run<int>()
+        //    }
+        //}
+
+    }
 
 
+    public class DataSourceEnumerator : IEnumerator<int>
+    {
+        private int[] DataSource;
+        private int index = -1;
+
+        public DataSourceEnumerator()
+        {
+            DataSource = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        }
+
+        public int Current { get; private set; } = 0;
+        public int Delay { get; set; } = 300;
+
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+            Reset();
+        }
+
+        public bool MoveNext()
+        {
+            //System.Threading.Thread.Sleep(Delay);
+
+            if(++index < DataSource.Length)
+            {
+                Current = DataSource[index];
+                return true;
+            }
+            else
+                return false;
+        }
+
+
+        public bool HasMoreResults()
+        {
+            return ++index < DataSource.Length;
+        }
+        public async Task<int> GetNextAsync()
+        {
+            var tsk = Task.Run<int>(GetNext);
+            int result;
+            result = await tsk.ContinueWith(t => t.Result);
+            return result;
+        }
+
+        public int GetNext()
+        {
+            System.Threading.Thread.Sleep(Delay);
+            return Current;
+        }
+
+        public async Task<bool> MoveNextAsync()
+        {
+            return await Task.Run<bool>(MoveNext);
+        }
+
+        public void Reset()
+        {
+            Current = 0;
+            index = -1;
+        }
     }
 
     public class NotifyOnInstance
