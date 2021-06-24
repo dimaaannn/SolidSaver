@@ -28,30 +28,25 @@ namespace SolidSaverWPF.Tests
                 StringData.Add("test string 3");
                 StringData.Add("test string 4");
             }
+
+            DocLoader = new DocLoader() { ModelAction = mw => StringData.Add(mw.DocTitle) };
         }
 
+        public DocLoader DocLoader { get; }
         public ObservableCollection<string> StringData { get; protected set; }
 
         public string Name { get; set; } = "DebugWindow";
-        private bool isBusy;
-        public bool IsBusy { get => isBusy; protected set => Set(ref isBusy, value); }
 
         public void LoadAllOpenedDocs()
         {
             StringData.Clear();
             cTS = new CancellationTokenSource();
             var ct = cTS.Token;
-            ct.Register(() => IsBusy = false);
-            IsBusy = true;
-            var task = OpenedDocs.AddOpenedDocsAsync(AddObjToList, ct);
+            var t = DocLoader.GetOpenedDocumentsAsync(ct);
+            //var task = OpenedDocs.AddOpenedDocsAsync(AddObjToList, ct);
             
-            task.ContinueWith(t => IsBusy = false);
         }
 
-        private void AddObjToList(object model)
-        {
-            StringData.Add(model as string);
-        }
         public void CancelTask()
         {
             cTS.Cancel();
@@ -59,7 +54,7 @@ namespace SolidSaverWPF.Tests
 
         private ICommand cancelTaskCommand;
         public ICommand CancelTaskCommand => cancelTaskCommand ?? (
-            cancelTaskCommand = new RelayCommand(CancelTask, () => IsBusy));
+            cancelTaskCommand = new RelayCommand(CancelTask, () => DocLoader.IsBusy));
 
         private ICommand loadDocsCommand;
 

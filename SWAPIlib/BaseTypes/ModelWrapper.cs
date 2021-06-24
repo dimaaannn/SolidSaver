@@ -4,17 +4,17 @@ using System.IO;
 
 namespace SWAPIlib.BaseTypes
 {
-    public interface ITarget
+    public interface ITarget2
     {
         object GetTarget();
     }
 
-    public interface ITarget<T> : ITarget
+    public interface ITarget2<T> : ITarget2
     {
         new T GetTarget();
     }
 
-    public interface IModelWrapper : ITarget<ModelDoc2>
+    public interface IModelWrapper : ITarget2<ModelDoc2>
     {
         string DocTitle { get; }
         AppDocType DocType { get; }
@@ -39,8 +39,7 @@ namespace SWAPIlib.BaseTypes
         private string GetTitle(ModelDoc2 model) => ModelProxy.GetName(model);
 
         public object GetTarget() => swModel;
-        ModelDoc2 ITarget<ModelDoc2>.GetTarget() => swModel;
-
+        ModelDoc2 ITarget2<ModelDoc2>.GetTarget() => swModel;
     }
 
 
