@@ -18,6 +18,8 @@ namespace SWAPIlib.BaseTypes
     {
         string DocTitle { get; }
         AppDocType DocType { get; }
+        ISwModelWrapper ConvertToOldWrapper();
+        
     }
 
     public class ModelWrapper : IModelWrapper
@@ -40,6 +42,15 @@ namespace SWAPIlib.BaseTypes
 
         public object GetTarget() => swModel;
         ModelDoc2 ITarget2<ModelDoc2>.GetTarget() => swModel;
+
+        public ISwModelWrapper ConvertToOldWrapper()
+        {
+            return ((SwModelWrapper)this) as ISwModelWrapper;
+        }
+        public static implicit operator SwModelWrapper(ModelWrapper modelwrapper)
+        {
+            return new SwModelWrapper(modelwrapper.swModel);
+        }
     }
 
 

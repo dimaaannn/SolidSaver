@@ -44,7 +44,6 @@ namespace SolidSaverWPF.Tests
             var ct = cTS.Token;
             var t = DocLoader.GetOpenedDocumentsAsync(ct);
             //var task = OpenedDocs.AddOpenedDocsAsync(AddObjToList, ct);
-            
         }
 
         public void CancelTask()

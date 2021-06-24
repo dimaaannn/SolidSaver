@@ -8,20 +8,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="300">
     <UserControl.DataContext>
-        <viewModel:DocLoaderViewModel/>
+        <viewModel:DocLoaderViewModel2/>
     </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="70"/>
         </Grid.ColumnDefinitions>
         
         <ComboBox Grid.Column="0" Name="OpenedDocsSelector" 
                   Margin="3" Height="Auto"
-                  ItemsSource="{Binding OpenedModels}"
+                  ItemsSource="{Binding DocumentList}"
                   SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
-            
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding DocTitle}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+
         </ComboBox>
         <Button Margin="3" Grid.Column="1" x:Name="LoadButton"
                 Command="{Binding LoadDocumentCommand}"
@@ -33,5 +39,8 @@
                        LineHeight="12"
                        TextAlignment="Center" />
         </Button>
+        <Button Margin="3" Grid.Column="3" x:Name="CancelButton"
+                Command="{Binding CancelTaskCommand}"
+                Content="Отмена"/>
     </Grid>
 </UserControl>
