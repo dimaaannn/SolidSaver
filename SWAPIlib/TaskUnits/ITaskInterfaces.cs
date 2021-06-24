@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib.Task
+namespace SWAPIlib.TaskUnits
 {
     /// <summary>
     /// Делегат взаимодействия с таблицей ячеек

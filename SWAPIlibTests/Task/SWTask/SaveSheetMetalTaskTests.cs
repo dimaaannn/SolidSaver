@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SolidWorks.Interop.sldworks;
 using SWAPIlib.Table;
-using SWAPIlib.Task.SWTask;
+using SWAPIlib.TaskUnits.SWTask;
 using SWAPIlibTests;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib.Task.SWTask.Tests
+namespace SWAPIlib.TaskUnits.SWTask.Tests
 {
     [TestClass()]
     public class SaveSheetMetalTaskTests

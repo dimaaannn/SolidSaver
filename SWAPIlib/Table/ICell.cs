@@ -1,4 +1,4 @@
-﻿using SWAPIlib.Task;
+﻿using SWAPIlib.TaskUnits;
 using System;
 using System.ComponentModel;
 using System.Linq;

@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using SolidSaverWPF.ViewModel.Table;
 using SWAPIlib.Table;
 using SWAPIlib.Table.Prop;
-using SWAPIlib.Task;
+using SWAPIlib.TaskUnits;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

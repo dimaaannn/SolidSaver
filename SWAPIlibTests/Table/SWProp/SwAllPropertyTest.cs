@@ -2,7 +2,7 @@
 using SWAPIlib.Table;
 using SWAPIlib.Table.Prop;
 using SWAPIlib.Table.SWProp;
-using SWAPIlib.Task;
+using SWAPIlib.TaskUnits;
 using System;
 using System.Collections.Generic;
 using System.IO;

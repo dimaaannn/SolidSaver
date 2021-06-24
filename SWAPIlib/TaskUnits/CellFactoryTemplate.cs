@@ -1,10 +1,10 @@
 ﻿using SWAPIlib.Table;
 using SWAPIlib.Table.Prop;
 using SWAPIlib.Table.SWProp;
-using SWAPIlib.Task.SWTask;
+using SWAPIlib.TaskUnits.SWTask;
 using System.Collections.Generic;
 
-namespace SWAPIlib.Task
+namespace SWAPIlib.TaskUnits
 {
     /// <summary>
     /// Заготовленные шаблоны свойств для фабрики

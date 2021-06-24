@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib.Task
+namespace SWAPIlib.TaskUnits
 {
     public interface ICellFactory : ITableAction, ITableChecker
     {

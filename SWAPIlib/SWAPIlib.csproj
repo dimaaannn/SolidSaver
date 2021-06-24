@@ -132,16 +132,16 @@
     <Compile Include="Table\Prop\TextBuilderCell.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
-    <Compile Include="Task\CellFactoryTemplate.cs" />
-    <Compile Include="Task\SWTask\SaveSheetMetalTask.cs" />
+    <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
+    <Compile Include="TaskUnits\SWTask\SaveSheetMetalTask.cs" />
     <Compile Include="Table\SWProp\PropertyCellUtils.cs" />
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
     <Compile Include="Table\Prop\WorkFolderCell.cs" />
     <Compile Include="Table\TextCell.cs" />
-    <Compile Include="Task\ICellFactory.cs" />
-    <Compile Include="Task\ICellLogger.cs" />
-    <Compile Include="Task\ICellProvider.cs" />
-    <Compile Include="Task\ITaskInterfaces.cs" />
+    <Compile Include="TaskUnits\ICellFactory.cs" />
+    <Compile Include="TaskUnits\ICellLogger.cs" />
+    <Compile Include="TaskUnits\ICellProvider.cs" />
+    <Compile Include="TaskUnits\ITaskInterfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">
@@ -164,7 +164,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Task\CellTask\" />
+    <Folder Include="TaskUnits\CellTask\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

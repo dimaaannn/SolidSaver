@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWAPIlib.Table.Prop;
-using SWAPIlib.Task;
+using SWAPIlib.TaskUnits;
 using System;
 using System.Collections.Generic;
 using System.Linq;

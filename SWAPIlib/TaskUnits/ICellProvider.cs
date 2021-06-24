@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SWAPIlib.Task
+namespace SWAPIlib.TaskUnits
 {
     /// <summary>
     /// Поставщик ячеек

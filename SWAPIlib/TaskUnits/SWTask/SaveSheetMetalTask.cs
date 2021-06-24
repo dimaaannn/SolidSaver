@@ -1,13 +1,13 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SWAPIlib.Table;
-using SWAPIlib.Task;
+using SWAPIlib.TaskUnits;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib.Task.SWTask
+namespace SWAPIlib.TaskUnits.SWTask
 {
 
 

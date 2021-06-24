@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SWAPIlib.Table;
-using SWAPIlib.Task;
+using SWAPIlib.TaskUnits;
 using SWAPIlibTests;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWAPIlib.Task.Tests
+namespace SWAPIlib.TaskUnits.Tests
 {
     [TestClass()]
     public class CellFactoryTests

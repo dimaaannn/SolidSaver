@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SWAPIlib.Task
+namespace SWAPIlib.TaskUnits
 {
     public interface ICellLogger
     {
