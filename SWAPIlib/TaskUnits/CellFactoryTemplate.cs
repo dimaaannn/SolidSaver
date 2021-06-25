@@ -12,10 +12,20 @@ namespace SWAPIlib.TaskUnits
     public interface ICellFactoryTemplate
     {
         ICellFactoryProvider GetCellProvider(ModelPropertyNames name);
+        ModelPropertyNames[] ImplementedTemplates { get; }
     }
 
     public class CellFactoryTemplate : ICellFactoryTemplate
     {
+        public ModelPropertyNames[] ImplementedTemplates =>
+            new ModelPropertyNames[]
+            {
+                ModelPropertyNames.WorkFolder,
+                ModelPropertyNames.UserProperty,
+                ModelPropertyNames.FileName,
+                ModelPropertyNames.TextBuilder,
+                ModelPropertyNames.SaveSheetMetal
+            };
 
         public ICellFactoryProvider GetCellProvider(ModelPropertyNames name)
         {
