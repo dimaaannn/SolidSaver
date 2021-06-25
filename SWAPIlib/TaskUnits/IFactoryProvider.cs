@@ -1,17 +1,45 @@
 ﻿using SWAPIlib.Table;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SWAPIlib.TaskUnits
 {
-    public interface IFactoryProvider
+
+    public interface IActionExecutor
+    {
+        List<TableLog> Proceed(ref ITable refTable);
+    }
+
+    public class ActionExecutor : IActionExecutor
+    {
+        public List<TableLog> Proceed(ref ITable refTable)
+        {
+            throw null;
+        }
+
+
+
+    }
+
+    public interface IActionProvider : IEnumerable<ITableAction>
+    {
+
+    }
+
+
+    public interface IFactoryProvider : IActionProvider
     {
         ICellFactory GetFactory(string key);
         IEnumerable<ICellFactory> GetFactories();
         void Add(ICellFactory factory, bool ignoreDuplicateKeys = true);
     }
 
+
+    /// <summary>
+    /// Класс для хранения списка обработчиков
+    /// </summary>
     public class FactoryProvider : IFactoryProvider
     {
 
@@ -56,12 +84,12 @@ namespace SWAPIlib.TaskUnits
         {
             return cellFactories.FirstOrDefault(factory => factory.CellProvider.Key == key);
         }
+
+        public IEnumerator<ITableAction> GetEnumerator() => factories.Cast<ITableAction>().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => factories.GetEnumerator();
     }
 
-
-    /// <summary>
-    /// Класс для хранения списка фабрик и добавления новых
-    /// </summary>
     public static class FactoryProviderExtension
     {
         /// <summary>
