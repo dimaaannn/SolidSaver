@@ -23,21 +23,26 @@ namespace SWAPIlib.Global
         public async Task GetOpenedDocumentsAsync(CancellationToken ct) =>
             await GetOpenedDocumentsAsync(ct, ModelAction);
 
-        public async Task GetOpenedDocumentsAsync(CancellationToken ct, Action<IModelWrapper> modelAction )
+        public async Task GetOpenedDocumentsAsync(CancellationToken ct, Action<IModelWrapper> modelAction)
         {
-            IsBusy = true;
-            Action<ModelDoc2> visibleModelToWrapper = model =>
+            if (IsBusy == false)
             {
-                if (model.Visible)
+                IsBusy = true;
+                ct.Register(() => IsBusy = false);
+                Action<ModelDoc2> visibleModelToWrapper = model =>
                 {
-                    modelAction(BuildModelWrapper(model));
-                }
-            };
+                    if (model.Visible)
+                    {
+                        modelAction(BuildModelWrapper(model));
+                    }
+                };
 
-
-            ct.Register(() => IsBusy = false);
-            await SWAPIlib.ComConn.SwAppControl.GetOpenedModels(visibleModelToWrapper, ct);
-            IsBusy = false;
+                ct.Register(() => IsBusy = false);
+                await SWAPIlib.ComConn.SwAppControl.GetOpenedModelsAsync(visibleModelToWrapper, ct);
+                IsBusy = false;
+            }
+            else
+                throw new InvalidAsynchronousStateException("DocLoader: Can't execute when IsBusy state enabled");
         }
 
         private static IModelWrapper BuildModelWrapper(ModelDoc2 model)
@@ -45,6 +50,22 @@ namespace SWAPIlib.Global
             return new ModelWrapper(model) as IModelWrapper;
         }
 
+        public async Task GetActiveDoc(CancellationToken ct, Action<IModelWrapper> modelAction)
+        {
+            bool prevBusyState = IsBusy;
+            IsBusy = true;
+            ct.Register(() => IsBusy = prevBusyState);
+
+            ModelDoc2 model = await SWAPIlib.ComConn.SwAppControl.GetActiveModelAsync(ct);
+            IModelWrapper wrapper = await Task<IModelWrapper>.Run(() => 
+                BuildModelWrapper(model));
+            modelAction(wrapper);
+
+            IsBusy = prevBusyState;
+        }
+
+        public async Task GetActiveDoc(CancellationToken ct) =>
+            await GetActiveDoc(ct, ModelAction);
 
     }
 }

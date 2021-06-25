@@ -94,7 +94,7 @@ namespace SWAPIlib.Global
 
             Action<ModelDoc2> modelAction = (model) => action(model.GetTitle());
 
-            await SWAPIlib.ComConn.SwAppControl.GetOpenedModels(modelAction, cancellationToken);
+            await SWAPIlib.ComConn.SwAppControl.GetOpenedModelsAsync(modelAction, cancellationToken);
         }
     }
 

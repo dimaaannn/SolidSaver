@@ -26,14 +26,19 @@ namespace SolidSaverWPF.ViewModel
             {
                 ModelAction = modelw =>
                 {
-                    if (modelw.DocType == SWAPIlib.AppDocType.swASM)
-                    DocumentList.Add(modelw);
+                    if (
+                    modelw.DocType == SWAPIlib.AppDocType.swASM
+                    && DocumentList.Contains(modelw) == false)
+                    {
+                        DocumentList.Add(modelw);
+                    }
                 }
             };
         }
         private int _SelectedIndex;
+
         private CancellationTokenSource cTS;
-        
+
         public DocLoader DocLoader { get; }
 
         public ObservableCollection<IModelWrapper> DocumentList { get; }
@@ -46,6 +51,8 @@ namespace SolidSaverWPF.ViewModel
             using (cTS = new CancellationTokenSource())
             {
                 DocumentList.Clear();
+                await DocLoader.GetActiveDoc(cTS.Token, DocLoader.ModelAction);
+
                 await DocLoader.GetOpenedDocumentsAsync(cTS.Token);
             }
         }
@@ -53,7 +60,7 @@ namespace SolidSaverWPF.ViewModel
         private void LoadSelected()
         {
             if (DocLoader.IsBusy)
-                cTS.Cancel();
+                CancelTask();
 
             var userSelection = DocumentList[SelectedIndex];
             Variables.SetMainModel(userSelection.ConvertToOldWrapper());
@@ -86,6 +93,7 @@ namespace SolidSaverWPF.ViewModel
         /// </summary>
         public ICommand LoadDocumentCommand => _LoadDocumentCommand ?? (_LoadDocumentCommand = new RelayCommand(LoadSelected, LoadDocumentCommandCanExecute));
         private ICommand _LoadDocumentCommand;
+
         private bool LoadDocumentCommandCanExecute()
         {
             return SwAppControl.ComConnected
@@ -93,9 +101,6 @@ namespace SolidSaverWPF.ViewModel
                 && SelectedIndex < DocumentList.Count;
         }
         #endregion
-
-
-
 
     }
 

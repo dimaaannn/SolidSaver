@@ -1,5 +1,6 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SWAPIlib.ComConn.Proxy;
+using System.Collections.Generic;
 using System.IO;
 
 namespace SWAPIlib.BaseTypes
@@ -47,10 +48,28 @@ namespace SWAPIlib.BaseTypes
         {
             return ((SwModelWrapper)this) as ISwModelWrapper;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ModelWrapper wrapper &&
+                   EqualityComparer<ModelDoc2>.Default.Equals(swModel, wrapper.swModel) &&
+                   title == wrapper.title;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 468417109;
+            hashCode = hashCode * -1521134295 + EqualityComparer<ModelDoc2>.Default.GetHashCode(swModel);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(title);
+            return hashCode;
+        }
+
         public static implicit operator SwModelWrapper(ModelWrapper modelwrapper)
         {
             return new SwModelWrapper(modelwrapper.swModel);
         }
+
+
     }
 
 
