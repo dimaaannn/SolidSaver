@@ -97,7 +97,7 @@ namespace SWAPIlib.ComConn
         /// <returns></returns>
         public static void Connect()
         {
-            
+
 
             var swApp = SwAPI.swApp;
             while (swApp == null)
@@ -109,12 +109,12 @@ namespace SWAPIlib.ComConn
 
         private static void LoadMainModelAction(ModelDoc2 model)
         {
-            if(model is AssemblyDoc asm)
+            if (model is AssemblyDoc asm)
             {
                 asm.DestroyNotify2 += RootModelClose;
                 asm.NewSelectionNotify += Asm_NewSelectionNotify;
             }
-            if(model is PartDoc part)
+            if (model is PartDoc part)
             {
                 part.DestroyNotify2 += RootModelClose;
             }
@@ -179,7 +179,7 @@ namespace SWAPIlib.ComConn
         /// <param name="modelAction"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public static async System.Threading.Tasks.Task GetOpenedModels(
+        public static async System.Threading.Tasks.Task GetOpenedModelsAsync(
             Action<ModelDoc2> modelAction,
             CancellationToken cancellationToken)
         {
@@ -187,10 +187,10 @@ namespace SWAPIlib.ComConn
 
             ModelDoc2 model = await GetNextDocAsync(enumOpenedDocuments);
 
-            while(model != null &&
+            while (model != null &&
                 cancellationToken.IsCancellationRequested == false)
             {
-                modelAction(model);    
+                modelAction(model);
                 model = await GetNextDocAsync(enumOpenedDocuments);
             }
         }
@@ -204,6 +204,12 @@ namespace SWAPIlib.ComConn
                 enumerator.Next(1, out model, ref fetched);
                 return model;
             });
+        }
+
+        public static async Task<ModelDoc2> GetActiveModelAsync(CancellationToken ct)
+        {
+            var model = await Task<ModelDoc2>.Run(() => swApp.ActiveDoc, ct);
+            return model as ModelDoc2;
         }
     }
 
