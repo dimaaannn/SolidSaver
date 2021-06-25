@@ -119,6 +119,7 @@ namespace SolidSaverWPF.ViewModel
 
             var fileNameViewBuilder = new CellFactory(cellFactoryTemplate, 
                 ModelPropertyNames.TextBuilder);
+
             fileNameViewBuilder.CellProvider.Key = "PartName";
             var textBuilderFileNameSettings = TextBuilderCell.BuildSettings(
                 reftable =>

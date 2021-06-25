@@ -8,10 +8,20 @@ namespace SWAPIlib.TaskUnits
 {
     public interface ITaskUnit
     {
-        ITable GetSettings(ITable refTable);
         bool Proceed(ref ITable refTable);
 
-        IFactoryProvider FactoryProvider { get; }
+        IActionProvider ActionProvider { get; set; }
+    }
+
+    public abstract class TaskUnitBase 
+    {
+        private IFactoryProvider factoryProvider = new FactoryProvider();
+        public CellFactoryTemplate CellFactoryTemplate { get; protected set; }
+
+        protected IFactoryProvider FactoryProvider { get => factoryProvider; set => factoryProvider = value; }
+
+        public abstract bool Proceed(ref ITable refTable);
+        
     }
 
 }
