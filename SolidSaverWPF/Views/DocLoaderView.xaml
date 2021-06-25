@@ -21,7 +21,7 @@
         <ComboBox Grid.Column="0" Name="OpenedDocsSelector" 
                   Margin="3" Height="Auto"
                   ItemsSource="{Binding DocumentList}"
-                  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
+                  SelectedIndex="{Binding SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding DocTitle}"/>

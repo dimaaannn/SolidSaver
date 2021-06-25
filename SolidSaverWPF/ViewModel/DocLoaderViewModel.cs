@@ -53,6 +53,8 @@ namespace SolidSaverWPF.ViewModel
                 DocumentList.Clear();
                 await DocLoader.GetActiveDoc(cTS.Token, DocLoader.ModelAction);
 
+                if (DocumentList.Count > 0)
+                    SelectedIndex = 0;
                 await DocLoader.GetOpenedDocumentsAsync(cTS.Token);
             }
         }
@@ -84,7 +86,9 @@ namespace SolidSaverWPF.ViewModel
         /// </summary>
         public ICommand UpdateListCommand => _UpdateListCommand ?? (_UpdateListCommand = new RelayCommand(UpdateDocumentList, UpdateListCommandCanExecute));
         private ICommand _UpdateListCommand;
-        private bool UpdateListCommandCanExecute() => SwAppControl.ComConnected;
+        private bool UpdateListCommandCanExecute() => 
+            SwAppControl.ComConnected
+            && DocLoader.IsBusy == false;
         #endregion
 
         #region LoadDocumentCommand
