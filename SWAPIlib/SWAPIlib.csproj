@@ -126,6 +126,7 @@
     <Compile Include="Table\ICell.cs" />
     <Compile Include="Table\ICellView.cs" />
     <Compile Include="Table\ICellT.cs" />
+    <Compile Include="Table\ICollectionCell.cs" />
     <Compile Include="Table\ITable.cs" />
     <Compile Include="Table\ITableViewModel.cs" />
     <Compile Include="Table\ITargetWrapper.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
     <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
+    <Compile Include="TaskUnits\ITaskUnit.cs" />
     <Compile Include="TaskUnits\SWTask\SaveSheetMetalTask.cs" />
     <Compile Include="Table\SWProp\PropertyCellUtils.cs" />
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
