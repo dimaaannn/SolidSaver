@@ -49,6 +49,18 @@
         <!--#endregion-->
 
         <Visibility x:Key="debugElementVis">Collapsed</Visibility>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!--<Style x:Key="debugElement">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger 
+                    Binding="{Binding Source={x:Static local:MainWindow.IsInDebugMode}}"
+                    Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>-->
 
     </Window.Resources>
 
@@ -72,6 +84,7 @@
                 HorizontalAlignment="Right"
                 Grid.Column="2">
                 
+                    <!--Visibility="{Binding Source={x:Static local:MainWindow.IsInDebugMode}, Converter={StaticResource BoolToVis}}"-->
                 <Button
                     Click="DebugButtonClick"
                     Content="Test"/>

@@ -52,20 +52,23 @@ namespace SolidSaverWPF.ViewModel
             {
                 DocumentList.Clear();
                 await DocLoader.GetActiveDoc(cTS.Token, DocLoader.ModelAction);
-
+                _LoadDocumentCommand.RaiseCanExecuteChanged();
                 if (DocumentList.Count > 0)
                     SelectedIndex = 0;
                 await DocLoader.GetOpenedDocumentsAsync(cTS.Token);
             }
         }
 
-        private void LoadSelected()
+        private async void LoadSelected()
         {
             if (DocLoader.IsBusy)
                 CancelTask();
-
+            isBusy = true;
+            _LoadDocumentCommand.RaiseCanExecuteChanged();
             var userSelection = DocumentList[SelectedIndex];
-            Variables.SetMainModel(userSelection.ConvertToOldWrapper());
+            await Task.Run(() => Variables.SetMainModel(userSelection.ConvertToOldWrapper()));
+            isBusy = false;
+            _LoadDocumentCommand.RaiseCanExecuteChanged();
         }
 
         private void CancelTask()
@@ -96,13 +99,15 @@ namespace SolidSaverWPF.ViewModel
         /// Загрузить выбранный документ
         /// </summary>
         public ICommand LoadDocumentCommand => _LoadDocumentCommand ?? (_LoadDocumentCommand = new RelayCommand(LoadSelected, LoadDocumentCommandCanExecute));
-        private ICommand _LoadDocumentCommand;
+        private RelayCommand _LoadDocumentCommand;
+        private bool isBusy;
 
         private bool LoadDocumentCommandCanExecute()
         {
             return SwAppControl.ComConnected
                 && SelectedIndex >= 0
-                && SelectedIndex < DocumentList.Count;
+                && SelectedIndex < DocumentList.Count
+                && isBusy == false;
         }
         #endregion
 
@@ -144,7 +149,7 @@ namespace SolidSaverWPF.ViewModel
         /// Загрузить выбранный документ
         /// </summary>
         public ICommand LoadDocumentCommand => _LoadDocumentCommand ?? (_LoadDocumentCommand = new RelayCommand(LoadSelected, LoadDocumentCommandCanExecute));
-        private ICommand _LoadDocumentCommand;
+        private RelayCommand _LoadDocumentCommand;
         private bool LoadDocumentCommandCanExecute()
         {
             return SwAppControl.ComConnected

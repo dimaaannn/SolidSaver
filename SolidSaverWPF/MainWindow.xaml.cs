@@ -27,75 +27,23 @@ namespace SolidSaverWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Законченные классы
-
-        /// <summary>
-        /// Поиск и замена свойств
-        /// </summary>
-        public IPropertyUI PropUI { get; set; }
-
-
-
+        public static bool IsInDebugMode { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
 
             Loaded += MainWindow_Loaded;
             
-            
-
-           
-            //MainPartView.SelectedCompProp
-            
-            //Run new thread
-            //System.Threading.ThreadPool.QueueUserWorkItem(TestPartList.ChangeSelection);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            #region Old loading options
-            //MainLinkedModelTemp = MainModel.GetMainModel();
-            //this.DataContext = this;
-
             SwAppControl.Connect();
-            //MainLinkedModelTemp.GetMainModel();
-            //MainLinkedModelTemp.TopLevelOnly = true;
-            //MainLinkedModelTemp.GetSubComponents();
 
-            ////Основной список деталей
-            ////Создать класс
-            //MainPartview = new SWAPIlib.Global.MainPartControl(MainLinkedModelTemp);
-            /////Подключить к списку деталей WPF - Заменить на binding
-            ////PartViewList.MainPartView = MainPartview;
-            ////Fix binding bug
-            ////Bind Main Part list to interface
-            //PartViewList.DataContext = MainPartview;
-            //PropertyBox.DataContext = MainPartview;
-            ////MainPartview.RootComponents
-            ////PropertyBox.ItemsSource = MainPartview.SelectedCompProp;
+//#if DEBUG
+            IsInDebugMode = true;
+//#endif
 
-            //var configurator = PropertyView.PropConfigurator.GetConfigurator();
-
-            //var TestCompList = MainPartview.RootComponents.SelectMany(x => x);
-            //configurator.SetSource(MainPartview.RootComponents.SelectMany(x => x));
-
-            //var a = 4; 
-            #endregion
-
-
-            #region Свойства поиска
-
-            ////Создать класс поиска свойств
-            //PropUI = new PropertyUI();
-            ////Привязка к WPF
-            //PropertyTab.DataContext = PropUI;
-            ////Тестовый список хранения
-            //PropUI.ComponentList = from comp in MainPartview.RootComponents
-            //                       where comp.IsSelected
-            //                       select comp.Appmodel;
-            //Реализовать загрузку выделенных компонентов
-            //PropUI.ComponentList = SelectedComp;
-            #endregion
         }
 
 
