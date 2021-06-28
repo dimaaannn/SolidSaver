@@ -8,13 +8,19 @@
         mc:Ignorable="d"
         xmlns:propert="clr-namespace:SolidSaverWPF.Prop"
         xmlns:proptab="clr-namespace:SolidSaverWPF.PropTab"
+        xmlns:vm="clr-namespace:SolidSaverWPF.ViewModel"
         xmlns:propertyfield="clr-namespace:SolidSaverWPF.PropertyRename"
         xmlns:partlist="clr-namespace:SolidSaverWPF.Views"
+        xmlns:tableView="clr-namespace:SolidSaverWPF.Views.Table"
+        xmlns:tableModel="clr-namespace:SolidSaverWPF.ViewModel.Table"
         xmlns:view="clr-namespace:SolidSaverWPF.Views"
         xmlns:propView="clr-namespace:SolidSaverWPF.Views.Property"
 
         xmlns:partcontroller="clr-namespace:SWAPIlib.Controller;assembly=SWAPIlib"
-        Title="MainWindow" Height="500" Width="674" MinWidth="350">
+        Title="MainWindow" Height="500" Width="920" MinWidth="920">
+    
+    
+    
     <Window.Resources>
         <!--#region Button style-->
         <Style TargetType="{x:Type Control}" x:Key="baseStyle">
@@ -40,9 +46,21 @@
             <Setter Property="Foreground" Value="Gray"/>
             <Setter Property="Margin" Value="3"/>
         </Style>
-
-
         <!--#endregion-->
+
+        <Visibility x:Key="debugElementVis">Collapsed</Visibility>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <!--<Style x:Key="debugElement">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger 
+                    Binding="{Binding Source={x:Static local:MainWindow.IsInDebugMode}}"
+                    Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>-->
 
     </Window.Resources>
 
@@ -60,31 +78,20 @@
                 <ColumnDefinition Width="59*"/>
                 <ColumnDefinition Width="222*"/>
             </Grid.ColumnDefinitions>
-            <!--#region Load button-->
-            <!--<Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="115*"/>
-                    <ColumnDefinition Width="107*"/>
 
-                </Grid.ColumnDefinitions>
-
-                <Button Grid.Column="0" Content="Загрузить модель" Margin="5" Name="LoadButton" Click="Load_Click"/>
-                <StackPanel Grid.Column="1" Margin="4">
-                    <CheckBox Grid.Column="1" Content="Верх.уровня" IsChecked="{Binding TopLevelOnly}"/>
-                    <CheckBox Grid.Column="1" Content="Из файла"/>
-                </StackPanel>
-
-            </Grid>-->
             <view:DocLoaderView Grid.Column="0"/>
-            <!--#endregion-->
-
-
-            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                <Button  Content="Выделить все" Click="SelectAll_click"/>
-                <Button  Content="Очистить" />
-                <Button  Content="загрузить"/>
+            <StackPanel
+                HorizontalAlignment="Right"
+                Grid.Column="2">
+                
+                    <!--Visibility="{Binding Source={x:Static local:MainWindow.IsInDebugMode}, Converter={StaticResource BoolToVis}}"-->
+                <Button
+                    Click="DebugButtonClick"
+                    Content="Test"/>
 
             </StackPanel>
+            <!--#endregion-->
+
 
         </Grid>
 
@@ -98,7 +105,7 @@
             VerticalAlignment="Stretch" Grid.Row="1"
             >
 
-            <Grid ShowGridLines="True"
+            <Grid ShowGridLines="False"
                   HorizontalAlignment="Stretch">
                 <!--#region Разметка рабочей области-->
                 <Grid.RowDefinitions>
@@ -108,7 +115,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350" MinWidth="300"/>
-                    <ColumnDefinition MinWidth="200"/>
+                    <ColumnDefinition MinWidth="400"/>
 
                 </Grid.ColumnDefinitions>
 
@@ -127,52 +134,12 @@
                 <view:PartListView x:Name="PartViewList"
                     Grid.Row="1" Margin="5"/>
 
-                <!--#region Список деталей устаревший интерфейс ISwPartData-->
-                <!--<ListView Name="PartsList"
-                    Grid.Row="1"
-                    Margin="5"
-                          MouseDoubleClick="PartsList_MouseDoubleClick"
-                    SelectionMode="Extended" SelectionChanged="PartsList_SelectionChanged">
 
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn 
-                                Header="File" Width="200"
-                                DisplayMemberBinding="{Binding Title}"/>
-                            <GridViewColumn 
-                                Header="Type" Width="40"
-                                DisplayMemberBinding="{Binding DocType}"/>
-                            <GridViewColumn Header="Select" Width="50">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <DockPanel HorizontalAlignment="Stretch">
-                                            <CheckBox HorizontalAlignment="Stretch"
-                                                IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-
-                </ListView>-->
-                <!--#endregion-->
-
-
-                <StackPanel 
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Stretch"
-                    Grid.Column="1">
-                    <Button Content="Update" Margin="2" />
-                    <Button Content="Write" Margin="2, 3" />
-                    <Button Content="WriteAll" Margin="2, 3"/>
-                </StackPanel>
                 <!--#region Список параметров-->
                 <Grid
                     Grid.Column="1" 
-                    Grid.Row="1" 
+                    Grid.Row="0" 
+                    Grid.RowSpan="2"
 
                     ShowGridLines="True">
                     <Grid.RowDefinitions>
@@ -187,49 +154,72 @@
                         x:Name="PropTab"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch" 
-                        VerticalAlignment="Stretch" SelectedIndex="3">
+                        VerticalAlignment="Stretch" SelectedIndex="4">
 
-                        <TabItem Header="Свойства">
-
-                            <!--#region Property object-->
-                            <!--<ListBox 
-                                ItemsSource="{Binding SelectedCompProp}"
-                                HorizontalAlignment="Stretch"
-                                HorizontalContentAlignment="Stretch"
-                                ScrollViewer.CanContentScroll="False"
-                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                Name="PropertyBox">
-
-                                --><!--#region Disable selection--><!--
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Focusable" Value="False"/>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                --><!--#endregion--><!--
-
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <propert:PropControl/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>-->
-                            <!--#endregion-->
+                        <TabItem Header="Свойства" Visibility="{StaticResource debugElementVis}">
 
                             <propView:SelectedCompView/>
                         </TabItem>
 
-                        <TabItem Header="Замена">
+                        <TabItem Header="Замена" Visibility="{StaticResource debugElementVis}">
                             <view:PropertyChangerTab x:Name="PropertyTab"/>
                         </TabItem>
-                        <TabItem Header="SelectionList" HorizontalContentAlignment="Stretch">
+                        <TabItem 
+                            Visibility="{StaticResource debugElementVis}"
+                            Header="SelectionList" 
+                            HorizontalContentAlignment="Stretch" >
                             
                             <propView:ComponentSelectionView/>
                             
                         </TabItem>
-                        <TabItem Header="PropList">
+                        <TabItem Header="PropList" Visibility="{StaticResource debugElementVis}">
                             <propView:PropertyLoaderView/>
+                        </TabItem>
+
+                        <TabItem Header="SaveSheet">
+                            <Grid ShowGridLines="True">
+                                <Grid.DataContext>
+                                    <vm:TaskViewModel/>
+                                </Grid.DataContext>
+                                
+                                <Grid.Resources>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Width" Value="65"/>
+                                        <Setter Property="Margin" Value="2, 3"/>
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <DockPanel LastChildFill="False" >
+                                    <StackPanel DockPanel.Dock="Right"
+                                        Orientation="Horizontal">
+                                        <Button Content="Обновить"
+                                                Command="{Binding UpdateCommand}"/>
+                                    </StackPanel>
+                                    <StackPanel DockPanel.Dock="Left" 
+                                        Orientation="Horizontal">
+                                        <Button Content="Загрузить" 
+                                                Command="{Binding GetSelectedComponentsCommand}"/>
+                                        <Button Content="Сохранить"
+                                                Command="{Binding WriteVisibleCommand}"/>
+                                    </StackPanel>
+                                </DockPanel>
+
+                                <ListView 
+                                    Grid.Row="1"
+                                    HorizontalContentAlignment="Stretch"
+                                    ItemsSource="{Binding TableView}">
+                                    
+                                    <ListView.Resources>
+                                        <DataTemplate DataType="{x:Type tableModel:TableViewModel}">
+                                            <tableView:TableView/>
+                                        </DataTemplate>
+                                    </ListView.Resources>
+
+                                </ListView>
+                            </Grid>
                         </TabItem>
 
                     </TabControl>

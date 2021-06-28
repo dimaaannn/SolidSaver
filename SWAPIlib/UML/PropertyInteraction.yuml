@@ -1,0 +1,18 @@
+// {type:sequence}
+[note: TestNote]
+[DataProvider]Data>[TaskProvider]
+[TaskProvider]executeStep>[TaskStep]
+
+[TaskStep]Data>[UnitTask]
+[UnitTask]PropTable>[PropTableTask]
+
+[PropTableTask]Property>[PropTask]
+[PropTask]Log>[PropTableTask]
+
+[PropTableTask]Log.>[UnitTask]
+[UnitTask]UnitLog>[TaskStep]
+
+[TaskStep]Result>[TaskProvider]
+[TaskProvider]GetNextStep>[TaskStep]
+[TaskStep]NextStep.>[TaskProvider]
+[TaskProvider]Result>[DataProvider]

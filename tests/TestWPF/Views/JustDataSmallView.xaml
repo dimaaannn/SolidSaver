@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="TestWPF.Views.JustDataSmallView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TestWPF.Views"
+             xmlns:data="clr-namespace:TestWPF.BuissnesLogic"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=data:JustData, IsDesignTimeCreatable=True}"
+             d:DesignHeight="30" d:DesignWidth="80">
+    <!--<UserControl.DataContext>
+        <data:JustData/>
+    </UserControl.DataContext>-->
+
+
+        <!--<DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding ID}">
+                                <DataTrigger.Value>
+                                    5
+                                </DataTrigger.Value>
+                                <Setter TargetName="border" Property="BorderThickness" Value="4"/>
+                                <Setter Property=""
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                        <view:JustDataSmallView/>-->
+
+    <UserControl.Resources>
+        <ColorAnimation x:Key="MouseOverAnimation" 
+                        Storyboard.TargetProperty="BorderBrush" 
+                        To="Red" 
+                        Duration="0:0:3"/>
+        <ColorAnimation x:Key="MouseLeaveAnimation" 
+                        Storyboard.TargetProperty="BorderBrush" 
+                        To="Red" 
+                        Duration="0:0:3"/>
+
+            
+    </UserControl.Resources>
+    
+    <Grid MinWidth="80" MinHeight="30">
+        <Viewbox>
+        <TextBlock 
+            FontSize="10"
+            MaxWidth="80"
+            Margin="2"
+            Text= "{Binding Name}"
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center"
+            TextWrapping="Wrap"/>
+        </Viewbox>
+
+        <Border Name="border"
+            Background="Transparent"
+            BorderThickness="2" CornerRadius="4" Padding="2">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="Blue">
+                </SolidColorBrush>
+            </Border.BorderBrush>
+
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="BorderBrush" Value="Gray"/>
+                    <Style.Triggers>
+                        <!--<Trigger Property="Border.IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="Red"/>
+                        </Trigger>-->
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Border.MouseEnter">
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard>
+                                <ColorAnimation 
+                                    Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                    To="Red"
+                                    Duration="0:0:0.5"
+                                    AutoReverse="True">
+                                </ColorAnimation>
+                            </Storyboard>
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+            
+        </Border>
+
+    </Grid>
+</UserControl>

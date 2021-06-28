@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using SolidWorks.Interop.sldworks;
 using SWAPIlib.ComConn.Proxy;
 
@@ -95,7 +97,7 @@ namespace SWAPIlib.ComConn
         /// <returns></returns>
         public static void Connect()
         {
-            
+
 
             var swApp = SwAPI.swApp;
             while (swApp == null)
@@ -107,12 +109,12 @@ namespace SWAPIlib.ComConn
 
         private static void LoadMainModelAction(ModelDoc2 model)
         {
-            if(model is AssemblyDoc asm)
+            if (model is AssemblyDoc asm)
             {
                 asm.DestroyNotify2 += RootModelClose;
                 asm.NewSelectionNotify += Asm_NewSelectionNotify;
             }
-            if(model is PartDoc part)
+            if (model is PartDoc part)
             {
                 part.DestroyNotify2 += RootModelClose;
             }
@@ -170,6 +172,45 @@ namespace SWAPIlib.ComConn
             _comStatus = true;
         }
         #endregion
+
+        /// <summary>
+        /// Передать все загруженные в память модели в метод
+        /// </summary>
+        /// <param name="modelAction"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async System.Threading.Tasks.Task GetOpenedModelsAsync(
+            Action<ModelDoc2> modelAction,
+            CancellationToken cancellationToken)
+        {
+            var enumOpenedDocuments = swApp.EnumDocuments2();
+
+            ModelDoc2 model = await GetNextDocAsync(enumOpenedDocuments);
+
+            while (model != null &&
+                cancellationToken.IsCancellationRequested == false)
+            {
+                modelAction(model);
+                model = await GetNextDocAsync(enumOpenedDocuments);
+            }
+        }
+
+        private static async Task<ModelDoc2> GetNextDocAsync(EnumDocuments2 enumerator)
+        {
+            return await System.Threading.Tasks.Task<ModelDoc2>.Run(() =>
+            {
+                int fetched = 0;
+                ModelDoc2 model;
+                enumerator.Next(1, out model, ref fetched);
+                return model;
+            });
+        }
+
+        public static async Task<ModelDoc2> GetActiveModelAsync(CancellationToken ct)
+        {
+            var model = await Task<ModelDoc2>.Run(() => swApp.ActiveDoc, ct);
+            return model as ModelDoc2;
+        }
     }
 
 }

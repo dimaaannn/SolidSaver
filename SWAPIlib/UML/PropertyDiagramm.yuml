@@ -1,0 +1,11 @@
+// {type:class}
+// {direction:topDown}
+[ICell|Value:string|Update()]
+[IWritableCell|TempValue:string|Write()]
+
+[ICell]^[IWritableCell]
+
+[ICell]^[IRefCell]
+
+[ITable|GetCell(string):ICell]
+[IRefCell]+*-1[ITable]

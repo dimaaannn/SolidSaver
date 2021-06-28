@@ -15,45 +15,29 @@
     </UserControl.DataContext>
     
     <Grid x:Name="testgrid" ShowGridLines="False" Grid.IsSharedSizeScope="True">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" x:Name="firstRow"/>
             <ColumnDefinition x:Name="secondRow"  Width="150"/>
-
-
         </Grid.ColumnDefinitions>
-
-        <StackPanel>
-            <TextBlock Text="{Binding ElementName=testgrid, Path=ActualWidth}" x:Name="wwwd"/>
-            <TextBlock Text="{Binding SelectedItemName}"/>
-            <TextBlock Text="test"/>
-            
-        </StackPanel>
-
 
         <TreeView x:Name="TreePartView" 
                     AutomationProperties.IsColumnHeader="True" AllowDrop="True"
                     Grid.Row="1" Grid.ColumnSpan="5"
                     ItemsSource="{Binding PartList}"
-                    SelectedItemChanged="SelectedItemChanged"
-                    >
+                    SelectedItemChanged="SelectedItemChanged">
 
             <TreeView.ItemTemplate>
 
-                <HierarchicalDataTemplate DataType="{x:Type partcontroller:ComponentControl}"  
-                        ItemsSource="{Binding SubComponents}">
+                <HierarchicalDataTemplate 
+                    DataType="{x:Type partcontroller:ComponentControl}"  
+                    ItemsSource="{Binding SubComponents}">
 
                     <partlist:ComponentRow/>
 
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-
-    
         
     </Grid>
 </UserControl>

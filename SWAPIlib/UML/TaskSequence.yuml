@@ -1,0 +1,8 @@
+// {type:sequence}
+[ISetWrapper]GetTask()>[TaskProvider]
+[TaskProvider]ITaskUnit.>[ISetWrapper]
+[ISetWrapper]PropertySet>[ITaskUnit]
+[ITaskUnit]ShowValues>[ISetWrapper]
+[ISetWrapper]SaveChanges.>[ITaskUnit]
+[ISetWrapper]DropChanges.>[ITaskUnit]
+[ITaskUnit]Result PropertySet>[ISetWrapper]

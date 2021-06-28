@@ -20,6 +20,7 @@ using SWAPIlib.ComConn.Proxy;
 using SWAPIlib.MProperty;
 using SWAPIlib.MProperty.Getters;
 using SWAPIlib.Global;
+using System.Threading.Tasks;
 
 namespace SolidApp
 {
@@ -49,54 +50,102 @@ namespace SolidApp
                 TestRawComponent = compList.First().SwCompModel;
             }
 
-            var swApp = SwAppControl.swApp;
+
+            var ds = new DataSourceEnumerator() { Delay = 300 };
 
 
-            var propTest = new PropertyTest();
+            PrintDataAsync(ds);
 
-            //Создать объект из которого будет получаться свойство
-            var targetComp = propTest.CreateTarget(TestRawComponent, TestRawComponent.Name, SWAPIlib.Property.TargetType.Component, "Component info");
+            Console.WriteLine("Some other work");
+            Thread.Sleep(4000);
+            //Console.ReadKey();
+        }
+
+        public static async void PrintDataAsync(DataSourceEnumerator intEnum)
+        {
+            //var taskList = new List<Task<int>>();
+            while (intEnum.MoveNext())
+            {
+
+                await intEnum.GetNextAsync().ContinueWith(t => Console.WriteLine(t.Result));
+            }
+        }
+
+        //public static IEnumerable<Task<int>> GetDataAsync(int delay = 300)
+        //{
+        //    var ds = new DataSourceEnumerator() { Delay = delay };
+
+        //    while(ds.MoveNext())
+        //    {
+        //        yield return Task.Run<int>()
+        //    }
+        //}
+
+    }
 
 
-            var lazyInstance = new Lazy<NotifyOnInstance>(() => (new NotifyOnInstance("someString")));
+    public class DataSourceEnumerator : IEnumerator<int>
+    {
+        private int[] DataSource;
+        private int index = -1;
 
+        public DataSourceEnumerator()
+        {
+            DataSource = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        }
 
-            var instance = lazyInstance.Value;
+        public int Current { get; private set; } = 0;
+        public int Delay { get; set; } = 300;
 
+        object IEnumerator.Current => Current;
 
-            #region PropertyTest
-            //var target = propTest.CreateWrapperTarget(testRawModel);
-            //propTest.SetTarget(targetComp);
+        public void Dispose()
+        {
+            Reset();
+        }
 
-            ////Задать обработчик
-            //var activeConfNamegetter = propTest.CreateActiveConfGetter();
-            //var confListgetter = propTest.CreateConfListGetter();
-            //propTest.SetPropertyGetter(confListgetter);
+        public bool MoveNext()
+        {
+            //System.Threading.Thread.Sleep(Delay);
 
-            ////создать свойства (тест)
-            //var propSettings = propTest.CreateSettings(new KeyValuePair<string, string>("test", "value"));
-            //propTest.PropertySettings = propSettings;
-
-            //var property = propTest.CreateProperty();
-            //property.Update();
-            //Console.WriteLine("PropertyValue = " + string.Join("\n", property.Select(x => x.Value).ToArray()));
-
-            //#region SetValue
-            //if (property.IsReadOnly)
-            //{
-            //    string tempVal = "По умолчанию";
-            //    property.TempValue = tempVal;
-            //    var result = property.WriteValue();
-            //}
-            //#endregion 
-            //Console.WriteLine("new PropertyValue = " + property.Value);
-            #endregion
-
-            Console.ReadKey();
+            if(++index < DataSource.Length)
+            {
+                Current = DataSource[index];
+                return true;
+            }
+            else
+                return false;
         }
 
 
+        public bool HasMoreResults()
+        {
+            return ++index < DataSource.Length;
+        }
+        public async Task<int> GetNextAsync()
+        {
+            var tsk = Task.Run<int>(GetNext);
+            int result;
+            result = await tsk.ContinueWith(t => t.Result);
+            return result;
+        }
 
+        public int GetNext()
+        {
+            System.Threading.Thread.Sleep(Delay);
+            return Current;
+        }
+
+        public async Task<bool> MoveNextAsync()
+        {
+            return await Task.Run<bool>(MoveNext);
+        }
+
+        public void Reset()
+        {
+            Current = 0;
+            index = -1;
+        }
     }
 
     public class NotifyOnInstance

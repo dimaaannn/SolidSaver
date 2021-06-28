@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="BaseTypes\Assembly.cs" />
     <Compile Include="BaseTypes\AppTypeFactory.cs" />
+    <Compile Include="BaseTypes\ModelWrapper.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComComponent.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComDrawing.cs" />
     <Compile Include="ComConn\ComObjectProxy\SwComModel.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Controller\Part\ModelSelector.cs" />
     <Compile Include="BaseTypes\ComponentCl.cs" />
     <Compile Include="BaseTypes\ISwModelWrapper.cs" />
+    <Compile Include="Global\DocLoader.cs" />
     <Compile Include="Global\MainModel.cs" />
     <Compile Include="Global\MainPartControl.cs" />
     <Compile Include="Global\LinkedModel.cs" />
@@ -121,6 +123,31 @@
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
+    <Compile Include="Table\ICell.cs" />
+    <Compile Include="Table\ICellView.cs" />
+    <Compile Include="Table\ICellT.cs" />
+    <Compile Include="Table\ICollectionCell.cs" />
+    <Compile Include="Table\ITable.cs" />
+    <Compile Include="Table\ITableViewModel.cs" />
+    <Compile Include="Table\ITargetWrapper.cs" />
+    <Compile Include="Table\PropertyCell.cs" />
+    <Compile Include="Table\PropertyEntities.cs" />
+    <Compile Include="Table\Prop\TextBuilderCell.cs" />
+    <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
+    <Compile Include="Table\SWProp\FilePathCell.cs" />
+    <Compile Include="TaskUnits\CellFactoryBuilder.cs" />
+    <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
+    <Compile Include="TaskUnits\IFactoryProvider.cs" />
+    <Compile Include="TaskUnits\ITaskUnit.cs" />
+    <Compile Include="TaskUnits\SWTask\SaveSheetMetalTask.cs" />
+    <Compile Include="Table\SWProp\PropertyCellUtils.cs" />
+    <Compile Include="Table\SWProp\UserPropertyCell.cs" />
+    <Compile Include="Table\Prop\WorkFolderCell.cs" />
+    <Compile Include="Table\TextCell.cs" />
+    <Compile Include="TaskUnits\ICellFactory.cs" />
+    <Compile Include="TaskUnits\ICellLogger.cs" />
+    <Compile Include="TaskUnits\ICellProvider.cs" />
+    <Compile Include="TaskUnits\ITaskInterfaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">
@@ -141,6 +168,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TaskUnits\CellTask\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

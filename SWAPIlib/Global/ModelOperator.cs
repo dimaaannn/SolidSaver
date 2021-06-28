@@ -6,10 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SWAPIlib.Global
 {
+
     public static class OpenedDocs
     {
         static OpenedDocs()
@@ -41,6 +43,58 @@ namespace SWAPIlib.Global
                 }
             }
             return ret;
+        }
+
+        public static List<ISwModelWrapper> GetVisibleAssembly()
+        {
+            var ret = new List<ISwModelWrapper>();
+            foreach (var model in DocEnumerator)
+            {
+                if (model?.Visible == true)
+                {
+                    var wrapModel = new SwModelWrapper(model);
+                    if(wrapModel.DocType == AppDocType.swASM)
+                    {
+                        ret.Add(wrapModel);
+                    }
+                }
+            }
+            return ret;
+        }
+
+        public static ModelDoc2 GetNextOpenedDoc(EnumDocuments2 enumerator)
+        {
+            int fetched = 0;
+            ModelDoc2 model;
+            enumerator.Next(1, out model, ref fetched);
+            return model;
+        }
+
+        public static async Task<ModelDoc2> GetNextOpenedDocAsync (EnumDocuments2 enumerator)
+        {
+            var ret = Task<ModelDoc2>.Run(
+                () => GetNextOpenedDoc(enumerator)
+                );
+            return await ret;
+        }
+
+
+
+        public static async System.Threading.Tasks.Task AddOpenedDocsAsync(Action<object> action, CancellationToken cancellationToken)
+        {
+            //var enumDocuments = SwAppControl.swApp.EnumDocuments2();
+
+            //var model = await GetNextOpenedDocAsync(enumDocuments);
+            //while(model != null 
+            //    && cancellationToken.IsCancellationRequested == false)
+            //{
+            //    action(model.GetTitle());
+            //    model = await GetNextOpenedDocAsync(enumDocuments);
+            //}
+
+            Action<ModelDoc2> modelAction = (model) => action(model.GetTitle());
+
+            await SWAPIlib.ComConn.SwAppControl.GetOpenedModelsAsync(modelAction, cancellationToken);
         }
     }
 

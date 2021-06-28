@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="SolidSaverWPF.Views.Table.TableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SolidSaverWPF.Views.Table"
+             mc:Ignorable="d" 
+             xmlns:tablemodel="clr-namespace:SolidSaverWPF.ViewModel.Table"
+             d:DataContext="{d:DesignInstance Type=tablemodel:TableViewModel, IsDesignTimeCreatable=True}"
+
+             d:DesignHeight="200" d:DesignWidth="250">
+    <!--<UserControl.DataContext>
+        <tablemodel:TableViewModel/>
+    </UserControl.DataContext>-->
+    <Border 
+        BorderThickness="4, 0, 0, 0" BorderBrush="Green"
+        CornerRadius="10"
+        Margin="1"
+        Padding="3, 0">
+
+        <DockPanel
+            Background="LightBlue">
+            <StackPanel DockPanel.Dock="Top"
+                Orientation="Vertical">
+                <TextBlock 
+                    Margin="3"
+                    Text="{Binding TargetName}"/>
+            </StackPanel>
+            <ListBox
+                HorizontalContentAlignment="Stretch"
+                ItemsSource="{Binding Properties}">
+                <ListBox.Resources>
+                    <DataTemplate 
+                        DataType="{x:Type tablemodel:CellViewModel}">
+                        <local:CellView/>
+                    </DataTemplate>
+                </ListBox.Resources>
+            </ListBox>
+        </DockPanel>
+    </Border>
+</UserControl>
