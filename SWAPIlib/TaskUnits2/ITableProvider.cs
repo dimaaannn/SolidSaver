@@ -1,7 +1,7 @@
 ﻿using SWAPIlib.Table;
 using System.Collections.Generic;
 
-namespace SWAPIlib.TaskUnits
+namespace SWAPIlib.TaskUnits2
 {
 
     public enum ITableType
@@ -11,7 +11,7 @@ namespace SWAPIlib.TaskUnits
     }
 
 
-    public interface IActionTarget
+    public interface ITableProvider
     {
         ITable GetTable(ITableType tableType = ITableType.Default);
         void Add(ITable newTable, ITableType tableType = ITableType.Default);
@@ -20,14 +20,14 @@ namespace SWAPIlib.TaskUnits
     }
 
 
-    public class ActionTarget : IActionTarget
+    public class TableProvider : ITableProvider
     {
         private readonly Dictionary<ITableType, ITable> tableDictionary =
             new Dictionary<ITableType, ITable>();
 
-        public ActionTarget() { }
+        public TableProvider() { }
 
-        public ActionTarget(ITable defaultTable)
+        public TableProvider(ITable defaultTable)
         {
             tableDictionary.Add(ITableType.Default, defaultTable);
         }
