@@ -8,7 +8,7 @@ namespace SWAPIlib.TaskUnits2
 
     public interface ITaskFactory2
     {
-        ITaskFactorySettings TaskTemplate { get; }
+        //ITaskFactorySettings TaskTemplate { get; }
 
     }
 
