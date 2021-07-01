@@ -38,7 +38,12 @@ namespace SolidApp
             var swConnector = Startup.ServiceProvider.GetService<ISwConnector>();
 
 
-            logger.LogWarning("test warning");
+            swConnector.Connect();
+
+            //Console.WriteLine($"ComConnected = {swConnector.IsComConnected}");
+            //Console.WriteLine("test");
+
+            swConnector.Disconnect();
             
 
             Console.ReadKey();

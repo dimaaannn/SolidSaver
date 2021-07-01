@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace SolidApp
 {
@@ -20,7 +21,13 @@ namespace SolidApp
                     services.AddLogging();
                     services.AddSingleton<ISwConnector, SWConnector>();
                     services.AddTransient<NotifyOnInstance>();
-                }).Build();
+                })
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddConsole()
+                        .SetMinimumLevel(LogLevel.Trace);
+                })
+                .Build();
             ServiceProvider = host.Services;
             
         }

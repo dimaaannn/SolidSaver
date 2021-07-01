@@ -15,6 +15,7 @@ namespace SolidApp.SW
 
         bool IsComConnected { get; }
         bool Connect();
+        void Disconnect();
 
         event EventHandler ComConnected;
         event EventHandler ComDisposed;
@@ -40,33 +41,43 @@ namespace SolidApp.SW
 
         public bool Connect()
         {
-            _logger.LogInformation("Begin connection to SW");
-            _swProcess = GetProcess(SW_PROCESS_NAME);
-            if (_swProcess == null)
-                return false;
-
-            SwApp = Activator.CreateInstance(typeof(ISldWorks)) as ISldWorks;
-            IsComConnected = SwApp != null;
-
-            if (IsComConnected)
+            using(var log = _logger.BeginScope("Com Connection to {processName}", SW_PROCESS_NAME))
             {
-                ComConnected?.Invoke(this, EventArgs.Empty);
-                _swProcess.EnableRaisingEvents = true;
-                _swProcess.Disposed += OnSwProcessDisposed;
+                _logger.LogDebug("Begin connection to SW");
+                _swProcess = GetProcess(SW_PROCESS_NAME);
+                if (_swProcess == null)
+                    return false;
+                Type progType = Type.GetTypeFromProgID(SW_PROG_ID);
+                SwApp = Activator.CreateInstance(progType) as ISldWorks;
+                IsComConnected = SwApp != null;
+                if (IsComConnected)
+                {
+                    ComConnected?.Invoke(this, EventArgs.Empty);
+                    _swProcess.EnableRaisingEvents = true;
+                    _swProcess.Disposed += OnSwProcessDisposed;
+                }
+                if (IsComConnected)
+                    _logger.LogInformation("Com connection established");
+                else
+                    _logger.LogWarning("Com connection failed");
             }
-            if (IsComConnected)
-                _logger.LogDebug("Com connection established");
-            else
-                _logger.LogWarning("Com connection failed");
             return IsComConnected;
         }
 
+        public void Disconnect()
+        {
+            _swProcess.Dispose();
+            _logger.LogInformation("Process {name} disposed", SW_PROCESS_NAME);
+        }
 
         private Process GetProcess(string processName)
         {
             Process[] ProcessList = Process.GetProcessesByName(processName);
             Process firstProcess = ProcessList.FirstOrDefault();
-            _logger.LogInformation("GetSwProcess = {proc}", firstProcess);
+            if (firstProcess == null)
+                _logger.LogWarning($"GetProcess: Process not found");
+            else
+                _logger.LogDebug("Process {proc} is found", firstProcess?.ProcessName);
             return firstProcess;
         }
 
