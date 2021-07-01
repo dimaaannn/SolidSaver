@@ -43,6 +43,8 @@ namespace SolidApp
             //Console.WriteLine($"ComConnected = {swConnector.IsComConnected}");
             //Console.WriteLine("test");
 
+            logger.LogTrace("testTrace");
+
             swConnector.Disconnect();
             
 
