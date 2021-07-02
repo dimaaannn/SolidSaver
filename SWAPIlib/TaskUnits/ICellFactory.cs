@@ -13,7 +13,7 @@ namespace SWAPIlib.TaskUnits
     }
 
 
-    public class CellFactory : ICellFactory
+    public class CellFactory : TableActionBase, ICellFactory
     {
         protected static ICellLogger Logger = new SimpleCellLogger<CellFactory>();
 
@@ -25,12 +25,12 @@ namespace SWAPIlib.TaskUnits
         }
 
         public CellFactory(ICellFactoryTemplate cellFactoryTemplate, ModelPropertyNames modelProperty) : this(cellFactoryTemplate.GetCellProvider(modelProperty)) { }
-        public string Name => CellProvider.Name;
+        public override string Name => CellProvider.Name;
         public ICellFactoryProvider CellProvider { get; set; }
 
         public CheckTableDelegate CheckTable => CellProvider.CheckTable;
 
-        public virtual TableLog Proceed(ref ITable refTable, ITable settings)
+        public override TableLog Proceed(ref ITable refTable, ITable settings)
         {
             TableLog retLog;
             CellLog createLog;
