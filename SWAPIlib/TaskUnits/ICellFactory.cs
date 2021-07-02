@@ -15,7 +15,7 @@ namespace SWAPIlib.TaskUnits
 
     public class CellFactory : TableActionBase, ICellFactory
     {
-        protected static ICellLogger Logger = new SimpleCellLogger<CellFactory>();
+        protected static ICellLogger logBuilder = new SimpleCellLogger<CellFactory>();
 
         public CellFactory(ICellFactoryProvider cellProvider) 
         {
@@ -57,11 +57,11 @@ namespace SWAPIlib.TaskUnits
             }
             else
             {
-                addLog = Logger.Log(cell: createLog.Cell, action: CellAction.Add, status: LogStatus.Passed);
+                addLog = logBuilder.Log(cell: createLog.Cell, action: CellAction.Add, status: LogStatus.Passed);
                 addLog.Info = "Некорректное свойство пропущено";
             }
 
-            retLog = Logger.Log(table: refTable, settings: settings);
+            retLog = logBuilder.Log(table: refTable, settings: settings);
             retLog.Info = CellProvider.Name + " cell factory";
             retLog.Log = new List<CellLog>
             {
@@ -85,7 +85,7 @@ namespace SWAPIlib.TaskUnits
                 cell = cellProvider.GetCell(refTable: refTable, settings: settings);
             }
 
-            CellLog ret = Logger.Log(cell, settings);
+            CellLog ret = logBuilder.Log(cell, settings);
             ret.Info = cellProvider.Name;
             ret.Status = isValid ? LogStatus.Processed : LogStatus.Failed;
 
@@ -95,7 +95,7 @@ namespace SWAPIlib.TaskUnits
         public static CellLog AddCellToTable(ICell cell, string key, ITable refTable, bool overrideKey = true)
         {
             ICell cellInTable;
-            var retLog = Logger.Log(cell, CellAction.Add, LogStatus.None);
+            var retLog = logBuilder.Log(cell, CellAction.Add, LogStatus.None);
             retLog.Info = $"{key}:{refTable.Name}";
 
 
