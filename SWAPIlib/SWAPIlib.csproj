@@ -137,6 +137,7 @@
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
     <Compile Include="TaskUnits2\TaskUnitInterfaces.cs" />
+    <Compile Include="TaskUnits\CellActionFactory.cs" />
     <Compile Include="TaskUnits\CellFactoryBuilder.cs" />
     <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
     <Compile Include="TaskUnits2\ITableProvider.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="TaskUnits\ICellLogger.cs" />
     <Compile Include="TaskUnits\ICellProvider.cs" />
     <Compile Include="TaskUnits\ITaskInterfaces.cs" />
+    <Compile Include="TaskUnits\ActionList.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="SwConst">

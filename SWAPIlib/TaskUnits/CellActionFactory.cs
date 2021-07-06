@@ -30,7 +30,6 @@ namespace SWAPIlib.TaskUnits
             {
                 Info = "AddCellAction",
                 Log = new List<CellLog>(),
-                Status = LogStatus.None
             };
 
             CellLog log = GetCell(cellProvider, refTable, settings);
@@ -40,6 +39,7 @@ namespace SWAPIlib.TaskUnits
             {
                 tlog.Log.Add(
                     AddToTable(log.Cell, cellProvider.Key, refTable));
+                tlog.Status = LogStatus.Processed;
             }
 
             return tlog;

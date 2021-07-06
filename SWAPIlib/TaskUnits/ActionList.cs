@@ -1,4 +1,5 @@
-﻿using SWAPIlib.Table;
+﻿using NLog;
+using SWAPIlib.Table;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,29 +9,37 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.TaskUnits
 {
-    public class ActionList : IEnumerable<ICellFactory>
+    public class ActionList : IEnumerable<ITableAction>
     {
-        private List<ICellFactory> CellFactories { get; } = new List<ICellFactory>();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly List<ITableAction> tableActions = new List<ITableAction>();
 
 
-        public IExtendedTable Build(ITable table)
+        public TableLog Proceed(ITable table)
         {
+            logger.Debug("Proceed table {tableName}", table.Name);
+            TableLog ret = TableLog.New;
+            foreach (var action in tableActions)
+            {
+                ret.Add(action.Proceed(ref table));
+            }
 
+            return ret;
         }
 
-        public void Add(ICellFactory factory) => CellFactories.Add(factory);
-        public void Remove(ICellFactory factory) => CellFactories.Remove(factory);
-        public void Clear() => CellFactories.Clear();
+        public void Add(ITableAction factory) => tableActions.Add(factory);
+        public void Remove(ITableAction factory) => tableActions.Remove(factory);
+        public void Clear() => tableActions.Clear();
 
-        public IEnumerator<ICellFactory> GetEnumerator() => CellFactories.GetEnumerator();
-        IEnumerator IEnumerable.GetEnumerator() => CellFactories.GetEnumerator();
+        public IEnumerator<ITableAction> GetEnumerator() => tableActions.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => tableActions.GetEnumerator();
 
     }
 
 
     public static class TableBuilderExtension
     {
-        public static void AddTo(this ICellFactory factory, ActionList tableBuilder)
+        public static void AddTo(this ITableAction factory, ActionList tableBuilder)
         {
             tableBuilder.Add(factory);
         }
