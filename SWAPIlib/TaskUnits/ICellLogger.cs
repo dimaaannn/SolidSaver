@@ -86,6 +86,8 @@ namespace SWAPIlib.TaskUnits
         public string PrevValue;
         public string NewValue;
         public string Info;
+
+        public static implicit operator bool(CellLog log) => log.Status == LogStatus.Processed;
     }
 
 }
