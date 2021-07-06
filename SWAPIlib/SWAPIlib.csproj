@@ -141,9 +141,7 @@
     <Compile Include="TaskUnits\CellFactoryBuilder.cs" />
     <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
     <Compile Include="TaskUnits2\ITableProvider.cs" />
-    <Compile Include="TaskUnits\IFactoryProvider.cs" />
     <Compile Include="TaskUnits\ITableAction.cs" />
-    <Compile Include="TaskUnits\ITaskUnit.cs" />
     <Compile Include="TaskUnits\SWTask\SaveSheetMetalTask.cs" />
     <Compile Include="Table\SWProp\PropertyCellUtils.cs" />
     <Compile Include="Table\SWProp\UserPropertyCell.cs" />
