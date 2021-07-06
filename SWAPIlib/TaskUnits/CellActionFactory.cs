@@ -7,13 +7,13 @@ using System.Text;
 
 namespace SWAPIlib.TaskUnits
 {
-    public class AddCellAction : TableActionBase, ITableChecker
+    public class CellActionFactory : TableActionBase, ITableChecker
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         private readonly ICellFactoryProvider cellProvider;
 
-        public AddCellAction(ICellFactoryProvider cellProvider)
+        public CellActionFactory(ICellFactoryProvider cellProvider)
         {
             this.cellProvider = cellProvider ?? throw new ArgumentNullException(nameof(cellProvider));
         }

@@ -84,7 +84,7 @@ namespace SWAPIlib.TaskUnits
         {
             logger.Debug("build new factory {name}", factoryProviderBuilder.Name);
             ICellFactoryProvider cellFactoryProvider = factoryProviderBuilder.Build();
-            ITableAction cellFactory = new AddCellAction(cellFactoryProvider);
+            ITableAction cellFactory = new CellActionFactory(cellFactoryProvider);
 
             if (settingsTable.Count() > 0)
                 cellFactory.GetSettingsDelegate = _ => settingsTable;
