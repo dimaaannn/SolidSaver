@@ -1,6 +1,7 @@
 ﻿using SWAPIlib.Table;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SWAPIlib.TaskUnits
 {
@@ -69,10 +70,36 @@ namespace SWAPIlib.TaskUnits
 
     public struct TableLog
     {
+        private LogStatus status;
+        public TableLog(Type taskType = null)
+        {
+            TableTaskType = taskType;
+            status = LogStatus.None;
+            Log = new List<CellLog>();
+            Info = null;
+        }
+        public LogStatus Status { 
+            get => status; 
+            set => status = value; }
         public Type TableTaskType;
-        public LogStatus Status;
         public List<CellLog> Log;
         public string Info;
+
+        private LogStatus GetStatus()
+        {
+            if (Log.Count == 0)
+                return LogStatus.None;
+            if(Log.All(l => l.Status == LogStatus.Processed))
+                return LogStatus.Processed;
+            if (Log.Any(l => l.Status == LogStatus.Failed))
+                return LogStatus.Failed;
+            return LogStatus.Passed;
+        }
+
+        public void Add(CellLog log)
+        {
+            Log.Add(log);
+        }
     }
 
     public struct CellLog
