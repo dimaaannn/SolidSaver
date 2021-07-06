@@ -13,16 +13,14 @@ namespace SWAPIlib.TaskUnits
         TableLog Proceed(ref ITable refTable, ITable settings);
         TableLog Proceed(ref ITable refTable);
 
-        Func<ITable, ITable> Settings { get; set; }
+        Func<ITable, ITable> GetSettingsDelegate { get; set; }
     }
 
 
     public abstract class TableActionBase : ITableAction
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
-
-        public Func<ITable, ITable> Settings { get; set; }
-        public TableLog Proceed(ref ITable refTable) => Proceed(ref refTable, Settings?.Invoke(refTable));
+        public Func<ITable, ITable> GetSettingsDelegate { get; set; }
+        public TableLog Proceed(ref ITable refTable) => Proceed(ref refTable, GetSettingsDelegate?.Invoke(refTable));
 
         public abstract string Name { get; }
         public abstract TableLog Proceed(ref ITable refTable, ITable settings);

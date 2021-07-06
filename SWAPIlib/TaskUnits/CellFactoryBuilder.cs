@@ -5,14 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utils;
+using SWAPIlib.Utils;
 
 namespace SWAPIlib.TaskUnits
 {
-    public interface ICellFactoryBuilder
-    {
 
-    }
 
     public class CellFactoryBuilder
     {
@@ -90,7 +87,7 @@ namespace SWAPIlib.TaskUnits
             ICellFactory cellFactory = new CellFactory(cellFactoryProvider);
 
             if (settingsTable.Count() > 0)
-                cellFactory.Settings = _ => settingsTable;
+                cellFactory.GetSettingsDelegate = _ => settingsTable;
 
             return cellFactory;
         }
@@ -117,7 +114,7 @@ namespace SWAPIlib.TaskUnits
 
 }
 
-namespace Utils
+namespace SWAPIlib.Utils
 {
     using SWAPIlib.TaskUnits;
 
@@ -132,7 +129,7 @@ namespace Utils
         public bool OverrideKey { get; set; } = true;
         public string Name { get; set; }
 
-        internal ICellFactoryProvider Build()
+        public ICellFactoryProvider Build()
         {
             if (CheckRequirements(this))
             {
