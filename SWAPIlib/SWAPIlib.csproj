@@ -127,6 +127,7 @@
     <Compile Include="Table\ICellView.cs" />
     <Compile Include="Table\ICellT.cs" />
     <Compile Include="Table\ICollectionCell.cs" />
+    <Compile Include="Table\IExtendedTable.cs" />
     <Compile Include="Table\ITable.cs" />
     <Compile Include="Table\ITableViewModel.cs" />
     <Compile Include="Table\ITargetWrapper.cs" />

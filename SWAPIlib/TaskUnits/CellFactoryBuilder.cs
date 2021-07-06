@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utils;
 
 namespace SWAPIlib.TaskUnits
 {
@@ -13,54 +14,149 @@ namespace SWAPIlib.TaskUnits
 
     }
 
-
     public class CellFactoryBuilder
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ICellFactoryTemplate cellFactoryTemplate;
-         
+
+        private CellProviderBuilder factoryProviderBuilder;
+        private IExtendedTable settingsTable;
+
         public CellFactoryBuilder(ICellFactoryTemplate cellFactoryTemplate)
         {
             this.cellFactoryTemplate = cellFactoryTemplate;
-            logger.Debug("Instanced with {factoryTemplate}", cellFactoryTemplate);
+            factoryProviderBuilder = new CellProviderBuilder();
+            settingsTable = new ExtendedTable();
+            logger.Trace("Instanced with {factoryTemplate}", cellFactoryTemplate);
         }
 
-        public CellFactoryBuilderPreform FromTemplate()
+        public static CellFactoryBuilder Create()
         {
-            throw null;
+            return new CellFactoryBuilder(new CellFactoryTemplate()); // TODO add DI singleton
         }
 
-        public CellFactoryBuilderPreform New(string text)
+        public CellFactoryBuilder New(ModelPropertyNames propertyName)
         {
-            throw null;
+            logger.Trace("New from template {name}", propertyName.ToString());
+            ParseTemplate(propertyName);
+            return this;
         }
 
-        protected ICellFactory Build(CellFactoryBuilderPreform preform)
+        public CellFactoryBuilder New(string text)
         {
-            
+            factoryProviderBuilder.CellGetter = BuildFromText(text);
+            return this;
         }
 
-        public class CellFactoryBuilderPreform
+        public CellFactoryBuilder TextCopy(ICell cellReference)
         {
-            private readonly CellFactoryBuilder parentBuilder;
+            New(cellReference.Text);
+            return this;
+        }
 
-            private CellFactoryBuilderPreform(CellFactoryBuilder parentBuilder)
+        public CellFactoryBuilder Reference(ICell cellReference)
+        {
+            logger.Trace("New from reference {ref}", cellReference);
+            factoryProviderBuilder.CellGetter = (refTable, settings) => cellReference;
+            return this;
+        }
+
+        public CellFactoryBuilder WithKey(string key)
+        {
+            factoryProviderBuilder.Key = key;
+            return this;
+        }
+
+        public CellFactoryBuilder WithTarget(object target)
+        {
+            settingsTable.Target = new TargetWrapper(target);
+            return this;
+        }
+
+        public CellFactoryBuilder AddSettings(params ITable[] settingsTables)
+        {
+            logger.Debug("Add {count} setting table", settingsTables.Length);
+            foreach (var table in settingsTables)
             {
-                this.parentBuilder = parentBuilder;
+                table.CopyTo(settingsTable, true);
             }
+            return this;
+        }
 
-            private ICell CellReference { get; set; }
-            public string Key { get; set; }
-            public bool OverrideKey { get; set; }
-            public 
+        public ICellFactory Build()
+        {
+            logger.Debug("build new factory {name}", factoryProviderBuilder.Name);
+            ICellFactoryProvider cellFactoryProvider = factoryProviderBuilder.Build();
+            ICellFactory cellFactory = new CellFactory(cellFactoryProvider);
 
-            public CellFactoryBuilderPreform WithKey(string key)
+            if (settingsTable.Count() > 0)
+                cellFactory.Settings = _ => settingsTable;
+
+            return cellFactory;
+        }
+
+        private void ParseTemplate(ModelPropertyNames propertyName)
+        {
+            ICellFactoryProvider temp = cellFactoryTemplate.GetCellProvider(propertyName);
+
+            factoryProviderBuilder.CellGetter = temp.GetCell;
+            factoryProviderBuilder.CheckTable = temp.CheckTable;
+            factoryProviderBuilder.Key = temp.Key;
+            factoryProviderBuilder.Name = temp.Name;
+        }
+
+        private CellGetterDelegate BuildFromText(string textValue)
+        {
+            return (refTable, settings) =>
             {
-                this.Key = key;
-                return this;
+                return new TextCell(textValue);
+            };
+        }
+
+    }
+
+}
+
+namespace Utils
+{
+    using SWAPIlib.TaskUnits;
+
+    /// <summary>
+    /// Создаёт объект настройки фабрики по заданным параметрам
+    /// </summary>
+    public class CellProviderBuilder
+    {
+        public CellGetterDelegate CellGetter { get; set; } 
+        public CheckTableDelegate CheckTable { get; set; }
+        public string Key { get; set; }
+        public bool OverrideKey { get; set; } = true;
+        public string Name { get; set; }
+
+        internal ICellFactoryProvider Build()
+        {
+            if (CheckRequirements(this))
+            {
+                CheckTableDelegate alwaysTrue = (refTable, settings) => true;
+                return new CellFactoryProvider
+                {
+                    GetCell = this.CellGetter,
+                    Key = this.Key,
+                    CheckTable = this.CheckTable ?? alwaysTrue,
+                    Name = this.Name ?? "NoName",
+                    OverrideKey = this.OverrideKey,
+                };
             }
+            else
+                throw new AggregateException("invalid or null arguments");
+        }
+
+        private bool CheckRequirements(CellProviderBuilder builderSettings)
+        {
+
+            bool ret = builderSettings.CellGetter == null;
+            ret &= string.IsNullOrEmpty(builderSettings.Key);
+            return ret;
         }
     }
-///Создать расширение для IFactoryProvider
-///FactoryBuilder.Create/.Add(someFactory).WithSettings(someSettingsTable).WithKey(key).Build()
+
 }
