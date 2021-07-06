@@ -137,6 +137,7 @@
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
     <Compile Include="TaskUnits2\TaskUnitInterfaces.cs" />
+    <Compile Include="TaskUnits\Actions\SaveSheetMetalList.cs" />
     <Compile Include="TaskUnits\CellActionFactory.cs" />
     <Compile Include="TaskUnits\CellFactoryBuilder.cs" />
     <Compile Include="TaskUnits\CellFactoryTemplate.cs" />
