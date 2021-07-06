@@ -71,7 +71,7 @@ namespace SWAPIlib.TaskUnits
     public struct TableLog
     {
         private LogStatus status;
-        public TableLog(Type taskType = null)
+        public TableLog(Type taskType)
         {
             TableTaskType = taskType;
             status = LogStatus.None;
@@ -100,10 +100,27 @@ namespace SWAPIlib.TaskUnits
         {
             Log.Add(log);
         }
+        public void Add(TableLog tLog)
+        {
+            Log.AddRange(tLog.Log);
+        }
+
+        public static TableLog New => new TableLog { Log = new List<CellLog>() };
     }
 
     public struct CellLog
     {
+        public CellLog(Type taskType)
+        {
+            Time = DateTime.Now;
+            Status = LogStatus.None;
+            Action = CellAction.None;
+            Cell = null;
+            TaskType = taskType;
+            PrevValue = null;
+            NewValue = null;
+            Info = null;
+        }
         public DateTime Time;
         
         public LogStatus Status;
@@ -115,6 +132,7 @@ namespace SWAPIlib.TaskUnits
         public string Info;
 
         public static implicit operator bool(CellLog log) => log.Status == LogStatus.Processed;
+        public static CellLog New => new CellLog { Time = DateTime.Now };
     }
 
 }
