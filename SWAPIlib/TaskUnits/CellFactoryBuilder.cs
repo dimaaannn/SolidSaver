@@ -80,11 +80,11 @@ namespace SWAPIlib.TaskUnits
             return this;
         }
 
-        public ICellFactory Build()
+        public ITableAction Build()
         {
             logger.Debug("build new factory {name}", factoryProviderBuilder.Name);
             ICellFactoryProvider cellFactoryProvider = factoryProviderBuilder.Build();
-            ICellFactory cellFactory = new CellFactory(cellFactoryProvider);
+            ITableAction cellFactory = new AddCellAction(cellFactoryProvider);
 
             if (settingsTable.Count() > 0)
                 cellFactory.GetSettingsDelegate = _ => settingsTable;
