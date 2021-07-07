@@ -127,8 +127,7 @@ namespace SolidSaverWPF.ViewModel
                 else
                     resultTable = table;
 
-                ret.Add(new TableViewModel(resultTable));
-                //ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
+                ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
             }
             return ret;
         }

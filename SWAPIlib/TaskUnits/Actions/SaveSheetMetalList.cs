@@ -30,12 +30,22 @@ namespace SWAPIlib.TaskUnits.Actions
 
             ret.Add(FolderSettings().Proceed(table));
             ret.Add(ModelOptions().Proceed(table));
-            var userParam = UserParameters();
-            var result = userParam.Proceed(table);
-            //ret.Add(UserParameters().Proceed(table));
-            //ret.Add(DxfFolderPathBuilder().Proceed(table));
+            ret.Add(UserParameters().Proceed(table));
+            ret.Add(DxfFolderPathBuilder().Proceed(table));
+            ret.Add(SaveMetalSheet().Proceed(table));
 
             return ret;
+        }
+
+        public static ActionList SaveMetalSheet()
+        {
+            return ActionList.DefaultBuilder(builder =>
+            {
+                CellFactoryBuilder
+                    .Create(ModelPropertyNames.SaveSheetMetal)
+                    .Build()
+                    .AddTo(builder);
+            });
         }
 
         public static ActionList UserParameters()
@@ -101,6 +111,7 @@ namespace SWAPIlib.TaskUnits.Actions
             var textBuilderAction =  CellFactoryBuilder
                 .Create(ModelPropertyNames.TextBuilder)
                 .WithSettings(textBuilderSettings)
+                .WithKey(ModelEntities.FilePath)
                 .Build();
 
             return ActionList.DefaultBuilder(builder => builder.Add(textBuilderAction));
@@ -119,23 +130,23 @@ namespace SWAPIlib.TaskUnits.Actions
                     .Create(ModelPropertyNames.ActiveConfigName)
                     .Build()
                     .AddTo(builder);
-                //CellFactoryBuilder
-                //    .Create(ModelPropertyNames.TextBuilder)
-                //    .WithKey(partNameKey)
-                //    .WithSettings(
-                //        CellFactoryBuilder.Create().Reference(
-                //            Table.Prop.TextBuilderCell.BuildSettings(
-                //                refTable =>
-                //                {
-                //                    string filePath = refTable.GetCell(ModelEntities.FileName.ToString()).Text;
-                //                    return System.IO.Path.GetFileName(filePath);
-                //                })
-                //        )
-                //        .WithKey(Table.Prop.TextBuilderCell.SETTINGS_KEY)
-                //        .Build()
-                //    )
-                //    .Build()
-                //    .AddTo(builder);
+                CellFactoryBuilder
+                    .Create(ModelPropertyNames.TextBuilder)
+                    .WithKey(partNameKey)
+                    .WithSettings(
+                        CellFactoryBuilder.Create().Reference(
+                            Table.Prop.TextBuilderCell.BuildSettings(
+                                refTable =>
+                                {
+                                    string filePath = refTable.GetCell(ModelEntities.FileName.ToString()).Text;
+                                    return System.IO.Path.GetFileName(filePath);
+                                })
+                        )
+                        .WithKey(Table.Prop.TextBuilderCell.SETTINGS_KEY)
+                        .Build()
+                    )
+                    .Build()
+                    .AddTo(builder);
             });
 
         }
