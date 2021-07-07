@@ -27,27 +27,37 @@ namespace SWAPIlib.TaskUnits
             logger.Trace("Instanced with {factoryTemplate}", cellFactoryTemplate);
         }
 
-        public static CellFactoryBuilder Create()
+        private static CellFactoryBuilder CreateNewInstance()
         {
+            logger.Trace("Create new instance");
             return new CellFactoryBuilder(new CellFactoryTemplate()); // TODO add DI singleton
         }
 
-        public CellFactoryBuilder New(ModelPropertyNames propertyName)
+        public static CellFactoryBuilder Create()
         {
-            logger.Trace("New from template {name}", propertyName.ToString());
-            ParseTemplate(propertyName);
-            return this;
+            logger.Trace("empty instance");
+            return CreateNewInstance();
         }
 
-        public CellFactoryBuilder New(string text)
+        public static CellFactoryBuilder Create(string text)
         {
-            factoryProviderBuilder.CellGetter = BuildFromText(text);
-            return this;
+            var ret = CreateNewInstance();
+            logger.Trace("from text {name}", text);
+            ret.factoryProviderBuilder.CellGetter = CellFactoryBuilder.BuildFromText(text);
+            return ret;
+        }
+
+        public static CellFactoryBuilder Create(ModelPropertyNames propertyName)
+        {
+            var ret = CreateNewInstance();
+            logger.Trace("from template {name}", propertyName.ToString());
+            ret.ParseTemplate(propertyName);
+            return ret;
         }
 
         public CellFactoryBuilder TextCopy(ICell cellReference)
         {
-            New(cellReference.Text);
+            factoryProviderBuilder.CellGetter = BuildFromText(textValue: cellReference.Text);
             return this;
         }
 
@@ -70,7 +80,7 @@ namespace SWAPIlib.TaskUnits
             return this;
         }
 
-        public CellFactoryBuilder AddSettings(params ITable[] settingsTables)
+        public CellFactoryBuilder WithSettings(params ITable[] settingsTables)
         {
             logger.Debug("Add {count} setting table", settingsTables.Length);
             foreach (var table in settingsTables)
@@ -102,7 +112,7 @@ namespace SWAPIlib.TaskUnits
             factoryProviderBuilder.Name = temp.Name;
         }
 
-        private CellGetterDelegate BuildFromText(string textValue)
+        private static CellGetterDelegate BuildFromText(string textValue)
         {
             return (refTable, settings) =>
             {
