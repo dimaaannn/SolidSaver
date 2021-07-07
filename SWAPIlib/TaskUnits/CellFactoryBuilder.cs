@@ -74,6 +74,11 @@ namespace SWAPIlib.TaskUnits
             return this;
         }
 
+        public CellFactoryBuilder WithKey<T>(T en) where T: Enum
+        {
+            return WithKey(en.ToString());
+        }
+
         public CellFactoryBuilder WithTarget(object target)
         {
             settingsTable.Target = new TargetWrapper(target);
