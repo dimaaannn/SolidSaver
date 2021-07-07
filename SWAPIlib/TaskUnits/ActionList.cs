@@ -28,6 +28,13 @@ namespace SWAPIlib.TaskUnits
         }
 
         public void Add(ITableAction factory) => tableActions.Add(factory);
+        public static ActionList DefaultBuilder(Action<ActionList> builderDelegate)
+        {
+            ActionList ret = new ActionList();
+            builderDelegate(ret);
+            return ret;
+        }
+
         public void AddRange(IEnumerable<ITableAction> factories) => tableActions.AddRange(factories);
         public void Remove(ITableAction factory) => tableActions.Remove(factory);
         public void Clear() => tableActions.Clear();
