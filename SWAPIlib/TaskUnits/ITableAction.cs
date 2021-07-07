@@ -20,7 +20,11 @@ namespace SWAPIlib.TaskUnits
     public abstract class TableActionBase : ITableAction
     {
         public Func<ITable, ITable> GetSettingsDelegate { get; set; }
-        public TableLog Proceed(ref ITable refTable) => Proceed(ref refTable, GetSettingsDelegate?.Invoke(refTable));
+        public TableLog Proceed(ref ITable refTable)
+        {
+            var settings = GetSettingsDelegate?.Invoke(refTable);
+            return Proceed(ref refTable, settings);
+        }
 
         public abstract string Name { get; }
         public abstract TableLog Proceed(ref ITable refTable, ITable settings);

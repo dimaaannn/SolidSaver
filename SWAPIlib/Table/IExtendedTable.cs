@@ -20,6 +20,6 @@ namespace SWAPIlib.Table
     {
         public ITargetWrapper Target { get; set; }
 
-        public object GetTarget() => Target.GetTarget();
+        public object GetTarget() => Target?.GetTarget();
     }
 }

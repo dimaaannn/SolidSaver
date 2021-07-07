@@ -30,7 +30,10 @@ namespace SWAPIlib.TaskUnits.Actions
 
             ret.Add(FolderSettings().Proceed(table));
             ret.Add(ModelOptions().Proceed(table));
-            ret.Add(DxfFolderPathBuilder().Proceed(table));
+            var userParam = UserParameters();
+            var result = userParam.Proceed(table);
+            //ret.Add(UserParameters().Proceed(table));
+            //ret.Add(DxfFolderPathBuilder().Proceed(table));
 
             return ret;
         }
@@ -40,37 +43,32 @@ namespace SWAPIlib.TaskUnits.Actions
             string nominationName = "Обозначение";
             string designationName = "Наименование";
 
+            var nominationSettings = CellFactoryBuilder
+                        .Create(nominationName)
+                        .WithKey(ModelEntities.UserPropertyName)
+                        .Build();
 
-            return ActionList.DefaultBuilder(builder =>
-            {
+            var designationSettings = CellFactoryBuilder
+                        .Create(designationName)
+                        .WithKey(ModelEntities.UserPropertyName)
+                        .Build();
 
-                // Наименование
-                CellFactoryBuilder
+            var actionL = new ActionList();
+            var addNominationAction = CellFactoryBuilder
                 .Create(ModelPropertyNames.UserProperty)
                 .WithKey(nominationName)
-                .WithSettings(
-                    CellFactoryBuilder
-                        .Create(ModelPropertyNames.UserProperty)
-                        .WithKey(ModelPropertyNames.UserProperty)
-                        .Build()
-                    )
-                .Build()
-                .AddTo(builder);
+                .WithSettings(nominationSettings);
 
-                // Обозначение
-                CellFactoryBuilder
+            var addDesignationAction = CellFactoryBuilder
                 .Create(ModelPropertyNames.UserProperty)
                 .WithKey(designationName)
-                .WithSettings(
-                    CellFactoryBuilder
-                        .Create(ModelPropertyNames.UserProperty)
-                        .WithKey(ModelPropertyNames.UserProperty)
-                        .Build()
-                    )
-                .Build()
-                .AddTo(builder);
+                .WithSettings(designationSettings);
 
-            });
+            actionL.Add(addNominationAction.Build());
+            actionL.Add(addDesignationAction.Build());
+
+            return actionL;
+
         }
 
         public static ActionList DxfFolderPathBuilder(string subFolderKey = SUBFOLDER_KEY)
@@ -110,6 +108,7 @@ namespace SWAPIlib.TaskUnits.Actions
 
         public static ActionList ModelOptions()
         {
+            string partNameKey = "PartName";
             return ActionList.DefaultBuilder(builder =>
             {
                 CellFactoryBuilder
@@ -120,6 +119,23 @@ namespace SWAPIlib.TaskUnits.Actions
                     .Create(ModelPropertyNames.ActiveConfigName)
                     .Build()
                     .AddTo(builder);
+                //CellFactoryBuilder
+                //    .Create(ModelPropertyNames.TextBuilder)
+                //    .WithKey(partNameKey)
+                //    .WithSettings(
+                //        CellFactoryBuilder.Create().Reference(
+                //            Table.Prop.TextBuilderCell.BuildSettings(
+                //                refTable =>
+                //                {
+                //                    string filePath = refTable.GetCell(ModelEntities.FileName.ToString()).Text;
+                //                    return System.IO.Path.GetFileName(filePath);
+                //                })
+                //        )
+                //        .WithKey(Table.Prop.TextBuilderCell.SETTINGS_KEY)
+                //        .Build()
+                //    )
+                //    .Build()
+                //    .AddTo(builder);
             });
 
         }

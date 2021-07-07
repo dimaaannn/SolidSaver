@@ -173,8 +173,8 @@ namespace SWAPIlib.Utils
         private bool CheckRequirements(CellProviderBuilder builderSettings)
         {
 
-            bool ret = builderSettings.CellGetter == null;
-            ret &= string.IsNullOrEmpty(builderSettings.Key);
+            bool ret = builderSettings.CellGetter != null;
+            ret &= string.IsNullOrEmpty(builderSettings.Key) == false;
             return ret;
         }
     }

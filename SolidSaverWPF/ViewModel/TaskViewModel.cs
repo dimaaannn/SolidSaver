@@ -44,44 +44,17 @@ namespace SolidSaverWPF.ViewModel
 
         public ITable[] GetSelectedModels()
         {
-            var ret = new List<ITable>();
+            var ret = new List<IExtendedTable>();
 
             foreach (var component in SWAPIlib.Global.MainModel.SelectionList)
             {
                 var target = new TargetWrapper(component.Appmodel);
-                ret.Add( new TargetTable(target.GetTarget()));
+                ret.Add( new ExtendedTable { Target = target });
             }
 
             return ret.ToArray();
         }
 
-        public ITable GetGlobalTable()
-        {
-            ITable globalTable = null;
-
-
-            var workFolderPath = new CellFactory(cellFactoryTemplate, ModelPropertyNames.WorkFolder);
-            var workFolderCell = workFolderPath.Proceed(ref globalTable, null).Log.First();
-
-            var dxfFolderName = new TextCell("Развёртки");
-            globalTable.Add("dxfFolder", dxfFolderName);
-
-            return globalTable;
-        }
-
-
-        public List<ICellFactory> GetBuildTemplates()
-        {
-            var ret = new List<ICellFactory>();
-
-            ret.Add(new CellFactory(cellFactoryTemplate, ModelPropertyNames.FileName));
-            ret.Add(new CellFactory(
-                cellFactoryTemplate,
-                ModelPropertyNames.ActiveConfigName));
-
-            return ret;
-
-        }
 
         public void LoadSelection()
         {
@@ -90,108 +63,38 @@ namespace SolidSaverWPF.ViewModel
             var tables = GetSelectedModels();
 
 
-            #region SettingsTable
-            var savingPathBuilder = new CellFactory(cellFactoryTemplate, 
-                ModelPropertyNames.TextBuilder);
-            savingPathBuilder.CellProvider.Key = ModelEntities.FilePath.ToString();
-
-            var textBuilderSavingPathSettings = TextBuilderCell.BuildSettings(
-            (reftable) =>
-            {
-                string workFolder = reftable.GetCell(ModelEntities.Folder.ToString()).ToString();
-                string filePath = reftable.GetCell(ModelEntities.FileName.ToString()).ToString();
-                string partFileName = System.IO.Path.GetFileNameWithoutExtension(filePath);
-                string subFolder = reftable.GetCell("dxfFolder").ToString();
-                string snomination = reftable.GetCell("Наименование").ToString();
-                string sdesignation = reftable.GetCell("Обозначение").ToString();
-
-                string savingFileName = $"{snomination}-{sdesignation}_{partFileName}";
-
-                //Replace invalid chars in fileName - create new interface
-                savingFileName = string.Join("_", 
-                    savingFileName.Split(
-                        System.IO.Path.GetInvalidFileNameChars()));
-
-                return System.IO.Path.Combine(workFolder, subFolder, savingFileName);
-            });
-            ITable savingPathSettings = new TableList { { TextBuilderCell.SETTINGS_KEY, textBuilderSavingPathSettings, true } };
-
-
-            var fileNameViewBuilder = new CellFactory(cellFactoryTemplate, 
-                ModelPropertyNames.TextBuilder);
-
-            fileNameViewBuilder.CellProvider.Key = "PartName";
-            var textBuilderFileNameSettings = TextBuilderCell.BuildSettings(
-                reftable =>
-                {
-                    string filePath = reftable.GetCell(ModelEntities.FileName.ToString()).ToString();
-                    return System.IO.Path.GetFileName(filePath);
-                });
-            ITable fileNameSettings = new TableList { { TextBuilderCell.SETTINGS_KEY,
-                textBuilderFileNameSettings, true } };
-
-            #endregion
-
-            var globalTable = GetGlobalTable();
-            var cellsTemplate = GetBuildTemplates();
-
-
-            var nomination = new CellFactory(
-                cellFactoryTemplate, ModelPropertyNames.UserProperty);
-            nomination.CellProvider.Key = "Наименование";
-            var nominationSettings = new TableList {
-                { ModelEntities.UserPropertyName.ToString(),
-                    new TextCell("Обозначение"), false} };
-
-            var designation = new CellFactory(
-                cellFactoryTemplate, ModelPropertyNames.UserProperty);
-            designation.CellProvider.Key = "Обозначение";
-            var designationSettings = new TableList {
-                { ModelEntities.UserPropertyName.ToString(),
-                    new TextCell("Наименование"), false} };
-
-            var saveSheetMetalFactory = new CellFactory(cellFactoryTemplate, ModelPropertyNames.SaveSheetMetal);
+            SWAPIlib.TaskUnits.Actions.SaveSheetMetalList saveSheetAction = new SWAPIlib.TaskUnits.Actions.SaveSheetMetalList();
 
             List<TableLog> logList = new List<TableLog>();
 
-            for (int i = 0; i < tables.Length; i++)
+            foreach (var table in tables)
             {
-                var table = tables[i];
-
-                globalTable.CopyTo(table, false);  //TODO поместить свойства в настройки, не вызывая ошибку
-
-                var validCells = cellsTemplate.Where(template => template.CheckTable(table, null));
-
-
-                logList.AddRange(validCells.Select(
-                    template => template.Proceed(ref table, null))
-                    .ToList());
-
-                nomination.Proceed(ref table, nominationSettings);
-                designation.Proceed(ref table, designationSettings);
-                
-                savingPathBuilder.Proceed(ref table, savingPathSettings);
-                fileNameViewBuilder.Proceed(ref table, fileNameSettings);
-
-                if(saveSheetMetalFactory.CheckTable(table, null))
-                    saveSheetMetalFactory.Proceed(ref table, null);
-
-                tables[i] = table;
+                logList.AddRange(saveSheetAction.Proceed(table));
             }
+
 
             var showedKeys = new HashSet<string>
             {
                 ModelEntities.ConfigName.ToString(),
                 ModelPropertyNames.SaveSheetMetal.ToString(),
                 "Наименование",
-                "Обозначение"
+                "Обозначение",
+                "dxfFolder"
             };
 
-
-            var viewModels = GetViewModel(tables, showedKeys);
-            foreach (var vm in viewModels)
+            try
             {
-                TableView.Add(vm);
+                //var viewModels = GetViewModel(tables, showedKeys);
+                var viewModels = GetViewModel(tables, null);
+                foreach (var vm in viewModels)
+                {
+                    TableView.Add(vm);
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -224,7 +127,8 @@ namespace SolidSaverWPF.ViewModel
                 else
                     resultTable = table;
 
-                ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
+                ret.Add(new TableViewModel(resultTable));
+                //ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
             }
             return ret;
         }

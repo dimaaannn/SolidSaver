@@ -74,7 +74,7 @@ namespace SWAPIlib.Table
             object ret = null;
             if (settings is ITargetTable tTable)
                 ret = tTable.GetTarget();
-            else if (refTable is ITargetTable tTable2)
+            if (refTable is ITargetTable tTable2 && ret == null)
                 ret = tTable2.GetTarget();
 
             return ret;

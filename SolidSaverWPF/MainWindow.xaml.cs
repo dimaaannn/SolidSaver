@@ -33,7 +33,14 @@ namespace SolidSaverWPF
             InitializeComponent();
 
             Loaded += MainWindow_Loaded;
+
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             
+        }
+
+        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            MessageBox.Show("Error!");
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
