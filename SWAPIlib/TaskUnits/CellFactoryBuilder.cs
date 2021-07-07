@@ -90,6 +90,14 @@ namespace SWAPIlib.TaskUnits
             return this;
         }
 
+        public CellFactoryBuilder WithSettings(ITableAction tableAction)
+        {
+            ITable tempTable = new TableList();
+            tableAction.Proceed(ref tempTable);
+            tempTable.CopyTo(settingsTable, true);
+            return this;
+        }
+
         public ITableAction Build()
         {
             logger.Debug("build new factory {name}", factoryProviderBuilder.Name);
