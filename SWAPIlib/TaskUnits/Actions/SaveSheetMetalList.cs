@@ -35,15 +35,42 @@ namespace SWAPIlib.TaskUnits.Actions
             return ret;
         }
 
-        public ActionList GetList()
+        public static ActionList UserParameters()
         {
-            var ret = new ActionList();
-
-            ret.AddRange(FolderSettings());
-            ret.AddRange(ModelOptions());
+            string nominationName = "Обозначение";
+            string designationName = "Наименование";
 
 
-            return ret;
+            return ActionList.DefaultBuilder(builder =>
+            {
+
+                // Наименование
+                CellFactoryBuilder
+                .Create(ModelPropertyNames.UserProperty)
+                .WithKey(nominationName)
+                .WithSettings(
+                    CellFactoryBuilder
+                        .Create(ModelPropertyNames.UserProperty)
+                        .WithKey(ModelPropertyNames.UserProperty)
+                        .Build()
+                    )
+                .Build()
+                .AddTo(builder);
+
+                // Обозначение
+                CellFactoryBuilder
+                .Create(ModelPropertyNames.UserProperty)
+                .WithKey(designationName)
+                .WithSettings(
+                    CellFactoryBuilder
+                        .Create(ModelPropertyNames.UserProperty)
+                        .WithKey(ModelPropertyNames.UserProperty)
+                        .Build()
+                    )
+                .Build()
+                .AddTo(builder);
+
+            });
         }
 
         public static ActionList DxfFolderPathBuilder(string subFolderKey = SUBFOLDER_KEY)
