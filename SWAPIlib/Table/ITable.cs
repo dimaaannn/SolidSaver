@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SWAPIlib.BaseTypes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,9 +13,8 @@ namespace SWAPIlib.Table
         void CopyTo(ITable other, bool overrideKey);
     }
 
-    public interface ITargetTable : ITable
+    public interface ITargetTable : ITable, ITarget2
     {
-        object GetTarget();
     }
 
     public interface ITargetTable<T> : ITargetTable

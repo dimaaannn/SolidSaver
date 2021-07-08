@@ -67,7 +67,6 @@
     <Compile Include="Table\SWProp\TableTests.cs" />
     <Compile Include="Table\SWProp\UserPropertyCellTests.cs" />
     <Compile Include="Table\TableViewTests.cs" />
-    <Compile Include="TaskUnits\ActionTargetTests.cs" />
     <Compile Include="Task\CellFactoryTests.cs" />
     <Compile Include="Task\CellProviderTemplateTests.cs" />
     <Compile Include="Task\SWTask\SaveSheetMetalTaskTests.cs" />

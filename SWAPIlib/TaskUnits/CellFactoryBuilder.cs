@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SWAPIlib.Utils;
+using Ninject;
+using SWAPIlib.BaseTypes;
 
 namespace SWAPIlib.TaskUnits
 {
@@ -81,7 +83,8 @@ namespace SWAPIlib.TaskUnits
 
         public CellFactoryBuilder WithTarget(object target)
         {
-            settingsTable.Target = new TargetWrapper(target);
+            var factory = Initialiser.kernel.Get<IPartWrapperFactory>();
+            settingsTable.Target = factory.GetObjectWrapper(target);
             return this;
         }
 

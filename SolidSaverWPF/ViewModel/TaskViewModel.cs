@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using SolidSaverWPF.ViewModel.Table;
+using SWAPIlib.BaseTypes;
 using SWAPIlib.Table;
 using SWAPIlib.Table.Prop;
 using SWAPIlib.TaskUnits;
@@ -44,15 +45,9 @@ namespace SolidSaverWPF.ViewModel
 
         public ITable[] GetSelectedModels()
         {
-            var ret = new List<IExtendedTable>();
 
-            foreach (var component in SWAPIlib.Global.MainModel.SelectionList)
-            {
-                var target = new TargetWrapper(component.Appmodel);
-                ret.Add( new ExtendedTable { Target = target });
-            }
-
-            return ret.ToArray();
+            var tableProvider = new SWAPIlib.TaskCollection.TableProvider();
+            return tableProvider.UserSelectedModels().ToArray();
         }
 
 

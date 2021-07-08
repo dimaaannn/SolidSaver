@@ -29,15 +29,24 @@ namespace SWAPIlib.BaseTypes
         string Name { get; }
         AppDocType DocType { get; }
     }
-    public interface IModelWrapper : ITarget2<ModelDoc2>
+    public interface IModelWrapper : IPartWrapper, ITarget2<ModelDoc2>
     {
         string DocTitle { get; }
-        AppDocType DocType { get; }
         ISwModelWrapper ConvertToOldWrapper();
         
     }
 
-    public class ModelWrapper : IModelWrapper, IPartWrapper
+    public class ObjectWrapper : ITarget2
+    {
+        private readonly object targetObj;
+        public ObjectWrapper(object obj)
+        {
+            targetObj = obj;
+        }
+        public object GetTarget() => targetObj;
+    }
+
+    public class ModelWrapper : IModelWrapper
     {
         private readonly ModelDoc2 swModel;
         private readonly string title;
@@ -49,6 +58,7 @@ namespace SWAPIlib.BaseTypes
             title = GetTitle(swModel);
             docType = PartTypeChecker.GetSWType(swModel);
         }
+
 
         string IPartWrapper.Name => DocTitle;
         public string DocTitle => title;
@@ -93,7 +103,7 @@ namespace SWAPIlib.BaseTypes
         IModelWrapper GetModel();
     }
 
-    public class ComponentWrapper : ITarget2<Component2>, IComponentWrapper
+    public class ComponentWrapper : IComponentWrapper
     {
         private readonly IPartWrapperFactory partWrapperFactory;
         private readonly Component2 component2;
@@ -131,6 +141,7 @@ namespace SWAPIlib.BaseTypes
     {
         IModelWrapper GetModelWrapper(ModelDoc2 swModel);
         IComponentWrapper GetComponentWrapper(Component2 swComponent);
+        ITarget2 GetObjectWrapper(object target);
     }
 
     public class PartWrapperFactory : IPartWrapperFactory
@@ -143,6 +154,11 @@ namespace SWAPIlib.BaseTypes
         public IModelWrapper GetModelWrapper(ModelDoc2 swModel)
         {
             return new ModelWrapper(swModel);
+        }
+
+        public ITarget2 GetObjectWrapper(object target)
+        {
+            return new ObjectWrapper(obj: target);
         }
     }
 }
