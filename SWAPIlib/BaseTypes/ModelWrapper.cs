@@ -5,6 +5,15 @@ using System.IO;
 
 namespace SWAPIlib.BaseTypes
 {
+
+    public class WrapperNinjectBinding : Ninject.Modules.NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IPartWrapperFactory>().To<PartWrapperFactory>().InSingletonScope();
+        }
+    }
+
     public interface ITarget2
     {
         object GetTarget();
@@ -15,6 +24,11 @@ namespace SWAPIlib.BaseTypes
         new T GetTarget();
     }
 
+    public interface IPartWrapper : ITarget2
+    {
+        string Name { get; }
+        AppDocType DocType { get; }
+    }
     public interface IModelWrapper : ITarget2<ModelDoc2>
     {
         string DocTitle { get; }
@@ -23,7 +37,7 @@ namespace SWAPIlib.BaseTypes
         
     }
 
-    public class ModelWrapper : IModelWrapper
+    public class ModelWrapper : IModelWrapper, IPartWrapper
     {
         private readonly ModelDoc2 swModel;
         private readonly string title;
@@ -36,6 +50,7 @@ namespace SWAPIlib.BaseTypes
             docType = PartTypeChecker.GetSWType(swModel);
         }
 
+        string IPartWrapper.Name => DocTitle;
         public string DocTitle => title;
         public AppDocType DocType => docType;
 
@@ -73,4 +88,61 @@ namespace SWAPIlib.BaseTypes
     }
 
 
+    public interface IComponentWrapper : IPartWrapper, ITarget2<Component2>
+    {
+        IModelWrapper GetModel();
+    }
+
+    public class ComponentWrapper : ITarget2<Component2>, IComponentWrapper
+    {
+        private readonly IPartWrapperFactory partWrapperFactory;
+        private readonly Component2 component2;
+        private readonly string name;
+        private readonly AppDocType docType;
+
+        private IModelWrapper ModelWrapper;
+
+        public ComponentWrapper(Component2 component, IPartWrapperFactory partWrapperFactory)
+        {
+            component2 = component;
+            name = SWAPIlib.ComConn.Proxy.ComponentProxy.GetName(component2);
+            docType = AppDocType.swCOMPONENT;
+            this.partWrapperFactory = partWrapperFactory;
+        }
+
+        public string Name => name;
+        public AppDocType DocType => docType;
+
+        public IModelWrapper GetModel()
+        {
+            if(ModelWrapper == null)
+            {
+                ModelDoc2 model = SWAPIlib.ComConn.Proxy.ComponentProxy.GetModelDoc2(component2);
+                ModelWrapper = partWrapperFactory.GetModelWrapper(model);
+            }
+            return ModelWrapper;
+        }
+
+        public Component2 GetTarget() => component2;
+        object ITarget2.GetTarget() => component2;
+    }
+
+    public interface IPartWrapperFactory
+    {
+        IModelWrapper GetModelWrapper(ModelDoc2 swModel);
+        IComponentWrapper GetComponentWrapper(Component2 swComponent);
+    }
+
+    public class PartWrapperFactory : IPartWrapperFactory
+    {
+        public IComponentWrapper GetComponentWrapper(Component2 swComponent)
+        {
+            return new ComponentWrapper(component: swComponent, this);
+        }
+
+        public IModelWrapper GetModelWrapper(ModelDoc2 swModel)
+        {
+            return new ModelWrapper(swModel);
+        }
+    }
 }

@@ -9,7 +9,17 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.TaskUnits
 {
-    public class ActionList : IEnumerable<ITableAction>
+    public interface IActionList : IEnumerable<ITableAction>
+    {
+        TableLog Proceed(ITable table);
+
+        void Add(ITableAction factory);
+        void AddRange(IEnumerable<ITableAction> factories);
+        void Clear();
+        void Remove(ITableAction factory);
+    }
+
+    public class ActionList : IEnumerable<ITableAction>, IActionList
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly List<ITableAction> tableActions = new List<ITableAction>();

@@ -1,0 +1,10 @@
+// {type:sequence}
+[User]
+[ActionManager]GetNextStepList>[ActionProvider]
+[ActionProvider]NextActionList>[ActionManager]
+[User]PressNextButton>[ActionManager]
+[ActionManager]ApplyAction>[Tables]
+[Tables]ActionStatus>[ActionManager]
+[User]TableChanges>[Tables]
+[User]PressNextButton.>[ActionManager]
+[ActionManager]GetNextStep.>[ActionProvider]

@@ -1,4 +1,5 @@
-﻿using SolidWorks.Interop.sldworks;
+﻿using Ninject;
+using SolidWorks.Interop.sldworks;
 using SWAPIlib.BaseTypes;
 using System;
 using System.ComponentModel;
@@ -47,7 +48,8 @@ namespace SWAPIlib.Global
 
         private static IModelWrapper BuildModelWrapper(ModelDoc2 model)
         {
-            return new ModelWrapper(model) as IModelWrapper;
+            var factory = Initialiser.kernel.Get<IPartWrapperFactory>();
+            return factory.GetModelWrapper(model);
         }
 
         public async Task GetActiveDoc(CancellationToken ct, Action<IModelWrapper> modelAction)

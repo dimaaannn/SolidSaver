@@ -123,6 +123,7 @@
     <Compile Include="ComConn\ComObjectProxy\SwComOther.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropReplacer\PropGenerator\PropertyMaker.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="Table\ICell.cs" />
     <Compile Include="Table\ICellView.cs" />
     <Compile Include="Table\ICellT.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Table\Prop\TextBuilderCell.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
+    <Compile Include="TaskCollection\IActionUnit.cs" />
     <Compile Include="TaskUnits\Actions\SaveSheetMetalList.cs" />
     <Compile Include="TaskUnits\CellActionFactory.cs" />
     <Compile Include="TaskUnits\CellFactoryBuilder.cs" />
