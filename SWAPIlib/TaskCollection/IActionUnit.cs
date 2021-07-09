@@ -112,7 +112,32 @@ namespace SWAPIlib.TaskCollection
         }
     }
 
+    public abstract class ActionScerianoBase<T>
+        where T : ITargetProvider
+    {
+        private readonly ITableCollection tableCollection;
+        private readonly List<IActionUnit> actionUnits = new List<IActionUnit>();
 
+        private int currentStep = 0;
+        
+        public ActionScerianoBase(ITableCollection tableCollection)
+        {
+            this.tableCollection = tableCollection;
+        }
+        public IActionUnit NextStep
+        {
+            get
+            {
+                if (currentStep < actionUnits.Count())
+                    return actionUnits[currentStep];
+                else return null;
+            }
+        }
+        public bool Init(T partProvider)
+        {
+            return tableCollection.GetFromProvider(partProvider);
+        }
+    }
 
 
     /// <summary>

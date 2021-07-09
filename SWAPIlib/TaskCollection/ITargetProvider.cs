@@ -5,17 +5,17 @@ using System.Linq;
 
 namespace SWAPIlib.TaskCollection
 {
-    public interface IPartProvider
+    public interface ITargetProvider
     {
-        IEnumerable<IPartWrapper> GetTargets();
+        IEnumerable<ITarget2> GetTargets();
     }
 
-    public interface IPartProvider<T> : IPartProvider
+    public interface ITargetProvider<T> : ITargetProvider where T : ITarget2
     {
         new IEnumerable<T> GetTargets();
     }
 
-    public class SelectedComponentProvider : IPartProvider<IComponentWrapper>
+    public class SelectedComponentProvider : ITargetProvider<IComponentWrapper>
     {
         private readonly IPartWrapperFactory partWrapperFactory;
         public SelectedComponentProvider(IPartWrapperFactory partWrapperFactory)
@@ -33,14 +33,15 @@ namespace SWAPIlib.TaskCollection
             }
             return ret;
         }
-        IEnumerable<IPartWrapper> IPartProvider.GetTargets() => GetTargets();
+
+        IEnumerable<ITarget2> ITargetProvider.GetTargets() => GetTargets();
     }
 
-    public class SelectedModelProvider : IPartProvider<IModelWrapper>
+    public class SelectedModelProvider : ITargetProvider<IModelWrapper>
     {
-        private readonly IPartProvider<IComponentWrapper> selectedCompProvider;
+        private readonly ITargetProvider<IComponentWrapper> selectedCompProvider;
 
-        public SelectedModelProvider(IPartProvider<IComponentWrapper> selectedCompProvider)
+        public SelectedModelProvider(ITargetProvider<IComponentWrapper> selectedCompProvider)
         {
             this.selectedCompProvider = selectedCompProvider ?? throw new ArgumentNullException(nameof(selectedCompProvider));
         }
@@ -48,6 +49,6 @@ namespace SWAPIlib.TaskCollection
         {
             return selectedCompProvider.GetTargets().Select(comp => comp.GetModel());
         }
-        IEnumerable<IPartWrapper> IPartProvider.GetTargets() => GetTargets();
+        IEnumerable<ITarget2> ITargetProvider.GetTargets() => GetTargets();
     }
 }

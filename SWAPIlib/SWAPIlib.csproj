@@ -140,9 +140,10 @@
     <Compile Include="Table\Prop\TextBuilderCell.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
+    <Compile Include="TaskCollection\IActionManager.cs" />
     <Compile Include="TaskCollection\IActionUnit.cs" />
     <Compile Include="TaskCollection\IExtendedTableFactory.cs" />
-    <Compile Include="TaskCollection\IPartProvider.cs" />
+    <Compile Include="TaskCollection\ITargetProvider.cs" />
     <Compile Include="TaskCollection\ITableCollection.cs" />
     <Compile Include="TaskCollection\TaskCollectionNinjectBinding.cs" />
     <Compile Include="TaskUnits\Actions\SaveSheetMetalList.cs" />

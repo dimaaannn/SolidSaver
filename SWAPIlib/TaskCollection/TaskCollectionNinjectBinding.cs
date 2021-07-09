@@ -9,7 +9,7 @@ namespace SWAPIlib.TaskCollection
             Bind<IExtendedTableFactory>().To<ExtendedTableFactory>().InSingletonScope();
             Bind<ITableCollection>().To<TableCollection>().InTransientScope();
             Bind<SelectedModelProvider>().To<SelectedModelProvider>().InSingletonScope();
-            Bind<IPartProvider<IComponentWrapper>>().To<SelectedComponentProvider>().InSingletonScope();
+            Bind<ITargetProvider<IComponentWrapper>>().To<SelectedComponentProvider>().InSingletonScope();
 
         }
     }

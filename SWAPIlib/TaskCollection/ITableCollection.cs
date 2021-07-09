@@ -1,5 +1,6 @@
 ﻿using SWAPIlib.BaseTypes;
 using SWAPIlib.Table;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace SWAPIlib.TaskCollection
 {
     public interface ITableCollection : ICollection<IExtendedTable>
     {
-        bool GetFromProvider(IPartProvider partProvider);
+        bool GetFromProvider(ITargetProvider partProvider);
+        Func<ITarget2, bool> TargetFilter { get; set; }
     }
 
     public class TableCollection : ITableCollection
@@ -17,14 +19,20 @@ namespace SWAPIlib.TaskCollection
         private readonly IExtendedTableFactory extendedTableFactory;
 
         private List<IExtendedTable> MainTableList => mainTableList;
+        public Func<ITarget2, bool> TargetFilter { get; set; }
 
         public TableCollection(IExtendedTableFactory extendedTableFactory)
         {
             this.extendedTableFactory = extendedTableFactory;
         }
-        public bool GetFromProvider(IPartProvider partProvider)
+        public bool GetFromProvider(ITargetProvider partProvider)
         {
-            IEnumerable<IPartWrapper> parts = partProvider.GetTargets();
+            IEnumerable<ITarget2> parts;
+            if (TargetFilter != null)
+                parts = partProvider.GetTargets().Where(TargetFilter);
+            else
+                parts = partProvider.GetTargets();
+
             if(parts.Count() > 0)
             {
                 MainTableList.AddRange(parts.Select(part => extendedTableFactory.Get(part)));
