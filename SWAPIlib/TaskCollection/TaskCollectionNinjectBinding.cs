@@ -1,4 +1,5 @@
 ﻿using SWAPIlib.BaseTypes;
+using SWAPIlib.Table;
 
 namespace SWAPIlib.TaskCollection
 {
@@ -6,10 +7,12 @@ namespace SWAPIlib.TaskCollection
     {
         public override void Load()
         {
-            Bind<IExtendedTableFactory>().To<ExtendedTableFactory>().InSingletonScope();
+            Bind<ISelectedModelProvider>().To<SelectedModelProvider>().InSingletonScope();
+            Bind<ISelectedComponentProvider>().To<SelectedComponentProvider>().InSingletonScope();
             Bind<ITableCollection>().To<TableCollection>().InTransientScope();
-            Bind<SelectedModelProvider>().To<SelectedModelProvider>().InSingletonScope();
-            Bind<ITargetProvider<IComponentWrapper>>().To<SelectedComponentProvider>().InSingletonScope();
+            Bind<IExtendedTable>().To<ExtendedTable>().InTransientScope();
+
+            Bind<ITaskServices>().To<TaskServices>().InSingletonScope();
 
         }
     }

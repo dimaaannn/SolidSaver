@@ -15,7 +15,14 @@ namespace SWAPIlib.TaskCollection
         new IEnumerable<T> GetTargets();
     }
 
-    public class SelectedComponentProvider : ITargetProvider<IComponentWrapper>
+    /// <summary>
+    /// Выбранные пользователем компоненты
+    /// </summary>
+    public interface ISelectedComponentProvider : ITargetProvider<IComponentWrapper>
+    {
+    }
+
+    public class SelectedComponentProvider : ISelectedComponentProvider
     {
         private readonly IPartWrapperFactory partWrapperFactory;
         public SelectedComponentProvider(IPartWrapperFactory partWrapperFactory)
@@ -37,7 +44,15 @@ namespace SWAPIlib.TaskCollection
         IEnumerable<ITarget2> ITargetProvider.GetTargets() => GetTargets();
     }
 
-    public class SelectedModelProvider : ITargetProvider<IModelWrapper>
+    /// <summary>
+    /// Выбранные пользователем модели деталей
+    /// </summary>
+    public interface ISelectedModelProvider : ITargetProvider<IModelWrapper>
+    {
+
+    }
+
+    public class SelectedModelProvider : ISelectedModelProvider
     {
         private readonly ITargetProvider<IComponentWrapper> selectedCompProvider;
 
