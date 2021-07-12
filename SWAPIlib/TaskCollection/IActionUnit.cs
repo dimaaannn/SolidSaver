@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Reactive.Subjects;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,19 +37,19 @@ namespace SWAPIlib.TaskCollection
     {
         public ActionUnit()
         {
-            //tableProcessedSubject = new Subject<IActionUnitResult>();
+            tableProcessedSubject = new Subject<IActionUnitResult>();
         }
-        //private ISubject<int> tableProcessedSubject;
+        private ISubject<IActionUnitResult> tableProcessedSubject;
         public bool IsCanExecute => ActionList?.Count() > 0;
         public IActionList ActionList { get; set; }
         public IUserInfo UserInfo { get; set; }
         public IActionUnit NextAction { get; set; }
-        public IDisposable Subscribe(IObserver<IActionUnitResult> observer) => throw null;// tableProcessedSubject.Subscribe(observer);
+        public IDisposable Subscribe(IObserver<IActionUnitResult> observer) =>  tableProcessedSubject.Subscribe(observer);
 
         public void Run(IExtendedTable table)
         {
             var result = ResultGenerator(table, ActionList.Proceed(table));
-            //tableProcessedSubject.OnNext(result);
+            tableProcessedSubject.OnNext(result);
         }
 
 
