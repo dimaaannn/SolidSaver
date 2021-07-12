@@ -20,6 +20,9 @@ namespace SWAPIlib.TaskCollection
             Bind<IExtendedTable>()
                 .To<ExtendedTable>()
                 .InTransientScope();
+            Bind<ITableProvider>()
+                .To<TableProvider>()
+                .InTransientScope();
 
             Bind<ITaskServices>()
                 .ToFactory();
@@ -35,6 +38,7 @@ namespace SWAPIlib.TaskCollection
         ITableCollection CreateTableCollection();
         ISelectedComponentProvider CreateSelectedComponentProvider();
         ISelectedModelProvider CreateSelectedModelProvider();
+        ITableProvider CreateTableProvider(ITargetProvider targetProvider);
     }
 
 }

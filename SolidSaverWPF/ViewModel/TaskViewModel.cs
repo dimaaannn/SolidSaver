@@ -46,7 +46,7 @@ namespace SolidSaverWPF.ViewModel
         public ITable[] GetSelectedModels()
         {
 
-            var tableProvider = new SWAPIlib.TaskCollection.TableProvider();
+            var tableProvider = new SWAPIlib.TaskCollection.TableProviderTemp();
             return tableProvider.UserSelectedModels().ToArray();
         }
 

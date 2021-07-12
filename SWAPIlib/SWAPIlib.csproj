@@ -162,6 +162,7 @@
     <Compile Include="TaskCollection\IActionUnit.cs" />
     <Compile Include="TaskCollection\ITargetProvider.cs" />
     <Compile Include="TaskCollection\ITableCollection.cs" />
+    <Compile Include="TaskCollection\ITableProvider.cs" />
     <Compile Include="TaskCollection\TaskCollectionNinjectBinding.cs" />
     <Compile Include="TaskUnits\Actions\SaveSheetMetalList.cs" />
     <Compile Include="TaskUnits\CellActionFactory.cs" />

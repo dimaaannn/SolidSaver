@@ -8,6 +8,7 @@ namespace SWAPIlib.TaskCollection
     public interface ITargetProvider
     {
         IEnumerable<ITarget2> GetTargets();
+        bool IsCanGetTargets { get; }
     }
 
     public interface ITargetProvider<T> : ITargetProvider where T : ITarget2
@@ -29,6 +30,9 @@ namespace SWAPIlib.TaskCollection
         {
             this.partWrapperFactory = partWrapperFactory;
         }
+
+        public bool IsCanGetTargets => SWAPIlib.Global.MainModel.SelectionList?.Count() > 0;
+
         public IEnumerable<IComponentWrapper> GetTargets()
         {
             var ret = new List<IComponentWrapper>();
@@ -60,6 +64,9 @@ namespace SWAPIlib.TaskCollection
         {
             this.selectedCompProvider = selectedCompProvider ?? throw new ArgumentNullException(nameof(selectedCompProvider));
         }
+
+        public bool IsCanGetTargets => selectedCompProvider.IsCanGetTargets;
+
         public IEnumerable<IModelWrapper> GetTargets()
         {
             return selectedCompProvider.GetTargets().Select(comp => comp.GetModel());

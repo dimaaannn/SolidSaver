@@ -120,26 +120,26 @@ namespace SWAPIlib.TaskCollection
     }
 
 
-    public interface IActionProvider
+    public interface IActionUnitSwitcher
     {
         bool MoveNext();
-        IActionList Current { get; }
-        IActionList Next { get; }
+        IActionUnit Current { get; }
+        IActionUnit Next { get; }
     }
 
-    public class ActionProvider : IActionProvider
+    public class ActionUnitSwitcher : IActionUnitSwitcher
     {
 
         private int currentActionIndex = 0;
 
-        public ActionProvider(List<IActionList> actions)
+        public ActionUnitSwitcher(List<IActionUnit> actions)
         {
             Actions = actions ?? throw new ArgumentNullException(nameof(actions));
         }
 
-        public List<IActionList> Actions { get; set; }
-        public IActionList Current => GetActionListByIndex(currentActionIndex);
-        public IActionList Next => GetActionListByIndex(currentActionIndex + 1);
+        public List<IActionUnit> Actions { get; set; }
+        public IActionUnit Current => GetActionListByIndex(currentActionIndex);
+        public IActionUnit Next => GetActionListByIndex(currentActionIndex + 1);
         public void Reset() => currentActionIndex = 0;
 
         public bool MoveNext()
@@ -147,7 +147,7 @@ namespace SWAPIlib.TaskCollection
             return Actions.Count() > ++currentActionIndex;
         }
 
-        private IActionList GetActionListByIndex(int index)
+        private IActionUnit GetActionListByIndex(int index)
         {
             if (Actions?.Count() > index)
             {
@@ -158,22 +158,7 @@ namespace SWAPIlib.TaskCollection
         }
     }
 
-    public interface ITableProvider
-    {
-        IExtendedTable Current { get; }
-        bool ReloadParts();
-    }
 
-    public class UserSelectedParts : ITableProvider
-    {
-        private IExtendedTable current;
-
-        public IExtendedTable Current => current;
-        public bool ReloadParts()
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public abstract class ActionScerianoBase
     {
@@ -210,7 +195,7 @@ namespace SWAPIlib.TaskCollection
                 TargetProvider = targetProvider ?? throw new ArgumentNullException(nameof(targetProvider));
             }
             public ITargetProvider TargetProvider { get; }
-            public IActionProvider ActionProvider { get; }
+            public IActionUnitSwitcher ActionProvider { get; }
         }
 
         private void OnChangeSettings(ScerianoData settings)
@@ -232,15 +217,16 @@ namespace SWAPIlib.TaskCollection
     /// <summary>
     /// Temp class for run test
     /// </summary>
-    public class TableProvider //TODO refactor provider
+    public class TableProviderTemp //TODO refactor provider
     {
         public ITableCollection UserSelectedModels()
         {
             var taskServices = Initialiser.kernel.Get<ITaskServices>();
-            var tableCollection = taskServices.CreateTableCollection();
             var partProvider = taskServices.CreateSelectedModelProvider();
-            tableCollection.GetFromProvider(partProvider);
-            return tableCollection;
+
+            var tableProvider = taskServices.CreateTableProvider(partProvider);
+
+            return tableProvider.GetTable();
         }
     }
 
