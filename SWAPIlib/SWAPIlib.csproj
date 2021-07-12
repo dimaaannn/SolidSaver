@@ -159,6 +159,7 @@
     <Compile Include="Table\Prop\TextBuilderCell.cs" />
     <Compile Include="Table\SWProp\ActiveConfigNameCell.cs" />
     <Compile Include="Table\SWProp\FilePathCell.cs" />
+    <Compile Include="TaskCollection\IActionUnitSwitcher.cs" />
     <Compile Include="TaskCollection\IActionUnit.cs" />
     <Compile Include="TaskCollection\ITargetProvider.cs" />
     <Compile Include="TaskCollection\ITableCollection.cs" />
