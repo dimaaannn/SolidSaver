@@ -31,6 +31,7 @@ namespace SWAPIlib.TaskCollection
     public interface ITaskServices
     {
         IExtendedTable CreateExtendedTable();
+        IExtendedTable CreateExtendedTable(ITarget2 target);
         ITableCollection CreateTableCollection();
         ISelectedComponentProvider CreateSelectedComponentProvider();
         ISelectedModelProvider CreateSelectedModelProvider();

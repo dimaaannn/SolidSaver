@@ -19,6 +19,16 @@ namespace SWAPIlib.Table
     
     public class ExtendedTable : BaseTable, IExtendedTable
     {
+        public ExtendedTable()
+        {
+
+        }
+
+        public ExtendedTable(ITarget2 target)
+        {
+            Target = target ?? throw new ArgumentNullException(nameof(target));
+        }
+
         public ITarget2 Target { get; set; }
 
         public object GetTarget() => Target?.GetTarget();
