@@ -1,4 +1,5 @@
-﻿using SWAPIlib.BaseTypes;
+﻿using Ninject.Extensions.Factory;
+using SWAPIlib.BaseTypes;
 using SWAPIlib.Table;
 
 namespace SWAPIlib.TaskCollection
@@ -7,15 +8,32 @@ namespace SWAPIlib.TaskCollection
     {
         public override void Load()
         {
-            Bind<ISelectedModelProvider>().To<SelectedModelProvider>().InSingletonScope();
-            Bind<ISelectedComponentProvider>().To<SelectedComponentProvider>().InSingletonScope();
-            Bind<ITableCollection>().To<TableCollection>().InTransientScope();
-            Bind<IExtendedTable>().To<ExtendedTable>().InTransientScope();
+            Bind<ISelectedModelProvider>()
+                .To<SelectedModelProvider>()
+                .InSingletonScope();
+            Bind<ISelectedComponentProvider>()
+                .To<SelectedComponentProvider>()
+                .InSingletonScope();
+            Bind<ITableCollection>()
+                .To<TableCollection>()
+                .InTransientScope();
+            Bind<IExtendedTable>()
+                .To<ExtendedTable>()
+                .InTransientScope();
 
-            Bind<ITaskServices>().To<TaskServices>().InSingletonScope();
+            Bind<ITaskServices>()
+                .ToFactory();
 
         }
     }
 
+
+    public interface ITaskServices
+    {
+        IExtendedTable CreateExtendedTable();
+        ITableCollection CreateTableCollection();
+        ISelectedComponentProvider CreateSelectedComponentProvider();
+        ISelectedModelProvider CreateSelectedModelProvider();
+    }
 
 }

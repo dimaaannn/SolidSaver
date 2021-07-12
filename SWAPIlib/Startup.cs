@@ -17,8 +17,8 @@ namespace SWAPIlib
         static Initialiser()
         {
             kernel = new StandardKernel();
-            kernel.Load<TaskCollection.TaskCollectionNinjectBinding>();
             kernel.Load<BaseTypes.WrapperNinjectBinding>();
+            kernel.Load<TaskCollection.TaskCollectionNinjectBinding>();
 
         }
 

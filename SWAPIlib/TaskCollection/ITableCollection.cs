@@ -16,14 +16,14 @@ namespace SWAPIlib.TaskCollection
     public class TableCollection : ITableCollection
     {
         private readonly List<IExtendedTable> mainTableList = new List<IExtendedTable>();
-        private readonly IExtendedTableFactory extendedTableFactory;
+        private readonly ITaskServices taskServices;
 
         private List<IExtendedTable> MainTableList => mainTableList;
         public Func<ITarget2, bool> TargetFilter { get; set; }
 
-        public TableCollection(IExtendedTableFactory extendedTableFactory)
+        public TableCollection(ITaskServices taskServices)
         {
-            this.extendedTableFactory = extendedTableFactory;
+            this.taskServices = taskServices ?? throw new ArgumentNullException(nameof(taskServices));
         }
         public bool GetFromProvider(ITargetProvider partProvider)
         {
@@ -35,7 +35,12 @@ namespace SWAPIlib.TaskCollection
 
             if(parts.Count() > 0)
             {
-                MainTableList.AddRange(parts.Select(part => extendedTableFactory.Get(part)));
+                foreach (ITarget2 target in parts)
+                {
+                    var extendedTable = taskServices.CreateExtendedTable();
+                    extendedTable.Target = target;
+                    MainTableList.Add(extendedTable);
+                }
                 return true;
             }
             return false;

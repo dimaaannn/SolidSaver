@@ -119,30 +119,112 @@ namespace SWAPIlib.TaskCollection
         }
     }
 
-    public abstract class ActionScerianoBase<T>
-        where T : ITargetProvider
-    {
-        private readonly ITableCollection tableCollection;
-        private readonly List<IActionUnit> actionUnits = new List<IActionUnit>();
 
-        private int currentStep = 0;
-        
-        public ActionScerianoBase(ITableCollection tableCollection)
+    public interface IActionProvider
+    {
+        bool MoveNext();
+        IActionList Current { get; }
+        IActionList Next { get; }
+    }
+
+    public class ActionProvider : IActionProvider
+    {
+
+        private int currentActionIndex = 0;
+
+        public ActionProvider(List<IActionList> actions)
         {
-            this.tableCollection = tableCollection;
+            Actions = actions ?? throw new ArgumentNullException(nameof(actions));
         }
-        public IActionUnit NextStep
+
+        public List<IActionList> Actions { get; set; }
+        public IActionList Current => GetActionListByIndex(currentActionIndex);
+        public IActionList Next => GetActionListByIndex(currentActionIndex + 1);
+        public void Reset() => currentActionIndex = 0;
+
+        public bool MoveNext()
         {
-            get
+            return Actions.Count() > ++currentActionIndex;
+        }
+
+        private IActionList GetActionListByIndex(int index)
+        {
+            if (Actions?.Count() > index)
             {
-                if (currentStep < actionUnits.Count())
-                    return actionUnits[currentStep];
-                else return null;
+                return Actions[index];
             }
+            else 
+                return null;
         }
-        public bool Init(T partProvider)
+    }
+
+    public interface ITableProvider
+    {
+        IExtendedTable Current { get; }
+        bool ReloadParts();
+    }
+
+    public class UserSelectedParts : ITableProvider
+    {
+        private IExtendedTable current;
+
+        public IExtendedTable Current => current;
+        public bool ReloadParts()
         {
-            return tableCollection.GetFromProvider(partProvider);
+            throw new NotImplementedException();
+        }
+    }
+
+    public abstract class ActionScerianoBase
+    {
+
+
+        private int currentStepIndex = 0;
+        private IDisposable currentStepSubscribe;
+        private ScerianoData settings;
+        private ITableCollection tableCollection;
+
+        public ITableCollection TableCollection { get => tableCollection; }
+        public IActionUnit CurrentStep
+        {
+            get => null;
+            //{
+            //    if (currentStepIndex < Settings?.ActionUnits.Count())
+            //    {
+            //        return Settings?.ActionUnits[currentStepIndex];
+            //    }
+            //    else return null;
+            //}
+        }
+
+        public ActionScerianoBase.ScerianoData Settings 
+        { 
+            get => settings; 
+            set => settings = value; 
+        }
+
+        public class ScerianoData
+        {
+            public ScerianoData(ITargetProvider targetProvider, List<IActionUnit> actionUnits)
+            {
+                TargetProvider = targetProvider ?? throw new ArgumentNullException(nameof(targetProvider));
+            }
+            public ITargetProvider TargetProvider { get; }
+            public IActionProvider ActionProvider { get; }
+        }
+
+        private void OnChangeSettings(ScerianoData settings)
+        {
+            if (settings is null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+
+            currentStepIndex = 0;
+        }
+        private void GetNextStep()
+        {
+
         }
     }
 
@@ -154,8 +236,9 @@ namespace SWAPIlib.TaskCollection
     {
         public ITableCollection UserSelectedModels()
         {
-            var tableCollection = Initialiser.kernel.Get<ITableCollection>();
-            var partProvider = Initialiser.kernel.Get<SelectedModelProvider>();
+            var taskServices = Initialiser.kernel.Get<ITaskServices>();
+            var tableCollection = taskServices.CreateTableCollection();
+            var partProvider = taskServices.CreateSelectedModelProvider();
             tableCollection.GetFromProvider(partProvider);
             return tableCollection;
         }

@@ -56,7 +56,7 @@ namespace SWAPIlib.TaskCollection
     {
         private readonly ITargetProvider<IComponentWrapper> selectedCompProvider;
 
-        public SelectedModelProvider(ITargetProvider<IComponentWrapper> selectedCompProvider)
+        public SelectedModelProvider(ISelectedComponentProvider selectedCompProvider)
         {
             this.selectedCompProvider = selectedCompProvider ?? throw new ArgumentNullException(nameof(selectedCompProvider));
         }
