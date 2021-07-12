@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Subjects;
+//using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,27 +35,34 @@ namespace SWAPIlib.TaskCollection
 
     public class ActionUnit : IActionUnit
     {
-        private readonly Subject<IActionUnitResult> tableProcessedSubject = new Subject<IActionUnitResult>();
+        public ActionUnit()
+        {
+            //tableProcessedSubject = new Subject<IActionUnitResult>();
+        }
+        //private ISubject<int> tableProcessedSubject;
         public bool IsCanExecute => ActionList?.Count() > 0;
         public IActionList ActionList { get; set; }
         public IUserInfo UserInfo { get; set; }
         public IActionUnit NextAction { get; set; }
-        public IDisposable Subscribe(IObserver<IActionUnitResult> observer) => tableProcessedSubject.Subscribe(observer);
+        public IDisposable Subscribe(IObserver<IActionUnitResult> observer) => throw null;// tableProcessedSubject.Subscribe(observer);
 
         public void Run(IExtendedTable table)
         {
             var result = ResultGenerator(table, ActionList.Proceed(table));
-            tableProcessedSubject.OnNext(result);
+            //tableProcessedSubject.OnNext(result);
         }
 
 
         private IActionUnitResult ResultGenerator(IExtendedTable table, TableLog tableLog)
         {
             ActionUnitStatus status = tableLog.Status != LogStatus.Failed ? ActionUnitStatus.Completed : ActionUnitStatus.Failed;
-            return new ActionUnitResult {
+            return new ActionUnitResult
+            {
                 ActionUnit = this,
-                TargetTable = table, 
-                ActionLog = tableLog };
+                TargetTable = table,
+                ActionLog = tableLog
+            };
+
         }
     }
 
@@ -68,7 +75,7 @@ namespace SWAPIlib.TaskCollection
     }
     public interface IActionUnitResult
     {
-        ActionUnit ActionUnit { get; }
+        IActionUnit ActionUnit { get; }
         ActionUnitStatus Status { get; }
         IExtendedTable TargetTable { get; }
         TableLog ActionLog { get; }
@@ -76,7 +83,7 @@ namespace SWAPIlib.TaskCollection
 
     public class ActionUnitResult : IActionUnitResult
     {
-        public ActionUnit ActionUnit { get; set; }
+        public IActionUnit ActionUnit { get; set; }
         public ActionUnitStatus Status
         {
             get
