@@ -25,6 +25,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SolidApp.SW;
 using Microsoft.Extensions.Logging;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace SolidApp
 {
@@ -37,16 +39,31 @@ namespace SolidApp
             var logger = Startup.ServiceProvider.GetService<ILogger<Program>>();
             var swConnector = Startup.ServiceProvider.GetService<ISwConnector>();
 
+            //swConnector.Connect();
 
-            swConnector.Connect();
-
-            //Console.WriteLine($"ComConnected = {swConnector.IsComConnected}");
-            //Console.WriteLine("test");
 
             logger.LogTrace("testTrace");
 
-            swConnector.Disconnect();
-            
+            string folderPath = @"\\sergeant\Техотдел\Технологический - Общие документы\Общая\Красиков\Temp 2\UML\TestFolder\test.txt";
+
+            var info = new FileInfo(folderPath);
+
+            var creationTime = info.CreationTime;
+
+            var accInfo = info.GetAccessControl();
+
+
+            var directory = info.Directory;
+
+            var dirSecurity = directory.GetAccessControl();
+
+            IdentityReference idRef = dirSecurity.GetOwner(typeof(SecurityIdentifier));
+            NTAccount ntAcc = idRef.Translate(typeof(NTAccount)) as NTAccount;
+
+            Console.WriteLine(ntAcc.Value);
+
+
+
 
             Console.ReadKey();
         }
