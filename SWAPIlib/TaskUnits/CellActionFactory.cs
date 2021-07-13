@@ -21,7 +21,10 @@ namespace SWAPIlib.TaskUnits
         public override string Name => cellProvider.Name;
         public CheckTableDelegate CheckTable => cellProvider.CheckTable;
 
-        
+        public override string ToString()
+        {
+            return $"{cellProvider.Key}:{cellProvider.Name}";
+        }
 
         public override TableLog Proceed(ref ITable refTable, ITable settings)
         {
@@ -65,7 +68,7 @@ namespace SWAPIlib.TaskUnits
 
             if(cellProvider.CheckTable(refTable: refTable, settings: settings))
             {
-                log.Cell = cellProvider.GetCell(refTable, settings);
+                log.Cell = cellProvider.GetCell?.Invoke(refTable, settings);
                 if(log.Cell != null)
                 {
                     logger.Trace("Cell {name} created from {tableName}", cellProvider.Name, refTable.Name);

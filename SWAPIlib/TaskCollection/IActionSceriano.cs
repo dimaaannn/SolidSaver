@@ -66,6 +66,12 @@ namespace SWAPIlib.TaskCollection
 
             return tableProvider.GetTable();
         }
+
+        public IActionList GetTestActionList()
+        {
+            var testClass = new TestAction(Initialiser.kernel);
+            return testClass.GlobalModelOptions();
+        }
     }
 
 

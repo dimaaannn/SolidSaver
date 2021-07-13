@@ -16,6 +16,8 @@ namespace SWAPIlib.TaskUnits
         {
             Bind<ICellFactoryTemplate>()
                 .To<CellFactoryTemplate>().InSingletonScope();
+            Bind<ICellFactoryProvider>()
+                .To<CellFactoryProvider>().InTransientScope();
             Bind<CellProviderBuilder>() //Непосредственный конструктор внутри фабрики
                 .ToSelf().InTransientScope();
             Bind<CellFactoryBuilder>() 
@@ -23,6 +25,7 @@ namespace SWAPIlib.TaskUnits
             Bind<CellActionFactory>()
                 .ToSelf().InTransientScope();
             Bind<ITable>().To<TableList>().InTransientScope();
+            Bind<IActionList>().To<ActionList>().InTransientScope();
 
             Bind<CellFactoryBuilderDI>().ToSelf().InTransientScope();
 
@@ -53,7 +56,7 @@ namespace SWAPIlib.TaskUnits
         /// Результат CellFactoryBuilder
         /// </summary>
         /// <returns></returns>
-        CellActionFactory CreateCellActionFactory();
+        CellActionFactory CreateCellActionFactory(ICellFactoryProvider cellProvider);
         CellFactoryBuilder CreateCellFactoryBuilder();
         IPartWrapperFactory CreatePartWrapperFactory();
         IExtendedTable CreateExtendedTable();

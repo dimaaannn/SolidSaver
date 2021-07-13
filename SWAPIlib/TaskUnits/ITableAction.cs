@@ -14,12 +14,22 @@ namespace SWAPIlib.TaskUnits
         TableLog Proceed(ref ITable refTable);
 
         Func<ITable, ITable> GetSettingsDelegate { get; set; }
+        ITable OptionalSettings { get; set; }
     }
 
 
     public abstract class TableActionBase : ITableAction
     {
-        public Func<ITable, ITable> GetSettingsDelegate { get; set; }
+        private Func<ITable, ITable> getSettingsDelegate;
+
+        public Func<ITable, ITable> GetSettingsDelegate 
+        {
+            get => getSettingsDelegate ?? (getSettingsDelegate = _ => OptionalSettings); 
+            set => getSettingsDelegate = value; 
+        }
+
+
+        public ITable OptionalSettings { get; set; }
         public TableLog Proceed(ref ITable refTable)
         {
             var settings = GetSettingsDelegate?.Invoke(refTable);

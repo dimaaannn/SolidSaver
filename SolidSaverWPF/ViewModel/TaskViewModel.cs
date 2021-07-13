@@ -58,13 +58,23 @@ namespace SolidSaverWPF.ViewModel
             var tables = GetSelectedModels();
 
 
-            SWAPIlib.TaskUnits.Actions.SaveSheetMetalList saveSheetAction = new SWAPIlib.TaskUnits.Actions.SaveSheetMetalList();
+            #region TESTING
+
+
+            var saveSheetPrevAction = new SWAPIlib.TaskUnits.Actions.SaveSheetMetalList();
+
+            var tableProviderTest = new SWAPIlib.TaskCollection.TableProviderTemp();
+            var testActionList = tableProviderTest.GetTestActionList(); 
+
+
+            #endregion
 
             List<TableLog> logList = new List<TableLog>();
 
             foreach (var table in tables)
             {
-                logList.AddRange(saveSheetAction.Proceed(table));
+                logList.Add(testActionList.Proceed(table));
+                //logList.AddRange(saveSheetPrevAction.Proceed(table));
             }
 
 

@@ -105,10 +105,13 @@ namespace SWAPIlib.TaskUnits
         {
             logger.Debug("build new factory {name}", factoryProviderBuilder.Name);
             ICellFactoryProvider cellFactoryProvider = factoryProviderBuilder.Build();
-            ITableAction cellFactory = taskUnitFactory.CreateCellActionFactory();
+            ITableAction cellFactory = taskUnitFactory.CreateCellActionFactory(cellFactoryProvider);
 
             if (settingsTable.Count() > 0)
-                cellFactory.GetSettingsDelegate = _ => settingsTable;
+            {
+                cellFactory.OptionalSettings = settingsTable;
+            }
+
 
             Clear();
             return cellFactory;
