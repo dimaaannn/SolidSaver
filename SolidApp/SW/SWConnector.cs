@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SolidApp.SW
 {
-    public interface ISwConnector
+    public interface ISwConnector : IDisposable
     {
         ISldWorks SwApp { get; }
 
@@ -82,6 +82,11 @@ namespace SolidApp.SW
         }
 
         private void OnSwProcessDisposed(object sender, EventArgs e)
+        {
+            Dispose();
+        }
+
+        public void Dispose()
         {
             IsComConnected = false;
             SwApp = null;
