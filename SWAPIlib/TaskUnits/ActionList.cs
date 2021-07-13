@@ -54,12 +54,4 @@ namespace SWAPIlib.TaskUnits
 
     }
 
-
-    public static class TableBuilderExtension
-    {
-        public static void AddTo(this ITableAction factory, ActionList tableBuilder)
-        {
-            tableBuilder.Add(factory);
-        }
-    }
 }

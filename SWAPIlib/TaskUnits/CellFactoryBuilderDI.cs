@@ -132,5 +132,13 @@ namespace SWAPIlib.TaskUnits
             };
         }
 
+    }    
+    
+    public static class TableBuilderExtension
+    {
+        public static void AddTo(this ITableAction factory, IActionList tableBuilder)
+        {
+            tableBuilder.Add(factory);
+        }
     }
 }
