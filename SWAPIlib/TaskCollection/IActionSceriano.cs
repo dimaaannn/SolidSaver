@@ -10,59 +10,47 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.TaskCollection
 {
-    public abstract class ActionScerianoBase
+
+
+
+    public class ActionManager : IDisposable
     {
 
-
-        private int currentStepIndex = 0;
-        private IDisposable currentStepSubscribe;
-        private ScerianoData settings;
-        private ITableCollection tableCollection;
-
-        public ITableCollection TableCollection { get => tableCollection; }
-        public IActionUnit CurrentStep
+        public void Begin(ActionDataProvider actionDataProvider)
         {
-            get => null;
-            //{
-            //    if (currentStepIndex < Settings?.ActionUnits.Count())
-            //    {
-            //        return Settings?.ActionUnits[currentStepIndex];
-            //    }
-            //    else return null;
-            //}
+            throw null;
         }
 
-        public ActionScerianoBase.ScerianoData Settings 
-        { 
-            get => settings; 
-            set => settings = value; 
-        }
-
-        public class ScerianoData
+        public void Dispose()
         {
-            public ScerianoData(ITargetProvider targetProvider, List<IActionUnit> actionUnits)
-            {
-                TargetProvider = targetProvider ?? throw new ArgumentNullException(nameof(targetProvider));
-            }
-            public ITargetProvider TargetProvider { get; }
-            public IActionUnitSwitcher ActionProvider { get; }
+            throw new NotImplementedException();
         }
 
-        private void OnChangeSettings(ScerianoData settings)
-        {
-            if (settings is null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-
-            currentStepIndex = 0;
-        }
         private void GetNextStep()
         {
 
         }
     }
 
+    public interface IActionDataProvider
+    {
+        IEnumerable<IActionUnit> ActionUnits { get; }
+        ITargetProvider TargetProvider { get;}
+    }
+
+    public class ActionDataProvider : IActionDataProvider
+    {
+        public List<IActionUnit> ActionUnitsList { get; }
+        public ActionDataProvider()
+        {
+            ActionUnitsList = new List<IActionUnit>();
+        }
+        public ITargetProvider TargetProvider { get; set; }
+        public IEnumerable<IActionUnit> ActionUnits => ActionUnitsList;
+
+
+
+    }
 
     /// <summary>
     /// Temp class for run test

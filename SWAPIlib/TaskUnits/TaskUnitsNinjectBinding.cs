@@ -1,0 +1,63 @@
+﻿using Ninject.Extensions.Factory;
+using SWAPIlib.BaseTypes;
+using SWAPIlib.Table;
+using SWAPIlib.Utils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SWAPIlib.TaskUnits
+{
+    public class TaskUnitsNinjectBinding : Ninject.Modules.NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<ICellFactoryTemplate>()
+                .To<CellFactoryTemplate>().InSingletonScope();
+            Bind<CellProviderBuilder>() //Непосредственный конструктор внутри фабрики
+                .ToSelf().InTransientScope();
+            Bind<CellFactoryBuilder>() 
+                .ToSelf().InTransientScope();
+            Bind<CellActionFactory>()
+                .ToSelf().InTransientScope();
+            Bind<ITable>().To<TableList>().InTransientScope();
+
+            Bind<CellFactoryBuilderDI>().ToSelf().InTransientScope();
+
+
+            Bind<ITaskUnitFactory>().ToFactory();
+
+            //Bind<ITableProvider>()
+            //    .To<TableProvider>()
+            //    .InTransientScope();
+
+            //Bind<ITaskServices>()
+            //    .ToFactory();
+
+        }
+    }
+
+
+    public interface ITaskUnitFactory
+    {
+        //IExtendedTable CreateExtendedTable(ITarget2 target);
+        /// <summary>
+        /// конструктор обработчика внутри фабрики
+        /// </summary>
+        /// <returns></returns>
+        CellProviderBuilder CreateCellProviderBuilder();
+        /// <summary>
+        /// Фабрика создающая ячейки при обработке. 
+        /// Результат CellFactoryBuilder
+        /// </summary>
+        /// <returns></returns>
+        CellActionFactory CreateCellActionFactory();
+        CellFactoryBuilder CreateCellFactoryBuilder();
+        IPartWrapperFactory CreatePartWrapperFactory();
+        IExtendedTable CreateExtendedTable();
+        ITable CreateTable();
+    }
+
+}

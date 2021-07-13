@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace SWAPIlib.TaskCollection
 {
-    public interface IActionUnitSwitcher
+    public interface IActionUnitCollection
     {
         bool MoveNext();
         IActionUnit Current { get; }
         IActionUnit Next { get; }
     }
 
-    public class ActionUnitSwitcher : IActionUnitSwitcher
+    public class ActionUnitSwitcher : IActionUnitCollection
     {
         private int currentActionIndex = 0;
 
