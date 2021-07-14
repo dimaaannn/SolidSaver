@@ -57,6 +57,12 @@ namespace SWAPIlib.TaskCollection
     /// </summary>
     public class TableProviderTemp //TODO refactor provider
     {
+        public TestAction TestAction { get; }
+        public TableProviderTemp()
+        {
+            //Initialiser.kernel.Bind<TestAction>().ToSelf().InSingletonScope();
+            TestAction = Initialiser.kernel.Get<TestAction>();
+        }
         public ITableCollection UserSelectedModels()
         {
             var taskServices = Initialiser.kernel.Get<ITaskServices>();
@@ -67,16 +73,10 @@ namespace SWAPIlib.TaskCollection
             return tableProvider.GetTable();
         }
 
-        public IActionList GetTestActionList()
-        {
-            var testClass = new TestAction(Initialiser.kernel);
-            return testClass.GlobalModelOptions();
-        }
 
         public IActionUnit GetActionUnit()
         {
-            var testClass = new TestAction(Initialiser.kernel);
-            IActionUnit ret = testClass.GetGlobalInfoUnit();
+            IActionUnit ret = TestAction.GetGlobalInfoUnit();
 
             return ret;
 

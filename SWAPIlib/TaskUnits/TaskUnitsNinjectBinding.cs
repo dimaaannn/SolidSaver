@@ -28,6 +28,7 @@ namespace SWAPIlib.TaskUnits
             Bind<IActionList>().To<ActionList>().InTransientScope();
 
             Bind<CellFactoryBuilderDI>().ToSelf().InTransientScope();
+            Bind<ICellFactoryBuilder>().To<CellFactoryBuilderDI>().InTransientScope();
 
 
             Bind<ITaskUnitFactory>().ToFactory();
@@ -57,10 +58,11 @@ namespace SWAPIlib.TaskUnits
         /// </summary>
         /// <returns></returns>
         CellActionFactory CreateCellActionFactory(ICellFactoryProvider cellProvider);
-        CellFactoryBuilder CreateCellFactoryBuilder();
+        ICellFactoryBuilder CreateCellFactoryBuilder();
         IPartWrapperFactory CreatePartWrapperFactory();
         IExtendedTable CreateExtendedTable();
         ITable CreateTable();
+        IActionList CreateActionList();
     }
 
 }

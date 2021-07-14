@@ -12,44 +12,36 @@ namespace SWAPIlib.TaskCollection
 {
     public class TestAction
     {
-        private StandardKernel dIkernel;
+        private readonly ITaskUnitFactory taskUnitFactory;
+        private readonly ITaskServices taskServices;
 
-        public TestAction(StandardKernel diKernel)
+        public TestAction(ITaskUnitFactory taskUnitFactory, ITaskServices taskServices)
         {
-            dIkernel = diKernel;
+            this.taskUnitFactory = taskUnitFactory;
+            this.taskServices = taskServices;
         }
 
-        CellFactoryBuilderDI GetFactory()
-        {
-            return dIkernel.Get<CellFactoryBuilderDI>();
-        }
-        public List<IActionList> GetActions()
-        {
-            List<IActionList> ret = new List<IActionList>();
 
-            var factoryBuilder = GetFactory();
-
-            
-            
-
-            return ret;
-        }
+        public const string SAVING_FILE_NAME_KEY = "PartName";
+        public const string NOMINATION_KEY       = "Обозначение";
+        public const string DESIGNATION_KEY      = "Наименование";
 
 
         public IActionUnit GetGlobalInfoUnit()
         {
-            ITaskServices taskServices = dIkernel.Get<ITaskServices>();
-            IActionList defaultModelInfoActions = GlobalModelOptions();
-            IActionUnit ret = taskServices.CreateActionUnit(defaultModelInfoActions);
+            IActionList newActionList = taskUnitFactory.CreateActionList();
+
+            AddGlobalModelOptions(newActionList);
+            AddUserProperty(newActionList, NOMINATION_KEY);
+            AddUserProperty(newActionList, DESIGNATION_KEY);
+
+            IActionUnit ret = taskServices.CreateActionUnit(newActionList);
             return ret;
         }
 
-        public IActionList GlobalModelOptions(string savingFileNameKey = "PartName")
+        public void AddGlobalModelOptions(IActionList targetList)
         {
-
-            IActionList ret = dIkernel.Get<IActionList>();
-            var factoryBuilder = GetFactory();
-
+            ICellFactoryBuilder factoryBuilder = taskUnitFactory.CreateCellFactoryBuilder();
             ICell textBuilderSettingsGetFileName = Table.Prop.TextBuilderCell.BuildSettings(
                 refTable =>
                 {
@@ -67,17 +59,37 @@ namespace SWAPIlib.TaskCollection
 
             var test = factoryBuilder.From(Table.ModelPropertyNames.FileName);
             var test2 = test.Build();
-            ret.Add(test2);
+            targetList.Add(test2);
                 
             factoryBuilder.From(Table.ModelPropertyNames.ActiveConfigName)
-                .Build().AddTo(ret);
+                .Build().AddTo(targetList);
             factoryBuilder.From(Table.ModelPropertyNames.TextBuilder)
-                .WithKey(savingFileNameKey)
+                .WithKey(SAVING_FILE_NAME_KEY)
                 .WithSettings(createTextBuilderSettings)
                 .Build()
-                .AddTo(ret);
-
-            return ret;
+                .AddTo(targetList);
         }
+
+
+        public void AddUserProperty(IActionList targetList, string userPropertyName)
+        {
+            ICellFactoryBuilder factoryBuilder = taskUnitFactory.CreateCellFactoryBuilder();
+            if (userPropertyName is null)
+            {
+                throw new ArgumentNullException(nameof(userPropertyName));
+            }
+
+            var settings = factoryBuilder
+                .From(userPropertyName)
+                .WithKey(Table.ModelEntities.UserPropertyName)
+                .Build();
+
+            factoryBuilder.From(Table.ModelPropertyNames.UserProperty)
+                .WithKey(userPropertyName)
+                .WithSettings(settings)
+                .Build()
+                .AddTo(targetList);
+        }
+
     }
 }

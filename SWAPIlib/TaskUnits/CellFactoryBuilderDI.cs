@@ -9,7 +9,21 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.TaskUnits
 {
-    public class CellFactoryBuilderDI
+    public interface ICellFactoryBuilder
+    {
+        ITableAction Build();
+        CellFactoryBuilderDI From(ModelPropertyNames propertyName);
+        CellFactoryBuilderDI From(string text);
+        CellFactoryBuilderDI FromReference(ICell cellReference);
+        CellFactoryBuilderDI FromTextCopy(ICell cellReference);
+        CellFactoryBuilderDI WithKey(string key);
+        CellFactoryBuilderDI WithKey<T>(T en) where T : Enum;
+        CellFactoryBuilderDI WithSettings(ITableAction tableAction);
+        CellFactoryBuilderDI WithSettings(params ITable[] settingsTables);
+        CellFactoryBuilderDI WithTarget(object target);
+    }
+
+    public class CellFactoryBuilderDI : ICellFactoryBuilder
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
@@ -135,8 +149,8 @@ namespace SWAPIlib.TaskUnits
             };
         }
 
-    }    
-    
+    }
+
     public static class TableBuilderExtension
     {
         public static void AddTo(this ITableAction factory, IActionList tableBuilder)
