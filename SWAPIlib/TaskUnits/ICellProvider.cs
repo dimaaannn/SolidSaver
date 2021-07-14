@@ -55,7 +55,7 @@ namespace SWAPIlib.TaskUnits
         /// <summary>
         /// Ключ добавления в таблицу
         /// </summary>
-        public string Key { get; set; } = "NoKey";
+        public string Key { get; set; }
         /// <summary>
         /// Перезаписать ключ в случае совпадения
         /// </summary>
