@@ -120,7 +120,10 @@ namespace SWAPIlib.BaseTypes
             if(ModelWrapper == null)
             {
                 ModelDoc2 model = SWAPIlib.ComConn.Proxy.ComponentProxy.GetModelDoc2(component2);
-                ModelWrapper = partWrapperFactory.GetModelWrapper(model);
+                if (model != null)
+                    ModelWrapper = partWrapperFactory.GetModelWrapper(model);
+                else
+                    return null;
             }
             return ModelWrapper;
         }
