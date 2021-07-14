@@ -35,6 +35,15 @@ namespace SWAPIlib.TaskCollection
             return ret;
         }
 
+
+        public IActionUnit GetGlobalInfoUnit()
+        {
+            ITaskServices taskServices = dIkernel.Get<ITaskServices>();
+            IActionList defaultModelInfoActions = GlobalModelOptions();
+            IActionUnit ret = taskServices.CreateActionUnit(defaultModelInfoActions);
+            return ret;
+        }
+
         public IActionList GlobalModelOptions(string savingFileNameKey = "PartName")
         {
 

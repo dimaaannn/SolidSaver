@@ -89,10 +89,10 @@ namespace SWAPIlib.TaskUnits
         {
             if (Log.Count == 0)
                 return LogStatus.None;
-            if(Log.All(l => l.Status == LogStatus.Processed))
-                return LogStatus.Processed;
             if (Log.Any(l => l.Status == LogStatus.Failed))
                 return LogStatus.Failed;
+            if(Log.Any(l => l.Status == LogStatus.Processed))
+                return LogStatus.Processed;
             return LogStatus.Passed;
         }
 

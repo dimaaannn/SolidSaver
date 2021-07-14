@@ -37,9 +37,11 @@ namespace SWAPIlib.TaskCollection
             {
                 foreach (ITarget2 target in parts)
                 {
-                    var extendedTable = taskServices.CreateExtendedTable(target);
-                    //extendedTable.Target = target;
-                    MainTableList.Add(extendedTable);
+                    if(target != null)
+                    {
+                        var extendedTable = taskServices.CreateExtendedTable(target);
+                        MainTableList.Add(extendedTable);
+                    }
                 }
                 return true;
             }

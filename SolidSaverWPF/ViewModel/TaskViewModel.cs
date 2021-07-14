@@ -64,7 +64,8 @@ namespace SolidSaverWPF.ViewModel
             var saveSheetPrevAction = new SWAPIlib.TaskUnits.Actions.SaveSheetMetalList();
 
             var tableProviderTest = new SWAPIlib.TaskCollection.TableProviderTemp();
-            var testActionList = tableProviderTest.GetTestActionList(); 
+            //var testActionList = tableProviderTest.GetTestActionList(); 
+            var actionUnit = tableProviderTest.GetActionUnit();
 
 
             #endregion
@@ -73,7 +74,8 @@ namespace SolidSaverWPF.ViewModel
 
             foreach (var table in tables)
             {
-                logList.Add(testActionList.Proceed(table));
+                actionUnit.Run(table as IExtendedTable);
+                //logList.Add(testActionList.Proceed(table));
                 //logList.AddRange(saveSheetPrevAction.Proceed(table));
             }
 

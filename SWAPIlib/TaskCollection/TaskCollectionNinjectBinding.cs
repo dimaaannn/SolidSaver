@@ -1,6 +1,7 @@
 ﻿using Ninject.Extensions.Factory;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.Table;
+using SWAPIlib.TaskUnits;
 
 namespace SWAPIlib.TaskCollection
 {
@@ -23,6 +24,8 @@ namespace SWAPIlib.TaskCollection
             Bind<ITableProvider>()
                 .To<TableProvider>()
                 .InTransientScope();
+            Bind<IActionUnit>()
+                .To<ActionUnit>().InTransientScope();
 
             Bind<ITaskServices>()
                 .ToFactory();
@@ -39,6 +42,7 @@ namespace SWAPIlib.TaskCollection
         ISelectedComponentProvider CreateSelectedComponentProvider();
         ISelectedModelProvider CreateSelectedModelProvider();
         ITableProvider CreateTableProvider(ITargetProvider targetProvider);
+        IActionUnit CreateActionUnit(IActionList actionList);
     }
 
 }

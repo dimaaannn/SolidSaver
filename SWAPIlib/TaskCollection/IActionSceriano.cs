@@ -72,6 +72,15 @@ namespace SWAPIlib.TaskCollection
             var testClass = new TestAction(Initialiser.kernel);
             return testClass.GlobalModelOptions();
         }
+
+        public IActionUnit GetActionUnit()
+        {
+            var testClass = new TestAction(Initialiser.kernel);
+            IActionUnit ret = testClass.GetGlobalInfoUnit();
+
+            return ret;
+
+        }
     }
 
 

@@ -33,6 +33,12 @@ namespace SWAPIlib.TaskCollection
         {
             tableProcessedSubject = new Subject<IActionUnitResult>();
         }
+
+        public ActionUnit(IActionList actionList) : this()
+        {
+            ActionList = actionList;
+        }
+
         private readonly ISubject<IActionUnitResult> tableProcessedSubject;
         public bool IsCanExecute => ActionList?.Count() > 0;
         public IActionList ActionList { get; set; }
@@ -54,7 +60,8 @@ namespace SWAPIlib.TaskCollection
             {
                 ActionUnit = this,
                 TargetTable = table,
-                ActionLog = tableLog
+                ActionLog = tableLog,
+                Status = status
             };
 
         }
