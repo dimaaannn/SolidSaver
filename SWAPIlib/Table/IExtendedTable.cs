@@ -31,6 +31,8 @@ namespace SWAPIlib.Table
 
         public ITarget2 Target { get; set; }
 
+        public string TargetName => Target.TargetName;
+
         public object GetTarget() => Target?.GetTarget();
     }
 }

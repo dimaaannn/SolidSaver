@@ -75,6 +75,8 @@ namespace SWAPIlib.Table
             this.targetObj = targetObj;
         }
 
+        public string TargetName { get; set; }
+
         public object GetTarget()
         {
             return targetObj;

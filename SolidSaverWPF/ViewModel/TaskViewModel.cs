@@ -132,7 +132,7 @@ namespace SolidSaverWPF.ViewModel
                 //else
                 //    resultTable = table;
 
-                ret.Add(new TableViewModel(table) { TargetName = table.Name });
+                ret.Add(new TableViewModel(table) { TargetName = table.TargetName });
             }
             return ret;
         }

@@ -111,6 +111,8 @@ namespace SWAPIlib.Table
 
         public string Name => _settingsTable.Name;
 
+        public string TargetName { get; set; }
+
         public void Add(string cellKey, ICell cell, bool replaceVal = true)
         {
             _settingsTable.Add(cellKey, cell, replaceVal);

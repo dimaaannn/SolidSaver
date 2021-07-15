@@ -8,6 +8,7 @@ namespace SWAPIlib.BaseTypes
 
     public interface ITarget2
     {
+        string TargetName { get; }
         object GetTarget();
     }
 
@@ -18,7 +19,6 @@ namespace SWAPIlib.BaseTypes
 
     public interface IPartWrapper : ITarget2
     {
-        string Name { get; }
         AppDocType DocType { get; }
     }
     public interface IModelWrapper : IPartWrapper, ITarget2<ModelDoc2>
@@ -35,6 +35,9 @@ namespace SWAPIlib.BaseTypes
         {
             targetObj = obj;
         }
+
+        public string TargetName { get; set; }
+
         public object GetTarget() => targetObj;
     }
 
@@ -51,10 +54,10 @@ namespace SWAPIlib.BaseTypes
             docType = PartTypeChecker.GetSWType(swModel);
         }
 
-
-        string IPartWrapper.Name => DocTitle;
         public string DocTitle => title;
         public AppDocType DocType => docType;
+
+        public string TargetName => $"{DocType.ToString().Substring(0, 2).ToUpper()}-{DocTitle}";
 
         private string GetTitle(ModelDoc2 model) => ModelProxy.GetName(model);
 
@@ -112,7 +115,7 @@ namespace SWAPIlib.BaseTypes
             this.partWrapperFactory = partWrapperFactory;
         }
 
-        public string Name => name;
+        public string TargetName => name;
         public AppDocType DocType => docType;
 
         public IModelWrapper GetModel()
