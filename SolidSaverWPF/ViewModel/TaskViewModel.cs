@@ -43,11 +43,11 @@ namespace SolidSaverWPF.ViewModel
         }
 
 
-        public ITable[] GetSelectedModels()
+        public SWAPIlib.TaskCollection.ITableCollection GetSelectedModels()
         {
 
             var tableProvider = new SWAPIlib.TaskCollection.TableProviderTemp();
-            return tableProvider.UserSelectedModels().ToArray();
+            return tableProvider.UserSelectedModels();
         }
 
 
@@ -55,7 +55,7 @@ namespace SolidSaverWPF.ViewModel
         {
             TableView.Clear();
 
-            var tables = GetSelectedModels();
+            var tableCollection = GetSelectedModels();
 
 
             #region TESTING
@@ -72,11 +72,9 @@ namespace SolidSaverWPF.ViewModel
 
             List<TableLog> logList = new List<TableLog>();
 
-            foreach (var table in tables)
+            foreach (var table in tableCollection)
             {
-                actionUnit.Run(table as IExtendedTable);
-                //logList.Add(testActionList.Proceed(table));
-                //logList.AddRange(saveSheetPrevAction.Proceed(table));
+                actionUnit.Run(table);
             }
 
 
@@ -92,7 +90,7 @@ namespace SolidSaverWPF.ViewModel
             try
             {
                 //var viewModels = GetViewModel(tables, showedKeys);
-                var viewModels = GetViewModel(tables, null);
+                var viewModels = GetViewModel(tableCollection, null);
                 foreach (var vm in viewModels)
                 {
                     TableView.Add(vm);
@@ -105,7 +103,7 @@ namespace SolidSaverWPF.ViewModel
             }
         }
 
-        protected static List<TableViewModel> GetViewModel(IEnumerable<ITable> tables, HashSet<string> cellFilter)
+        protected static List<TableViewModel> GetViewModel(SWAPIlib.TaskCollection.ITableCollection tableCollection, HashSet<string> cellFilter)
         {
             var ret = new List<TableViewModel>();
 
@@ -114,27 +112,27 @@ namespace SolidSaverWPF.ViewModel
                 addFilter = true;
 
             ITable resultTable;
-            foreach (var table in tables)
+            foreach (var table in tableCollection)
             {
-                if (addFilter)
-                {
-                    resultTable = new TargetTable((table as ITargetTable).GetTarget());
+                //if (addFilter)
+                //{
+                //    resultTable = new TargetTable((table as ITargetTable).GetTarget());
 
-                    var keyVals = from keyval in table
-                                  let key = keyval.Key
-                                  where cellFilter.Contains(key)
-                                  where keyval.Value != null
-                                  select keyval;
+                //    var keyVals = from keyval in table
+                //                  let key = keyval.Key
+                //                  where cellFilter.Contains(key)
+                //                  where keyval.Value != null
+                //                  select keyval;
 
-                    foreach (var keyval in keyVals)
-                    {
-                        resultTable.Add(keyval.Key, keyval.Value, false);
-                    }
-                }
-                else
-                    resultTable = table;
+                //    foreach (var keyval in keyVals)
+                //    {
+                //        resultTable.Add(keyval.Key, keyval.Value, false);
+                //    }
+                //}
+                //else
+                //    resultTable = table;
 
-                ret.Add(new TableViewModel(resultTable) { TargetName = table.GetCell("PartName").Text });
+                ret.Add(new TableViewModel(table) { TargetName = table.Name });
             }
             return ret;
         }

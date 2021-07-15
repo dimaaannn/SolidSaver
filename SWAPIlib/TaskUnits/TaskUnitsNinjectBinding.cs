@@ -1,6 +1,7 @@
 ﻿using Ninject.Extensions.Factory;
 using SWAPIlib.BaseTypes;
 using SWAPIlib.Table;
+using SWAPIlib.TaskUnits.Actions;
 using SWAPIlib.Utils;
 using System;
 using System.Collections.Generic;
@@ -30,15 +31,12 @@ namespace SWAPIlib.TaskUnits
             Bind<CellFactoryBuilderDI>().ToSelf().InTransientScope();
             Bind<ICellFactoryBuilder>().To<CellFactoryBuilderDI>().InTransientScope();
 
+            Bind<ModelActions>().ToSelf().InSingletonScope();
+
 
             Bind<ITaskUnitFactory>().ToFactory();
 
-            //Bind<ITableProvider>()
-            //    .To<TableProvider>()
-            //    .InTransientScope();
 
-            //Bind<ITaskServices>()
-            //    .ToFactory();
 
         }
     }
