@@ -24,9 +24,10 @@ namespace SWAPIlib.TaskCollection
         }
 
 
-        public const string SAVING_FILE_NAME_KEY = "PartName";
+        public const string FILE_NAME_KEY        = "FileName";
         public const string NOMINATION_KEY       = "Обозначение";
         public const string DESIGNATION_KEY      = "Наименование";
+        public const string ACTIVE_CONFIG_KEY    = "ConfigName";
 
 
         public IActionUnit GetGlobalInfoUnit()
@@ -34,7 +35,7 @@ namespace SWAPIlib.TaskCollection
             IActionList actionList = taskUnitFactory.CreateActionList();
 
             actionList.Add(modelActions.GetActiveConfigName("ActiveConfig"));
-            actionList.Add(modelActions.GetFileName(SAVING_FILE_NAME_KEY));
+            actionList.Add(modelActions.GetFileName(FILE_NAME_KEY));
             
 
             //AddGlobalModelOptions(actionList);
@@ -43,6 +44,22 @@ namespace SWAPIlib.TaskCollection
 
             IActionUnit ret = taskServices.CreateActionUnit(actionList);
             return ret;
+        }
+
+        public IEnumerable<IActionUnit> GetActionUnits()
+        {
+            IActionList step1 = taskUnitFactory.CreateActionList();
+
+            step1.Add(modelActions.GetActiveConfigName(ACTIVE_CONFIG_KEY));
+            step1.Add(modelActions.GetFileName(FILE_NAME_KEY));
+            yield return taskServices.CreateActionUnit(step1);
+
+            IActionList step2 = taskUnitFactory.CreateActionList();
+
+            step2.Add(modelActions.GetUserProperty(NOMINATION_KEY));
+            step2.Add(modelActions.GetUserProperty(DESIGNATION_KEY));
+            yield return taskServices.CreateActionUnit(step2);
+            
         }
     }
 }

@@ -15,10 +15,24 @@ namespace SWAPIlib.TaskCollection
 
     public class ActionManager : IDisposable
     {
-
+        public IActionUnit CurrentStep { get; private set; }
+        IEnumerator<IActionUnit> actionUnitsEnumerator;
         public void Begin(ActionDataProvider actionDataProvider)
         {
-            throw null;
+            actionUnitsEnumerator = actionDataProvider.ActionUnits.GetEnumerator();
+            TakeNextStep();
+        }
+
+        private void TakeNextStep()
+        {
+            if (actionUnitsEnumerator.MoveNext())
+            {
+                CurrentStep = actionUnitsEnumerator.Current;
+            }
+            else
+            {
+                CurrentStep = null;
+            }
         }
 
         public void Dispose()
