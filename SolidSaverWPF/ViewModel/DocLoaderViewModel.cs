@@ -22,15 +22,15 @@ namespace SolidSaverWPF.ViewModel
         public DocLoaderViewModel2()
         {
             DocumentList = new ObservableCollection<IModelWrapper>();
-            DocLoader = new DocLoader()
+            DocLoader = new DocLoader()                                     //Обработчик загруженных документов
             {
                 ModelAction = modelw =>
                 {
                     if (
-                    modelw.DocType == SWAPIlib.AppDocType.swASM
-                    && DocumentList.Contains(modelw) == false)
+                    modelw.DocType == SWAPIlib.AppDocType.swASM             //Если документ имеет тип "сборка"
+                    && DocumentList.Contains(modelw) == false)              //И ещё не присутствует в списке
                     {
-                        DocumentList.Add(modelw);
+                        DocumentList.Add(modelw);                           //Добавить деталь в список доступных для загрузки
                     }
                 }
             };
@@ -50,28 +50,28 @@ namespace SolidSaverWPF.ViewModel
         {
             using (cTS = new CancellationTokenSource())
             {
-                DocumentList.Clear();
-                await DocLoader.GetActiveDoc(cTS.Token, DocLoader.ModelAction);
-                _LoadDocumentCommand.RaiseCanExecuteChanged();
-                if (DocumentList.Count > 0)
-                    SelectedIndex = 0;
-                await DocLoader.GetOpenedDocumentsAsync(cTS.Token);
+                DocumentList.Clear();                                           //Очистить список
+                await DocLoader.GetActiveDoc(cTS.Token, DocLoader.ModelAction); //Добавить в список АКТИВНЫЙ документ
+                _LoadDocumentCommand.RaiseCanExecuteChanged();                  //Обновить статус блокировки кнопки
+                if (DocumentList.Count > 0)                                     //Если список не пустой
+                    SelectedIndex = 0;                                          //Сделать активным первый пункт
+                await DocLoader.GetOpenedDocumentsAsync(cTS.Token);             //Загрузить в фоне все остальные документы
             }
         }
 
-        private async void LoadSelected()
+        private async void LoadSelected()                                       //Загрузить выбранный элемент
         {
             if (DocLoader.IsBusy)
                 CancelTask();
             isBusy = true;
             _LoadDocumentCommand.RaiseCanExecuteChanged();
-            var userSelection = DocumentList[SelectedIndex];
-            await Task.Run(() => Variables.SetMainModel(userSelection.ConvertToOldWrapper()));
+            var userSelection = DocumentList[SelectedIndex];                                   //Получить выбранный пользователем элемент
+            await Task.Run(() => Variables.SetMainModel(userSelection.ConvertToOldWrapper())); //Установить модель в качестве главной
             isBusy = false;
             _LoadDocumentCommand.RaiseCanExecuteChanged();
         }
 
-        private void CancelTask()
+        private void CancelTask()                                                               //отменить фоновую загрузку списка
         {
             cTS.Cancel();
         }

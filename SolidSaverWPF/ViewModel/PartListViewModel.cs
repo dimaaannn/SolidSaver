@@ -47,27 +47,6 @@ namespace SolidSaverWPF.ViewModel
         private string selectedItemName;
         public string SelectedItemName { get => selectedItemName; set => Set(ref selectedItemName , value); }
 
-        ///// <summary>
-        ///// Компонент выбран в списке
-        ///// </summary>
-        ///// <param name="o"></param>
-        ///// <param name="e"></param>
-        //public void SelectedItemChanged(object o, RoutedPropertyChangedEventArgs<object> e)
-        //{
-        //    if (e.NewValue is IComponentControl comp)
-        //    {
-        //        MessengerInstance.Send<SelectionMessage<IComponentControl>>(
-        //            new SelectionMessage<IComponentControl>(this, comp));
-        //    }
-        //}
-
-
-
-        //private ICommand _SelectionChangedCommand;
-        //public ICommand SelectionChangedCommand { get => _SelectionChangedCommand ?? 
-        //        (_SelectionChangedCommand = new RelayCommand(SelectedItemChanged)
-        //}
-
         /// <summary>
         /// Главная модель обновлена
         /// </summary>
