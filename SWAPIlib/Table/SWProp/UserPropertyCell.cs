@@ -59,8 +59,26 @@ namespace SWAPIlib.Table.SWProp
         protected bool GetUserProperty(object target, out string result)
         {
             bool ret = false;
-            result = null;
-            if(target is ModelDoc2 model
+
+            if (ConfigName == null)
+            {
+                throw new ArgumentNullException("GetUserProperty: Отсутствует ячейка с именем конфигурации");
+            }
+            switch (target)
+            {
+                case Component2 component:
+                    target = (ModelDoc2)component.GetModelDoc2();
+                    break;
+                case PartDoc partDoc:
+                    target = (ModelDoc2)partDoc;
+                    break;
+                default:
+                    break;
+            }
+
+
+
+            if (target is ModelDoc2 model
                 && !string.IsNullOrEmpty(ConfigName)
                 && !string.IsNullOrEmpty(UserPropertyName))
             {
@@ -69,6 +87,11 @@ namespace SWAPIlib.Table.SWProp
                     swModel: model,
                     configName: ConfigName,
                     fieldName: UserPropertyName);
+            }
+            else
+            {
+                AutoUpdate = false;
+                result = null;
             }
             return ret;
         }
