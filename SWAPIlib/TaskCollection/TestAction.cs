@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace SWAPIlib.TaskCollection
 {
+    /// <summary>
+    /// Заготовка для обработки последовательных действий. Создана, но переключение не прикручено к интерфейсу
+    /// </summary>
     public class TestAction
     {
         private readonly ITaskUnitFactory taskUnitFactory;
@@ -43,6 +46,7 @@ namespace SWAPIlib.TaskCollection
             actionList.Add(modelActions.GetActiveConfigName()); //Обязательно создать ячейку с именем конфигурации
             actionList.Add(modelActions.GetUserProperty(NOMINATION_KEY));
             actionList.Add(modelActions.GetUserProperty(DESIGNATION_KEY));
+
             
 
 
@@ -54,7 +58,8 @@ namespace SWAPIlib.TaskCollection
         {
             IActionList step1 = taskUnitFactory.CreateActionList();
 
-            step1.Add(modelActions.GetActiveConfigName(ACTIVE_CONFIG_KEY));
+            //Добавить пользовательские свойства (обозначение и наименование)
+            step1.Add(modelActions.GetActiveConfigName(ACTIVE_CONFIG_KEY)); //Обязательно создать ячейку с именем конфигурации
             step1.Add(modelActions.GetFileName(FILE_NAME_KEY));
             yield return taskServices.CreateActionUnit(step1);
 

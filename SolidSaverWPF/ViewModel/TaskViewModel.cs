@@ -55,83 +55,50 @@ namespace SolidSaverWPF.ViewModel
         {
             TableView.Clear();
 
-            var tableCollection = GetSelectedModels();
+            //Получить список выделенных пользователем деталей (где проставлены галочки)
+            var userSelectedModels = GetSelectedModels();
 
+            #region Тестовая заготовка для отладки
 
-            #region TESTING
-
-
+            //Создать тестовый класс-поставщик действий (использовался в прошлый раз)
+            //Сейчас - никак не используется. Просто висит.
             var saveSheetPrevAction = new SWAPIlib.TaskUnits.Actions.SaveSheetMetalList();
 
+            //Создать тестовый класс со всеми зависимостями (Через DI)
             var tableProviderTest = new SWAPIlib.TaskCollection.TableProviderTemp();
-            //var testActionList = tableProviderTest.GetTestActionList(); 
+            //Получить из этого класса набор действий
             var actionUnit = tableProviderTest.GetActionUnit();
-
-
             #endregion
 
             List<TableLog> logList = new List<TableLog>();
 
-            foreach (var table in tableCollection)
+            //Запустить обработку таблиц для каждой из выбранной ранее деталей
+            foreach (var modelTable in userSelectedModels)
             {
-                actionUnit.Run(table);
+                actionUnit.Run(modelTable);
             }
 
+            //Создать визуальные представления для каждой из таблиц
+            var viewModels = GetViewModel(userSelectedModels);
 
-            var showedKeys = new HashSet<string>
+            //Показать представления пользователю
+            foreach (var vm in viewModels)
             {
-                ModelEntities.ConfigName.ToString(),
-                ModelPropertyNames.SaveSheetMetal.ToString(),
-                "Наименование",
-                "Обозначение",
-                "dxfFolder"
-            };
-
-            try
-            {
-                //var viewModels = GetViewModel(tables, showedKeys);
-                var viewModels = GetViewModel(tableCollection, null);
-                foreach (var vm in viewModels)
-                {
-                    TableView.Add(vm);
-                }
-
-            }
-            catch (Exception)
-            {
-                throw;
+                TableView.Add(vm);
             }
         }
 
-        protected static List<TableViewModel> GetViewModel(SWAPIlib.TaskCollection.ITableCollection tableCollection, HashSet<string> cellFilter)
+        /// <summary>
+        /// Создать визуальные представления для таблиц с свойствами
+        /// </summary>
+        /// <param name="tableCollection"></param>
+        /// <returns></returns>
+        protected static List<TableViewModel> GetViewModel(SWAPIlib.TaskCollection.ITableCollection tableCollection)
         {
             var ret = new List<TableViewModel>();
 
-            bool addFilter = false;
-            if (cellFilter?.Count > 0)
-                addFilter = true;
-
-            ITable resultTable;
             foreach (var table in tableCollection)
             {
-                //if (addFilter)
-                //{
-                //    resultTable = new TargetTable((table as ITargetTable).GetTarget());
-
-                //    var keyVals = from keyval in table
-                //                  let key = keyval.Key
-                //                  where cellFilter.Contains(key)
-                //                  where keyval.Value != null
-                //                  select keyval;
-
-                //    foreach (var keyval in keyVals)
-                //    {
-                //        resultTable.Add(keyval.Key, keyval.Value, false);
-                //    }
-                //}
-                //else
-                //    resultTable = table;
-
                 ret.Add(new TableViewModel(table) { TargetName = table.TargetName });
             }
             return ret;

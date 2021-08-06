@@ -90,6 +90,7 @@ namespace SWAPIlib.TaskCollection
 
         public IActionUnit GetActionUnit()
         {
+            //Вернуть
             IActionUnit ret = TestAction.GetGlobalInfoUnit();
 
             return ret;
