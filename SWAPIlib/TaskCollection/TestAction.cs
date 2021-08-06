@@ -36,11 +36,15 @@ namespace SWAPIlib.TaskCollection
 
             actionList.Add(modelActions.GetActiveConfigName("ActiveConfig"));
             actionList.Add(modelActions.GetFileName(FILE_NAME_KEY));
+
+
+
+            //Добавить пользовательские свойства (обозначение и наименование)
+            actionList.Add(modelActions.GetActiveConfigName()); //Обязательно создать ячейку с именем конфигурации
+            actionList.Add(modelActions.GetUserProperty(NOMINATION_KEY));
+            actionList.Add(modelActions.GetUserProperty(DESIGNATION_KEY));
             
 
-            //AddGlobalModelOptions(actionList);
-            //AddUserProperty(actionList, NOMINATION_KEY);
-            //AddUserProperty(actionList, DESIGNATION_KEY);
 
             IActionUnit ret = taskServices.CreateActionUnit(actionList);
             return ret;
